@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Logger = QModManager.Utility.Logger;
+using System.Collections.Generic;
 
 namespace SeaTruckSpeedMod_BZ
 {
@@ -8,6 +9,7 @@ namespace SeaTruckSpeedMod_BZ
         /// <summary>
         /// Harmony hooks to modify the SeaTruck drag coefficient, reducing it to increase maximum speed
         /// </summary>
+        /// 
         [HarmonyPatch(typeof(SeaTruckMotor))]
         [HarmonyPatch("Start")]
         internal class SeaTruckDragMod
@@ -21,6 +23,10 @@ namespace SeaTruckSpeedMod_BZ
                 // Get current drag
                 float currentDrag = __instance.pilotingDrag;
                 Logger.Log(Logger.Level.Debug, $"Current drag: {currentDrag}");
+
+                // Add to our list of instances to allow ad-hoc change to the value
+                SeaTruckHistoryItem newSeaTruck = new SeaTruckHistoryItem(__instance, currentDrag);
+                QMod.SeaTruckHistory.Add(newSeaTruck);
 
                 // Get current modifier
                 float modifier = QMod.Config.SeaTruckSpeedModifier;

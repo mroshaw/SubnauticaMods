@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using HarmonyLib;
 using QModManager.API.ModLoading;
-
+using System.Collections.Generic;
 using SMLHelper.V2.Handlers;
 using SMLHelper.V2.Interfaces;
 using SMLHelper.V2.Json;
@@ -21,7 +21,8 @@ namespace SeaTruckSpeedMod_BZ
         /// Attributes. The values in this instance will be updated whenever the user changes the corresponding option in the menu.
         /// </summary>
         internal static Config Config { get; } = OptionsPanelHandler.Main.RegisterModOptions<Config>();
-
+        // Maintain a list of SeaTrucks that we've modded, to allow dynamic change using menu
+        internal static List<SeaTruckHistoryItem> SeaTruckHistory = new List<SeaTruckHistoryItem>();
         [QModPatch]
         public static void Patch()
         {
@@ -39,7 +40,6 @@ namespace SeaTruckSpeedMod_BZ
     [Menu("Sea Truck Speed Mod")]
     public class Config : ConfigFile
     {
-
         /// <summary>
         /// Slider element for float value of the modifier. We'll allow 1.0 (unchanged) to 5.0 (lightening speed)
         /// </summary>
@@ -54,6 +54,24 @@ namespace SeaTruckSpeedMod_BZ
             Logger.Log(Logger.Level.Debug, "Generic value changed!");
             Logger.Log(Logger.Level.Debug, $"{e.Id}: {e.GetType()}");
 
+            // Update max speed on all SeaTruckMotors
+            if (QMod.SeaTruckHistory != null)
+            {
+                foreach (SeaTruckHistoryItem seaTruckHistoryItem in QMod.SeaTruckHistory)
+                {
+                    if (seaTruckHistoryItem.SeaTruckInstance != null)
+                    {
+                        // Apply modifier
+                        seaTruckHistoryItem.SeaTruckInstance.pilotingDrag = (seaTruckHistoryItem.SeaTruckDrag / QMod.Config.SeaTruckSpeedModifier);
+                        Logger.Log(Logger.Level.Info, $"Updated existing SeaTruckMotor. Current drag {seaTruckHistoryItem.SeaTruckDrag} to new drag {seaTruckHistoryItem.SeaTruckDrag / QMod.Config.SeaTruckSpeedModifier}");
+                    }
+                    else
+                    {
+                        // Remove from list
+                        QMod.SeaTruckHistory.Remove(seaTruckHistoryItem);
+                    }
+                }
+            }
             switch (e)
             {
                 case KeybindChangedEventArgs keybindChangedEventArgs:
