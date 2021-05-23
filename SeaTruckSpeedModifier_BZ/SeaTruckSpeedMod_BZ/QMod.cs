@@ -43,7 +43,7 @@ namespace SeaTruckSpeedMod_BZ
         /// <summary>
         /// Slider element for float value of the modifier. We'll allow 1.0 (unchanged) to 5.0 (lightening speed)
         /// </summary>
-        [Slider("Speed modifier", Format = "{0:F2}", Min = 1.0F, Max = 5.0F, DefaultValue = 1.0F, Step = 0.1F), OnChange(nameof(MyGenericValueChangedEvent))]
+        [Slider("Speed modifier", Format = "{0:F2}", Min = 1.0F, Max = 10.0F, DefaultValue = 1.0F, Step = 0.1F), OnChange(nameof(MyGenericValueChangedEvent))]
         public float SeaTruckSpeedModifier;
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace SeaTruckSpeedMod_BZ
                     {
                         // Apply modifier
                         seaTruckHistoryItem.SeaTruckInstance.pilotingDrag = (seaTruckHistoryItem.SeaTruckDrag / QMod.Config.SeaTruckSpeedModifier);
-                        Logger.Log(Logger.Level.Info, $"Updated existing SeaTruckMotor. Current drag {seaTruckHistoryItem.SeaTruckDrag} to new drag {seaTruckHistoryItem.SeaTruckDrag / QMod.Config.SeaTruckSpeedModifier}");
+                        Logger.Log(Logger.Level.Debug, $"Updated existing SeaTruckMotor. Current drag {seaTruckHistoryItem.SeaTruckDrag} to new drag {seaTruckHistoryItem.SeaTruckDrag / QMod.Config.SeaTruckSpeedModifier}");
                     }
                     else
                     {
