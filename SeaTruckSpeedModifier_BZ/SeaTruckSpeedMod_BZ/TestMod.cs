@@ -1,15 +1,13 @@
 ﻿using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Logger = QModManager.Utility.Logger;
 
 namespace SeaTruckSpeedMod_BZ
 {
     class TestMod
     {
+        /// <summary>
+        /// Very simple hook into the PDA to check that Harmony PatchAll is working
+        /// </summary>
         [HarmonyPatch(typeof(PDAScanner))]
         [HarmonyPatch("Initialize")]
         internal class TestPDAScanner
@@ -17,7 +15,7 @@ namespace SeaTruckSpeedMod_BZ
             [HarmonyPostfix]
             public static void Postfix()
             {
-                Logger.Log(Logger.Level.Info, $"PDA Scanner Init {SeaTruckSpeedQMod.Config.SeaTruckSpeedModifier}");
+                Logger.Log(Logger.Level.Debug, $"PDA Scanner Init");
             }
         }
     }

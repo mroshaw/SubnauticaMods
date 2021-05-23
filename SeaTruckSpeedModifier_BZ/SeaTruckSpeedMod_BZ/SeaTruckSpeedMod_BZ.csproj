@@ -64,9 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestMod.cs" />
-    <Compile Include="SeaGlideMod.cs" />
     <Compile Include="SeaTruckMod.cs" />
-    <Compile Include="SeaTruckSpeedQMod.cs" />
+    <Compile Include="QMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

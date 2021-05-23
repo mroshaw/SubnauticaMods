@@ -19,6 +19,9 @@ namespace PrawnRepairAndCharge_BZ
             public static void Prefix(Exosuit __instance, bool docked, Vehicle.DockType dockType)
             {
                 Logger.Log(Logger.Level.Info, $"In pre fix {docked}");
+
+                // Get the current charge and damager levels
+
             }
         }
     }
