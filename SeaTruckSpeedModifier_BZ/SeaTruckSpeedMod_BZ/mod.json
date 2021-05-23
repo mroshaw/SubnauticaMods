@@ -1,0 +1,12 @@
+{
+  "Id": "SeaTruckSpeedModBZ",
+  "DisplayName": "Sea Truck Speed Modifier",
+  "Author": "Oli Ollerenshaw",
+  "Version": "1.0.0",
+  "Enable": true,
+  "AssemblyName": "SeaTruckSpeedMod_BZ.dll",
+  "VersionDependencies": {
+    "SMLHelper": "2.9.6"
+  },
+  "Game": "BelowZero"
+}
