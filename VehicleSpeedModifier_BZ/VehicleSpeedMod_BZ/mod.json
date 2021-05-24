@@ -1,0 +1,12 @@
+{
+  "Id": "VehicleSpeedModBZ",
+  "DisplayName": "Vehicle Speed Modifier",
+  "Author": "Oli Ollerenshaw",
+  "Version": "1.0.0",
+  "Enable": true,
+  "AssemblyName": "VehicleSpeedMod_BZ.dll",
+  "VersionDependencies": {
+    "SMLHelper": "2.9.6"
+  },
+  "Game": "BelowZero"
+}
