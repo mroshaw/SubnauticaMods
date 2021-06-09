@@ -1,8 +1,8 @@
-SEATRUCK SPEED MODIFIER BZ - 1.0
-Configurable modifier to enhance the speed of the Seatruck.
+BOOSTER TANK SPEED MODIFIER BZ - 1.0
+Configurable modifier to enhance the speed of the Booster Tank.
 
 :: REQUIREMENTS ::
-* The courage to travel at near light speed in a box in the sea!
+* The courage to travel at near light speed in the sea!
 
 :: FEATURES ::
 * Configurable speed modifier, accessed through the Mod menu in game

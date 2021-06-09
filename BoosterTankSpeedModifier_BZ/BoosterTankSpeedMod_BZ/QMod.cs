@@ -7,7 +7,7 @@ using SMLHelper.V2.Interfaces;
 using SMLHelper.V2.Json;
 using SMLHelper.V2.Options;
 using SMLHelper.V2.Options.Attributes;
-
+using UnityEngine;
 using UnityEngine.UI;
 using Logger = QModManager.Utility.Logger;
 
@@ -44,23 +44,29 @@ namespace SeaTruckSpeedMod_BZ
         /// Slider element for float value of the modifier. We'll allow 1.0 (unchanged) to 5.0 (lightening speed)
         /// </summary>
         [Slider("Speed modifier", Format = "{0:F2}", Min = 1.0F, Max = 10.0F, DefaultValue = 1.0F, Step = 0.1F), OnChange(nameof(BoosterModifierChanged))]
-        public float BoosterTankSpeedModifier;
+        public float BoosterTankSpeedModifier = 1.0F;
+
+        [Slider("Oxygen consumption modifier", Format = "{0:F2}", Min = 0.0F, Max = 5.0F, DefaultValue = 1.0F, Step = 0.1F), OnChange(nameof(OxygenModifierChanged))]
+        public float OxygenConsumptionModifier = 1.0F;
 
         /// <summary>
-        /// OnChange event, for debugging for now
+        /// OnChange event, parse through our list of modified Booster Tanks to update in place.
         /// </summary>
         private void BoosterModifierChanged(IModOptionEventArgs e)
         {
             // Update max speed on all Booster Tanks
             if (QMod.BoosterTankHistory != null)
             {
+                float currentMotorForceModifier = ((SliderChangedEventArgs)e).Value;
                 foreach (BoosterTankHistoryItem boosterTankHistoryItem in QMod.BoosterTankHistory)
                 {
                     if (boosterTankHistoryItem.BoosterInstance != null)
                     {
-                        // Apply modifier
-                        boosterTankHistoryItem.BoosterInstance.motor.motorForce = (boosterTankHistoryItem.MotorForce * QMod.Config.BoosterTankSpeedModifier);
-                        Logger.Log(Logger.Level.Debug, $"Updated existing BoosterTank. Current MotorForce: {boosterTankHistoryItem.MotorForce} to: {boosterTankHistoryItem.MotorForce * QMod.Config.BoosterTankSpeedModifier}");
+                        // Apply booster modifier
+                        float currentBoostValue = boosterTankHistoryItem.MotorForce;
+                        float newBoostValue = boosterTankHistoryItem.MotorForce * currentMotorForceModifier;
+                        boosterTankHistoryItem.BoosterInstance.motor.motorForce = (boosterTankHistoryItem.MotorForce * currentMotorForceModifier);
+                        Logger.Log(Logger.Level.Debug, $"Updated existing BoosterTank. Current MotorForce: {currentBoostValue} to: {newBoostValue}");
                     }
                     else
                     {
@@ -69,20 +75,29 @@ namespace SeaTruckSpeedMod_BZ
                     }
                 }
             }
-            switch (e)
+        }
+        private void OxygenModifierChanged(IModOptionEventArgs e)
+        {
+            // Update oxygen usage on all Booster Tanks
+            if (QMod.BoosterTankHistory != null)
             {
-                case KeybindChangedEventArgs keybindChangedEventArgs:
-                    Logger.Log(Logger.Level.Debug, keybindChangedEventArgs.KeyName);
-                    break;
-                case ChoiceChangedEventArgs choiceChangedEventArgs:
-                    Logger.Log(Logger.Level.Debug, $"{choiceChangedEventArgs.Index}: {choiceChangedEventArgs.Value}");
-                    break;
-                case SliderChangedEventArgs sliderChangedEventArgs:
-                    Logger.Log(Logger.Level.Debug, sliderChangedEventArgs.Value.ToString());
-                    break;
-                case ToggleChangedEventArgs toggleChangedEventArgs:
-                    Logger.Log(Logger.Level.Debug, toggleChangedEventArgs.Value.ToString());
-                    break;
+                float currentOxygenModifier = ((SliderChangedEventArgs)e).Value;
+                foreach (BoosterTankHistoryItem boosterTankHistoryItem in QMod.BoosterTankHistory)
+                {
+                    if (boosterTankHistoryItem.BoosterInstance != null)
+                    {
+                        // Apply oxygen modifier
+                        float currentOxygenValue = boosterTankHistoryItem.OxygenConsumption;
+                        float newOxygenValue = currentOxygenValue * currentOxygenModifier;
+                        boosterTankHistoryItem.BoosterInstance.boostOxygenUsePerSecond = newOxygenValue;
+                        Logger.Log(Logger.Level.Debug, $"Updated existing BoosterTank. Current Oxygen consumption: {currentOxygenValue} to: {newOxygenValue}");
+                    }
+                    else
+                    {
+                        // Remove from list
+                        QMod.BoosterTankHistory.Remove(boosterTankHistoryItem);
+                    }
+                }
             }
         }
     }

@@ -15,12 +15,13 @@ namespace SeaTruckSpeedMod_BZ
     {
         public SuitBoosterTank BoosterInstance;
         public float MotorForce;
+        public float OxygenConsumption;
 
-        public BoosterTankHistoryItem(SuitBoosterTank boosterInstance, float motorForce)
+        public BoosterTankHistoryItem(SuitBoosterTank boosterInstance, float motorForce, float oxygenConsumption)
         {
-
             BoosterInstance = boosterInstance;
             MotorForce = motorForce;
+            OxygenConsumption = oxygenConsumption;
         }
     }
 }
