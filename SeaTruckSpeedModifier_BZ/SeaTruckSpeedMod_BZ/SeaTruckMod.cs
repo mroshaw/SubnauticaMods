@@ -29,14 +29,12 @@ namespace SeaTruckSpeedMod_BZ
                 QMod.SeaTruckHistory.Add(newSeaTruck);
 
                 // Get current modifier
-                float modifier = QMod.Config.SeaTruckSpeedModifier;
-                Logger.Log(Logger.Level.Debug, $"Modifier: {modifier}");
+                float dragModifier = QMod.Config.SeaTruckSpeedModifier;
 
                 // Apply modifier
-                float newDrag = currentDrag / modifier;
+                float newDrag = currentDrag / dragModifier;
                 __instance.pilotingDrag = newDrag;
-                Logger.Log(Logger.Level.Debug, $"New drag: {newDrag}");
-
+                Logger.Log(Logger.Level.Debug, $"Current drag: {currentDrag} to new drag: {newDrag}");
             }
         }
     }

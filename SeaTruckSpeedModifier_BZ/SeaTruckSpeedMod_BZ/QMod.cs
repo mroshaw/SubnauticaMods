@@ -13,6 +13,14 @@ using Logger = QModManager.Utility.Logger;
 
 namespace SeaTruckSpeedMod_BZ
 {
+    /// <summary>
+    /// Keep tabs on what we're changing in QMod menus
+    /// </summary>
+    public enum ModifierType
+    {
+        SpeedModifier
+    }
+
     [QModCore]
     public static class QMod
     {
@@ -41,9 +49,9 @@ namespace SeaTruckSpeedMod_BZ
     public class Config : ConfigFile
     {
         /// <summary>
-        /// Slider element for float value of the modifier. We'll allow 1.0 (unchanged) to 5.0 (lightening speed)
+        /// Slider element for float value of the modifier. We'll allow 1.0 (unchanged) to 11.0 (lightening speed)
         /// </summary>
-        [Slider("Speed modifier", Format = "{0:F2}", Min = 1.0F, Max = 10.0F, DefaultValue = 1.0F, Step = 0.1F), OnChange(nameof(MyGenericValueChangedEvent))]
+        [Slider("Speed modifier", Format = "{0:F2}", Min = 1.0F, Max = 11.0F, DefaultValue = 1.0F, Step = 0.1F), OnChange(nameof(MyGenericValueChangedEvent))]
         public float SeaTruckSpeedModifier;
 
         /// <summary>
@@ -51,9 +59,11 @@ namespace SeaTruckSpeedMod_BZ
         /// </summary>
         private void MyGenericValueChangedEvent(IModOptionEventArgs e)
         {
-            Logger.Log(Logger.Level.Debug, "Generic value changed!");
-            Logger.Log(Logger.Level.Debug, $"{e.Id}: {e.GetType()}");
+            UpdateAllSeaTrucks(ModifierType.SpeedModifier, ((SliderChangedEventArgs)e).Value);
+        }
 
+        private void UpdateAllSeaTrucks(ModifierType modifierType, float modifierValue)
+        {
             // Update max speed on all SeaTruckMotors
             if (QMod.SeaTruckHistory != null)
             {
@@ -61,9 +71,14 @@ namespace SeaTruckSpeedMod_BZ
                 {
                     if (seaTruckHistoryItem.SeaTruckInstance != null)
                     {
-                        // Apply modifier
-                        seaTruckHistoryItem.SeaTruckInstance.pilotingDrag = (seaTruckHistoryItem.SeaTruckDrag / QMod.Config.SeaTruckSpeedModifier);
-                        Logger.Log(Logger.Level.Debug, $"Updated existing SeaTruckMotor. Current drag {seaTruckHistoryItem.SeaTruckDrag} to new drag {seaTruckHistoryItem.SeaTruckDrag / QMod.Config.SeaTruckSpeedModifier}");
+                        if (modifierType == ModifierType.SpeedModifier)
+                        {
+                            // Apply modifier
+                            float currentDrag = seaTruckHistoryItem.SeaTruckDrag;
+                            float newDrag = currentDrag / modifierValue;
+                            seaTruckHistoryItem.SeaTruckInstance.pilotingDrag = (newDrag);
+                            Logger.Log(Logger.Level.Debug, $"Updated existing SeaTruckMotor. Current drag: {currentDrag} to new drag: {newDrag}");
+                        }
                     }
                     else
                     {
@@ -71,21 +86,6 @@ namespace SeaTruckSpeedMod_BZ
                         QMod.SeaTruckHistory.Remove(seaTruckHistoryItem);
                     }
                 }
-            }
-            switch (e)
-            {
-                case KeybindChangedEventArgs keybindChangedEventArgs:
-                    Logger.Log(Logger.Level.Debug, keybindChangedEventArgs.KeyName);
-                    break;
-                case ChoiceChangedEventArgs choiceChangedEventArgs:
-                    Logger.Log(Logger.Level.Debug, $"{choiceChangedEventArgs.Index}: {choiceChangedEventArgs.Value}");
-                    break;
-                case SliderChangedEventArgs sliderChangedEventArgs:
-                    Logger.Log(Logger.Level.Debug, sliderChangedEventArgs.Value.ToString());
-                    break;
-                case ToggleChangedEventArgs toggleChangedEventArgs:
-                    Logger.Log(Logger.Level.Debug, toggleChangedEventArgs.Value.ToString());
-                    break;
             }
         }
     }
