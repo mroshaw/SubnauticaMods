@@ -1,0 +1,12 @@
+{
+  "Id": "UnlimitedExtinguisher",
+  "DisplayName": "Unlimited Fire Extinguisher",
+  "Author": "Oli Ollerenshaw",
+  "Version": "1.0.0",
+  "Enable": true,
+  "AssemblyName": "UnlimitedExtinguisher.dll",
+  "VersionDependencies": {
+    "SMLHelper": "2.9.6"
+  },
+  "Game": "Subnautica"
+}
