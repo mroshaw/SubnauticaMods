@@ -1,0 +1,1 @@
+copy /Y "C:\Users\mrosh\Google Drive\Development\Visual Studio Projects\Subnautica Below Zero\SeaTruckSpeedModifier_BZ\SeaTruckSpeedMod_BZ\bin\Debug\SeaTruckSpeedMod_BZ.dll" "C:\Games\Steam\steamapps\common\SubnauticaZero\QMods\SeaTruckSpeedMod_BZ\SeaTruckSpeedMod_BZ.dll"
