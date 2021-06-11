@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B709C554-2724-4019-8D94-18FC0FF7E659}</ProjectGuid>
+    <ProjectGuid>{35AA2D4F-53EC-4A63-895C-CD16700C2CF1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SeaTruckSpeedMod_BZ</RootNamespace>

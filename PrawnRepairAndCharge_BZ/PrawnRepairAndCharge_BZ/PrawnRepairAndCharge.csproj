@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B709C554-2724-4019-8D94-18FC0FF7E659}</ProjectGuid>
+    <ProjectGuid>{F0181A30-885F-4EC4-83F2-1CB8446F06AF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PrawnRepairAndCharge_BZ</RootNamespace>

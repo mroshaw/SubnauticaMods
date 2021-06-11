@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B709C554-2724-4019-8D94-18FC0FF7E659}</ProjectGuid>
+    <ProjectGuid>{5466B5E2-E6E0-4390-B64D-C87431A59AB1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UnlimitedExtinguisher</RootNamespace>

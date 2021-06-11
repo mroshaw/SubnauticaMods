@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31402.337
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoosterTankSpeedMod_BZ", "BoosterTankSpeedModifier_BZ\BoosterTankSpeedMod_BZ\BoosterTankSpeedMod_BZ.csproj", "{B709C554-2724-4019-8D94-18FC0FF7E659}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFirstSubnauticaMod_BZ", "MyFirstSubnauticaMod_BZ\MyFirstSubnauticaMod_BZ.csproj", "{9F31782C-7B97-44BE-BBE5-6DB23DF77B6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrawnRepairAndCharge", "PrawnRepairAndCharge_BZ\PrawnRepairAndCharge_BZ\PrawnRepairAndCharge.csproj", "{F0181A30-885F-4EC4-83F2-1CB8446F06AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeaTruckSpeedMod_BZ", "SeaTruckSpeedModifier_BZ\SeaTruckSpeedMod_BZ\SeaTruckSpeedMod_BZ.csproj", "{35AA2D4F-53EC-4A63-895C-CD16700C2CF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnlimitedExtinguisher", "UnlimitedExtinguisher\UnlimitedExtinguisher\UnlimitedExtinguisher.csproj", "{5466B5E2-E6E0-4390-B64D-C87431A59AB1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B709C554-2724-4019-8D94-18FC0FF7E659}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B709C554-2724-4019-8D94-18FC0FF7E659}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B709C554-2724-4019-8D94-18FC0FF7E659}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B709C554-2724-4019-8D94-18FC0FF7E659}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F31782C-7B97-44BE-BBE5-6DB23DF77B6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F31782C-7B97-44BE-BBE5-6DB23DF77B6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F31782C-7B97-44BE-BBE5-6DB23DF77B6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F31782C-7B97-44BE-BBE5-6DB23DF77B6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0181A30-885F-4EC4-83F2-1CB8446F06AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0181A30-885F-4EC4-83F2-1CB8446F06AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0181A30-885F-4EC4-83F2-1CB8446F06AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0181A30-885F-4EC4-83F2-1CB8446F06AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35AA2D4F-53EC-4A63-895C-CD16700C2CF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35AA2D4F-53EC-4A63-895C-CD16700C2CF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35AA2D4F-53EC-4A63-895C-CD16700C2CF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35AA2D4F-53EC-4A63-895C-CD16700C2CF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5466B5E2-E6E0-4390-B64D-C87431A59AB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5466B5E2-E6E0-4390-B64D-C87431A59AB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5466B5E2-E6E0-4390-B64D-C87431A59AB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5466B5E2-E6E0-4390-B64D-C87431A59AB1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B7C207F6-0B63-4258-B838-FA393F8CEA5F}
+	EndGlobalSection
+EndGlobal
