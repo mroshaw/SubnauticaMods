@@ -25,7 +25,7 @@ namespace UnlimitedExtinguisher_BZ
                 // Logger.Log(Logger.Level.Debug, $"FireExtinguisher_UseExtinguisher");
                 if (QMod.Config.UnlimitedFuel)
                 {
-                    #// Logger.Log(Logger.Level.Debug, $"Setting expendAmount from {expendAmount} to 0.");
+                    // Logger.Log(Logger.Level.Debug, $"Setting expendAmount from {expendAmount} to 0.");
                     expendAmount = 0f;
                 }
 
