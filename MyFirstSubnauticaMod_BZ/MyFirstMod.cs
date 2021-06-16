@@ -15,9 +15,12 @@ namespace MyFirstSubnauticaMod_BZ
             [HarmonyPostfix]
             public static void Postfix(Knife __instance)
             {
+                // ### Enhancing the mod ###
+                // Get the damage modifier
+                float damageModifier = QMod.Config.KnifeModifier;
                 // Double the knife damage
                 float knifeDamage = __instance.damage;
-                float newKnifeDamage = knifeDamage * 2;
+                float newKnifeDamage = knifeDamage * damageModifier;
                 __instance.damage = newKnifeDamage;
                 Logger.Log(Logger.Level.Debug, $"Knife damage was: {knifeDamage}," +
                     $" is now: {newKnifeDamage}");
