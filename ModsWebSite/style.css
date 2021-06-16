@@ -1,6 +1,14 @@
+.body {
+	background-color: #383838;
+}
+
+.header {
+	background-color: #383838;
+}
+
 .header > h1 {
 	font: 24px "Lobster", serif;
-	width: 100%;
+	width: 90%;
 	font-size: 6em;
 	text-align: center;
 	background: linear-gradient(
@@ -34,8 +42,10 @@
 	@keyframes Always {
 	100% { transform: scale(1.1);}
 }
-.body {
+.textbody {
+	background-color: #383838;
 	font: 24px "Roboto Condensed", sans-serif;
+	color: #ffffff;
 	text-align: center;
 	font-size: 1.4em;
 }
@@ -46,4 +56,20 @@
 	color: #DC143C;
 	font-size: 3em;
 	text-align: center;
+}
+.column {
+  float: left;
+  width: 33%;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
 }
