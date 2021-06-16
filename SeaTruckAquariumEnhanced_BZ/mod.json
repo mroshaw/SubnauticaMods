@@ -1,0 +1,12 @@
+﻿{
+  "Id": "SeaTruckAquariumEnhancedBZ",
+  "DisplayName": "Prevent windshield splatter!",
+  "Author": "Oli Ollerenshaw",
+  "Version": "1.0.0",
+  "Enable": true,
+  "AssemblyName": "SeaTruckAquariumEnhanced_BZ.dll",
+  "VersionDependencies": {
+    "SMLHelper": "2.9.6"
+  },
+  "Game": "BelowZero"
+}

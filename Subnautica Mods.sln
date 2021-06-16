@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnlimitedExtinguisher", "Un
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrawnSuitThrustMod_BZ", "PrawnSuitThrustMod_BZ\PrawnSuitThrustMod_BZ.csproj", "{073974A1-E576-43F3-8CBF-189773B1E2A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeaTruckAquariumEnhanced_BZ", "SeaTruckAquariumEnhanced_BZ\SeaTruckAquariumEnhanced_BZ.csproj", "{82588D3C-DB92-4918-AAC0-0CCCACC20F3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{073974A1-E576-43F3-8CBF-189773B1E2A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{073974A1-E576-43F3-8CBF-189773B1E2A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{073974A1-E576-43F3-8CBF-189773B1E2A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82588D3C-DB92-4918-AAC0-0CCCACC20F3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82588D3C-DB92-4918-AAC0-0CCCACC20F3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82588D3C-DB92-4918-AAC0-0CCCACC20F3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82588D3C-DB92-4918-AAC0-0CCCACC20F3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
