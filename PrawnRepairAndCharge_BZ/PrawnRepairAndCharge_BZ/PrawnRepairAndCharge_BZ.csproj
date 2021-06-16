@@ -65,7 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestMod.cs" />
-    <Compile Include="PrawnMod.cs" />
+    <Compile Include="PrawnSuitMod.cs" />
     <Compile Include="QMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -74,7 +74,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "C:\Users\mrosh\Google Drive\Development\Visual Studio Projects\Subnautica Below Zero\PrawnRepairAndCharge_BZ\PrawnRepairAndCharge_BZ\bin\Debug\PrawnRepairAndCharge_BZ.dll" "C:\Games\Steam\steamapps\common\SubnauticaZero\QMods\PrawnRepairAndCharge_BZ\PrawnRepairAndCharge_BZ.dll"
+    <PostBuildEvent>mkdir "C:\Games\Steam\steamapps\common\SubnauticaZero\QMods\$(TargetName)"
+copy /Y "$(TargetPath)" "C:\Games\Steam\steamapps\common\SubnauticaZero\QMods\$(TargetName)"
+copy /Y "$(ProjectDir)\mod.json" "C:\Games\Steam\steamapps\common\SubnauticaZero\QMods\$(TargetName)\mod.json"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

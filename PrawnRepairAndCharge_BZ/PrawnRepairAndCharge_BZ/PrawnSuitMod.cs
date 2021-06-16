@@ -9,7 +9,7 @@ using Logger = QModManager.Utility.Logger;
 
 namespace PrawnRepairAndCharge_BZ
 {
-    class PrawnMod
+    class PrawnSuitMod
     {
         [HarmonyPatch(typeof(Exosuit))]
         [HarmonyPatch("OnDockedChanged")]
