@@ -64,7 +64,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestMod.cs" />
     <Compile Include="PrawnSuitMod.cs" />
     <Compile Include="QMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

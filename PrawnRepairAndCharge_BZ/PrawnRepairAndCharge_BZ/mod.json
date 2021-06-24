@@ -2,7 +2,7 @@
   "Id": "PrawnRepairAndChargeBZ",
   "DisplayName": "Repair and charge Prawn Suit when docked",
   "Author": "Oli Ollerenshaw",
-  "Version": "1.0.0",
+  "Version": "1.0.1",
   "Enable": true,
   "AssemblyName": "PrawnRepairAndCharge_BZ.dll",
   "VersionDependencies": {

@@ -1,10 +1,4 @@
-﻿using System;
-using HarmonyLib;
-using SMLHelper.V2;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HarmonyLib;
 using Logger = QModManager.Utility.Logger;
 
 namespace PrawnRepairAndCharge_BZ
@@ -18,30 +12,32 @@ namespace PrawnRepairAndCharge_BZ
             [HarmonyPrefix]
             public static void Prefix(Exosuit __instance, bool docked, Vehicle.DockType dockType)
             {
-                Logger.Log(Logger.Level.Debug, $"In pre fix {docked}");
+                Logger.Log(Logger.Level.Debug, $"In Exosuit.OnDockedChanged");
                 if (docked)
                 {
-                    // Get current charge
+                    Logger.Log(Logger.Level.Debug, $"Dock Change at: {dockType}, Docked is: {docked}");
+
+                    // If we're docked in MoonPool or SeaTruck, and option is enabled, make the modifications
                     if ((dockType == Vehicle.DockType.Base && QMod.Config.EnableMoonPool) || (dockType == Vehicle.DockType.Seatruck && QMod.Config.EnableSeaTruck))
                     {
+                        Vehicle baseInstance = (Vehicle)__instance;
                         // Get current health
                         float currentHealth = __instance.liveMixin.GetHealthFraction();
                         Logger.Log(Logger.Level.Debug, $"Current health fraction: {currentHealth}");
+
                         // Top up health
-                        __instance.liveMixin.AddHealth(100.00F - currentHealth);
-                        currentHealth = __instance.liveMixin.GetHealthFraction();
-                        Logger.Log(Logger.Level.Debug, $"New health fraction: {currentHealth}");
-                        try
-                        {
-                            // Get current charge
-                            __instance.energyInterface.GetValues(out float currentCharge, out float currentCapacity);
-                            Logger.Log(Logger.Level.Debug, $"Current charge: {currentCharge}, current capacity {currentCapacity}, delta: {currentCapacity - currentCharge}");
-                            __instance.AddEnergy(currentCapacity - currentCharge);
-                        }
-                        catch(Exception e)
-                        {
-                            Logger.Log(Logger.Level.Debug, $"Bugger: {e}");
-                        }
+                        float healthDelta = 1F - currentHealth;
+                        __instance.liveMixin.AddHealth(healthDelta);
+                        Logger.Log(Logger.Level.Debug, $"Health Delta: {healthDelta}");
+
+                        // Get current charge
+                        baseInstance.energyInterface.GetValues(out float currentCharge, out float currentCapacity);
+                        Logger.Log(Logger.Level.Debug, $"Current charge: {currentCharge}, Current capacity: {currentCapacity}");
+                        float powerDelta = currentCapacity - currentCharge;
+
+                        // Top up charge
+                        baseInstance.AddEnergy(powerDelta);
+                        Logger.Log(Logger.Level.Debug, $"Current charge: {currentCharge}, current capacity {currentCapacity}, delta: {powerDelta}");
                     }
                 }
             }
