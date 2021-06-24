@@ -40,9 +40,9 @@ namespace PrawnRepairAndCharge_BZ
         /// Allow toggling of Moonpool and Seatruck
         /// </summary>
         [Toggle("Enabled in Moonpool")]
-        public bool EnableMoonPool;
+        public bool EnableMoonPool = true;
 
         [Toggle("Enabled on Seatruck")]
-        public bool EnableSeaTruck;
+        public bool EnableSeaTruck = true;
     }
 }
