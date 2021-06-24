@@ -21,23 +21,24 @@ namespace PrawnRepairAndCharge_BZ
                     if ((dockType == Vehicle.DockType.Base && QMod.Config.EnableMoonPool) || (dockType == Vehicle.DockType.Seatruck && QMod.Config.EnableSeaTruck))
                     {
                         Vehicle baseInstance = (Vehicle)__instance;
-                        // Get current health
-                        float currentHealth = __instance.liveMixin.GetHealthFraction();
-                        Logger.Log(Logger.Level.Debug, $"Current health fraction: {currentHealth}");
+                        // Get current and max health
+                        float currentHealth = __instance.liveMixin.health;
+                        float maxHealth = __instance.liveMixin.maxHealth;
+                        Logger.Log(Logger.Level.Debug, $"Current health: {currentHealth}, Max health: {maxHealth}");
+                        float deltaHealth = maxHealth - currentHealth;
 
                         // Top up health
-                        float healthDelta = 1F - currentHealth;
-                        __instance.liveMixin.AddHealth(healthDelta);
-                        Logger.Log(Logger.Level.Debug, $"Health Delta: {healthDelta}");
+                        __instance.liveMixin.AddHealth(deltaHealth);
+                        Logger.Log(Logger.Level.Debug, $"Added health delta: {deltaHealth}");
 
-                        // Get current charge
+                        // Get current charge and max charge
                         baseInstance.energyInterface.GetValues(out float currentCharge, out float currentCapacity);
-                        Logger.Log(Logger.Level.Debug, $"Current charge: {currentCharge}, Current capacity: {currentCapacity}");
-                        float powerDelta = currentCapacity - currentCharge;
+                        Logger.Log(Logger.Level.Debug, $"Current charge: {currentCharge}, Max charge: {currentCapacity}");
+                        float deltaPower = currentCapacity - currentCharge;
 
                         // Top up charge
-                        baseInstance.AddEnergy(powerDelta);
-                        Logger.Log(Logger.Level.Debug, $"Current charge: {currentCharge}, current capacity {currentCapacity}, delta: {powerDelta}");
+                        baseInstance.AddEnergy(deltaPower);
+                        Logger.Log(Logger.Level.Debug, $"Added power delta: {deltaPower}");
                     }
                 }
             }
