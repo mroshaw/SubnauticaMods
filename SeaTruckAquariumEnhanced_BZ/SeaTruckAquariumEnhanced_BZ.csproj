@@ -71,7 +71,7 @@
   <ItemGroup>
     <Compile Include="Qmod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SeaTruckMod.cs" />
+    <Compile Include="AquariumMod.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="mod.json" />
