@@ -1,6 +1,6 @@
 {
   "Id": "PrawnRepairAndChargeBZ",
-  "DisplayName": "Repair and charge Prawn Suit when docked",
+  "DisplayName": "Prawn Repair and Charge BZ",
   "Author": "Oli Ollerenshaw",
   "Version": "1.0.1",
   "Enable": true,
