@@ -1,7 +1,5 @@
 ﻿using HarmonyLib;
-using UnityEngine;
 using Logger = QModManager.Utility.Logger;
-using System.Collections.Generic;
 
 namespace SeaTruckSpeedMod_BZ
 {

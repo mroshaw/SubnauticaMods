@@ -75,7 +75,6 @@ namespace SeaTruckSpeedMod_BZ
             // Update oxygen usage on all Booster Tanks
             UpdateHistory(ChangeType.Oxygen, (SliderChangedEventArgs)e);
         }
-
         private void UpdateHistory(ChangeType changeType, SliderChangedEventArgs eventArgs)
         {
             // Update oxygen usage on all Booster Tanks

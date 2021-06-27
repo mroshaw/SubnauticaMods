@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoosterTankHistoryItem.cs" />
-    <Compile Include="TestMod.cs" />
     <Compile Include="BoosterTankMod.cs" />
     <Compile Include="QMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
