@@ -17,7 +17,7 @@ namespace SeaTruckSpeedMod_BZ
             public static void Postfix(SuitBoosterTank __instance)
             {
                 // Grab the modifier value from Config and apply to motorForce
-                Logger.Log(Logger.Level.Debug, $"In SuitBoosterTank_Awake");
+                Logger.Log(Logger.Level.Debug, "In SuitBoosterTank_Awake");
 
                 // Get current modifiers from menu config
                 float boostModifier = QMod.Config.BoosterTankSpeedModifier;
