@@ -12,7 +12,7 @@ namespace PrawnRepairAndCharge_BZ
             [HarmonyPrefix]
             public static void Prefix(Exosuit __instance, bool docked, Vehicle.DockType dockType)
             {
-                Logger.Log(Logger.Level.Debug, $"In Exosuit.OnDockedChanged");
+                Logger.Log(Logger.Level.Debug, "In Exosuit.OnDockedChanged");
                 if (docked)
                 {
                     Logger.Log(Logger.Level.Debug, $"Dock Change at: {dockType}, Docked is: {docked}");

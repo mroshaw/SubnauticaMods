@@ -3,9 +3,7 @@ using HarmonyLib;
 using QModManager.API.ModLoading;
 using SMLHelper.V2.Handlers;
 using SMLHelper.V2.Json;
-using SMLHelper.V2.Options;
 using SMLHelper.V2.Options.Attributes;
-using UnityEngine.UI;
 using Logger = QModManager.Utility.Logger;
 
 namespace PrawnRepairAndCharge_BZ
