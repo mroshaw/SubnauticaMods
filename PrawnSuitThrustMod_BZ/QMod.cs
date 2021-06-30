@@ -4,7 +4,6 @@ using QModManager.API.ModLoading;
 using SMLHelper.V2.Handlers;
 using SMLHelper.V2.Json;
 using SMLHelper.V2.Options.Attributes;
-using UnityEngine.UI;
 using Logger = QModManager.Utility.Logger;
 
 namespace PrawnSuitThrustMod_BZ
@@ -33,6 +32,12 @@ namespace PrawnSuitThrustMod_BZ
         /// </summary>
         [Slider("Thrust modifier", Format = "{0:F2}", Min = 1.0F, Max = 11.0F, DefaultValue = 1.0F, Step = 0.1F)]
         public float ThrustModifer = 1.0F;
+
+        /// <summary>
+        /// Energy consumption modifier, to offset additional thrust
+        /// </summary>
+        [Slider("Energy consumption modifier", Format = "{0:F2}", Min = 0.0F, Max = 5.0F, DefaultValue = 1.0F, Step = 0.1F)]
+        public float OxygenConsumptionModifier = 1.0F;
     }
 }
 

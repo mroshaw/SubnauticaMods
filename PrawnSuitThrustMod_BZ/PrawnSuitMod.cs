@@ -18,6 +18,10 @@ namespace PrawnSuitThrustMod_BZ
                 float thrustModifier = QMod.Config.ThrustModifer;
                 Logger.Log(Logger.Level.Debug, $"Adding force modifier: {thrustModifier}");
                 __instance.useRigidbody.AddForce(Vector3.up * (__instance.jumpJetsUpgraded ? 7f * thrustModifier : 5f * thrustModifier), ForceMode.VelocityChange);
+
+                // Get the power consumption modifier and apply
+
+
             }
         }
     }
