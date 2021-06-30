@@ -1,10 +1,10 @@
 ﻿{
-  "Id": "SeaTruckAquariumEnhancedBZ",
-  "DisplayName": "Seatruck Aquarium Enhanced BZ",
+  "Id": "SMLHelperToggleTest_BZ",
+  "DisplayName": "SML Helper Toggle Test BZ",
   "Author": "Oli Ollerenshaw",
   "Version": "1.0.0",
   "Enable": true,
-  "AssemblyName": "SeaTruckAquariumEnhanced_BZ.dll",
+  "AssemblyName": "SMLHelperToggleTest_BZ.dll",
   "VersionDependencies": {
     "SMLHelper": "2.9.6"
   },

@@ -7,7 +7,7 @@ using SMLHelper.V2.Options.Attributes;
 using UnityEngine.UI;
 using Logger = QModManager.Utility.Logger;
 
-namespace SeaTruckAquariumEnhanced_BZ
+namespace SeaTruckFishScoop_BZ
 {
     [QModCore]
     public static class QMod

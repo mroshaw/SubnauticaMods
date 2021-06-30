@@ -1,0 +1,12 @@
+﻿{
+    "Id": "SeaTruckFishScoop_BZ",
+    "DisplayName": "Sea Truck Fish Scoop BZ",
+    "Author": "Oli Ollerenshaw",
+    "Version": "1.0.0",
+    "Enable": true,
+    "AssemblyName": "SeaTruckFishScoop_BZ.dll",
+    "VersionDependencies": {
+        "SMLHelper": "2.9.6"
+    },
+    "Game": "BelowZero"
+}

@@ -3,7 +3,7 @@ using Logger = QModManager.Utility.Logger;
 using UnityEngine;
 
 
-namespace SeaTruckAquariumEnhanced_BZ
+namespace SeaTruckFishScoop_BZ
 {
     class AquariumMod
     {
@@ -11,13 +11,23 @@ namespace SeaTruckAquariumEnhanced_BZ
         [HarmonyPatch("TakeDamage")]
         internal class VehicleCollisionMod
         {
+            /// <summary>
+            /// Here, we're prefixing the TakeDamage method to intecept damage being dealt to a
+            /// Creature by the SeaTruck cab.
+            /// For context, "taker" is the object taking damage, "dealer" is the object dealing damage.
+            /// </summary>
+            /// <param name="__instance"></param>
+            /// <param name="dealer"></param>
             [HarmonyPrefix]
             public static void TakeDamage(LiveMixin __instance, GameObject dealer = null)
             {
+
                 if (dealer == null)
                 {
                     return;
                 }
+
+                // Get the root context of the damage taker
                 GameObject taker = __instance.gameObject;
                 Logger.Log(Logger.Level.Debug, $"Damage: {dealer.name} did damage to: {taker.name}");
                 GameObject rootTaker = UWE.Utils.GetEntityRoot(__instance.gameObject);
@@ -26,6 +36,7 @@ namespace SeaTruckAquariumEnhanced_BZ
                     rootTaker = taker;
                 }
 
+                // Get the root context of the damage dealer
                 GameObject rootDealer = UWE.Utils.GetEntityRoot(dealer);
                 if (rootDealer == null)
                 {
@@ -40,7 +51,7 @@ namespace SeaTruckAquariumEnhanced_BZ
                 }
                 Logger.Log(Logger.Level.Debug, $"Taker is a supported fish");
 
-                // Let's see if whatever dealt the damage was a SeaTruck cab
+                // Let's see if whatever dealt the damage was a SeaTruck main cab
                 SeaTruckSegment seaTruckSegment = rootDealer.GetComponent<SeaTruckSegment>();
                 if (seaTruckSegment == null)
                 {
