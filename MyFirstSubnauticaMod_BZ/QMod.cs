@@ -30,7 +30,7 @@ namespace MyFirstSubnauticaMod_BZ
     }
 
     /// <summary>
-    // ### Enhancing the mod ###
+    /// ### Enhancing the mod ###
     /// Set up the Mod menu
     /// </summary>
     [Menu("My First Mod")]
