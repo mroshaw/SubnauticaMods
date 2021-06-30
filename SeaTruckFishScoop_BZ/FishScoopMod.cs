@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SeaTruckFishScoop_BZ
 {
-    class AquariumMod
+    class FishScoopMod
     {
         [HarmonyPatch(typeof(LiveMixin))]
         [HarmonyPatch("TakeDamage")]
@@ -49,7 +49,7 @@ namespace SeaTruckFishScoop_BZ
                 {
                     return;
                 }
-                Logger.Log(Logger.Level.Debug, $"Taker is a supported fish");
+                Logger.Log(Logger.Level.Debug, "Taker is a supported fish");
 
                 // Let's see if whatever dealt the damage was a SeaTruck main cab
                 SeaTruckSegment seaTruckSegment = rootDealer.GetComponent<SeaTruckSegment>();
@@ -61,7 +61,7 @@ namespace SeaTruckFishScoop_BZ
                 {
                     return;
                 }
-                Logger.Log(Logger.Level.Debug, $"SeaTruck cab is dealer");
+                Logger.Log(Logger.Level.Debug, "SeaTruck cab is dealer");
 
                 // We hit a supported fish with our SeaTruck cab. Iterate over all Aquarium modules and add the fish to
                 // the first one with space
@@ -72,21 +72,20 @@ namespace SeaTruckFishScoop_BZ
                 {
                     if (AddFishToAquarium(seaTruckAquarium, rootTaker))
                     {
-                        Logger.Log(Logger.Level.Debug, $"Fish successfully added");
+                        Logger.Log(Logger.Level.Debug, "Fish successfully added");
                         return;
                     }
                     else
                     {
-                        Logger.Log(Logger.Level.Debug, $"Unable to add fish to this aquarium. Likely full or fish is already in one.");
+                        Logger.Log(Logger.Level.Debug, "Unable to add fish to this aquarium. Likely full or fish is already in one.");
                     }
                 }
             }
         }
-
         /// <summary>
         /// Is the object hit valid for inclusion in the Aquarium?
         /// </summary>
-        /// <param name="colliderGameObject"></param>
+        /// <param name="takerGameObject"></param>
         /// <returns></returns>
         private static bool IsValidObject(GameObject takerGameObject)
         {
@@ -106,14 +105,15 @@ namespace SeaTruckFishScoop_BZ
         /// Add our fish to the chosen Aquarium
         /// </summary>
         /// <param name="seaTruckAquarium"></param>
-        /// <param name="collidedWith"></param>
+        /// <param name="auquariumFish"></param>
+        /// <returns></returns>
         private static bool AddFishToAquarium (SeaTruckAquarium seaTruckAquarium, GameObject auquariumFish)
         {
             Pickupable pickupable = auquariumFish.GetComponent<Pickupable>();
   
             if (seaTruckAquarium.storageContainer.container.HasRoomFor(pickupable))
             {
-                global::Utils.PlayFMODAsset(seaTruckAquarium.collectSound, auquariumFish.transform, 20f);
+                Utils.PlayFMODAsset(seaTruckAquarium.collectSound, auquariumFish.transform, 20f);
                 pickupable.Initialize();
                 InventoryItem item = new InventoryItem(pickupable);
                 seaTruckAquarium.storageContainer.container.UnsafeAdd(item);
