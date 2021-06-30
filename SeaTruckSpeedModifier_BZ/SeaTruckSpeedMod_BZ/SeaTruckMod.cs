@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using Logger = QModManager.Utility.Logger;
-using System.Collections.Generic;
 
 namespace SeaTruckSpeedMod_BZ
 {
@@ -18,7 +17,7 @@ namespace SeaTruckSpeedMod_BZ
             public static void Postfix(SeaTruckMotor __instance)
             {
                 // Grab the modifier value from Config and apply to the drag coefficient
-                Logger.Log(Logger.Level.Debug, $"In post fix");
+                Logger.Log(Logger.Level.Debug, "In post fix");
 
                 // Get current drag
                 float currentDrag = __instance.pilotingDrag;

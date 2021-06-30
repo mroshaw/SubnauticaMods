@@ -7,8 +7,6 @@ using SMLHelper.V2.Interfaces;
 using SMLHelper.V2.Json;
 using SMLHelper.V2.Options;
 using SMLHelper.V2.Options.Attributes;
-
-using UnityEngine.UI;
 using Logger = QModManager.Utility.Logger;
 
 namespace SeaTruckSpeedMod_BZ

@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SeaTruckHistoryItem.cs" />
-    <Compile Include="TestMod.cs" />
     <Compile Include="SeaTruckMod.cs" />
     <Compile Include="QMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
