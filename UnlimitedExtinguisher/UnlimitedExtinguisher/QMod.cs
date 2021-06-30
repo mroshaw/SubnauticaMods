@@ -1,20 +1,13 @@
-﻿using System;
-using System.Reflection;
-using System.Collections.Generic;
+﻿using System.Reflection;
 using HarmonyLib;
 using QModManager.API.ModLoading;
-using SMLHelper.V2.Commands;
 using SMLHelper.V2.Handlers;
-using SMLHelper.V2.Interfaces;
 using SMLHelper.V2.Json;
 using SMLHelper.V2.Options;
 using SMLHelper.V2.Options.Attributes;
-
-using UnityEngine;
-using UnityEngine.UI;
 using Logger = QModManager.Utility.Logger;
 
-namespace UnlimitedExtinguisher_BZ
+namespace UnlimitedExtinguisher
 {
     [QModCore]
     public static class QMod

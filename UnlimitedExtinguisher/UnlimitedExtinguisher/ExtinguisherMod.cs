@@ -1,14 +1,6 @@
-﻿using System;
-using HarmonyLib;
-using SMLHelper.V2;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Logger = QModManager.Utility.Logger;
-using UnityEngine;
+﻿using HarmonyLib;
 
-namespace UnlimitedExtinguisher_BZ
+namespace UnlimitedExtinguisher
 {
     class ExtinguisherMod
     {
