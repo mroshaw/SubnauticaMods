@@ -19,12 +19,12 @@ namespace SeaTruckFishScoop_BZ
             /// <param name="__instance"></param>
             /// <param name="dealer"></param>
             [HarmonyPrefix]
-            public static void TakeDamage(LiveMixin __instance, GameObject dealer = null)
+            public static bool TakeDamage(LiveMixin __instance, GameObject dealer = null)
             {
 
                 if (dealer == null)
                 {
-                    return;
+                    return true;
                 }
 
                 // Get the root context of the damage taker
@@ -47,7 +47,7 @@ namespace SeaTruckFishScoop_BZ
                 // Let's see if what took the damage was a compatible aquarium fish
                 if (!IsValidObject(rootTaker))
                 {
-                    return;
+                    return true;
                 }
                 Logger.Log(Logger.Level.Debug, "Taker is a supported fish");
 
@@ -55,11 +55,11 @@ namespace SeaTruckFishScoop_BZ
                 SeaTruckSegment seaTruckSegment = rootDealer.GetComponent<SeaTruckSegment>();
                 if (seaTruckSegment == null)
                 {
-                    return;
+                    return true;
                 }
                 if (!seaTruckSegment.isMainCab)
                 {
-                    return;
+                    return true;
                 }
                 Logger.Log(Logger.Level.Debug, "SeaTruck cab is dealer");
 
@@ -73,13 +73,14 @@ namespace SeaTruckFishScoop_BZ
                     if (AddFishToAquarium(seaTruckAquarium, rootTaker))
                     {
                         Logger.Log(Logger.Level.Debug, "Fish successfully added");
-                        return;
+                        return false;
                     }
                     else
                     {
                         Logger.Log(Logger.Level.Debug, "Unable to add fish to this aquarium. Likely full or fish is already in one.");
                     }
                 }
+                return true;
             }
         }
         /// <summary>
