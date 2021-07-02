@@ -35,10 +35,10 @@
 }
 
 @keyframes BeProud {
-	100% { background-position: 100vw 0px; }
+	100% { background-position: 100vw 0; }
 }
 
-	@keyframes Always {
+@keyframes Always {
 	100% { transform: scale(1.1);}
 }
 .textbody {
@@ -50,7 +50,6 @@
 }
 .footer {
 	font: 24px "Lobster", serif;
-	font-size: 2em;
 	width: 100%;
 	color: #DC143C;
 	font-size: 3em;
@@ -67,7 +66,7 @@
   clear: both;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1200px) {
   .column {
     width: 100%;
   }
