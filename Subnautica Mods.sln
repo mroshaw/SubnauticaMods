@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrawnSuitThrustMod_BZ", "Pr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeaTruckFishScoop_BZ", "SeaTruckFishScoop_BZ\SeaTruckFishScoop_BZ.csproj", "{82588D3C-DB92-4918-AAC0-0CCCACC20F3D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubnauticaModUtils", "SubnauticaModUtils\SubnauticaModUtils.csproj", "{60EDAB69-A9CF-4505-BBDD-B00A7EC98E9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubnauticaModUtilsTestMod", "SubnauticaModUtilsTestMod\SubnauticaModUtilsTestMod.csproj", "{C38A410C-39F3-4A81-A5B0-913F817C80D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{82588D3C-DB92-4918-AAC0-0CCCACC20F3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82588D3C-DB92-4918-AAC0-0CCCACC20F3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82588D3C-DB92-4918-AAC0-0CCCACC20F3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60EDAB69-A9CF-4505-BBDD-B00A7EC98E9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60EDAB69-A9CF-4505-BBDD-B00A7EC98E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60EDAB69-A9CF-4505-BBDD-B00A7EC98E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60EDAB69-A9CF-4505-BBDD-B00A7EC98E9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C38A410C-39F3-4A81-A5B0-913F817C80D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C38A410C-39F3-4A81-A5B0-913F817C80D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C38A410C-39F3-4A81-A5B0-913F817C80D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C38A410C-39F3-4A81-A5B0-913F817C80D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

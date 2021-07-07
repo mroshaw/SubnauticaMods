@@ -1,0 +1,12 @@
+﻿{
+    "Id": "ModUtilsTestMod",
+    "DisplayName": "Mod Utils Test Mod",
+    "Author": "Oli Ollerenshaw",
+    "Version": "1.0.0",
+    "Enable": true,
+    "AssemblyName": "ModUtilsTestMod.dll",
+    "VersionDependencies": {
+        "SMLHelper": "2.9.6"
+    },
+    "Game": "BelowZero"
+}
