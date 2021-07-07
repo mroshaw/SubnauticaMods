@@ -21,6 +21,12 @@ namespace SeaTruckFishScoop_BZ
             [HarmonyPrefix]
             public static bool TakeDamage(LiveMixin __instance, GameObject dealer = null)
             {
+                // Check our config
+                if (!QMod.Config.EnableFishScoop)
+                {
+                    Logger.Log(Logger.Level.Debug, "Fish Scoop is disabled.");
+                    return true;
+                }
 
                 if (dealer == null)
                 {
@@ -44,13 +50,6 @@ namespace SeaTruckFishScoop_BZ
                 }
                 Logger.Log(Logger.Level.Debug, $"Dealer root: {rootDealer.name}. Taker root: {rootTaker.name}");
 
-                // Let's see if what took the damage was a compatible aquarium fish
-                if (!IsValidObject(rootTaker))
-                {
-                    return true;
-                }
-                Logger.Log(Logger.Level.Debug, "Taker is a supported fish");
-
                 // Let's see if whatever dealt the damage was a SeaTruck main cab
                 SeaTruckSegment seaTruckSegment = rootDealer.GetComponent<SeaTruckSegment>();
                 if (seaTruckSegment == null)
@@ -63,6 +62,34 @@ namespace SeaTruckFishScoop_BZ
                 }
                 Logger.Log(Logger.Level.Debug, "SeaTruck cab is dealer");
 
+                // Check if piloting against the config options
+                SeaTruckMotor seaTruckMotor = rootDealer.GetComponent<SeaTruckMotor>();
+                bool isPiloted = seaTruckMotor.IsPiloted();
+                Logger.Log(Logger.Level.Debug, $"SeaTruckIsPiloted: {isPiloted}");
+                float velicityMagnitude = seaTruckMotor.useRigidbody.velocity.magnitude;
+                Logger.Log(Logger.Level.Debug, $"Velocity.Magniture: {velicityMagnitude}");
+
+                if (!isPiloted && !QMod.Config.ScoopwhileNotPiloting)
+                {
+                    Logger.Log(Logger.Level.Debug, $"SeaTruck not being piloted, isPiloted: {isPiloted}, ScoopwhileNotPiloting: {QMod.Config.ScoopwhileNotPiloting}. No fish scoop!");
+                    return true;
+                }
+
+                // Check if static against the config options
+                if ((velicityMagnitude == 0.0f)  && !QMod.Config.ScoopWhileStatic)
+                {
+                    Logger.Log(Logger.Level.Debug, $"SeaTruck is static, velocity.Magnitude: {velicityMagnitude}, ScoopWhileStatic: {QMod.Config.ScoopWhileStatic}. No fish scoop!");
+                    return true;
+                }
+
+                // Let's see if what took the damage was a compatible aquarium fish
+                if (!IsValidObject(rootTaker))
+                {
+                    Logger.Log(Logger.Level.Debug, "Not a valid fish. No fish scoop!");
+                    return true;
+                }
+                Logger.Log(Logger.Level.Debug, "Taker is a supported fish");
+
                 // We hit a supported fish with our SeaTruck cab. Iterate over all Aquarium modules and add the fish to
                 // the first one with space
                 SeaTruckAquarium[] seaTruckAquariums = rootDealer.GetComponentsInChildren<SeaTruckAquarium>();
@@ -72,14 +99,17 @@ namespace SeaTruckFishScoop_BZ
                 {
                     if (AddFishToAquarium(seaTruckAquarium, rootTaker))
                     {
-                        Logger.Log(Logger.Level.Debug, "Fish successfully added");
+                        Logger.Log(Logger.Level.Debug, $"Fish successfully added ({rootTaker.name})");
+                        ErrorMessage.AddMessage($"Fish scoop successful! Added {rootTaker.name}");
                         return false;
                     }
                     else
                     {
-                        Logger.Log(Logger.Level.Debug, "Unable to add fish to this aquarium. Likely full or fish is already in one.");
+                        Logger.Log(Logger.Level.Debug, $"Unable to add fish to this aquarium ({seaTruckAquarium.name}). Likely full or fish is already in one.");
                     }
-                }
+                 }
+                Logger.Log(Logger.Level.Debug, "No free aquariums!");
+                ErrorMessage.AddMessage($"Aquariums are full. Fish scoop failed!");
                 return true;
             }
         }
