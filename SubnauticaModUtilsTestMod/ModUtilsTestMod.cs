@@ -19,7 +19,8 @@ namespace SubnauticaModUtilsTestMod
                 if (Input.GetKeyUp(KeyCode.Quote))
                 {
                     Logger.Log(Logger.Level.Debug, $"Toggle keypress detected");
-                    AudioUtilsBZ.Test();
+                    AudioUtilsBZ.PlayGameSound(AudioUtilsBZ.BZGameSound.Creature.ChelicerateBite);
+                    // AudioUtilsSN.PlayGameSound(AudioUtilsSN.SNGameSound.Creature.BleederPunch);
                 }
             }
         }
