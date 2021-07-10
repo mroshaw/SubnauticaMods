@@ -1128,7 +1128,7 @@ namespace SubnauticaModUtils
 		/// </summary>
 		public static void Test()
 		{
-			PlayGameSound(SNGameSound.Creature.BloodcrawlerIdle);
+			PlayGameSound(SNGameSound.Player.Breathing);
 		}
 	}
 
