@@ -2,7 +2,7 @@
   "Id": "SeaTruckSpeedModBZ",
   "DisplayName": "Sea Truck Speed Modifier BZ",
   "Author": "Oli Ollerenshaw",
-  "Version": "1.0.0",
+  "Version": "1.0.1",
   "Enable": true,
   "AssemblyName": "SeaTruckSpeedMod_BZ.dll",
   "VersionDependencies": {

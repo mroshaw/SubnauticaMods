@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Logger = QModManager.Utility.Logger;
+using UnityEngine;
 
 namespace SeaTruckSpeedMod_BZ
 {
@@ -17,23 +18,33 @@ namespace SeaTruckSpeedMod_BZ
             public static void Postfix(SeaTruckMotor __instance)
             {
                 // Grab the modifier value from Config and apply to the drag coefficient
-                Logger.Log(Logger.Level.Debug, "In post fix");
+                Logger.Log(Logger.Level.Debug, $"SeaTruckMotor_Start ({__instance.name})");
 
-                // Get current drag
-                float currentDrag = __instance.pilotingDrag;
-                Logger.Log(Logger.Level.Debug, $"Current drag: {currentDrag}");
+                // Determine if this is the motor for the Main Cab
+                GameObject rootSeatruck = UWE.Utils.GetEntityRoot(__instance.gameObject);
+                SeaTruckSegment seaTruckCabSegment = rootSeatruck.GetComponent<SeaTruckSegment>();
+                if (seaTruckCabSegment.isMainCab)
+                { 
+                    // Get current drag
+                    float currentDrag = __instance.pilotingDrag;
+                    Logger.Log(Logger.Level.Debug, $"Current drag: {currentDrag}");
 
-                // Add to our list of instances to allow ad-hoc change to the value
-                SeaTruckHistoryItem newSeaTruck = new SeaTruckHistoryItem(__instance, currentDrag);
-                QMod.SeaTruckHistory.Add(newSeaTruck);
+                    // Add to our list of instances to allow ad-hoc change to the value
+                    SeaTruckHistoryItem newSeaTruck = new SeaTruckHistoryItem(__instance, currentDrag);
+                    QMod.SeaTruckHistory.Add(newSeaTruck);
 
-                // Get current modifier
-                float dragModifier = QMod.Config.SeaTruckSpeedModifier;
+                    // Get current modifier
+                    float dragModifier = QMod.Config.SeaTruckSpeedModifier;
 
-                // Apply modifier
-                float newDrag = currentDrag / dragModifier;
-                __instance.pilotingDrag = newDrag;
-                Logger.Log(Logger.Level.Debug, $"Current drag: {currentDrag} to new drag: {newDrag}");
+                    // Apply modifier
+                    float newDrag = currentDrag / dragModifier;
+                    __instance.pilotingDrag = newDrag;
+                    Logger.Log(Logger.Level.Debug, $"Current drag: {currentDrag} to new drag: {newDrag}");
+                }
+                else
+                {
+                    Logger.Log(Logger.Level.Debug, "Not main cab");
+                }
             }
         }
     }

@@ -23,12 +23,13 @@ namespace SeaTruckSpeedMod_BZ
     public static class QMod
     {
         /// <summary>
-        /// Here, we are setting up a instance of <see cref="Config"/>, which will automatically generate an options menu using
-        /// Attributes. The values in this instance will be updated whenever the user changes the corresponding option in the menu.
+        /// Set up the config for the mod menu
         /// </summary>
         internal static Config Config { get; } = OptionsPanelHandler.Main.RegisterModOptions<Config>();
+
         // Maintain a list of SeaTrucks that we've modded, to allow dynamic change using menu
         internal static List<SeaTruckHistoryItem> SeaTruckHistory = new List<SeaTruckHistoryItem>();
+
         [QModPatch]
         public static void Patch()
         {
@@ -49,13 +50,13 @@ namespace SeaTruckSpeedMod_BZ
         /// <summary>
         /// Slider element for float value of the modifier. We'll allow 1.0 (unchanged) to 11.0 (lightening speed)
         /// </summary>
-        [Slider("Speed modifier", Format = "{0:F2}", Min = 1.0F, Max = 11.0F, DefaultValue = 1.0F, Step = 0.1F), OnChange(nameof(MyGenericValueChangedEvent))]
+        [Slider("Speed modifier", Format = "{0:F2}", Min = 1.0F, Max = 11.0F, DefaultValue = 1.0F, Step = 0.1F), OnChange(nameof(SpeedModifierChanged))]
         public float SeaTruckSpeedModifier;
 
         /// <summary>
         /// OnChange event, for debugging for now
         /// </summary>
-        private void MyGenericValueChangedEvent(IModOptionEventArgs e)
+        private void SpeedModifierChanged(IModOptionEventArgs e)
         {
             UpdateAllSeaTrucks(ModifierType.SpeedModifier, ((SliderChangedEventArgs)e).Value);
         }
@@ -65,6 +66,7 @@ namespace SeaTruckSpeedMod_BZ
             // Update max speed on all SeaTruckMotors
             if (QMod.SeaTruckHistory != null)
             {
+                Logger.Log(Logger.Level.Debug, $"Updating {QMod.SeaTruckHistory.Count} SeaTruckMotors");
                 foreach (SeaTruckHistoryItem seaTruckHistoryItem in QMod.SeaTruckHistory)
                 {
                     if (seaTruckHistoryItem.SeaTruckInstance != null)
