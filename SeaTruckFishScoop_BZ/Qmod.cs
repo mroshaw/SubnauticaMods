@@ -55,5 +55,9 @@ namespace SeaTruckFishScoop_BZ
         // Allow the scoop to work if the Seatruck is not being piloted
         [Toggle("Scoop while not piloting")]
         public bool ScoopwhileNotPiloting = false;
+
+        // Key press binding to release all fish from all attached Aquariums
+        [Keybind("Release all fish")]
+        public KeyCode ReleaseFishKey = KeyCode.Insert;
     }
 }

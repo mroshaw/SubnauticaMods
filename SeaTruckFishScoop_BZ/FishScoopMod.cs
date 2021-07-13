@@ -76,7 +76,7 @@ namespace SeaTruckFishScoop_BZ
                 }
 
                 // Check if static against the config options
-                if ((velicityMagnitude == 0.0f)  && !QMod.Config.ScoopWhileStatic)
+                if ((velicityMagnitude == 0.0f) && !QMod.Config.ScoopWhileStatic)
                 {
                     Logger.Log(Logger.Level.Debug, $"SeaTruck is static, velocity.Magnitude: {velicityMagnitude}, ScoopWhileStatic: {QMod.Config.ScoopWhileStatic}. No fish scoop!");
                     return true;
@@ -89,70 +89,26 @@ namespace SeaTruckFishScoop_BZ
                     return true;
                 }
                 Logger.Log(Logger.Level.Debug, "Taker is a supported fish");
-
-                // We hit a supported fish with our SeaTruck cab. Iterate over all Aquarium modules and add the fish to
-                // the first one with space
-                SeaTruckAquarium[] seaTruckAquariums = rootDealer.GetComponentsInChildren<SeaTruckAquarium>();
-                Logger.Log(Logger.Level.Debug, $"Found {seaTruckAquariums.Length} aquarium modules");
-
-                foreach (SeaTruckAquarium seaTruckAquarium in seaTruckAquariums)
+                bool fishAdded = AquariumsMod.AddFishToFreeAquarium(seaTruckMotor, rootTaker);
+                return !fishAdded;
+            }
+            /// <summary>
+            /// Is the object hit valid for inclusion in the Aquarium?
+            /// </summary>
+            /// <param name="takerGameObject"></param>
+            /// <returns></returns>
+            private static bool IsValidObject(GameObject takerGameObject)
+            {
+                if (!takerGameObject.GetComponent<AquariumFish>())
                 {
-                    if (AddFishToAquarium(seaTruckAquarium, rootTaker))
-                    {
-                        Logger.Log(Logger.Level.Debug, $"Fish successfully added ({rootTaker.name})");
-                        ErrorMessage.AddMessage($"Fish scoop successful! Added {rootTaker.name}");
-                        return false;
-                    }
-                    else
-                    {
-                        Logger.Log(Logger.Level.Debug, $"Unable to add fish to this aquarium ({seaTruckAquarium.name}). Likely full or fish is already in one.");
-                    }
-                 }
-                Logger.Log(Logger.Level.Debug, "No free aquariums!");
-                ErrorMessage.AddMessage($"Aquariums are full. Fish scoop failed!");
+                    return false;
+                }
+                WaterParkCreature waterParkCreature = takerGameObject.GetComponent<WaterParkCreature>();
+                if (waterParkCreature && waterParkCreature.IsInsideWaterPark())
+                {
+                    return false;
+                }
                 return true;
-            }
-        }
-        /// <summary>
-        /// Is the object hit valid for inclusion in the Aquarium?
-        /// </summary>
-        /// <param name="takerGameObject"></param>
-        /// <returns></returns>
-        private static bool IsValidObject(GameObject takerGameObject)
-        {
-            if (!takerGameObject.GetComponent<AquariumFish>())
-            {
-                return false;
-            }
-            WaterParkCreature waterParkCreature = takerGameObject.GetComponent<WaterParkCreature>();
-            if (waterParkCreature && waterParkCreature.IsInsideWaterPark())
-            {
-                return false;
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// Add our fish to the chosen Aquarium
-        /// </summary>
-        /// <param name="seaTruckAquarium"></param>
-        /// <param name="auquariumFish"></param>
-        /// <returns></returns>
-        private static bool AddFishToAquarium (SeaTruckAquarium seaTruckAquarium, GameObject auquariumFish)
-        {
-            Pickupable pickupable = auquariumFish.GetComponent<Pickupable>();
-  
-            if (seaTruckAquarium.storageContainer.container.HasRoomFor(pickupable))
-            {
-                Utils.PlayFMODAsset(seaTruckAquarium.collectSound, auquariumFish.transform, 20f);
-                pickupable.Initialize();
-                InventoryItem item = new InventoryItem(pickupable);
-                seaTruckAquarium.storageContainer.container.UnsafeAdd(item);
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
     }
