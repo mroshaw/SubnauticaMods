@@ -13,11 +13,11 @@ namespace SubnauticaModUtils
 		// Single static instance of FmodAsset to play the chosen sound
 		private static readonly FMODAsset FmodAsset = ScriptableObject.CreateInstance<FMODAsset>();
 
-		/// <summary>
-		/// Play the selected game sound
-		/// </summary>
-		/// <param name="gameSound"></param>
-		public static void PlayGameSound(SNGameSound gameSound)
+        /// <summary>
+        /// Play the selected game sound
+        /// </summary>
+        /// <param name="gameSound"></param>
+        public static void PlayGameSound(SNGameSound gameSound)
 		{
 			FmodAsset.path = gameSound.SoundPath;
 			FMODUWE.PlayOneShot(FmodAsset, Player.main.transform.position);
@@ -29,14 +29,14 @@ namespace SubnauticaModUtils
 		public class SNGameSound
 		{
 			public string SoundPath;
-			public SNGameSound(string soundPath)
+			private SNGameSound(string soundPath)
 			{
 				SoundPath = soundPath;
 			}
 
 			// Subnautica Sounds
 			#region
-			public class Creature
+			public static class Creature
 			{
 				public static SNGameSound Andi1 = new SNGameSound("event:/creature/andi/1");
 				public static SNGameSound Andi2 = new SNGameSound("event:/creature/andi/2");
@@ -193,7 +193,7 @@ namespace SubnauticaModUtils
 				public static SNGameSound WarperSwipe = new SNGameSound("event:/creature/warper/swipe");
 			}
 
-			public class Env
+			public static class Env
 			{
 				public static SNGameSound AntechamberLightsOn = new SNGameSound("event:/env/antechamber_lights_on");
 				public static SNGameSound AntechamberPillarDown = new SNGameSound("event:/env/antechamber_pillar_down");
@@ -340,7 +340,7 @@ namespace SubnauticaModUtils
 				public static SNGameSound TextType = new SNGameSound("event:/interface/text_type");
 			}
 
-			public class Loot
+			public static class Loot
 			{
 				public static SNGameSound BreakBreakable = new SNGameSound("event:/loot/break_breakable");
 				public static SNGameSound DataboxBoxOpen = new SNGameSound("event:/loot/databox/box_open");
@@ -389,7 +389,7 @@ namespace SubnauticaModUtils
 				public static SNGameSound PrecCrystalLoop = new SNGameSound("event:/loot/prec_crystal_loop");
 			}
 
-			public class Main
+			public static class Main
 			{
 				public static SNGameSound MenuCreditsMusic = new SNGameSound("event:/main_menu/credits_music");
 				public static SNGameSound MenuIntro = new SNGameSound("event:/main_menu/intro");
@@ -401,7 +401,7 @@ namespace SubnauticaModUtils
 				public static SNGameSound MenuUnmuteAll = new SNGameSound("event:/main_menu/unmute_all");
 			}
 
-			public class Player
+			public static class Player
 			{
 				public static SNGameSound AccessDenied = new SNGameSound("event:/player/access_denied");
 				public static SNGameSound AccessGranted = new SNGameSound("event:/player/access_granted");
@@ -683,7 +683,7 @@ namespace SubnauticaModUtils
 				public static SNGameSound WaterVeryLow = new SNGameSound("event:/player/water_very_low");
 			}
 
-			public class Sub
+			public static class Sub
 			{
 				public static SNGameSound BaseAiNopower = new SNGameSound("event:/sub/base/AI_nopower");
 				public static SNGameSound BaseBaseBackground = new SNGameSound("event:/sub/base/base_background");
@@ -994,7 +994,7 @@ namespace SubnauticaModUtils
 				public static SNGameSound SeamothWelcome = new SNGameSound("event:/sub/seamoth/welcome");
 			}
 
-			public class Tools
+			public static class Tools
 			{
 				public static SNGameSound AirbladderAirbladderDeflate = new SNGameSound("event:/tools/airbladder/airbladder_deflate");
 				public static SNGameSound AirbladderAirbladderDeflateSurface = new SNGameSound("event:/tools/airbladder/airbladder_deflate_surface");
