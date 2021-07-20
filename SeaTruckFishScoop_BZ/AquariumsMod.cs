@@ -103,8 +103,9 @@ namespace SeaTruckFishScoop_BZ
             {
                 if (AddFishToAquarium(seaTruckAquarium, fish))
                 {
-                    Logger.Log(Logger.Level.Debug, $"Fish successfully added ({fish.name})");
-                    ErrorMessage.AddMessage($"Fish scoop successful! Added {fish.name}");
+                    string friendlyFishName = fish.name.Replace("(Clone)", "");
+                    Logger.Log(Logger.Level.Debug, $"Fish successfully added ({friendlyFishName})");
+                    ErrorMessage.AddMessage($"Fish scoop successful! Added {friendlyFishName}");
                     return true;
                 }
                 else

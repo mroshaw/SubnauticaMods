@@ -90,6 +90,7 @@ namespace SeaTruckFishScoop_BZ
                 }
                 Logger.Log(Logger.Level.Debug, "Taker is a supported fish");
                 bool fishAdded = AquariumsMod.AddFishToFreeAquarium(seaTruckMotor, rootTaker);
+                Logger.Log(Logger.Level.Debug, $"Status of AddFish: {fishAdded}, return value for TakeDamage: {!fishAdded}");
                 return !fishAdded;
             }
             /// <summary>
