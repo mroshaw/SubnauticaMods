@@ -60,7 +60,6 @@ Global
 		{35AA2D4F-53EC-4A63-895C-CD16700C2CF1}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{35AA2D4F-53EC-4A63-895C-CD16700C2CF1}.Test|Any CPU.Build.0 = Test|Any CPU
 		{5466B5E2-E6E0-4390-B64D-C87431A59AB1}.Below Zero|Any CPU.ActiveCfg = Below Zero|Any CPU
-		{5466B5E2-E6E0-4390-B64D-C87431A59AB1}.Below Zero|Any CPU.Build.0 = Below Zero|Any CPU
 		{5466B5E2-E6E0-4390-B64D-C87431A59AB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5466B5E2-E6E0-4390-B64D-C87431A59AB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5466B5E2-E6E0-4390-B64D-C87431A59AB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -121,7 +120,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {3DC6A6DD-22CC-45F9-9AC2-ACD7DC8CCBD7}
 		    SolutionGuid = {B7C207F6-0B63-4258-B838-FA393F8CEA5F}
+		SolutionGuid = {3DC6A6DD-22CC-45F9-9AC2-ACD7DC8CCBD7}
 	EndGlobalSection
 EndGlobal
