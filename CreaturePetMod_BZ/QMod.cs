@@ -11,7 +11,6 @@ using Logger = QModManager.Utility.Logger;
 
 namespace CreaturePetMod_BZ
 {
-
     /// <summary>
     /// Used to allow the player a choice of pet to spawn
     /// </summary>
@@ -38,6 +37,7 @@ namespace CreaturePetMod_BZ
             Logger.Log(Logger.Level.Info, "Patched successfully!");
         }
     }
+
     /// <summary>
     /// Setup the mod menu
     /// </summary>
@@ -62,6 +62,5 @@ namespace CreaturePetMod_BZ
         // Max pets per room
         [Slider("Max pets per base", 0, 5, DefaultValue = 2)]
         public int MaxPetsPerRoom = 2;
-
     }
 }

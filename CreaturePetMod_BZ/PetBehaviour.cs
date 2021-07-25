@@ -18,7 +18,6 @@ namespace CreaturePetMod_BZ
         {
             // Configure base creature behaviours
             Creature creaturePet = petCreatureGameObject.GetComponent<Creature>();
-
             creaturePet.Friendliness.Value = 1.0f;
             creaturePet.Aggression.Value = 0.0f;
             creaturePet.Scared.Value = 0.0f;

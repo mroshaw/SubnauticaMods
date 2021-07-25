@@ -7,7 +7,7 @@ using System;
 namespace CreaturePetMod_BZ
 {
     /// <summary>
-    /// Mods to enable additonal controls that can be used within the Seatruck cab
+    /// Mods to enable additonal controls that can be used to spawn pet creatures
     /// </summary>
     class PlayerInputMod
     {
@@ -23,7 +23,6 @@ namespace CreaturePetMod_BZ
                 {
                     Logger.Log(Logger.Level.Debug, $"Spawn keypress detected");
                     PetSpawner.SpawnCreaturePet();
-
                 }
             }
         }
