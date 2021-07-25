@@ -23,6 +23,13 @@ namespace CreaturePetMod_BZ
                 return;
             }
 
+            // Have we reach the limit of pets per room?
+            if (NumPetsInRoom(interiorGameObject) >= QMod.Config.MaxPetsPerRoom )
+            {
+                Logger.Log(Logger.Level.Debug, $"Reached max pet numbers");
+                return;
+            }
+
             // Next, we want to decide where to spawn. This will be 1m in front of the player, at floor level
             Logger.Log(Logger.Level.Debug, $"Getting spawn position");
 
@@ -58,6 +65,19 @@ namespace CreaturePetMod_BZ
             }
             Logger.Log(Logger.Level.Debug, $"Player is inside: {interiorGameObject.name}");
             return interiorGameObject;
+        }
+
+        /// <summary>
+        /// Gets the number of creatures currently in the room
+        /// </summary>
+        /// <param name="interior"></param>
+        /// <returns></returns>
+        private static int NumPetsInRoom(GameObject interior)
+        {
+            Logger.Log(Logger.Level.Debug, $"Counting room pets");
+            Creature[] creaturesInRoom = interior.GetAllComponentsInChildren<Creature>();
+            Logger.Log(Logger.Level.Debug, $"Found: {creaturesInRoom.Length}");
+            return creaturesInRoom.Length;
         }
 
         /// <summary>

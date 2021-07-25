@@ -58,5 +58,10 @@ namespace CreaturePetMod_BZ
         // Toggle restriction to indoors only
         [Toggle("Indoor pet only")]
         public bool IndoorPetOnly = true;
+
+        // Max pets per room
+        [Slider("Max pets per base", 0, 5, DefaultValue = 2)]
+        public int MaxPetsPerRoom = 2;
+
     }
 }
