@@ -1,5 +1,6 @@
 ﻿using Logger = QModManager.Utility.Logger;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,10 +36,21 @@ namespace CreaturePetMod_BZ
 
             // Determine spawn position and rotation
             GetSpawnLocation(out Quaternion spawnRotation, out Vector3 spawnPosition);
+            CheckNavMesh(spawnPosition);
 
             // Call the routine to find the prefab and instantiate the creature
             Logger.Log(Logger.Level.Debug, $"Setting up SnowStalkerBaby");
             UWE.CoroutineHost.StartCoroutine(SetUpCreaturePet(interiorGameObject, spawnPosition, spawnRotation, QMod.Config.ChoiceOfPet));
+        }
+
+        /// <summary>
+        /// Checks the NavMesh state at the proposed Spawn Point
+        /// </summary>
+        private static void CheckNavMesh(Vector3 spawnPosition)
+        {
+            Logger.Log(Logger.Level.Debug, $"Looking for NavMesh...");
+            bool foundNavMesh = NavMesh.SamplePosition(spawnPosition, out NavMeshHit navMeshHit, 1.0f, NavMesh.AllAreas);
+            Logger.Log(Logger.Level.Debug, $"Status of search: {foundNavMesh}, hit: {navMeshHit}");
         }
 
         /// <summary>
@@ -103,9 +115,20 @@ namespace CreaturePetMod_BZ
                 spawnPosition = hit.point + new Vector3(0, playerTransform.localScale.y / 2, 0);
                 Logger.Log(Logger.Level.Debug, $"Spawn position is: {spawnPosition.x} {spawnPosition.y} {spawnPosition.z}");
             }
-            Logger.Log(Logger.Level.Debug, $"Raycast didn't hit. Using player position");
+            else
+            {
+                Logger.Log(Logger.Level.Debug, $"Raycast didn't hit. Using player position");
+            }
         }
 
+        /// <summary>
+        /// Sets up our creature Prefab and GameObject
+        /// </summary>
+        /// <param name="parentBase"></param>
+        /// <param name="spawnPosition"></param>
+        /// <param name="spawnRotation"></param>
+        /// <param name="petChoice"></param>
+        /// <returns></returns>
         private static IEnumerator SetUpCreaturePet(GameObject parentBase, Vector3 spawnPosition, Quaternion spawnRotation, PetChoice petChoice)
         {
             // Setup Prefab
@@ -119,6 +142,9 @@ namespace CreaturePetMod_BZ
                 case PetChoice.PenglingBaby:
                     petTechType = TechType.PenguinBaby;
                     break;
+                case PetChoice.SeaEmperorBaby:
+                    petTechType = TechType.SeaEmperorBaby;
+                    break;
                 default:
                     Logger.Log(Logger.Level.Debug, $"Invalid Pet Choice: {petChoice}");
                     yield break;
@@ -129,6 +155,10 @@ namespace CreaturePetMod_BZ
             GameObject creaturePetPrefab = task.GetResult();
             Logger.Log(Logger.Level.Debug, $"Instantiating new GameObject");
             GameObject petCreatureGameObject;
+            // Configure the prefab
+            // Logger.Log(Logger.Level.Debug, $"Calling ConfigurePetBehaviour");
+            // ConfigurePetBehaviour(QMod.Config.ChoiceOfPet, creaturePetPrefab);
+
             if (parentBase)
             {
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -149,7 +179,6 @@ namespace CreaturePetMod_BZ
         /// <param name="petChoice"></param>
         private static void ConfigurePetBehaviour(PetChoice petChoice, GameObject petCreatureGameObject)
         {
-
             // Configure default behaviour
             PetBehaviour.ConfigureBasePet(petCreatureGameObject);
 
@@ -162,6 +191,10 @@ namespace CreaturePetMod_BZ
                 case PetChoice.PenglingBaby:
                     PetBehaviour.ConfigurePenglingBaby(petCreatureGameObject);
                     break;
+                case PetChoice.SeaEmperorBaby:
+                    PetBehaviour.ConfigureSeaEmperorBaby(petCreatureGameObject);
+                    break;
+
                 default:
                     Logger.Log(Logger.Level.Debug, $"Invalid Pet Choice: {petChoice}");
                     break;

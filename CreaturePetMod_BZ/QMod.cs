@@ -14,7 +14,7 @@ namespace CreaturePetMod_BZ
     /// <summary>
     /// Used to allow the player a choice of pet to spawn
     /// </summary>
-    public enum PetChoice { SnowstalkerBaby, PenglingBaby }
+    public enum PetChoice { SnowstalkerBaby, PenglingBaby, SeaEmperorBaby }
 
     /// <summary>
     /// This is our core Patching class
@@ -52,7 +52,7 @@ namespace CreaturePetMod_BZ
         public KeyCode SpawnPetKey = KeyCode.End;
 
         // Allow selection of custom pet
-        [Choice("Pet to spawn", "Snowstalker Baby", "Pengling Baby")]
+        [Choice("Pet to spawn", "Snowstalker Baby", "Pengling Baby", "Sea Emperor Baby")]
         public PetChoice ChoiceOfPet = PetChoice.SnowstalkerBaby;
 
         // Toggle restriction to indoors only
