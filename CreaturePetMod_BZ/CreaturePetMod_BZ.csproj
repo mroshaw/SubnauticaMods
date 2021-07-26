@@ -101,6 +101,7 @@
   <ItemGroup>
     <Compile Include="PetSpawner.cs" />
     <Compile Include="PetBehaviour.cs" />
+    <Compile Include="PetTag.cs" />
     <Compile Include="SpawnInstigator.cs" />
     <Compile Include="QMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -76,6 +76,7 @@ namespace CreaturePetMod_BZ
                 return null;
             }
             Logger.Log(Logger.Level.Debug, $"Player is inside: {interiorGameObject.name}");
+
             return interiorGameObject;
         }
 
@@ -87,9 +88,9 @@ namespace CreaturePetMod_BZ
         private static int NumPetsInRoom(GameObject interior)
         {
             Logger.Log(Logger.Level.Debug, $"Counting room pets");
-            Creature[] creaturesInRoom = interior.GetAllComponentsInChildren<Creature>();
-            Logger.Log(Logger.Level.Debug, $"Found: {creaturesInRoom.Length}");
-            return creaturesInRoom.Length;
+            PetTag[] petsInRoom = interior.GetAllComponentsInChildren<PetTag>();
+            Logger.Log(Logger.Level.Debug, $"Found: {petsInRoom.Length}");
+            return petsInRoom.Length;
         }
 
         /// <summary>
@@ -142,8 +143,8 @@ namespace CreaturePetMod_BZ
                 case PetChoice.PenglingBaby:
                     petTechType = TechType.PenguinBaby;
                     break;
-                case PetChoice.SeaEmperorBaby:
-                    petTechType = TechType.SeaEmperorBaby;
+                case PetChoice.PenglingAdult:
+                    petTechType = TechType.Penguin;
                     break;
                 default:
                     Logger.Log(Logger.Level.Debug, $"Invalid Pet Choice: {petChoice}");
@@ -155,9 +156,6 @@ namespace CreaturePetMod_BZ
             GameObject creaturePetPrefab = task.GetResult();
             Logger.Log(Logger.Level.Debug, $"Instantiating new GameObject");
             GameObject petCreatureGameObject;
-            // Configure the prefab
-            // Logger.Log(Logger.Level.Debug, $"Calling ConfigurePetBehaviour");
-            // ConfigurePetBehaviour(QMod.Config.ChoiceOfPet, creaturePetPrefab);
 
             if (parentBase)
             {
@@ -179,9 +177,6 @@ namespace CreaturePetMod_BZ
         /// <param name="petChoice"></param>
         private static void ConfigurePetBehaviour(PetChoice petChoice, GameObject petCreatureGameObject)
         {
-            // Configure default behaviour
-            PetBehaviour.ConfigureBasePet(petCreatureGameObject);
-
             // Now configure appropriate pet behaviour
             switch (petChoice)
             {
@@ -191,8 +186,8 @@ namespace CreaturePetMod_BZ
                 case PetChoice.PenglingBaby:
                     PetBehaviour.ConfigurePenglingBaby(petCreatureGameObject);
                     break;
-                case PetChoice.SeaEmperorBaby:
-                    PetBehaviour.ConfigureSeaEmperorBaby(petCreatureGameObject);
+                case PetChoice.PenglingAdult:
+                    PetBehaviour.ConfigurePenglingAdult(petCreatureGameObject);
                     break;
 
                 default:
