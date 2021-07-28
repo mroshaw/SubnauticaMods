@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Logger = QModManager.Utility.Logger;
 
 namespace CreaturePetMod_BZ
 {
@@ -14,12 +15,11 @@ namespace CreaturePetMod_BZ
     /// </summary>
     class PetTag : MonoBehaviour
     {
-        public bool BoolIsPet;
+        public bool IsPet;
         public string PetName;
-
         public PetTag ()
         {
-            BoolIsPet = true;
+           IsPet = true;
         }
     }
 }

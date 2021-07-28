@@ -21,12 +21,14 @@ namespace CreaturePetMod_BZ
             if (!interiorGameObject && QMod.Config.IndoorPetOnly)
             {
                 Logger.Log(Logger.Level.Debug, $"Not inside and indoor pet only, so won't spawn");
+                ErrorMessage.AddMessage($"Cant' spawn pet outside!");
                 return;
             }
 
             // Have we reach the limit of pets per room?
             if (NumPetsInRoom(interiorGameObject) >= QMod.Config.MaxPetsPerRoom )
             {
+                ErrorMessage.AddMessage($"Maximum pets reached!");
                 Logger.Log(Logger.Level.Debug, $"Reached max pet numbers");
                 return;
             }
@@ -94,26 +96,30 @@ namespace CreaturePetMod_BZ
         }
 
         /// <summary>
-        /// Finds the correct spawn location for the creature based on player position and floor level
+        /// Finds the correct spawn location for the creature based on player / camera position and floor level
         /// </summary>
         /// <param name="spawnRotation"></param>
         /// <param name="spawnPosition"></param>
         private static void GetSpawnLocation(out Quaternion spawnRotation, out Vector3 spawnPosition)
         {
-            // Start with the player position and rotation
+            // Start with the camera position and rotation
+            // Could use player, but mouse can change where the player is "looking" without rotation
+            Transform cameraTransform = MainCameraControl.main.transform;
             Transform playerTransform = Player.main.transform;
-            spawnPosition = playerTransform.position;
-            spawnRotation = playerTransform.rotation;
+            spawnPosition = cameraTransform.position;
+            // Get the creature looking at the player
+            spawnRotation = cameraTransform.rotation * Quaternion.Euler(0, 180f, 0);
 
-            Logger.Log(Logger.Level.Debug, $"Player position is: {spawnPosition.x} {spawnPosition.y} {spawnPosition.z}");
-            spawnPosition += playerTransform.forward;
-            Logger.Log(Logger.Level.Debug, $"Player forward position is: {spawnPosition.x} {spawnPosition.y} {spawnPosition.z}");
+            Logger.Log(Logger.Level.Debug, $"Camera position is: {spawnPosition.x} {spawnPosition.y} {spawnPosition.z}");
+            // Give a little room to spawn the beastie
+            spawnPosition = playerTransform.position + (cameraTransform.forward * 1.2f);
+            Logger.Log(Logger.Level.Debug, $"Camera forward position is: {spawnPosition.x} {spawnPosition.y} {spawnPosition.z}");
 
             // Get ground height
             if (Physics.Raycast(spawnPosition, Vector3.down, out RaycastHit hit, 5.0f, -1, QueryTriggerInteraction.Ignore))
             {
                 Logger.Log(Logger.Level.Debug, $"Hit position is: {hit.point.x} {hit.point.y} {hit.point.z}");
-                spawnPosition = hit.point + new Vector3(0, playerTransform.localScale.y / 2, 0);
+                spawnPosition = hit.point + new Vector3(0, cameraTransform.localScale.y / 2, 0);
                 Logger.Log(Logger.Level.Debug, $"Spawn position is: {spawnPosition.x} {spawnPosition.y} {spawnPosition.z}");
             }
             else
@@ -159,41 +165,17 @@ namespace CreaturePetMod_BZ
 
             if (parentBase)
             {
-#pragma warning disable CS0618 // Type or member is obsolete
+ #pragma warning disable CS0618 // Type or member is obsolete
                 petCreatureGameObject = GameObject.Instantiate(creaturePetPrefab, spawnPosition, spawnRotation, parentBase.transform);
-#pragma warning restore CS0618 // Type or member is obsolete
+ #pragma warning restore CS0618 // Type or member is obsolete
             }
             else
             {
                 petCreatureGameObject = GameObject.Instantiate(creaturePetPrefab, spawnPosition, spawnRotation);
             }
+  
             Logger.Log(Logger.Level.Debug, $"Calling ConfigurePetBehaviour");
-            ConfigurePetBehaviour(QMod.Config.ChoiceOfPet, petCreatureGameObject);
-        }
-
-        /// <summary>
-        /// Configure the base pet behaviour, then call the specific pet config
-        /// </summary>
-        /// <param name="petChoice"></param>
-        private static void ConfigurePetBehaviour(PetChoice petChoice, GameObject petCreatureGameObject)
-        {
-            // Now configure appropriate pet behaviour
-            switch (petChoice)
-            {
-                case PetChoice.SnowstalkerBaby:
-                    PetBehaviour.ConfigureSnowStalkerBaby(petCreatureGameObject);
-                    break;
-                case PetChoice.PenglingBaby:
-                    PetBehaviour.ConfigurePenglingBaby(petCreatureGameObject);
-                    break;
-                case PetChoice.PenglingAdult:
-                    PetBehaviour.ConfigurePenglingAdult(petCreatureGameObject);
-                    break;
-
-                default:
-                    Logger.Log(Logger.Level.Debug, $"Invalid Pet Choice: {petChoice}");
-                    break;
-            }
+            PetBehaviour.ConfigurePetCreature(petCreatureGameObject);
         }
     }
 }

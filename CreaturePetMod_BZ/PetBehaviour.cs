@@ -12,30 +12,63 @@ namespace CreaturePetMod_BZ
     static class PetBehaviour
     {
         /// <summary>
+        /// Configure our creature based on type
+        /// </summary>
+        /// <param name="creature"></param>
+        internal static void ConfigurePetCreature(GameObject petCreatureGameObject)
+        {
+            // Configure base creature
+            // Configure base creature behaviours
+            Creature petCreature = petCreatureGameObject.GetComponent<Creature>();
+
+            petCreature.Friendliness.Value = 1.0f;
+            petCreature.Aggression.Value = 0.0f;
+            petCreature.Scared.Value = 0.0f;
+            petCreature.Hunger.Value = 0.0f;
+
+            // Prevent from swimming in interiors   
+            LandCreatureGravity landCreatuerGravity = petCreature.gameObject.GetComponent<LandCreatureGravity>();
+            landCreatuerGravity.forceLandMode = true;
+            landCreatuerGravity.enabled = true;
+
+            // Add creature specific config
+            string creatureTypeString = petCreature.GetType().ToString();
+            switch (creatureTypeString)
+            {
+                case "SnowStalkerBaby":
+                    ConfigureSnowStalkerBaby(petCreatureGameObject);
+                    break;
+
+                case "PenguinBaby":
+                    ConfigurePenglingBaby(petCreatureGameObject);
+                    break;
+
+                case "Penguin":
+                    ConfigurePenglingAdult(petCreatureGameObject);
+                    break;
+
+                default:
+                    Logger.Log(Logger.Level.Debug, $"Invalid Pet Type: {creatureTypeString}");
+                    break;
+            }
+
+            // Add the pet to our list
+            PetUtils.StorePrefabId(petCreatureGameObject);
+        }
+
+         /// <summary>
         /// Configure Snow Stalker Baby specific behaviours
         /// </summary>
         /// <param name="petCreatureGameObject"></param>
-        internal static void ConfigureSnowStalkerBaby(GameObject petCreatureGameObject)
+        private static void ConfigureSnowStalkerBaby(GameObject petCreatureGameObject)
         {
             SnowStalkerBaby snowStalkerPet = petCreatureGameObject.GetComponent<SnowStalkerBaby>();
             Logger.Log(Logger.Level.Debug, $"Configuring SnowStalker: {snowStalkerPet.name}");
 
-            // Configure base creature behaviours
-            snowStalkerPet.Friendliness.Value = 1.0f;
-            snowStalkerPet.Aggression.Value = 0.0f;
-            snowStalkerPet.Scared.Value = 0.0f;
-            snowStalkerPet.Hunger.Value = 0.0f;
-
-            // Prevent from swimming in interiors
-            LandCreatureGravity landCreatuerGravity = snowStalkerPet.gameObject.GetComponent<LandCreatureGravity>();
-            landCreatuerGravity.forceLandMode = true;
-            landCreatuerGravity.enabled = true;
-
             // Add new PetTag component
-            PetTag petTag = petCreatureGameObject.gameObject.AddComponent<PetTag>();
-            petTag.PetName = "Bitey";
+            PetTag petTag = petCreatureGameObject.AddComponent<PetTag>() as PetTag;
+            
             // Switch out the NavMesh with SurfaceMovement
-
             // Remove NavMesh behaviour
             SwimWalkCreatureController swimWalkCreatureController = petCreatureGameObject.GetComponent<SwimWalkCreatureController>();
             swimWalkCreatureController.walkBehaviours = RemoveBehaviourItem(swimWalkCreatureController.walkBehaviours, typeof(UnityEngine.AI.NavMeshAgent));
@@ -43,7 +76,7 @@ namespace CreaturePetMod_BZ
             // Add a SurfaceMovement component, get that little bugger moving around!
             OnSurfaceTracker onSurfaceTracker = petCreatureGameObject.GetComponent<OnSurfaceTracker>();
             WalkBehaviour walkBehaviour = petCreatureGameObject.GetComponent<WalkBehaviour>();
-            OnSurfaceMovement onSurfaceMovement = petCreatureGameObject.AddComponent<OnSurfaceMovement>() as OnSurfaceMovement;
+            OnSurfaceMovement onSurfaceMovement = petCreatureGameObject.AddComponent<OnSurfaceMovement>();
             MoveOnSurface moveOnSurface = petCreatureGameObject.GetComponent<MoveOnSurface>();
             onSurfaceMovement.onSurfaceTracker = onSurfaceTracker;
             onSurfaceMovement.locomotion = petCreatureGameObject.GetComponent<Locomotion>();
@@ -64,46 +97,26 @@ namespace CreaturePetMod_BZ
         /// Conifugre Pengling Baby specific behaviours
         /// </summary>
         /// <param name="petCreatureGameObject"></param>
-        internal static void ConfigurePenglingBaby(GameObject petCreatureGameObject)
+        private static void ConfigurePenglingBaby(GameObject petCreatureGameObject)
         {
             PenguinBaby penglingPet = petCreatureGameObject.GetComponent<PenguinBaby>();
-            Logger.Log(Logger.Level.Debug, $"Configuring Pengling: {penglingPet.name}");
-
-            // Configure base creature behaviours
-            penglingPet.Friendliness.Value = 1.0f;
-            penglingPet.Aggression.Value = 0.0f;
-            penglingPet.Scared.Value = 0.0f;
-            penglingPet.Hunger.Value = 0.0f;
-
-            // Prevent from swimming in interiors
-            penglingPet.gameObject.GetComponent<LandCreatureGravity>().forceLandMode = true;
+            Logger.Log(Logger.Level.Debug, $"Configuring Pengling Baby: {penglingPet.name}");
 
             // Add new PetTag component
-            PetTag petTag = petCreatureGameObject.gameObject.AddComponent<PetTag>();
-            petTag.PetName = "Fluffy";
+            PetTag petTag = petCreatureGameObject.AddComponent<PetTag>();
         }
 
         /// <summary>
         /// Conifugre Pengling Baby specific behaviours
         /// </summary>
         /// <param name="petCreatureGameObject"></param>
-        internal static void ConfigurePenglingAdult(GameObject petCreatureGameObject)
+        private static void ConfigurePenglingAdult(GameObject petCreatureGameObject)
         {
             Penguin penglingPet = petCreatureGameObject.GetComponent<Penguin>();
             Logger.Log(Logger.Level.Debug, $"Configuring Pengling: {penglingPet.name}");
 
-            // Configure base creature behaviours
-            penglingPet.Friendliness.Value = 1.0f;
-            penglingPet.Aggression.Value = 0.0f;
-            penglingPet.Scared.Value = 0.0f;
-            penglingPet.Hunger.Value = 0.0f;
-
-            // Prevent from swimming in interiors
-            penglingPet.gameObject.GetComponent<LandCreatureGravity>().forceLandMode = true;
-
-            // Add new PetTag component
-            PetTag petTag = petCreatureGameObject.gameObject.AddComponent<PetTag>();
-            petTag.PetName = "Stinky";
+              // Add new PetTag component
+            PetTag petTag = petCreatureGameObject.AddComponent<PetTag>();
         }
 
         /// <summary>
@@ -112,7 +125,7 @@ namespace CreaturePetMod_BZ
         /// <param name="array"></param>
         /// <param name="typeToRemove"></param>
         /// <returns></returns>
-        internal static Behaviour[] RemoveBehaviourItem(Behaviour[] array, Type typeToRemove)
+        private static Behaviour[] RemoveBehaviourItem(Behaviour[] array, Type typeToRemove)
         {
             Logger.Log(Logger.Level.Debug, $"Removing behaviour: {typeToRemove}");
             List<Behaviour> behaviourList = new List<Behaviour>(array);
@@ -126,7 +139,7 @@ namespace CreaturePetMod_BZ
         /// Cleans up the NavMesh stuff that we don't want or need
         /// </summary>
         /// <param name="petCreatureGameObject"></param>
-        internal static void CleanUpMesh(GameObject petCreatureGameObject)
+        private static void CleanUpMesh(GameObject petCreatureGameObject)
         {
             // Remove NavMesh components
             MoveOnNavMesh navMeshComp = petCreatureGameObject.GetComponent<MoveOnNavMesh>();
