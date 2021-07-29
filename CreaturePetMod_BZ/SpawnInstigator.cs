@@ -9,20 +9,49 @@ namespace CreaturePetMod_BZ
     /// <summary>
     /// Mods to enable additonal controls that can be used to spawn pet creatures
     /// </summary>
-    class PlayerInputMod
+    class SpawnInstigator
     {
+        /// <summary>
+        /// Class to manage "spawning" of a new pet
+        /// </summary>
         [HarmonyPatch(typeof(Player))]
         [HarmonyPatch("Update")]
-        internal class KeyboardInput
+        internal class PetSpawner
         {
             [HarmonyPostfix]
-            public static void Update()
+            public static void OnSpawn()
             {
                 // Check for "Spawn Pet" keypress
                 if (Input.GetKeyUp(QMod.Config.SpawnPetKey))
                 {
                     Logger.Log(Logger.Level.Debug, $"Spawn keypress detected");
-                    PetSpawner.SpawnCreaturePet();
+                    CreaturePetMod_BZ.PetSpawner.SpawnCreaturePet();
+                    Logger.Log(Logger.Level.Debug, $"Pet spawned!");
+                    ErrorMessage.AddMessage($"You have a new pet!");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Class to manage the death of a pet
+        /// </summary>
+        [HarmonyPatch(typeof(Creature))]
+        [HarmonyPatch("OnKill")]
+        internal class PetKiller
+        {
+            [HarmonyPostfix]
+            public static void OnKill(Creature __instance)
+            {
+                // Check to see if the creature is a Pet
+                if (PetUtils.IsCreaturePet(__instance))
+                {
+                    Logger.Log(Logger.Level.Debug, $"Pet death detected");
+                    QMod.PetDetailsHashSet.Remove(__instance.GetComponentInParent<CreaturePet>().GetPetDetailsObject());
+
+                    // Stop floating away!
+                    __instance.GetComponentInParent<Rigidbody>().mass = 99.0f;
+                    Logger.Log(Logger.Level.Debug, $"Pet removed!");
+                    ErrorMessage.AddMessage($"One of your pets has died!");
                 }
             }
         }

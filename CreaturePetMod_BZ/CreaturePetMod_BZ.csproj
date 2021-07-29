@@ -100,9 +100,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LoadGameOverride.cs" />
+    <Compile Include="PetInteraction.cs" />
+    <Compile Include="PetDetails.cs" />
     <Compile Include="PetSpawner.cs" />
     <Compile Include="PetBehaviour.cs" />
-    <Compile Include="PetTag.cs" />
+    <Compile Include="CreaturePet.cs" />
     <Compile Include="PetUtils.cs" />
     <Compile Include="SpawnInstigator.cs" />
     <Compile Include="QMod.cs" />

@@ -11,11 +11,12 @@ namespace CreaturePetMod_BZ
     /// </summary>
     static class PetBehaviour
     {
+
         /// <summary>
-        /// Configure our creature based on type
+        /// Configure our Pet behaviour based on type
         /// </summary>
-        /// <param name="creature"></param>
-        internal static void ConfigurePetCreature(GameObject petCreatureGameObject)
+        /// <param name="petCreatureGameObject"></param>
+        internal static void ConfigurePetCreature(GameObject petCreatureGameObject, PetDetails existingPetDetails)
         {
             // Configure base creature
             // Configure base creature behaviours
@@ -24,13 +25,36 @@ namespace CreaturePetMod_BZ
             petCreature.Friendliness.Value = 1.0f;
             petCreature.Aggression.Value = 0.0f;
             petCreature.Scared.Value = 0.0f;
-            petCreature.Hunger.Value = 0.0f;
 
-            // Prevent from swimming in interiors   
+            // Prevent Pet from swimming in interiors   
             LandCreatureGravity landCreatuerGravity = petCreature.gameObject.GetComponent<LandCreatureGravity>();
             landCreatuerGravity.forceLandMode = true;
             landCreatuerGravity.enabled = true;
 
+            // Reconfigure Death to prevent floating
+            CreatureDeath creatureDeath = petCreatureGameObject.GetComponent<CreatureDeath>();
+            creatureDeath.sink = true;
+            // creatureDeath.removeCorpseAfterSeconds = 2.0f;
+
+            // Configure the Pickupable component
+            Pickupable pickupable = petCreatureGameObject.GetComponentInParent<Pickupable>();
+            if (!petCreatureGameObject.GetComponentInParent<Pickupable>())
+            {
+                pickupable = petCreatureGameObject.AddComponent<Pickupable>();
+            }
+            pickupable.isPickupable = false;
+
+            // Add new creaturePet component
+            CreaturePet creaturePet = petCreatureGameObject.AddComponent<CreaturePet>() as CreaturePet;
+            if (existingPetDetails == null)
+            {
+
+                creaturePet.SetPetDetails (QMod.Config.PetName.ToString(), PetUtils.GetCreaturePrefabId(petCreature));
+            }
+            else
+            {
+                creaturePet.SetPetDetails (existingPetDetails.PetName, existingPetDetails.PrefabId);
+            }
             // Add creature specific config
             string creatureTypeString = petCreature.GetType().ToString();
             switch (creatureTypeString)
@@ -53,7 +77,7 @@ namespace CreaturePetMod_BZ
             }
 
             // Add the pet to our list
-            PetUtils.StorePrefabId(petCreatureGameObject);
+            QMod.PetDetailsHashSet.Add(creaturePet.GetPetDetailsObject());
         }
 
          /// <summary>
@@ -65,9 +89,6 @@ namespace CreaturePetMod_BZ
             SnowStalkerBaby snowStalkerPet = petCreatureGameObject.GetComponent<SnowStalkerBaby>();
             Logger.Log(Logger.Level.Debug, $"Configuring SnowStalker: {snowStalkerPet.name}");
 
-            // Add new PetTag component
-            PetTag petTag = petCreatureGameObject.AddComponent<PetTag>() as PetTag;
-            
             // Switch out the NavMesh with SurfaceMovement
             // Remove NavMesh behaviour
             SwimWalkCreatureController swimWalkCreatureController = petCreatureGameObject.GetComponent<SwimWalkCreatureController>();
@@ -90,7 +111,6 @@ namespace CreaturePetMod_BZ
 
             // Shake down!
             snowStalkerPet.GetAnimator().SetTrigger("dryFur");
-
         }
 
         /// <summary>
@@ -101,22 +121,16 @@ namespace CreaturePetMod_BZ
         {
             PenguinBaby penglingPet = petCreatureGameObject.GetComponent<PenguinBaby>();
             Logger.Log(Logger.Level.Debug, $"Configuring Pengling Baby: {penglingPet.name}");
-
-            // Add new PetTag component
-            PetTag petTag = petCreatureGameObject.AddComponent<PetTag>();
-        }
+       }
 
         /// <summary>
-        /// Conifugre Pengling Baby specific behaviours
+        /// Conifugre Pengling Adult specific behaviours
         /// </summary>
         /// <param name="petCreatureGameObject"></param>
         private static void ConfigurePenglingAdult(GameObject petCreatureGameObject)
         {
             Penguin penglingPet = petCreatureGameObject.GetComponent<Penguin>();
             Logger.Log(Logger.Level.Debug, $"Configuring Pengling: {penglingPet.name}");
-
-              // Add new PetTag component
-            PetTag petTag = petCreatureGameObject.AddComponent<PetTag>();
         }
 
         /// <summary>

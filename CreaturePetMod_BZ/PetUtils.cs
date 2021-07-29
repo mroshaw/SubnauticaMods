@@ -11,46 +11,40 @@ namespace CreaturePetMod_BZ
     class PetUtils
     {
         /// <summary>
-        /// Determine if a GameObject is a pet
+        /// Determine if a Creature is a pet
         /// </summary>
-        /// <param name="parentGameObject"></param>
+        /// <param name="creaturePet"></param>
         /// <returns></returns>
-        public static bool IsGameObjectPet(GameObject parentGameObject)
+        internal static bool IsCreaturePet(Creature creaturePet)
         {
-            return (parentGameObject.GetComponentInParent<PetTag>());
+            return (creaturePet.GetComponentInParent<CreaturePet>());
         }
 
         /// <summary>
-        /// Determine if a Creature is a pet
+        /// Gets the GUID Id of the PrefabIdentifier associated with the given Creature
         /// </summary>
-        /// <param name="parentCreature"></param>
+        /// <param name="creaturePet"></param>
         /// <returns></returns>
-        public static bool IsCreaturePet(Creature parentCreature)
+        internal static string GetCreaturePrefabId(Creature creaturePet)
         {
-            return (parentCreature.GetComponent<PetTag>());
+            return creaturePet.GetComponent<PrefabIdentifier>().Id;
         }
 
-        public static string GetCreaturePreFabId(Creature parentCreature)
+        /// <summary>
+        /// Determines whether the given prefab id is in the pet hashset
+        /// </summary>
+        /// <param name="prefabid"></param>
+        /// <returns></returns>
+        internal static PetDetails IsPrefabIdInHashSet(string prefabid)
         {
-            return parentCreature.GetComponent<PrefabIdentifier>().Id;
-        }
-
-        public static bool StorePrefabId(GameObject petCreatureGameObject)
-        {
-            // Get and store the Prefab keys to allow us to reconfigure these again on loading
-            Logger.Log(Logger.Level.Debug, $"Getting Prefab Id to add to list");
-            PrefabIdentifier prefabIdentifier = petCreatureGameObject.GetComponentInParent<PrefabIdentifier>();
-            string prefabId = prefabIdentifier.Id;
-            if (string.IsNullOrEmpty(prefabId))
+            foreach (PetDetails petDetails in QMod.PetDetailsHashSet)
             {
-                return false;
+                if (petDetails.PrefabId == prefabid)
+                {
+                    return petDetails;
+                }
             }
-            else
-            {
-                Logger.Log(Logger.Level.Debug, $"Adding Prefab Idenfifier to list: {prefabId}");
-                QMod.PetPrefabKeyList.Add(prefabId);
-                return true;
-            }
+            return null;
         }
     }
 }

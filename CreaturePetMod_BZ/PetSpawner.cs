@@ -7,6 +7,9 @@ using System.Collections.Generic;
 
 namespace CreaturePetMod_BZ
 {
+    /// <summary>
+    /// Class to support spawning of a new Pet
+    /// </summary>
     internal static class PetSpawner
     {
         /// <summary>
@@ -38,15 +41,15 @@ namespace CreaturePetMod_BZ
 
             // Determine spawn position and rotation
             GetSpawnLocation(out Quaternion spawnRotation, out Vector3 spawnPosition);
-            CheckNavMesh(spawnPosition);
+            // CheckNavMesh(spawnPosition);
 
             // Call the routine to find the prefab and instantiate the creature
-            Logger.Log(Logger.Level.Debug, $"Setting up SnowStalkerBaby");
+            Logger.Log(Logger.Level.Debug, $"Setting up Creature!");
             UWE.CoroutineHost.StartCoroutine(SetUpCreaturePet(interiorGameObject, spawnPosition, spawnRotation, QMod.Config.ChoiceOfPet));
         }
 
         /// <summary>
-        /// Checks the NavMesh state at the proposed Spawn Point
+        /// Checks the NavMesh state at the proposed Spawn Point.
         /// </summary>
         private static void CheckNavMesh(Vector3 spawnPosition)
         {
@@ -90,7 +93,7 @@ namespace CreaturePetMod_BZ
         private static int NumPetsInRoom(GameObject interior)
         {
             Logger.Log(Logger.Level.Debug, $"Counting room pets");
-            PetTag[] petsInRoom = interior.GetAllComponentsInChildren<PetTag>();
+            CreaturePet[] petsInRoom = interior.GetAllComponentsInChildren<CreaturePet>();
             Logger.Log(Logger.Level.Debug, $"Found: {petsInRoom.Length}");
             return petsInRoom.Length;
         }
@@ -175,7 +178,7 @@ namespace CreaturePetMod_BZ
             }
   
             Logger.Log(Logger.Level.Debug, $"Calling ConfigurePetBehaviour");
-            PetBehaviour.ConfigurePetCreature(petCreatureGameObject);
+            PetBehaviour.ConfigurePetCreature(petCreatureGameObject, null);
         }
     }
 }
