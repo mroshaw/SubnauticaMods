@@ -122,13 +122,12 @@ namespace CreaturePetMod_BZ
         [Choice("Pet name")]
         public PetNames PetName = PetNames.Buddy;
 
-        // Default pet name
-        [Toggle("Indoor pet only")]
+        // Only allow spawning pets indoors
+        [Toggle("Indoor pets only (experimental)")]
         public bool IndoorPetOnly = true;
 
         // Max pets per room
         [Slider("Max pets per base", 0, 15, DefaultValue = 5)]
         public int MaxPetsPerRoom = 5;
-
     }
 }

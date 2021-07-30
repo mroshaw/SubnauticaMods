@@ -17,7 +17,7 @@ namespace CreaturePetMod_BZ
         /// <returns></returns>
         internal static bool IsCreaturePet(Creature creaturePet)
         {
-            return (creaturePet.GetComponentInParent<CreaturePet>());
+            return creaturePet.GetComponentInParent<CreaturePet>();
         }
 
         /// <summary>
@@ -28,6 +28,16 @@ namespace CreaturePetMod_BZ
         internal static string GetCreaturePrefabId(Creature creaturePet)
         {
             return creaturePet.GetComponent<PrefabIdentifier>().Id;
+        }
+
+        /// <summary>
+        /// Determine if the GameObject is a pet
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <returns></returns>
+        internal static bool IsGameGameObjectPet(GameObject gameObject)
+        {
+            return gameObject.GetComponentInParent<CreaturePet>();
         }
 
         /// <summary>

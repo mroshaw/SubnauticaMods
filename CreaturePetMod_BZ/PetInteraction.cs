@@ -77,5 +77,23 @@ namespace CreaturePetMod_BZ
             }
         }
 
+        /// <summary>
+        /// Override interaction with Player as a platform
+        /// </summary>
+        [HarmonyPatch(typeof(GroundMotor))]
+        [HarmonyPatch("IsValidPlatform")]
+        internal class PlatformInteract
+        {
+            [HarmonyPostfix]
+            public static void OverrideIsPlatform(GroundMotor __instance, GameObject go, ref bool __result)
+            {
+                Creature creature = go.GetComponentInParent<Creature>();
+                if (creature)
+                {
+                    // Not allowed to stand on your pet!
+                    __result = false;
+                }
+            }
+        }
     }
 }
