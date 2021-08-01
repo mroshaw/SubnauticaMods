@@ -179,6 +179,7 @@ namespace CreaturePetMod_BZ
   
             Logger.Log(Logger.Level.Debug, $"Calling ConfigurePetBehaviour");
             PetBehaviour.ConfigurePetCreature(petCreatureGameObject, null);
+            ErrorMessage.AddMessage($"You have a new pet!");
         }
     }
 }
