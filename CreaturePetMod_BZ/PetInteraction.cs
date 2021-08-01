@@ -25,6 +25,7 @@ namespace CreaturePetMod_BZ
                     if (creaturePet)
                     {
                         TechType techType = __instance.GetTechType();
+                        main.SetIcon(HandReticle.IconType.Hand, 1f);
                         main.SetText(HandReticle.TextType.Hand, $"Pet {creaturePet.GetPetName()}", true, GameInput.Button.LeftHand);
                         HandReticle.main.SetText(HandReticle.TextType.HandSubscript, techType.AsString(false), false, GameInput.Button.None);
                         return false;
@@ -90,9 +91,10 @@ namespace CreaturePetMod_BZ
                 Creature creature = go.GetComponentInParent<Creature>();
                 if (creature)
                 {
-                    // Not allowed to stand on your pet!
+                    Logger.Log(Logger.Level.Debug, $"Preventing platform behaviour: {creature.GetType()}");
                     __result = false;
                 }
+
             }
         }
     }
