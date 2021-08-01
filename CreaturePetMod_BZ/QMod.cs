@@ -106,7 +106,6 @@ namespace CreaturePetMod_BZ
     [Menu("Creature Pet Mod")]
     public class Config : ConfigFile
     {
-
         /// <summary>
         /// Allow toggling of various options
         /// </summary>
@@ -127,7 +126,7 @@ namespace CreaturePetMod_BZ
         public bool IndoorPetOnly = true;
 
         // Max pets per room
-        [Slider("Max pets per base", 0, 15, DefaultValue = 5)]
-        public int MaxPetsPerRoom = 5;
+        [Slider("Max pets per base", 0, 30, DefaultValue = 10)]
+        public int MaxPetsPerRoom = 10;
     }
 }
