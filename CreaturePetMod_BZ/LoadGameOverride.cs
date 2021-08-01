@@ -22,10 +22,6 @@ namespace CreaturePetMod_BZ
             [HarmonyPostfix]
             public static void FixBehaviours(Creature __instance)
             {
-                // We check against prefab Id to find pets to reconfigure
-                string loadedPrefabId = PetUtils.GetCreaturePrefabId(__instance);
-                Logger.Log(Logger.Level.Debug, $"Start Creature Prefab Id: {loadedPrefabId}");
-
                 // First up, is this creature a pet? We lose our "creaturePet" component
                 // to the save game, so need to check another way
                 if (PetUtils.IsCreaturePet(__instance))
@@ -34,10 +30,14 @@ namespace CreaturePetMod_BZ
                     return;
                 }
 
+                // We check against prefab Id to find pets to reconfigure
+                string loadedPrefabId = PetUtils.GetCreaturePrefabId(__instance);
+
                 // If the GUID is in the list, let's reconfigure
                 PetDetails petDetails = PetUtils.IsPrefabIdInHashSet(loadedPrefabId);
                 if (petDetails != null)
                 {
+                    Logger.Log(Logger.Level.Debug, $"Start Creature Prefab Id: {loadedPrefabId}");
                     Logger.Log(Logger.Level.Debug, $"Reconfiguring loaded Pet: {__instance.name}");
                     PetBehaviour.ConfigurePetCreature(__instance.gameObject, petDetails);
                 }
