@@ -27,7 +27,6 @@ namespace CreaturePetMod_BZ
                     Logger.Log(Logger.Level.Debug, $"Spawn keypress detected");
                     CreaturePetMod_BZ.PetSpawner.SpawnCreaturePet();
                     Logger.Log(Logger.Level.Debug, $"Pet spawned!");
-                    ErrorMessage.AddMessage($"You have a new pet!");
                 }
             }
         }
@@ -46,12 +45,15 @@ namespace CreaturePetMod_BZ
                 if (PetUtils.IsCreaturePet(__instance))
                 {
                     Logger.Log(Logger.Level.Debug, $"Pet death detected");
-                    QMod.PetDetailsHashSet.Remove(__instance.GetComponentInParent<CreaturePet>().GetPetDetailsObject());
+                    PetDetails petDetails = __instance.GetComponentInParent<CreaturePet>().GetPetDetailsObject();
+                    QMod.PetDetailsHashSet.Remove(petDetails);
 
                     // Stop floating away!
                     __instance.GetComponentInParent<Rigidbody>().mass = 99.0f;
+
+                    // So long, fuzzball.
                     Logger.Log(Logger.Level.Debug, $"Pet removed!");
-                    ErrorMessage.AddMessage($"One of your pets has died!");
+                    ErrorMessage.AddMessage($"One of your pets has died! Farewell, {petDetails.PetName}!");
                 }
             }
         }
