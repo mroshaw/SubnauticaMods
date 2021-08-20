@@ -12,8 +12,7 @@ namespace PrawnRepairAndCharge_BZ
     public static class QMod
     {
         /// <summary>
-        /// Here, we are setting up a instance of <see cref="Config"/>, which will automatically generate an options menu using
-        /// Attributes. The values in this instance will be updated whenever the user changes the corresponding option in the menu.
+        /// Config instance, to manage the QMod menu settings
         /// </summary>
         internal static Config Config { get; } = OptionsPanelHandler.Main.RegisterModOptions<Config>();
 
