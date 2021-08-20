@@ -28,7 +28,6 @@ namespace SeaTruckFishScoop_BZ
             new Harmony(id).PatchAll(executingAssembly);
             Logger.Log(Logger.Level.Info, "Patched successfully!");
        }
-
     }
     /// <summary>
     /// Setup the mod menu
