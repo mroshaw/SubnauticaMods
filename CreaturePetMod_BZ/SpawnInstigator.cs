@@ -27,6 +27,7 @@ namespace CreaturePetMod_BZ
                     Logger.Log(Logger.Level.Debug, $"Spawn keypress detected");
                     CreaturePetMod_BZ.PetSpawner.SpawnCreaturePet();
                     Logger.Log(Logger.Level.Debug, $"Pet spawned!");
+                    ErrorMessage.AddMessage($"Pet spawned! Weclome, {QMod.Config.PetName}!");
                 }
             }
         }
@@ -49,7 +50,7 @@ namespace CreaturePetMod_BZ
                     QMod.PetDetailsHashSet.Remove(petDetails);
 
                     // Stop floating away!
-                    __instance.GetComponentInParent<Rigidbody>().mass = 99.0f;
+                    __instance.GetComponentInParent<Rigidbody>().mass = 2.0f;
 
                     // So long, fuzzball.
                     Logger.Log(Logger.Level.Debug, $"Pet removed!");
