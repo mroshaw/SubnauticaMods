@@ -13,18 +13,33 @@ namespace CreaturePetMod_BZ
     {
 
         /// <summary>
+        /// Reset creture traits, as these are initialised on Creature.Start()
+        /// </summary>
+        /// <param name="petCreature"></param>
+        internal static void ConfigurePetTraits(Creature petCreature)
+        {
+            petCreature.Friendliness.Value = 1.0f;
+            petCreature.Happy.Value = 1.0f;
+            petCreature.Aggression.Value = 0.0f;
+            petCreature.Scared.Value = 0.0f;
+            petCreature.Curiosity.Value = 1.0f;
+            petCreature.Hunger.Value = 1.0f;
+            petCreature.Tired.Value = 0.0f;
+        }
+
+        /// <summary>
         /// Configure our Pet behaviour based on type
         /// </summary>
         /// <param name="petCreatureGameObject"></param>
         internal static void ConfigurePetCreature(GameObject petCreatureGameObject, PetDetails existingPetDetails)
         {
             // Configure base creature
+            
             // Configure base creature behaviours
             Creature petCreature = petCreatureGameObject.GetComponent<Creature>();
 
-            petCreature.Friendliness.Value = 1.0f;
-            petCreature.Aggression.Value = 0.0f;
-            petCreature.Scared.Value = 0.0f;
+            // Set the name for easy debugging
+            petCreatureGameObject.name = $"{petCreature.GetType()}(Pet)";
 
             // Prevent Pet from swimming in interiors   
             LandCreatureGravity landCreatuerGravity = petCreature.gameObject.GetComponent<LandCreatureGravity>();
@@ -49,11 +64,11 @@ namespace CreaturePetMod_BZ
             if (existingPetDetails == null)
             {
 
-                creaturePet.SetPetDetails (QMod.Config.PetName.ToString(), PetUtils.GetCreaturePrefabId(petCreature));
+                creaturePet.SetPetDetails(QMod.Config.PetName.ToString(), PetUtils.GetCreaturePrefabId(petCreature));
             }
             else
             {
-                creaturePet.SetPetDetails (existingPetDetails.PetName, existingPetDetails.PrefabId);
+                creaturePet.SetPetDetails(existingPetDetails.PetName, existingPetDetails.PrefabId);
             }
             // Add creature specific config
             string creatureTypeString = petCreature.GetType().ToString();
@@ -80,12 +95,57 @@ namespace CreaturePetMod_BZ
             QMod.PetDetailsHashSet.Add(creaturePet.GetPetDetailsObject());
         }
 
-         /// <summary>
+        /// <summary>
         /// Configure Snow Stalker Baby specific behaviours
         /// </summary>
         /// <param name="petCreatureGameObject"></param>
         private static void ConfigureSnowStalkerBaby(GameObject petCreatureGameObject)
         {
+
+            /*
+              Pengling Components:
+                AvoidEdges
+                AvoidObstacles
+                AvoidObstaclesOnLand
+                CreatureDeath
+                CreatureFlinch
+                GoToPlayerHoldingFish
+                LandCreatureGravity
+                LastTarget
+                LiveMixin
+                Locomotion
+                MoveOnSurface
+                OnSurfaceMovement
+                OnSurfaceTracker
+                SplineFollowing
+                StayAtLeashPosition
+                SwimManeuvering
+                SwimRandom
+                SwimWalkCreatureController
+                WalkBehavior
+                WorldForces
+
+              SnowStalkerBaby Components:
+                AvoidObstacles
+                AvoidObstaclesOnLand
+                CreatureDeath
+                CretureFlinch
+                LandCreatureGravity
+                LiveMixin
+                Locomotion
+                MoveOnSurface
+                OnSurfaceMovement
+                OnSurfaceTracker
+                SplineFollowing
+                StayAtLeashPosition
+                SwimRandom
+                SwimWalkCreatureController
+                WalkBehaviour
+                WorldForces
+
+                -- AvoidObstaclesOnSurface
+
+            */
             SnowStalkerBaby snowStalkerPet = petCreatureGameObject.GetComponent<SnowStalkerBaby>();
             Logger.Log(Logger.Level.Debug, $"Configuring SnowStalker: {snowStalkerPet.name}");
 
@@ -94,20 +154,36 @@ namespace CreaturePetMod_BZ
             SwimWalkCreatureController swimWalkCreatureController = petCreatureGameObject.GetComponent<SwimWalkCreatureController>();
             swimWalkCreatureController.walkBehaviours = RemoveBehaviourItem(swimWalkCreatureController.walkBehaviours, typeof(UnityEngine.AI.NavMeshAgent));
 
+            // Clean up the left over NavMesh components
+            Logger.Log(Logger.Level.Debug, $"Cleaning up the Mesh");
+            CleanUpMesh(petCreatureGameObject);
+
             // Add a SurfaceMovement component, get that little bugger moving around!
             OnSurfaceTracker onSurfaceTracker = petCreatureGameObject.GetComponent<OnSurfaceTracker>();
             WalkBehaviour walkBehaviour = petCreatureGameObject.GetComponent<WalkBehaviour>();
             OnSurfaceMovement onSurfaceMovement = petCreatureGameObject.AddComponent<OnSurfaceMovement>();
             MoveOnSurface moveOnSurface = petCreatureGameObject.GetComponent<MoveOnSurface>();
+
+            // Configure walking and movement components
             onSurfaceMovement.onSurfaceTracker = onSurfaceTracker;
             onSurfaceMovement.locomotion = petCreatureGameObject.GetComponent<Locomotion>();
             moveOnSurface.onSurfaceMovement = onSurfaceMovement;
+            moveOnSurface.moveRadius = 7.0f;
             walkBehaviour.onSurfaceMovement = onSurfaceMovement;
-            onSurfaceMovement.Start();
+            walkBehaviour.onSurfaceTracker = onSurfaceTracker;
+            snowStalkerPet.onSurfaceMovement = onSurfaceMovement;
 
-            // Clean up the left over NavMesh components
-            Logger.Log(Logger.Level.Debug, $"Cleaning up the Mesh");
-            CleanUpMesh(petCreatureGameObject);
+            // Add Obstacle Avoidance components
+            AvoidObstaclesOnLand avoidObstaclesOnLand = petCreatureGameObject.AddComponent<AvoidObstaclesOnLand>();
+            AvoidObstaclesOnSurface avoidObstaclesOnSurface = petCreatureGameObject.AddComponent<AvoidObstaclesOnSurface>();
+            avoidObstaclesOnLand.creature = snowStalkerPet;
+            avoidObstaclesOnSurface.creature = snowStalkerPet;
+            avoidObstaclesOnLand.swimBehaviour = walkBehaviour;
+            avoidObstaclesOnLand.scanDistance = 0.5f;
+
+            LastTarget lastTarget = petCreatureGameObject.AddComponent<LastTarget>();
+            SwimRandom swimRandom = petCreatureGameObject.GetComponent<SwimRandom>();
+            swimRandom.swimBehaviour = walkBehaviour;
 
             // Shake down!
             snowStalkerPet.GetAnimator().SetTrigger("dryFur");
@@ -121,7 +197,7 @@ namespace CreaturePetMod_BZ
         {
             PenguinBaby penglingPet = petCreatureGameObject.GetComponent<PenguinBaby>();
             Logger.Log(Logger.Level.Debug, $"Configuring Pengling Baby: {penglingPet.name}");
-       }
+        }
 
         /// <summary>
         /// Conifugre Pengling Adult specific behaviours

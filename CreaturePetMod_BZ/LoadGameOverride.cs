@@ -40,6 +40,8 @@ namespace CreaturePetMod_BZ
                     Logger.Log(Logger.Level.Debug, $"Start Creature Prefab Id: {loadedPrefabId}");
                     Logger.Log(Logger.Level.Debug, $"Reconfiguring loaded Pet: {__instance.name}");
                     PetBehaviour.ConfigurePetCreature(__instance.gameObject, petDetails);
+                    __instance.Start();
+                    PetBehaviour.ConfigurePetTraits(__instance);
                 }
             }
         }

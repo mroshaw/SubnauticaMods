@@ -99,13 +99,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="DebugCreature.cs" />
     <Compile Include="LoadGameOverride.cs" />
-    <Compile Include="PetInteraction.cs" />
+    <Compile Include="PetPatcher.cs" />
     <Compile Include="PetDetails.cs" />
     <Compile Include="PetSpawner.cs" />
     <Compile Include="PetBehaviour.cs" />
     <Compile Include="CreaturePet.cs" />
     <Compile Include="PetUtils.cs" />
+    <Compile Include="SnowStalkderMovementPatcher.cs" />
     <Compile Include="SpawnInstigator.cs" />
     <Compile Include="QMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

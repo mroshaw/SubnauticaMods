@@ -6,18 +6,16 @@ using SMLHelper.V2.Json;
 using SMLHelper.V2.Json.Attributes;
 using SMLHelper.V2.Options.Attributes;
 using UnityEngine;
-using System.Media;
 using Logger = QModManager.Utility.Logger;
 using System.Collections.Generic;
-using SMLHelper.V2.Interfaces;
-using SMLHelper.V2.Options;
 
 namespace CreaturePetMod_BZ
 {
     /// <summary>
     /// Used to allow the player a choice of pet to spawn
     /// </summary>
-    public enum PetChoice { SnowstalkerBaby, PenglingBaby, PenglingAdult };
+    public enum PetCreatureType { SnowstalkerBaby, PenglingBaby, PenglingAdult };
+
     // Some pet names to choose from
     public enum PetNames { Anise, Beethoven, Bitey, Buddy, Cheerio, Clifford, Denali, Fuzzy, Gandalf, Hera, Jasper, Juju, Kovu, Lassie, Lois, Meera, Mochi, Oscar, Picasso, Ranger, Sampson, Shadow, Sprinkles, Stinky, Tobin, Wendy, Zola };
 
@@ -73,9 +71,7 @@ namespace CreaturePetMod_BZ
 
             saveData.OnFinishedLoading += (object sender, JsonFileEventArgs e) =>
             {
-                SaveData data = e.Instance as SaveData; // e.Instance is the instance of your SaveData stored as a JsonFile.
-                                                        // We can use polymorphism to convert it back into a SaveData
-                                                        // instance, and access its members, such as PlayerPosition.
+                SaveData data = e.Instance as SaveData;
                 PetDetailsHashSet = data.PetDetailsHashSet;
                 if (PetDetailsHashSet == null)
                 {
@@ -91,7 +87,7 @@ namespace CreaturePetMod_BZ
                 data.PetDetailsHashSet = PetDetailsHashSet;
             };
 
-            // Simply display the position we recorded to the save file whenever the save data it is saved
+            // Log success
             saveData.OnFinishedSaving += (object sender, JsonFileEventArgs e) =>
             {
                 SaveData data = e.Instance as SaveData;
@@ -115,7 +111,7 @@ namespace CreaturePetMod_BZ
 
         // Allow selection of custom pet
         [Choice("Pet to spawn", "Snowstalker Baby", "Pengling Baby", "Pengling Adult")]
-        public PetChoice ChoiceOfPet = PetChoice.SnowstalkerBaby;
+        public PetCreatureType ChoiceOfPet = PetCreatureType.SnowstalkerBaby;
 
         // Choice of pet names
         [Choice("Pet name")]

@@ -139,20 +139,20 @@ namespace CreaturePetMod_BZ
         /// <param name="spawnRotation"></param>
         /// <param name="petChoice"></param>
         /// <returns></returns>
-        private static IEnumerator SetUpCreaturePet(GameObject parentBase, Vector3 spawnPosition, Quaternion spawnRotation, PetChoice petChoice)
+        private static IEnumerator SetUpCreaturePet(GameObject parentBase, Vector3 spawnPosition, Quaternion spawnRotation, PetCreatureType petChoice)
         {
             // Setup Prefab
             Logger.Log(Logger.Level.Debug, $"In SetUpCreaturePet");
             TechType petTechType;
             switch (petChoice)
             {
-                case PetChoice.SnowstalkerBaby:
+                case PetCreatureType.SnowstalkerBaby:
                     petTechType = TechType.SnowStalkerBaby;
                     break;
-                case PetChoice.PenglingBaby:
+                case PetCreatureType.PenglingBaby:
                     petTechType = TechType.PenguinBaby;
                     break;
-                case PetChoice.PenglingAdult:
+                case PetCreatureType.PenglingAdult:
                     petTechType = TechType.Penguin;
                     break;
                 default:
@@ -179,6 +179,9 @@ namespace CreaturePetMod_BZ
   
             Logger.Log(Logger.Level.Debug, $"Calling ConfigurePetBehaviour");
             PetBehaviour.ConfigurePetCreature(petCreatureGameObject, null);
+            Creature petCreature = petCreatureGameObject.GetComponent<Creature>();
+            petCreature.Start();
+            PetBehaviour.ConfigurePetTraits(petCreature);
             ErrorMessage.AddMessage($"You have a new pet!");
         }
     }
