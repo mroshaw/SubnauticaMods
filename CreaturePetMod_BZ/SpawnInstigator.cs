@@ -1,8 +1,6 @@
 ﻿using HarmonyLib;
 using Logger = QModManager.Utility.Logger;
 using UnityEngine;
-using System.Collections.Generic;
-using System;
 
 namespace CreaturePetMod_BZ
 {
@@ -25,9 +23,12 @@ namespace CreaturePetMod_BZ
                 if (Input.GetKeyUp(QMod.Config.SpawnPetKey))
                 {
                     Logger.Log(Logger.Level.Debug, $"Spawn keypress detected");
-                    CreaturePetMod_BZ.PetSpawner.SpawnCreaturePet();
-                    Logger.Log(Logger.Level.Debug, $"Pet spawned!");
-                    ErrorMessage.AddMessage($"Pet spawned! Weclome, {QMod.Config.PetName}!");
+                    bool petSpawned = CreaturePetMod_BZ.PetSpawner.SpawnCreaturePet();
+                    if (petSpawned)
+                    {
+                        Logger.Log(Logger.Level.Debug, $"Pet spawned!");
+                        ErrorMessage.AddMessage($"Pet spawned! Weclome, {QMod.Config.PetName}!");
+                    }
                 }
             }
         }
@@ -48,9 +49,10 @@ namespace CreaturePetMod_BZ
                     Logger.Log(Logger.Level.Debug, $"Pet death detected");
                     PetDetails petDetails = __instance.GetComponentInParent<CreaturePet>().GetPetDetailsObject();
                     QMod.PetDetailsHashSet.Remove(petDetails);
+                    petDetails.IsAlive = false;
 
                     // Stop floating away!
-                    __instance.GetComponentInParent<Rigidbody>().mass = 2.0f;
+                    __instance.GetComponentInParent<Rigidbody>().mass = 99.0f;
 
                     // So long, fuzzball.
                     Logger.Log(Logger.Level.Debug, $"Pet removed!");
