@@ -124,5 +124,13 @@ namespace CreaturePetMod_BZ
         // Max pets per room
         [Slider("Max pets per base", 0, 30, DefaultValue = 10)]
         public int MaxPetsPerRoom = 10;
+
+        // Kill all pets
+        [Button("Kill all pets - USE WITH CAUTION!")]
+        public void KillAllButtonClicked()
+        {
+            Logger.Log(Logger.Level.Debug, $"Kill all button pressed!");
+            PetUtils.KillAllPets();
+        }
     }
 }
