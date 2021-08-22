@@ -52,5 +52,10 @@ namespace CreaturePetMod_BZ
         {
             return PetDetails;
         }
+
+        public bool IsPetAlive()
+        {
+            return PetDetails.IsAlive;
+        }
     }
 }

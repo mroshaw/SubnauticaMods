@@ -15,17 +15,19 @@ namespace CreaturePetMod_BZ
     {
         public string PrefabId;
         public string PetName;
-
-        public PetDetails()
+        public bool IsAlive;
+        internal PetDetails()
         {
             PrefabId = "";
             PetName = "";
+            IsAlive = true;
         }
 
-        public PetDetails (string prefabId, string petName)
+        internal PetDetails (string prefabId, string petName)
         {
             PrefabId = prefabId;
             PetName = petName;
+            IsAlive = true;
         }
 
         /// <summary>
