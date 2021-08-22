@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using UnityEngine;
+using System;
+using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using Logger = QModManager.Utility.Logger;
 
 namespace CreaturePetMod_BZ
@@ -93,6 +91,35 @@ namespace CreaturePetMod_BZ
                 default:
                     return "";
             }
+        }
+
+        /// <summary>
+        /// Kills ALL pets. Use with caution!
+        /// </summary>
+        public static void KillAllPets()
+        {
+
+            CreaturePet[] creaturePets = GameObject.FindObjectsOfType<CreaturePet>();
+            Logger.Log(Logger.Level.Debug, $"Killing {creaturePets.Count()} pets");
+            foreach (CreaturePet creaturePet in creaturePets)
+            {
+                KillPet(creaturePet);
+            }
+        }
+
+        /// <summary>
+        /// Kill the specified pet
+        /// </summary>
+        /// <param name="pet"></param>
+        public static void KillPet(CreaturePet pet)
+        {
+            // Get LiveMixIn component and kill
+            Creature creature = pet.GetComponentInParent<Creature>();
+            LiveMixin liveMixin = pet.GetComponentInParent<LiveMixin>();
+
+            // Kill the Creature
+            Logger.Log(Logger.Level.Debug, $"Killing {creature.GetType()} ({pet.GetPetName()})");
+            liveMixin.Kill();
         }
     }
 }
