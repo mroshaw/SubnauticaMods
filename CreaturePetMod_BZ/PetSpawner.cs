@@ -1,9 +1,7 @@
 ﻿using Logger = QModManager.Utility.Logger;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace CreaturePetMod_BZ
 {
@@ -15,17 +13,31 @@ namespace CreaturePetMod_BZ
         /// <summary>
         /// Main class for handling pet spawn
         /// </summary>
-        internal static void SpawnCreaturePet()
+        internal static bool SpawnCreaturePet()
         {
+            // Secide where to spawn. This will be 1m in front of the player, at floor level
+            Logger.Log(Logger.Level.Debug, $"Getting spawn position");
+
+            // Determine spawn position and rotation
+            GetSpawnLocation(out Quaternion spawnRotation, out Vector3 spawnPosition);
+
             // First up, we want to check that we can spawn here. Use the toggle combined with IsInterior to decide
             Logger.Log(Logger.Level.Debug, $"Checking player position");
             GameObject interiorGameObject = GetPlayerBaseRoom();
+            bool isSpawnInBoundary = IsSpawnInBoundary(spawnPosition);
 
-            if (!interiorGameObject && QMod.Config.IndoorPetOnly)
+            if (!isSpawnInBoundary)
+            {
+                Logger.Log(Logger.Level.Debug, $"Spawn location too close to wall or object");
+                ErrorMessage.AddMessage($"Too close to wall or object!");
+                return false;
+            }
+
+            if (!interiorGameObject && QMod.Config.IndoorPetOnly && !IsSpawnInBoundary(spawnPosition))
             {
                 Logger.Log(Logger.Level.Debug, $"Not inside and indoor pet only, so won't spawn");
-                ErrorMessage.AddMessage($"Cant' spawn pet outside!");
-                return;
+                ErrorMessage.AddMessage($"Can't spawn pet outside!");
+                return false;
             }
 
             // Have we reach the limit of pets per room?
@@ -33,19 +45,13 @@ namespace CreaturePetMod_BZ
             {
                 ErrorMessage.AddMessage($"Maximum pets reached!");
                 Logger.Log(Logger.Level.Debug, $"Reached max pet numbers");
-                return;
+                return false;
             }
-
-            // Next, we want to decide where to spawn. This will be 1m in front of the player, at floor level
-            Logger.Log(Logger.Level.Debug, $"Getting spawn position");
-
-            // Determine spawn position and rotation
-            GetSpawnLocation(out Quaternion spawnRotation, out Vector3 spawnPosition);
-            // CheckNavMesh(spawnPosition);
 
             // Call the routine to find the prefab and instantiate the creature
             Logger.Log(Logger.Level.Debug, $"Setting up Creature!");
             UWE.CoroutineHost.StartCoroutine(SetUpCreaturePet(interiorGameObject, spawnPosition, spawnRotation, QMod.Config.ChoiceOfPet));
+            return true;
         }
 
         /// <summary>
@@ -94,11 +100,20 @@ namespace CreaturePetMod_BZ
         {
             Logger.Log(Logger.Level.Debug, $"Counting room pets");
             CreaturePet[] petsInRoom = interior.GetAllComponentsInChildren<CreaturePet>();
-            Logger.Log(Logger.Level.Debug, $"Found: {petsInRoom.Length}");
-            return petsInRoom.Length;
+            int alivePetCount = 0;
+            foreach (CreaturePet pet in petsInRoom)
+            {
+                if(pet.IsPetAlive())
+                {
+                    alivePetCount++;
+                }
+            }
+            Logger.Log(Logger.Level.Debug, $"Found: {alivePetCount} live pets");
+            return alivePetCount;
         }
 
         /// <summary>
+        /// 
         /// Finds the correct spawn location for the creature based on player / camera position and floor level
         /// </summary>
         /// <param name="spawnRotation"></param>
@@ -119,7 +134,7 @@ namespace CreaturePetMod_BZ
             Logger.Log(Logger.Level.Debug, $"Camera forward position is: {spawnPosition.x} {spawnPosition.y} {spawnPosition.z}");
 
             // Get ground height
-            if (Physics.Raycast(spawnPosition, Vector3.down, out RaycastHit hit, 5.0f, -1, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(spawnPosition, Vector3.down, out RaycastHit hit, 10.0f))
             {
                 Logger.Log(Logger.Level.Debug, $"Hit position is: {hit.point.x} {hit.point.y} {hit.point.z}");
                 spawnPosition = hit.point + new Vector3(0, cameraTransform.localScale.y / 2, 0);
@@ -128,6 +143,28 @@ namespace CreaturePetMod_BZ
             else
             {
                 Logger.Log(Logger.Level.Debug, $"Raycast didn't hit. Using player position");
+            }
+        }
+
+        /// <summary>
+        /// Check to see if there is anything between the player and the spawn position
+        /// This helps avoid attempts to spawn outside of base objects
+        /// </summary>
+        /// <param name="spawnPosition"></param>
+        /// <returns></returns>
+        private static bool IsSpawnInBoundary(Vector3 spawnPosition)
+        {
+            Vector3 fromPosition = MainCameraControl.main.transform.position;
+            Vector3 toPosition = spawnPosition;
+            if (Physics.Linecast(fromPosition, toPosition, out RaycastHit hit))
+            {
+                Logger.Log(Logger.Level.Debug, $"Spawn would be outside boundary. Hit: {hit.collider.gameObject.name}");
+                return false;
+            }
+            else
+            {
+                Logger.Log(Logger.Level.Debug, $"Spawn would be within boundary");
+                return true;
             }
         }
 
@@ -180,6 +217,7 @@ namespace CreaturePetMod_BZ
             Logger.Log(Logger.Level.Debug, $"Calling ConfigurePetBehaviour");
             PetBehaviour.ConfigurePetCreature(petCreatureGameObject, null);
             Creature petCreature = petCreatureGameObject.GetComponent<Creature>();
+            // Call Start() again, just to ensure action and behaviours are updated with new components
             petCreature.Start();
             PetBehaviour.ConfigurePetTraits(petCreature);
             ErrorMessage.AddMessage($"You have a new pet!");
