@@ -70,6 +70,10 @@ namespace CreaturePetMod_BZ
             {
                 creaturePet.SetPetDetails(existingPetDetails.PetName, existingPetDetails.PrefabId);
             }
+
+            // Add Player as friend
+            petCreature.SetFriend(Player.main.gameObject);
+
             // Add creature specific config
             string creatureTypeString = petCreature.GetType().ToString();
             switch (creatureTypeString)
