@@ -1,9 +1,0 @@
-///
-// Run this in Unity Runtime Explorer
-///
-
-FMODAsset[] allFmodAssets = Resources.FindObjectsOfTypeAll<FMODAsset>();
-foreach (FMODAsset fmodAsset in allFmodAssets)
-{
-  Log($"{fmodAsset.path}");
-}
