@@ -2,7 +2,7 @@
     "Id": "SeaTruckFishScoop_BZ",
     "DisplayName": "Seatruck Fish Scoop BZ",
     "Author": "Oli Ollerenshaw",
-    "Version": "1.1.0",
+    "Version": "1.2.0",
     "Enable": true,
     "AssemblyName": "SeaTruckFishScoop_BZ.dll",
     "VersionDependencies": {

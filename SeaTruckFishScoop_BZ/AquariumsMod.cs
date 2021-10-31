@@ -27,6 +27,23 @@ namespace SeaTruckFishScoop_BZ
             QMod.Config.EnableFishScoop = !currentState;
             Logger.Log(Logger.Level.Debug, $"Toggled to: {QMod.Config.EnableFishScoop}");
             SeaTruckMotor mainMotor = Player.main.GetComponentInParent<SeaTruckMotor>();
+            
+            // If we're not in the SeaTruck, call it a day
+            if (!mainMotor)
+            {
+                Logger.Log(Logger.Level.Debug, $"Couldn't find Main Motor!");
+                return;
+            }
+
+            // Check if we have any aquarium modules attached
+            if (!AquariumsMod.IsAquariumAttached(mainMotor))
+            {
+                Logger.Log(Logger.Level.Debug, $"Couldn't find any Aquariums!");
+                ErrorMessage.AddMessage($"No aquariums attached!");
+                return;
+            }
+
+            // Toggle state
             if (currentState)
             {
                 ErrorMessage.AddMessage($"Fish scoop DISABLED");
@@ -49,17 +66,22 @@ namespace SeaTruckFishScoop_BZ
         {
             // Get the main motor being piloted, and grab a list of aquariums to parse
             SeaTruckMotor mainMotor = Player.main.GetComponentInParent<SeaTruckMotor>();
-            if (mainMotor == null)
+            if (!mainMotor)
             {
                 Logger.Log(Logger.Level.Debug, $"Couldn't find Main Motor!");
                 return;
             }
-                SeaTruckAquarium[] seaTruckAquariums = mainMotor.GetComponentsInChildren<SeaTruckAquarium>();
-            if (seaTruckAquariums == null)
+
+            // Check if we have any aquarium modules attached
+            if (!IsAquariumAttached(mainMotor))
             {
                 Logger.Log(Logger.Level.Debug, $"Couldn't find any Aquariums!");
+                ErrorMessage.AddMessage($"No aquariums attached!");
                 return;
             }
+
+            // Checks all done, we can purge the modules
+            SeaTruckAquarium[] seaTruckAquariums = mainMotor.GetComponentsInChildren<SeaTruckAquarium>();
             Logger.Log(Logger.Level.Debug, $"Found {seaTruckAquariums.Length} aquarium modules");
             SoundsToPlay.path = aquariumPurgeSoundPath;
             FMODUWE.PlayOneShot(SoundsToPlay, mainMotor.transform.position);
@@ -71,6 +93,10 @@ namespace SeaTruckFishScoop_BZ
             ErrorMessage.AddMessage($"All aquariums purged!");
         }
 
+        /// <summary>
+        /// Removes all fish from the specified Aquarium module
+        /// </summary>
+        /// <param name="seaTruckAquarium"></param>
         private static void PurgeFishFromAquarium(SeaTruckAquarium seaTruckAquarium)
         {
             // Get all creatures / aquariumfish
@@ -92,19 +118,53 @@ namespace SeaTruckFishScoop_BZ
             }
         }
 
-        internal static bool AddFishToFreeAquarium(SeaTruckMotor seaTruck, GameObject fish)
+        /// <summary>
+        /// Returns true if at least one aquarium module is attached to the SeaTruckMotor
+        /// </summary>
+        /// <param name="mainMotor"></param>
+        /// <returns></returns>
+        internal static bool IsAquariumAttached(SeaTruckMotor mainMotor)
+        {
+            SeaTruckAquarium[] seaTruckAquariums = mainMotor.GetComponentsInChildren<SeaTruckAquarium>();
+            Logger.Log(Logger.Level.Debug, $"Found {seaTruckAquariums.Length} aquarium modules");
+            // Check to see if there are any aquariums
+            if (seaTruckAquariums.Length == 0)
+            {
+                Logger.Log(Logger.Level.Debug, "No aquariums found.");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Adds the specified fish to an aquarium attached to the SeaTruckMotor
+        /// </summary>
+        /// <param name="mainMotor"></param>
+        /// <param name="fish"></param>
+        /// <returns></returns>
+        internal static bool AddFishToFreeAquarium(SeaTruckMotor mainMotor, GameObject fish)
         {
             // We hit a supported fish with our SeaTruck cab. Iterate over all Aquarium modules and add the fish to
             // the first one with space
-            SeaTruckAquarium[] seaTruckAquariums = seaTruck.GetComponentsInChildren<SeaTruckAquarium>();
+            SeaTruckAquarium[] seaTruckAquariums = mainMotor.GetComponentsInChildren<SeaTruckAquarium>();
             Logger.Log(Logger.Level.Debug, $"Found {seaTruckAquariums.Length} aquarium modules");
+
+            // Check to see if there are any aquariums
+            if (seaTruckAquariums.Length == 0)
+            {
+                Logger.Log(Logger.Level.Debug, "No aquariums found.");
+                return false;
+            }
 
             foreach (SeaTruckAquarium seaTruckAquarium in seaTruckAquariums)
             {
                 if (AddFishToAquarium(seaTruckAquarium, fish))
                 {
-                    string friendlyFishName = fish.name.Replace("(Clone)", "");
-                    Logger.Log(Logger.Level.Debug, $"Fish successfully added ({friendlyFishName})");
+                    string friendlyFishName = GetFriendlyName(fish.name);
+                    Logger.Log(Logger.Level.Debug, $"Fish successfully added {fish.name} as {friendlyFishName}");
                     ErrorMessage.AddMessage($"Fish scoop successful! Added {friendlyFishName}");
                     return true;
                 }
@@ -118,6 +178,16 @@ namespace SeaTruckFishScoop_BZ
             return false;
         }
   
+        /// <summary>
+        /// Returns a "user friendly" name for the fish caught
+        /// </summary>
+        /// <param name="fishName"></param>
+        /// <returns></returns>
+        private static string GetFriendlyName(string fishName)
+        {
+            return (fishName.Replace("(Clone)", ""));
+        }
+
         /// <summary>
         /// Add our fish to the chosen Aquarium
         /// </summary>

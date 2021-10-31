@@ -69,6 +69,7 @@ namespace SeaTruckFishScoop_BZ
                 float velicityMagnitude = seaTruckMotor.useRigidbody.velocity.magnitude;
                 Logger.Log(Logger.Level.Debug, $"Velocity.Magniture: {velicityMagnitude}");
 
+                // Check if seatruck is being piloted
                 if (!isPiloted && !QMod.Config.ScoopwhileNotPiloting)
                 {
                     Logger.Log(Logger.Level.Debug, $"SeaTruck not being piloted, isPiloted: {isPiloted}, ScoopwhileNotPiloting: {QMod.Config.ScoopwhileNotPiloting}. No fish scoop!");
@@ -88,9 +89,11 @@ namespace SeaTruckFishScoop_BZ
                     Logger.Log(Logger.Level.Debug, "Not a valid fish. No fish scoop!");
                     return true;
                 }
+
+                // We've passed our checks, now try to add the fish
                 Logger.Log(Logger.Level.Debug, "Taker is a supported fish");
                 bool fishAdded = AquariumsMod.AddFishToFreeAquarium(seaTruckMotor, rootTaker);
-                Logger.Log(Logger.Level.Debug, $"Status of AddFish: {fishAdded}, return value for TakeDamage: {!fishAdded}");
+                Logger.Log(Logger.Level.Debug, $"Status of AddFish: {fishAdded}, return value for AddFishToFreeAquarium: {!fishAdded}");
                 return !fishAdded;
             }
             /// <summary>

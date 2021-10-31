@@ -5,7 +5,6 @@ using SMLHelper.V2.Handlers;
 using SMLHelper.V2.Json;
 using SMLHelper.V2.Options.Attributes;
 using UnityEngine;
-using System.Media;
 using Logger = QModManager.Utility.Logger;
 
 
