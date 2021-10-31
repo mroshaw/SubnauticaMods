@@ -1,10 +1,10 @@
 {
-  "Id": "UnlimitedExtinguisher",
-  "DisplayName": "Unlimited Fire Extinguisher",
+  "Id": "UnlimitedExtinguisher_SN",
+  "DisplayName": "Unlimited Fire Extinguisher SN",
   "Author": "Oli Ollerenshaw",
   "Version": "1.0.0",
   "Enable": true,
-  "AssemblyName": "UnlimitedExtinguisher.dll",
+  "AssemblyName": "UnlimitedExtinguisher_SN.dll",
   "VersionDependencies": {
     "SMLHelper": "2.9.6"
   },

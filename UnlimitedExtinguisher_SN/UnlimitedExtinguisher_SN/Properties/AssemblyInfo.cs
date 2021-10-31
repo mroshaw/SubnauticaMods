@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("UnlimitedExtinguisher")]
+[assembly: AssemblyTitle("UnlimitedExtinguisher_SN")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("UnlimitedExtinguisher")]
+[assembly: AssemblyProduct("UnlimitedExtinguisher_SN")]
 [assembly: AssemblyCopyright("Copyright ©Iain Ollerenshaw  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
