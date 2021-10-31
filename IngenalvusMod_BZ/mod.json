@@ -1,0 +1,12 @@
+﻿{
+  "Id": "IngenalvusMod_BZ",
+  "DisplayName": "Ingenalvus Mod BZ",
+  "Author": "Oli Ollerenshaw",
+  "Version": "1.0.0",
+  "Enable": true,
+  "AssemblyName": "IngenalvusMod_BZ.dll",
+  "VersionDependencies": {
+    "SMLHelper": "2.12"
+  },
+  "Game": "BelowZero"
+}
