@@ -1,9 +1,10 @@
-﻿using Logger = QModManager.Utility.Logger;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
-using System.Collections;
+using UWE;
+using Logger = QModManager.Utility.Logger;
 
-namespace CreaturePetMod_BZ
+namespace MroshawMods.CreaturePetMod_BZ
 {
     /// <summary>
     /// Class to support spawning of a new Pet
@@ -15,53 +16,43 @@ namespace CreaturePetMod_BZ
         /// </summary>
         internal static bool SpawnCreaturePet()
         {
-            // Secide where to spawn. This will be 1m in front of the player, at floor level
-            Logger.Log(Logger.Level.Debug, $"Getting spawn position");
+            // Decide where to spawn. This will be 1m in front of the player, at floor level
+            Logger.Log(Logger.Level.Debug, "Getting spawn position");
 
             // Determine spawn position and rotation
             GetSpawnLocation(out Quaternion spawnRotation, out Vector3 spawnPosition);
 
             // First up, we want to check that we can spawn here. Use the toggle combined with IsInterior to decide
-            Logger.Log(Logger.Level.Debug, $"Checking player position");
+            Logger.Log(Logger.Level.Debug, "Checking player position");
             GameObject interiorGameObject = GetPlayerBaseRoom();
             bool isSpawnInBoundary = IsSpawnInBoundary(spawnPosition);
 
             if (!isSpawnInBoundary)
             {
-                Logger.Log(Logger.Level.Debug, $"Spawn location too close to wall or object");
-                ErrorMessage.AddMessage($"Too close to wall or object!");
+                Logger.Log(Logger.Level.Debug, "Spawn location too close to wall or object");
+                ErrorMessage.AddMessage("Too close to wall or object!");
                 return false;
             }
 
             if (!interiorGameObject && QMod.Config.IndoorPetOnly && !IsSpawnInBoundary(spawnPosition))
             {
-                Logger.Log(Logger.Level.Debug, $"Not inside and indoor pet only, so won't spawn");
-                ErrorMessage.AddMessage($"Can't spawn pet outside!");
+                Logger.Log(Logger.Level.Debug, "Not inside and indoor pet only, so won't spawn");
+                ErrorMessage.AddMessage("Can't spawn pet outside!");
                 return false;
             }
 
             // Have we reach the limit of pets per room?
             if (NumPetsInRoom(interiorGameObject) >= QMod.Config.MaxPetsPerRoom )
             {
-                ErrorMessage.AddMessage($"Maximum pets reached!");
-                Logger.Log(Logger.Level.Debug, $"Reached max pet numbers");
+                ErrorMessage.AddMessage("Maximum pets reached!");
+                Logger.Log(Logger.Level.Debug, "Reached max pet numbers");
                 return false;
             }
 
             // Call the routine to find the prefab and instantiate the creature
-            Logger.Log(Logger.Level.Debug, $"Setting up Creature!");
-            UWE.CoroutineHost.StartCoroutine(SetUpCreaturePet(interiorGameObject, spawnPosition, spawnRotation, QMod.Config.ChoiceOfPet));
+            Logger.Log(Logger.Level.Debug, "Setting up Creature!");
+            CoroutineHost.StartCoroutine(SetUpCreaturePet(interiorGameObject, spawnPosition, spawnRotation, QMod.Config.PetType));
             return true;
-        }
-
-        /// <summary>
-        /// Checks the NavMesh state at the proposed Spawn Point.
-        /// </summary>
-        private static void CheckNavMesh(Vector3 spawnPosition)
-        {
-            Logger.Log(Logger.Level.Debug, $"Looking for NavMesh...");
-            bool foundNavMesh = NavMesh.SamplePosition(spawnPosition, out NavMeshHit navMeshHit, 1.0f, NavMesh.AllAreas);
-            Logger.Log(Logger.Level.Debug, $"Status of search: {foundNavMesh}, hit: {navMeshHit}");
         }
 
         /// <summary>
@@ -73,7 +64,7 @@ namespace CreaturePetMod_BZ
             IInteriorSpace playerInterior = Player.main.currentInterior;
             if (playerInterior == null)
             {
-                Logger.Log(Logger.Level.Debug, $"Can't find interior, so must be outside");
+                Logger.Log(Logger.Level.Debug, "Can't find interior, so must be outside");
                 return null;
             }
             // We have an interior object, so let's check we're really in it. No reason why we wouldn't be
@@ -83,7 +74,7 @@ namespace CreaturePetMod_BZ
             Logger.Log(Logger.Level.Debug, $"Is Player inside: {isPlayerInside}");
             if (!isPlayerInside)
             {
-                Logger.Log(Logger.Level.Debug, $"Player is not inside");
+                Logger.Log(Logger.Level.Debug, "Player is not inside");
                 return null;
             }
             Logger.Log(Logger.Level.Debug, $"Player is inside: {interiorGameObject.name}");
@@ -98,7 +89,7 @@ namespace CreaturePetMod_BZ
         /// <returns></returns>
         private static int NumPetsInRoom(GameObject interior)
         {
-            Logger.Log(Logger.Level.Debug, $"Counting room pets");
+            Logger.Log(Logger.Level.Debug, "Counting room pets");
             CreaturePet[] petsInRoom = interior.GetAllComponentsInChildren<CreaturePet>();
             int alivePetCount = 0;
             foreach (CreaturePet pet in petsInRoom)
@@ -108,7 +99,7 @@ namespace CreaturePetMod_BZ
                     alivePetCount++;
                 }
             }
-            Logger.Log(Logger.Level.Debug, $"Found: {alivePetCount} live pets");
+            Logger.Log(Logger.Level.Debug, "Found: {alivePetCount} live pets");
             return alivePetCount;
         }
 
@@ -142,7 +133,7 @@ namespace CreaturePetMod_BZ
             }
             else
             {
-                Logger.Log(Logger.Level.Debug, $"Raycast didn't hit. Using player position");
+                Logger.Log(Logger.Level.Debug, "Raycast didn't hit. Using player position");
             }
         }
 
@@ -161,11 +152,9 @@ namespace CreaturePetMod_BZ
                 Logger.Log(Logger.Level.Debug, $"Spawn would be outside boundary. Hit: {hit.collider.gameObject.name}");
                 return false;
             }
-            else
-            {
-                Logger.Log(Logger.Level.Debug, $"Spawn would be within boundary");
-                return true;
-            }
+
+            Logger.Log(Logger.Level.Debug, "Spawn would be within boundary");
+            return true;
         }
 
         /// <summary>
@@ -174,33 +163,41 @@ namespace CreaturePetMod_BZ
         /// <param name="parentBase"></param>
         /// <param name="spawnPosition"></param>
         /// <param name="spawnRotation"></param>
-        /// <param name="petChoice"></param>
+        /// <param name="petType"></param>
         /// <returns></returns>
-        private static IEnumerator SetUpCreaturePet(GameObject parentBase, Vector3 spawnPosition, Quaternion spawnRotation, PetCreatureType petChoice)
+        private static IEnumerator SetUpCreaturePet(GameObject parentBase, Vector3 spawnPosition, Quaternion spawnRotation, PetCreatureType petType)
         {
             // Setup Prefab
-            Logger.Log(Logger.Level.Debug, $"In SetUpCreaturePet");
+            Logger.Log(Logger.Level.Debug, "In SetUpCreaturePet");
+
+            // Get the TechType for the required Prefab
             TechType petTechType;
-            switch (petChoice)
+            switch (petType)
             {
                 case PetCreatureType.SnowstalkerBaby:
                     petTechType = TechType.SnowStalkerBaby;
                     break;
+             //   case PetCreatureType.SnowstalkerJuvinile:
+             //       petTechType = TechType.SnowStalker;
+             //       break;
                 case PetCreatureType.PenglingBaby:
                     petTechType = TechType.PenguinBaby;
                     break;
                 case PetCreatureType.PenglingAdult:
                     petTechType = TechType.Penguin;
                     break;
+                case PetCreatureType.Pinnicarid:
+                    petTechType = TechType.Pinnacarid;
+                    break;
                 default:
-                    Logger.Log(Logger.Level.Debug, $"Invalid Pet Choice: {petChoice}");
+                    Logger.Log(Logger.Level.Debug, $"Invalid Pet Choice: {petType}");
                     yield break;
             }
 
             CoroutineTask<GameObject> task = CraftData.GetPrefabForTechTypeAsync(petTechType);
             yield return task;
             GameObject creaturePetPrefab = task.GetResult();
-            Logger.Log(Logger.Level.Debug, $"Instantiating new GameObject");
+            Logger.Log(Logger.Level.Debug, "Instantiating new GameObject");
             GameObject petCreatureGameObject;
 
             if (parentBase)
@@ -213,14 +210,36 @@ namespace CreaturePetMod_BZ
             {
                 petCreatureGameObject = GameObject.Instantiate(creaturePetPrefab, spawnPosition, spawnRotation);
             }
-  
-            Logger.Log(Logger.Level.Debug, $"Calling ConfigurePetBehaviour");
-            PetBehaviour.ConfigurePetCreature(petCreatureGameObject, null);
-            Creature petCreature = petCreatureGameObject.GetComponent<Creature>();
-            // Call Start() again, just to ensure action and behaviours are updated with new components
-            petCreature.Start();
-            PetBehaviour.ConfigurePetTraits(petCreature);
-            ErrorMessage.AddMessage($"You have a new pet!");
+
+            // Set to inactive, while we configure
+            petCreatureGameObject.SetActive(false);
+
+            // Do the configuration
+            Logger.Log(Logger.Level.Debug, "Adding CreaturePet component...");
+            string petName = QMod.Config.PetName.ToString();
+            Creature creature = petCreatureGameObject.GetComponent<Creature>();
+            CreaturePet creaturePet = petCreatureGameObject.AddComponent<CreaturePet>();
+            Logger.Log(Logger.Level.Debug, "Configuring Pet...");
+            PetDetails petDetails =  creaturePet.ConfigurePet(QMod.Config.PetType, QMod.Config.PetName.ToString());
+
+            // Set the GameObject to Active
+            Logger.Log(Logger.Level.Debug, "Enable Game Object...");
+            petCreatureGameObject.SetActive(true);
+
+            // Refresh Actions based on amended Component allocation
+            creature.ScanCreatureActions();
+
+            Logger.Log(Logger.Level.Debug, "Adding to HashSet...");
+            if (QMod.PetDetailsHashSet == null)
+            {
+                QMod.PetDetailsHashSet = new HashSet<PetDetails>();
+
+            }
+            QMod.PetDetailsHashSet.Add(petDetails);
+            Logger.Log(Logger.Level.Debug, "Adding to HashSet... Done");
+
+            // Done
+            ErrorMessage.AddMessage($"You have a new pet! Welcome, {petName}");
         }
     }
 }

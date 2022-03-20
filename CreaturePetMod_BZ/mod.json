@@ -2,7 +2,7 @@
     "Id": "CreaturePetMod_BZ",
     "DisplayName": "Creature Pet Mod",
     "Author": "Oli Ollerenshaw",
-    "Version": "1.1.0",
+    "Version": "1.2.0",
     "Enable": true,
     "AssemblyName": "CreaturePetMod_BZ.dll",
     "VersionDependencies": {

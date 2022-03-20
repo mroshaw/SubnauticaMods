@@ -1,48 +1,37 @@
 ﻿namespace MroshawMods.CreaturePetMod_BZ
 {
     /// <summary>
+    /// LEGACY CLASS, USED TO MIGRATE OLD SAVE FILES
     /// Class for storing custom pet details.
     /// Having this separate from CreaturePet allows us to store instances
     /// in our HashSet and Serialize for save and loading
     /// </summary>
-    public class PetDetails
+    public class PetDetailsV1
     {
-        public string PrefabId;
-        public string PetName;
-        public bool IsAlive;
-        public PetCreatureType PetType;
-
+        public readonly string PrefabId;
+        public readonly string PetName;
+        private bool IsAlive;
+        
         /// <summary>
-        /// Default empty constructor
+        /// Default constructor
         /// </summary>
-        public PetDetails()
+        public PetDetailsV1()
         {
             PrefabId = "";
             PetName = "";
             IsAlive = true;
-            PetType = PetCreatureType.Unknown;
         }
 
         /// <summary>
-        /// Constructor
+        /// Constructor with params
         /// </summary>
         /// <param name="prefabId"></param>
         /// <param name="petName"></param>
-        /// <param name="petType"></param>
-        public PetDetails (string prefabId, string petName, PetCreatureType petType)
+        public PetDetailsV1(string prefabId, string petName)
         {
             PrefabId = prefabId;
             PetName = petName;
             IsAlive = true;
-            PetType = petType;
-        }
-
-        /// <summary>
-        /// Records the death of a Pet
-        /// </summary>
-        public void KillPet()
-        {
-            IsAlive = false;
         }
 
         /// <summary>

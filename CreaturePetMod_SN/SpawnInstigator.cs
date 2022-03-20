@@ -2,7 +2,7 @@
 using Logger = QModManager.Utility.Logger;
 using UnityEngine;
 
-namespace CreaturePetMod_BZ
+namespace CreaturePetMod_SN
 {
     /// <summary>
     /// Mods to enable additonal controls that can be used to spawn pet creatures
@@ -23,7 +23,7 @@ namespace CreaturePetMod_BZ
                 if (Input.GetKeyUp(QMod.Config.SpawnPetKey))
                 {
                     Logger.Log(Logger.Level.Debug, $"Spawn keypress detected");
-                    bool petSpawned = CreaturePetMod_BZ.PetSpawner.SpawnCreaturePet();
+                    bool petSpawned = CreaturePetMod_SN.PetSpawner.SpawnCreaturePet();
                     if (petSpawned)
                     {
                         Logger.Log(Logger.Level.Debug, $"Pet spawned!");

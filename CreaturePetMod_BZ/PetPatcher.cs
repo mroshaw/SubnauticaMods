@@ -1,9 +1,9 @@
 ﻿using HarmonyLib;
-using Logger = QModManager.Utility.Logger;
+using System.Collections.Generic;
 using UnityEngine;
+using Logger = QModManager.Utility.Logger;
 
-
-namespace CreaturePetMod_BZ
+namespace MroshawMods.CreaturePetMod_BZ
 {
     /// <summary>
     /// Provides patched methods for Pet specific behaviour
@@ -15,25 +15,20 @@ namespace CreaturePetMod_BZ
         /// </summary>
         [HarmonyPatch(typeof(Pickupable))]
         [HarmonyPatch("OnHandHover")]
-        internal class PetInfoPatch
+        internal class CursorHoverOverCreature
         {
             [HarmonyPrefix]
             public static bool ShowPetInfo(Pickupable __instance, GUIHand hand)
             {
                 HandReticle main = HandReticle.main;
-                if (hand.IsFreeToInteract())
-                {
-                    CreaturePet creaturePet = __instance.GetComponentInParent<CreaturePet>();
-                    if (creaturePet)
-                    {
-                        TechType techType = __instance.GetTechType();
-                        main.SetIcon(HandReticle.IconType.Hand, 1f);
-                        main.SetText(HandReticle.TextType.Hand, $"Pet {creaturePet.GetPetName()}", true, GameInput.Button.LeftHand);
-                        HandReticle.main.SetText(HandReticle.TextType.HandSubscript, techType.AsString(false), false, GameInput.Button.None);
-                        return false;
-                    }
-                }
-                return true;
+                if (!hand.IsFreeToInteract()) return true;
+                CreaturePet creaturePet = __instance.GetComponentInParent<CreaturePet>();
+                if (!creaturePet) return true;
+                TechType techType = __instance.GetTechType();
+                main.SetIcon(HandReticle.IconType.Hand, 1f);
+                main.SetText(HandReticle.TextType.Hand, $"Pet {creaturePet.GetPetName()}", true, GameInput.Button.LeftHand);
+                HandReticle.main.SetText(HandReticle.TextType.HandSubscript, creaturePet.petCreatureType.ToString(), false, GameInput.Button.None);
+                return false;
             }
         }
 
@@ -42,7 +37,7 @@ namespace CreaturePetMod_BZ
         /// </summary>
         [HarmonyPatch(typeof(Pickupable))]
         [HarmonyPatch("OnHandClick")]
-        internal class PetPlayPatch
+        internal class PlayerClickedOnCreature
         {
             [HarmonyPrefix]
             public static bool PlayWithPet(Pickupable __instance, GUIHand hand)
@@ -53,38 +48,20 @@ namespace CreaturePetMod_BZ
                     CreaturePet creaturePet = __instance.GetComponentInParent<CreaturePet>();
                     if (creaturePet)
                     {
-                        TechType techType = __instance.GetTechType();
-                        string petAnimation;
-                        // Pick a random animations and play it
-                        switch (techType)
+
+                        // Hold down CTRL key and click, to beckon pet towards player position
+                        if (Input.GetKey(KeyCode.LeftControl))
                         {
-                            case TechType.SnowStalkerBaby:
-                                SnowStalkerBaby snowStalkerBaby = __instance.GetComponentInParent<SnowStalkerBaby>();
-                                petAnimation = PetUtils.GetRandomAnim(PetCreatureType.SnowstalkerBaby);
-                                Logger.Log(Logger.Level.Debug, $"Random animation: {petAnimation}");
-                                snowStalkerBaby.GetAnimator().SetTrigger(petAnimation);
-                                break;
-                            case TechType.PenguinBaby:
-                                PenguinBaby penguinBaby = __instance.GetComponentInParent<PenguinBaby>();
-                                petAnimation = PetUtils.GetRandomAnim(PetCreatureType.PenglingBaby);
-                                Logger.Log(Logger.Level.Debug, $"Random animation: {petAnimation}");
-                                penguinBaby.GetAnimator().SetTrigger(petAnimation);
-                                break;
-
-                            case TechType.Penguin:
-                                Penguin penguin = __instance.GetComponentInParent<Penguin>();
-                                petAnimation = PetUtils.GetRandomAnim(PetCreatureType.PenglingAdult);
-                                penguin.GetAnimator().SetTrigger(petAnimation);
-                                Logger.Log(Logger.Level.Debug, $"Random animation: {petAnimation}");
-                                break;
+                            // Walk towards the player
+                            creaturePet.WalkToPlayerWithDelay();
+                            return false;
                         }
-                        main.SetText(HandReticle.TextType.Hand, $"Pet: {techType.AsString(false)}", true, GameInput.Button.None);
-                        HandReticle.main.SetText(HandReticle.TextType.HandSubscript, creaturePet.GetPetName(), false, GameInput.Button.None);
 
-                        // Walk towards the player
-                        MoveOnSurface moveOnSurface = __instance.GetComponentInParent<MoveOnSurface>();
-                        moveOnSurface.walkBehaviour.GoToInternal(Player.main.transform.position, (Player.main.transform.position - creaturePet.transform.position).normalized, moveOnSurface.moveVelocity);
-                        Logger.Log(Logger.Level.Debug, $"Walking towards player...");
+                        // Perform random animation
+                        creaturePet.PetWithAnimation();
+                        // main.SetText(HandReticle.TextType.Hand, $"Pet: {creaturePet.petTechType.AsString(false)}", true, GameInput.Button.None);
+                        // HandReticle.main.SetText(HandReticle.TextType.HandSubscript, creaturePet.GetPetName(), false, GameInput.Button.None);
+
                         return false;
                     }
                 }
@@ -97,7 +74,7 @@ namespace CreaturePetMod_BZ
         /// </summary>
         [HarmonyPatch(typeof(GroundMotor))]
         [HarmonyPatch("IsValidPlatform")]
-        internal class PlatformInteractPatch
+        internal class CheckForValidPlatform
         {
             [HarmonyPostfix]
             public static void OverrideIsPlatform(GroundMotor __instance, GameObject go, ref bool __result)
@@ -105,58 +82,139 @@ namespace CreaturePetMod_BZ
                 Creature creature = go.GetComponentInParent<Creature>();
                 if (creature)
                 {
-                    // Logger.Log(Logger.Level.Debug, $"Preventing platform behaviour: {creature.GetType()}");
                     __result = false;
                 }
-
             }
         }
 
         /// <summary>
-        /// Prevents traits (e.g. happiness, agressiveness) being updated for Pet creatures
+        /// Patches surface movement
         /// </summary>
-        [HarmonyPatch(typeof(Creature))]
-        [HarmonyPatch("UpdateBehaviour")]
-        internal class CreatureTraitPatch
+        [HarmonyPatch(typeof(MoveOnSurface))]
+        [HarmonyPatch("Perform")]
+        private class MoveOnSurfacePatch
         {
+            /// <summary>
+            /// Overrides the Perform method specifically for SnowStalkerBaby pets, forcing the GoToInternal behaviour
+            /// </summary>
+            /// <param name="__instance"></param>
+            /// <param name="time"></param>
+            /// <param name="deltaTime"></param>
+            /// <returns></returns>
             [HarmonyPrefix]
-            public static bool OverrideUpdateTrait(Creature __instance, float time, float deltaTime)
+            private static bool PerformOverride(MoveOnSurface __instance, float time, float deltaTime)
             {
-                if (PetUtils.IsCreaturePet(__instance))
+                // Get parent Creature and check that it's a Pet
+                Creature creature = __instance.creature;
+                CreaturePet creaturePet = __instance.gameObject.GetComponent<CreaturePet>();
+                if (!creaturePet || creaturePet.petCreatureType != PetCreatureType.SnowstalkerBaby)
                 {
-                    // Logger.Log(Logger.Level.Debug, $"Preventing trait update behaviour: {__instance.GetType()}");
-                    StopwatchProfiler instance = StopwatchProfiler.Instance;
-                    CreatureAction creatureAction = __instance.ChooseBestAction(time);
-                    if (__instance.prevBestAction != creatureAction)
-                    {
-                        if (__instance.prevBestAction)
-                        {
-                            __instance.prevBestAction.StopPerform(time);
-                        }
-                        if (creatureAction)
-                        {
-                            creatureAction.StartPerform(time);
-                        }
-                        __instance.prevBestAction = creatureAction;
-                    }
-                    if (creatureAction)
-                    {
-                        creatureAction.Perform(time, deltaTime);
-                        __instance.lastAction = creatureAction;
-                    }
-                    if (__instance.traitsAnimator && __instance.traitsAnimator.isActiveAndEnabled)
-                    {
-                        __instance.traitsAnimator.SetFloat(Creature.animAggressive, __instance.Aggression.Value);
-                        __instance.traitsAnimator.SetFloat(Creature.animScared, __instance.Scared.Value);
-                        __instance.traitsAnimator.SetFloat(Creature.animTired, __instance.Tired.Value);
-                        __instance.traitsAnimator.SetFloat(Creature.animHappy, __instance.Happy.Value);
-                    }
-                    return false;
-                }
-                else
-                {
+                    // Invoke the "unpatched" method
                     return true;
                 }
+
+                if (!(__instance.timeNextTarget <= time)) return false;
+                __instance.desiredPosition = __instance.FindRandomPosition();
+                __instance.timeNextTarget = time + __instance.updateTargetInterval + __instance.updateTargetRandomInterval * Random.value;
+                // Enforce the "GoToInternal" behaviour
+                __instance.walkBehaviour.GoToInternal(__instance.desiredPosition, (__instance.desiredPosition - creature.transform.position).normalized, __instance.moveVelocity);
+                Logger.Log(Logger.Level.Debug, $"{creature.GetType()} is walking to random target");
+                return false;
+            }
+        }
+
+        /// Class to manage "spawning" of a new pet
+        /// </summary>
+        [HarmonyPatch(typeof(Player))]
+        [HarmonyPatch("Update")]
+        internal class SpawnKeyPress
+        {
+            [HarmonyPostfix]
+            public static void OnSpawn()
+            {
+                // Check for "Spawn Pet" keypress
+                if (Input.GetKeyUp(QMod.Config.SpawnPetKey))
+                {
+                    Logger.Log(Logger.Level.Debug, "Spawn keypress detected");
+                    PetSpawner.SpawnCreaturePet();
+                    Logger.Log(Logger.Level.Debug, "Pet spawned!");
+                    ErrorMessage.AddMessage($"Pet spawned! Welcome, {QMod.Config.PetName}!");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Class to manage the death of a pet
+        /// </summary>
+        [HarmonyPatch(typeof(Creature))]
+        [HarmonyPatch("OnKill")]
+        internal class CreatureKilled
+        {
+            [HarmonyPostfix]
+            public static void OnKill(Creature __instance)
+            {
+                CreaturePet creaturePet = __instance.gameObject.GetComponent<CreaturePet>();
+                // Check to see if the creature is a Pet
+                if (creaturePet)
+                {
+                    Logger.Log(Logger.Level.Debug, "Pet death detected");
+                    creaturePet.Dead();
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(Creature))]
+        [HarmonyPatch("Start")]
+        internal class CreatureCreated
+        {
+            /// <summary>
+            /// This fixes an issue where loading a save game "undoes" our GameObject changes
+            /// We lose our "creaturePet", so need another way to identify the loaded creature.
+            /// </summary>
+            /// <param name="__instance"></param>
+            [HarmonyPostfix]
+            public static void ConfigureExistingPets(Creature __instance)
+            {
+                // First up, is this creature a pet? We lose our "creaturePet" component
+                // to the save game, so need to check another way
+                CreaturePet creaturePet = __instance.gameObject.GetComponent<CreaturePet>();
+                if (creaturePet)
+                {
+                    Logger.Log(Logger.Level.Debug, "Creature Start: Already a pet, no need to reconfigure.");
+                    return;
+                }
+
+                // We check against prefab Id to find pets to reconfigure
+                string loadedPrefabId = __instance.gameObject.GetComponent<PrefabIdentifier>().Id;
+
+                // If the GUID is in the list, let's reconfigure
+                PetDetails petDetails = GetPetDetailsWithPrefabId(loadedPrefabId);
+                if (petDetails == null) return;
+                Logger.Log(Logger.Level.Debug, $"ConfigureExistingPets: Loading Creature Prefab Id: {loadedPrefabId} ({petDetails.PetName}");
+                Logger.Log(Logger.Level.Debug, $"ConfigureExistingPets: Adding CreaturePet component...");
+                creaturePet = __instance.gameObject.AddComponent<CreaturePet>();
+                Logger.Log(Logger.Level.Debug, $"ConfigureExistingPets: Adding CreaturePet component... Done");
+                Logger.Log(Logger.Level.Debug, $"ConfigureExistingPetsConfiguring Pet...");
+                petDetails = creaturePet.ConfigurePet(petDetails.PetType, petDetails.PetName);
+                Logger.Log(Logger.Level.Debug, $"ConfigureExistingPetsConfiguring Pet... Done.");
+                Logger.Log(Logger.Level.Debug, $"Finished loading CreaturePet Prefab Id: {loadedPrefabId}");
+            }
+
+            /// <summary>
+            /// Get the Pet Details from internal storage
+            /// </summary>
+            /// <param name="prefabid"></param>
+            /// <returns></returns>
+            internal static PetDetails GetPetDetailsWithPrefabId(string prefabid)
+            {
+                foreach (PetDetails petDetails in QMod.PetDetailsHashSet)
+                {
+                    if (petDetails.PrefabId == prefabid)
+                    {
+                        return petDetails;
+                    }
+                }
+                return null;
             }
         }
     }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using Logger = QModManager.Utility.Logger;
 
-namespace CreaturePetMod_BZ
+namespace CreaturePetMod_SN
 {
     /// <summary>
     /// Selection of Static methods to manage Pets
@@ -13,15 +13,7 @@ namespace CreaturePetMod_BZ
     class PetUtils
     {
 
-        // Selection of animations on petting
-        //  { "peck", "flutter" };
-        //  { "shudder", "call", "trip" };
-        //  { "chilling", "standUpSniff", "standUpHowl", "dryFur" };
-        private static string[] PenglingAdultAnims = { "peck", "flutter" };
-        private static string[] PenglingBabyAnims = { "shudder", "call" };
-        private static string[] SnowStalkerBabyAnims = { "dryFur" };
-
-        /// <summary>
+           /// <summary>
         /// Determine if a Creature is a pet
         /// </summary>
         /// <param name="creaturePet"></param>
@@ -68,31 +60,7 @@ namespace CreaturePetMod_BZ
             return null;
         }
 
-        /// <summary>
-        /// Returns a random animation for the pet
-        /// </summary>
-        /// <param name="petType"></param>
-        /// <returns></returns>
-        public static string GetRandomAnim(PetCreatureType petType)
-        {
-            System.Random random = new System.Random();
-            int index;
-            switch (petType)
-            {
-                case PetCreatureType.PenglingAdult:
-                    index = random.Next(PenglingAdultAnims.Count());
-                    return PenglingAdultAnims[index];
-                case PetCreatureType.PenglingBaby:
-                    index = random.Next(PenglingBabyAnims.Count());
-                    return PenglingBabyAnims[index];
-                case PetCreatureType.SnowstalkerBaby:
-                    index = random.Next(SnowStalkerBabyAnims.Count());
-                    return SnowStalkerBabyAnims[index];
-                default:
-                    return "";
-            }
-        }
-
+    
         /// <summary>
         /// Kills ALL pets. Use with caution!
         /// </summary>

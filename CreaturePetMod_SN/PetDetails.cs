@@ -1,4 +1,10 @@
-﻿namespace MroshawMods.CreaturePetMod_BZ
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CreaturePetMod_SN
 {
     /// <summary>
     /// Class for storing custom pet details.
@@ -10,49 +16,29 @@
         public string PrefabId;
         public string PetName;
         public bool IsAlive;
-        public PetCreatureType PetType;
-
-        /// <summary>
-        /// Default empty constructor
-        /// </summary>
-        public PetDetails()
+        internal PetDetails()
         {
             PrefabId = "";
             PetName = "";
             IsAlive = true;
-            PetType = PetCreatureType.Unknown;
         }
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="prefabId"></param>
-        /// <param name="petName"></param>
-        /// <param name="petType"></param>
-        public PetDetails (string prefabId, string petName, PetCreatureType petType)
+        internal PetDetails (string prefabId, string petName)
         {
             PrefabId = prefabId;
             PetName = petName;
             IsAlive = true;
-            PetType = petType;
         }
 
         /// <summary>
-        /// Records the death of a Pet
-        /// </summary>
-        public void KillPet()
-        {
-            IsAlive = false;
-        }
-
-        /// <summary>
-        /// Override the HashSet Equals so we don't duplicate
+        /// OVerride the HashSet Equals so we don't duplicate
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            return obj is PetDetails q && q.PrefabId == PrefabId && q.PetName == PetName;
+            PetDetails q = obj as PetDetails;
+            return q != null && q.PrefabId == this.PrefabId && q.PetName == this.PetName;
         }
 
         /// <summary>
@@ -61,7 +47,7 @@
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return PrefabId.GetHashCode() ^ PetName.GetHashCode();
+            return this.PrefabId.GetHashCode() ^ this.PetName.GetHashCode();
         }
     }
 }
