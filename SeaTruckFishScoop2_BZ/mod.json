@@ -6,7 +6,7 @@
     "Enable": true,
     "AssemblyName": "SeaTruckFishScoop_BZ.dll",
     "VersionDependencies": {
-        "SMLHelper": "2.14"
+        "SMLHelper": "2.9.6"
     },
     "Game": "BelowZero"
 }

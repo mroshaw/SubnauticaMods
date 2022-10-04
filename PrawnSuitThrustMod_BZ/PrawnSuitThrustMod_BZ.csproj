@@ -34,18 +34,22 @@
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\core\0Harmony.dll</HintPath>
+      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass_publicized">
-      <HintPath>C:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\publicized_assemblies\Assembly-CSharp-firstpass_publicized.dll</HintPath>
+      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\publicized_assemblies\Assembly-CSharp-firstpass_publicized.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp_publicized, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll</HintPath>
+      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll</HintPath>
     </Reference>
     <Reference Include="QModInstaller, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\plugins\QModManager\QModInstaller.dll</HintPath>
+      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\plugins\QModManager\QModInstaller.dll</HintPath>
+    </Reference>
+    <Reference Include="SMLHelper, Version=2.9.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\QMods\SMLHelper_BZ\SMLHelper.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,7 +61,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -71,9 +79,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir "C:\Games\Steam\steamapps\common\SubnauticaZero\QMods\$(TargetName)"
-copy /Y "$(TargetPath)" "C:\Games\Steam\steamapps\common\SubnauticaZero\QMods\$(TargetName)"
-copy /Y "$(ProjectDir)\mod.json" "C:\Games\Steam\steamapps\common\SubnauticaZero\QMods\$(TargetName)\mod.json"
+    <PostBuildEvent>mkdir "E:\Games\Steam\steamapps\common\SubnauticaZero\QMods\$(TargetName)"
+copy /Y "$(TargetPath)" "E:\Games\Steam\steamapps\common\SubnauticaZero\QMods\$(TargetName)"
+copy /Y "$(ProjectDir)\mod.json" "E:\Games\Steam\steamapps\common\SubnauticaZero\QMods\$(TargetName)\mod.json"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

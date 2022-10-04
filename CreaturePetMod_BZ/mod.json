@@ -2,11 +2,11 @@
     "Id": "CreaturePetMod_BZ",
     "DisplayName": "Creature Pet Mod",
     "Author": "Oli Ollerenshaw",
-    "Version": "1.2.0",
+    "Version": "1.5.0",
     "Enable": true,
     "AssemblyName": "CreaturePetMod_BZ.dll",
     "VersionDependencies": {
-        "SMLHelper": "2.11"
+        "SMLHelper": "2.14"
     },
     "Game": "BelowZero"
 }

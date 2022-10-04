@@ -11,7 +11,7 @@ using Logger = QModManager.Utility.Logger;
 namespace SeaTruckFishScoop_BZ
 {
     [QModCore]
-    public static class QMod
+    public static class QModHelper
     {
         /// <summary>
         /// Config instance, to manage the QMod menu settings

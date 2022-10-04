@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using HarmonyLib;
+using MroshawMods.CreaturePetMod_BZ.Buildables;
 using QModManager.API.ModLoading;
 using SMLHelper.V2.Handlers;
 using SMLHelper.V2.Json;
@@ -15,7 +17,7 @@ namespace MroshawMods.CreaturePetMod_BZ
     /// <summary>
     /// Used to allow the player a choice of pet to spawn
     /// </summary>
-    public enum PetCreatureType { SnowstalkerBaby, PenglingBaby, PenglingAdult, Pinnicarid, Unknown }
+    public enum PetCreatureType { SnowstalkerBaby, PenglingBaby, PenglingAdult, Pinnicarid, BlueTrivalve, YellowTrivalve, Unknown }
     // SnowstalkerJuvinile
 
     // Some pet names to choose from
@@ -30,12 +32,18 @@ namespace MroshawMods.CreaturePetMod_BZ
         /// <summary>
         /// Config instance, to manage the QMod menu settings
         /// </summary>
+        private static Assembly executingAssembly = Assembly.GetExecutingAssembly();
+        private static string ModPath = Path.GetDirectoryName(executingAssembly.Location);
+        internal static string AssetsFolder = Path.Combine(ModPath, "Assets");
 
         // Maintain our custom config
         internal static Config Config { get; } = OptionsPanelHandler.Main.RegisterModOptions<Config>();
 
+        // Customer TechTypes for our "buildable" pets
+        public static List<TechType> petTechTypes = new List<TechType>();
+
         // Maintain a global list of PrefabIds for spawned pets. This allows us to load and save
-        internal static HashSet<PetDetails> PetDetailsHashSet;
+        internal static HashSet<PetDetails> PetDetailsHashSet = new HashSet<PetDetails>();
 
         // Static reference to the External Pet AssetBundles
         // public static AssetBundle dypAssetBundle;
@@ -51,15 +59,18 @@ namespace MroshawMods.CreaturePetMod_BZ
             PetDetailsHashSet = new HashSet<PetDetails>();
 
             // Call harmony patching
-            Assembly executingAssembly = Assembly.GetExecutingAssembly();
             string id = "mroshaw_" + executingAssembly.GetName().Name;
             Logger.Log(Logger.Level.Info, "Patching " + id);
             new Harmony(id).PatchAll(executingAssembly);
             Logger.Log(Logger.Level.Info, "Patched successfully!");
 
             // Setup the save and load system
-            Logger.Log(Logger.Level.Info, "Setting up save and load");
+            Logger.Log(Logger.Level.Info, "Setting up save and load...");
             ConfigSaveData();
+            Logger.Log(Logger.Level.Info, "Setting up save and load... Done");
+            Logger.Log(Logger.Level.Info, "Setting up buildables...");
+            // PatchBuildables();
+            Logger.Log(Logger.Level.Info, "Setting up buildables... Done");
             Logger.Log(Logger.Level.Info, "All done!");
         }
 
@@ -132,7 +143,7 @@ namespace MroshawMods.CreaturePetMod_BZ
                 if (saveDataV1.PetDetailsHashSet is null)
                 {
                     Logger.Log(Logger.Level.Info, "HashSet is NULL!!!!!");
-                    return null;
+                    return new HashSet<PetDetails>();
                 }
                 Logger.Log(Logger.Level.Info, "Miration starting...!");
                 return ConvertPetDetailsV1ToV2(saveDataV1.PetDetailsHashSet);
@@ -173,6 +184,24 @@ namespace MroshawMods.CreaturePetMod_BZ
             }
         }
 
+        /// <summary>
+        /// Patches in the buildables / craft items required to create pets.
+        /// TODO
+        /// </summary>
+        private static void PatchBuildables()
+        {
+            // Patch in the Fabriactor
+            PetsFabricator petsFabricator = new PetsFabricator();
+            petsFabricator.Patch();
+
+            // Patch in Buildables
+            PenglingBuildable penglingBuildable = new PenglingBuildable();
+            penglingBuildable.Patch();
+            TrivalveBlueBuildable trivalveBlueBuildable = new TrivalveBlueBuildable();
+            trivalveBlueBuildable.Patch();
+            TrivalveYellowBuildable trivalveYellowBuildable = new TrivalveYellowBuildable();
+            trivalveYellowBuildable.Patch();
+        }
     }
 
     /// <summary>
@@ -189,7 +218,7 @@ namespace MroshawMods.CreaturePetMod_BZ
         public KeyCode SpawnPetKey = KeyCode.End;
 
         // Allow selection of custom pet
-        [Choice("Pet to spawn", "Snowstalker Baby", "Pengling Baby", "Pengling Adult", "Pinnicarid")]
+        [Choice("Pet to spawn", "Snowstalker Baby", "Pengling Baby", "Pengling Adult", "Pinnicarid", "Blue Trivalve", "Yellow Trivalve")]
         public PetCreatureType PetType = PetCreatureType.SnowstalkerBaby;
 
         // Choice of pet names

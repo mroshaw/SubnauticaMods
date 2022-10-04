@@ -22,7 +22,7 @@ namespace SeaTruckFishScoop_BZ
             public static bool TakeDamage(LiveMixin __instance, GameObject dealer = null)
             {
                 // Check our config
-                if (!QMod.Config.EnableFishScoop)
+                if (!QModHelper.Config.EnableFishScoop)
                 {
                     Logger.Log(Logger.Level.Debug, "Fish Scoop is disabled.");
                     return true;
@@ -67,19 +67,19 @@ namespace SeaTruckFishScoop_BZ
                 bool isPiloted = seaTruckMotor.IsPiloted();
                 Logger.Log(Logger.Level.Debug, $"SeaTruckIsPiloted: {isPiloted}");
                 float velicityMagnitude = seaTruckMotor.useRigidbody.velocity.magnitude;
-                Logger.Log(Logger.Level.Debug, $"Velocity.Magniture: {velicityMagnitude}");
+                Logger.Log(Logger.Level.Debug, $"Velocity.Magnitude: {velicityMagnitude}");
 
                 // Check if seatruck is being piloted
-                if (!isPiloted && !QMod.Config.ScoopwhileNotPiloting)
+                if (!isPiloted && !QModHelper.Config.ScoopwhileNotPiloting)
                 {
-                    Logger.Log(Logger.Level.Debug, $"SeaTruck not being piloted, isPiloted: {isPiloted}, ScoopwhileNotPiloting: {QMod.Config.ScoopwhileNotPiloting}. No fish scoop!");
+                    Logger.Log(Logger.Level.Debug, $"SeaTruck not being piloted, isPiloted: {isPiloted}, ScoopwhileNotPiloting: {QModHelper.Config.ScoopwhileNotPiloting}. No fish scoop!");
                     return true;
                 }
 
                 // Check if static against the config options
-                if ((velicityMagnitude == 0.0f) && !QMod.Config.ScoopWhileStatic)
+                if ((velicityMagnitude == 0.0f) && !QModHelper.Config.ScoopWhileStatic)
                 {
-                    Logger.Log(Logger.Level.Debug, $"SeaTruck is static, velocity.Magnitude: {velicityMagnitude}, ScoopWhileStatic: {QMod.Config.ScoopWhileStatic}. No fish scoop!");
+                    Logger.Log(Logger.Level.Debug, $"SeaTruck is static, velocity.Magnitude: {velicityMagnitude}, ScoopWhileStatic: {QModHelper.Config.ScoopWhileStatic}. No fish scoop!");
                     return true;
                 }
 
@@ -96,6 +96,7 @@ namespace SeaTruckFishScoop_BZ
                 Logger.Log(Logger.Level.Debug, $"Status of AddFish: {fishAdded}, return value for AddFishToFreeAquarium: {!fishAdded}");
                 return !fishAdded;
             }
+
             /// <summary>
             /// Is the object hit valid for inclusion in the Aquarium?
             /// </summary>

@@ -99,7 +99,7 @@ namespace MroshawMods.CreaturePetMod_BZ
                     alivePetCount++;
                 }
             }
-            Logger.Log(Logger.Level.Debug, "Found: {alivePetCount} live pets");
+            Logger.Log(Logger.Level.Debug, $"Found: {alivePetCount} live pets");
             return alivePetCount;
         }
 
@@ -165,7 +165,7 @@ namespace MroshawMods.CreaturePetMod_BZ
         /// <param name="spawnRotation"></param>
         /// <param name="petType"></param>
         /// <returns></returns>
-        private static IEnumerator SetUpCreaturePet(GameObject parentBase, Vector3 spawnPosition, Quaternion spawnRotation, PetCreatureType petType)
+        internal static IEnumerator SetUpCreaturePet(GameObject parentBase, Vector3 spawnPosition, Quaternion spawnRotation, PetCreatureType petType)
         {
             // Setup Prefab
             Logger.Log(Logger.Level.Debug, "In SetUpCreaturePet");
@@ -189,6 +189,13 @@ namespace MroshawMods.CreaturePetMod_BZ
                 case PetCreatureType.Pinnicarid:
                     petTechType = TechType.Pinnacarid;
                     break;
+                case PetCreatureType.BlueTrivalve:
+                    petTechType = TechType.TrivalveBlue;
+                    break;
+                case PetCreatureType.YellowTrivalve:
+                    petTechType = TechType.TrivalveYellow;
+                    break;
+
                 default:
                     Logger.Log(Logger.Level.Debug, $"Invalid Pet Choice: {petType}");
                     yield break;
@@ -219,15 +226,14 @@ namespace MroshawMods.CreaturePetMod_BZ
             string petName = QMod.Config.PetName.ToString();
             Creature creature = petCreatureGameObject.GetComponent<Creature>();
             CreaturePet creaturePet = petCreatureGameObject.AddComponent<CreaturePet>();
+            Logger.Log(Logger.Level.Debug, "Adding CreaturePet component... Done.");
             Logger.Log(Logger.Level.Debug, "Configuring Pet...");
             PetDetails petDetails =  creaturePet.ConfigurePet(QMod.Config.PetType, QMod.Config.PetName.ToString());
-
+            Logger.Log(Logger.Level.Debug, "Configuring Pet... Done.");
             // Set the GameObject to Active
             Logger.Log(Logger.Level.Debug, "Enable Game Object...");
             petCreatureGameObject.SetActive(true);
-
-            // Refresh Actions based on amended Component allocation
-            creature.ScanCreatureActions();
+            Logger.Log(Logger.Level.Debug, "Enable Game Object... Done.");
 
             Logger.Log(Logger.Level.Debug, "Adding to HashSet...");
             if (QMod.PetDetailsHashSet == null)
@@ -240,6 +246,7 @@ namespace MroshawMods.CreaturePetMod_BZ
 
             // Done
             ErrorMessage.AddMessage($"You have a new pet! Welcome, {petName}");
+
         }
     }
 }

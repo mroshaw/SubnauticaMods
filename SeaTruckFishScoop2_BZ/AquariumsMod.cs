@@ -24,8 +24,8 @@ namespace SeaTruckFishScoop_BZ
         {
 
             Logger.Log(Logger.Level.Debug, $"Toggling fish scoop from: {currentState}...");
-            QMod.Config.EnableFishScoop = !currentState;
-            Logger.Log(Logger.Level.Debug, $"Toggled to: {QMod.Config.EnableFishScoop}");
+            QModHelper.Config.EnableFishScoop = !currentState;
+            Logger.Log(Logger.Level.Debug, $"Toggled to: {QModHelper.Config.EnableFishScoop}");
             SeaTruckMotor mainMotor = Player.main.GetComponentInParent<SeaTruckMotor>();
             
             // If we're not in the SeaTruck, call it a day

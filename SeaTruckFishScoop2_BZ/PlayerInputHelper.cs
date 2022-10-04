@@ -9,7 +9,7 @@ namespace SeaTruckFishScoop_BZ
     /// <summary>
     /// Mods to enable additonal controls that can be used within the Seatruck cab
     /// </summary>
-    class PlayerInputMod
+    class PlayerInputHelper
     {
         [HarmonyPatch(typeof(Player))]
         [HarmonyPatch("Update")]
@@ -19,7 +19,7 @@ namespace SeaTruckFishScoop_BZ
             public static void Update()
             {
                 // Check for "toggle fish scoop" keypress
-                if (Input.GetKeyUp(QMod.Config.ToggleFishScoop))
+                if (Input.GetKeyUp(QModHelper.Config.ToggleFishScoop))
                 {
                     Logger.Log(Logger.Level.Debug, $"Toggle keypress detected");
                     // Only toggle when pilotinbg Seatruck
@@ -29,12 +29,12 @@ namespace SeaTruckFishScoop_BZ
                         return;
                     }
 
-                    // Toggle scoope
-                    AquariumsMod.ToggleFishScoop(QMod.Config.EnableFishScoop);
+                    // Toggle scoop
+                    AquariumsMod.ToggleFishScoop(QModHelper.Config.EnableFishScoop);
                 }
 
                 // Check for "purge aquariums" keypress
-                if (Input.GetKeyUp(QMod.Config.ReleaseFishKey))
+                if (Input.GetKeyUp(QModHelper.Config.ReleaseFishKey))
                 {
                     Logger.Log(Logger.Level.Debug, "Purge keypress detected");
                     // Only allow when pilotinbg Seatruck

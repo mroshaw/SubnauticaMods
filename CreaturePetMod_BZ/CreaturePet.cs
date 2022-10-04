@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MroshawMods.Checks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,7 @@ namespace MroshawMods.CreaturePetMod_BZ
         private static readonly string[] SnowStalkerJuvenileAnims = { "dryFur", "roar", "bite", "flinch", "fidget", "standUpSniff", "standUpHowl", "threaten" };
         private static readonly string[] SnowStalkerBabyAnims = { "dryFur", "growl", "bite", "roar", "fidget", "standUpSniff", "standUpHowl" };
         private static readonly string[] PinnacaridAnims = { "flutter", "beg", "bite", "fidget", "flinch", "call" };
+        private static readonly string[] TrivalveAnims = { };
 
         private PetDetails _petDetails;
          private Creature _creature;
@@ -32,6 +34,7 @@ namespace MroshawMods.CreaturePetMod_BZ
         public TechType petTechType;
         public PetCreatureType petCreatureType;
         private MoveOnSurface _moveOnSurface;
+        private TrivalvePlayerInteraction _trivalvePlayerInteraction;
         private string _prefabId;
 
         public PetDetails ConfigurePet(PetCreatureType petType, string name)
@@ -49,6 +52,12 @@ namespace MroshawMods.CreaturePetMod_BZ
             if (!_moveOnSurface)
             {
                 Logger.Log(Logger.Level.Debug, "ConfigurePet: Can't find MoveOnFurface component!");
+            }
+
+            _trivalvePlayerInteraction = GetComponentInChildren<TrivalvePlayerInteraction>();
+            if(!_trivalvePlayerInteraction)
+            {
+                Logger.Log(Logger.Level.Debug, "ConfigurePet: Can't find TrivalvePlayerInteraction component. Probably not a Trivalve.");
             }
             petTechType = CraftData.GetTechType(gameObject);
             Logger.Log(Logger.Level.Debug, "ConfigurePet: Setting up main components... Done");
@@ -95,8 +104,13 @@ namespace MroshawMods.CreaturePetMod_BZ
             CleanUpMesh();
             Logger.Log(Logger.Level.Debug, "ConfigurePet: Cleaning up the Mesh... Done");
 
-            Logger.Log(Logger.Level.Debug, "ConfigurePet: All done! :)");
+            // Refresh Actions based on amended Component allocation
+            Logger.Log(Logger.Level.Debug, "ConfigurePet: Scanning creature actions...");
+            _creature.ScanCreatureActions();
+            Logger.Log(Logger.Level.Debug, "ConfigurePet: Scanning creature actions... Done.");
 
+            Logger.Log(Logger.Level.Debug, "ConfigurePet: All done! :)");
+            LongJohnSilverCheck();
             return _petDetails;
         }
 
@@ -172,13 +186,16 @@ namespace MroshawMods.CreaturePetMod_BZ
             Destroy(creatureDeath);
 
             // Configure the Pickupable component
-            Logger.Log(Logger.Level.Debug, "... ConfigurePetCreature:  Pickupable...");
-            Pickupable pickupable = gameObject.GetComponent<Pickupable>();
-            if (!pickupable)
+            if (petCreatureType != PetCreatureType.BlueTrivalve && petCreatureType != PetCreatureType.YellowTrivalve)
             {
-                pickupable = gameObject.AddComponent<Pickupable>();
+                Logger.Log(Logger.Level.Debug, "... ConfigurePetCreature:  Pickupable...");
+                Pickupable pickupable = gameObject.GetComponent<Pickupable>();
+                if (!pickupable)
+                {
+                    pickupable = gameObject.AddComponent<Pickupable>();
+                }
+                pickupable.isPickupable = false;
             }
-            pickupable.isPickupable = false;
 
             // Add creature specific config
             switch (petCreatureType)
@@ -199,12 +216,39 @@ namespace MroshawMods.CreaturePetMod_BZ
                 case PetCreatureType.Pinnicarid:
                     ConfigurePinnicarid();
                     break;
+                case PetCreatureType.BlueTrivalve:
+                case PetCreatureType.YellowTrivalve:
+                    ConfigureTrivalve();
+                    break;
 
                 default:
                     Logger.Log(Logger.Level.Debug, $"... Invalid Pet Type: {petCreatureType}");
                     break;
             }
             Logger.Log(Logger.Level.Debug, "... ConfigurePetCreature:  Done");
+        }
+
+        /// <summary>
+        /// Check if player has been a naughty boy... SQWAAAK!
+        /// </summary>
+        private void LongJohnSilverCheck()
+        {
+            if(PirateCheck.IsPirate())
+            {
+                StartCoroutine(SetPetResting(5.0f));
+            }
+        }
+
+        /// <summary>
+        /// Hes not dead, he's resting!
+        /// </summary>
+        /// <param name="delay"></param>
+        /// <returns></returns>
+        private IEnumerator SetPetResting(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            Kill();
+            ErrorMessage.AddMessage($"Arrr, yer Pet be restin'! Plunder ye a legit copy of the game, if it pleases ye!");
         }
 
         /// <summary>
@@ -355,6 +399,19 @@ namespace MroshawMods.CreaturePetMod_BZ
             Pinnacarid pinnicaridPet = gameObject.GetComponent<Pinnacarid>();
             Logger.Log(Logger.Level.Debug, $"... Configuring Pinnicarid: {pinnicaridPet.name}...");
             Logger.Log(Logger.Level.Debug, $"... Configuring Pinnicarid: {pinnicaridPet.name}... Done");
+
+            // Play first anim
+            _animator.SetTrigger("flutter");
+        }
+
+        /// <summary>
+        /// Configure Trivalve specific behaviours
+        /// </summary>
+        private void ConfigureTrivalve()
+        {
+            Trivalve trivalvePet = gameObject.GetComponent<Trivalve>();
+            Logger.Log(Logger.Level.Debug, $"... Configuring Trivalve: {trivalvePet.name}...");
+            Logger.Log(Logger.Level.Debug, $"... Configuring Trivalve: {trivalvePet.name}... Done");
 
             // Play first anim
             _animator.SetTrigger("flutter");
@@ -531,7 +588,7 @@ namespace MroshawMods.CreaturePetMod_BZ
         /// <param name="seconds"></param>
         /// <param name="gameObject"></param>
         /// <returns></returns>
-        private static IEnumerator DestroyAsync(int seconds, GameObject gameObject)
+        private static IEnumerator DestroyAsync(float seconds, GameObject gameObject)
         {
             yield return new WaitForSeconds(seconds);
             Logger.Log(Logger.Level.Debug, $"GameObject destroyed.");
@@ -552,6 +609,73 @@ namespace MroshawMods.CreaturePetMod_BZ
             behaviourList.Remove(behaviorToRemove);
             Logger.Log(Logger.Level.Debug, $"... Behaviour removed: {typeToRemove}");
             return behaviourList.ToArray();
+        }
+
+        public void AddConstructable()
+        {
+            Logger.Log(Logger.Level.Debug, $"Adding Constructable...");
+            Constructable constructable = gameObject.AddComponent<Constructable>();
+            Logger.Log(Logger.Level.Debug, $"Adding Constructable... Done.");
+            Logger.Log(Logger.Level.Debug, $"Configuring Constructable...");
+            // constructable.
+            Logger.Log(Logger.Level.Debug, $"Configuring Constructable... Done.");
+        }
+
+        /// <summary>
+        /// Overrides the TrivalvePlayerInteraction "IsAllowedToInteract" method
+        /// </summary>
+        /// <param name="swimWalkState"></param>
+        /// <returns></returns>
+        public bool AllowedToInteract(SwimWalkCreatureController.State swimWalkState)
+        {
+            if (_trivalvePlayerInteraction.state != TrivalvePlayerInteraction.State.None)
+            {
+                // Logger.Log(Logger.Level.Debug, $"CreaturePet.AllowedToInteract: State is not None!");
+                return false;
+            }
+            if (PlayerCinematicController.cinematicModeCount > 0)
+            {
+                // Logger.Log(Logger.Level.Debug, $"CreaturePet.AllowedToInteract: Player cinematic count is not 0!");
+                return false;
+            }
+            if (!_trivalvePlayerInteraction.liveMixin.IsAlive())
+            {
+                // Logger.Log(Logger.Level.Debug, $"CreaturePet.AllowedToInteract: Trivalve is not alive!");
+                return false;
+            }
+            Player localPlayerComp = global::Utils.GetLocalPlayerComp();
+            if (localPlayerComp == null)
+            {
+                // Logger.Log(Logger.Level.Debug, $"CreaturePet.AllowedToInteract: Can't find LocalPlayerComp!");
+                return false;
+            }
+            if (swimWalkState == SwimWalkCreatureController.State.Swim)
+            {
+                if (!localPlayerComp.IsSwimming())
+                {
+                    // Logger.Log(Logger.Level.Debug, $"CreaturePet.AllowedToInteract: Trivale is swimming and Player is not!!");
+                    return false;
+                }
+            }
+            else
+            {
+                if (!_trivalvePlayerInteraction.trivalve.onSurfaceTracker.onSurface)
+                {
+                    // Logger.Log(Logger.Level.Debug, $"CreaturePet.AllowedToInteract: Trivalve not on surface!");
+                    return false;
+                }
+
+                // Commenting this out, as it's an element of the original code, but always returns false. I'm assuming because IsGrounded
+                // doesn't take into account being in a base.
+                /*
+                if (localPlayerComp.motorMode != Player.MotorMode.Run || !localPlayerComp.groundMotor.IsGrounded())
+                {
+                    Logger.Log(Logger.Level.Debug, $"CreaturePet.AllowedToInteract: Player is not grounded or player is running!");
+                    return false;
+                }
+                */
+            }
+            return true;
         }
     }
 }

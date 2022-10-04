@@ -2,11 +2,11 @@
   "Id": "PrawnRepairAndChargeBZ",
   "DisplayName": "Prawn Repair and Charge BZ",
   "Author": "Oli Ollerenshaw",
-  "Version": "1.0.1",
+  "Version": "1.1",
   "Enable": true,
   "AssemblyName": "PrawnRepairAndCharge_BZ.dll",
   "VersionDependencies": {
-    "SMLHelper": "2.9.6"
+    "SMLHelper": "2.14"
   },
   "Game": "BelowZero"
 }

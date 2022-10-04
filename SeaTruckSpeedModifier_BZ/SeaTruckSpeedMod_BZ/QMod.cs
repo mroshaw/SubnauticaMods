@@ -51,7 +51,7 @@ namespace SeaTruckSpeedMod_BZ
         /// Slider element for float value of the modifier. We'll allow 1.0 (unchanged) to 11.0 (lightening speed)
         /// </summary>
         [Slider("Speed modifier", Format = "{0:F2}", Min = 1.0F, Max = 11.0F, DefaultValue = 1.0F, Step = 0.1F), OnChange(nameof(SpeedModifierChanged))]
-        public float SeaTruckSpeedModifier;
+        public float SeaTruckSpeedModifier = 1.0f;
 
         /// <summary>
         /// OnChange event, for debugging for now

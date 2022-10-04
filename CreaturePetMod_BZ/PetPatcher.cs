@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 using UnityEngine;
+using Story;
 using Logger = QModManager.Utility.Logger;
 
 namespace MroshawMods.CreaturePetMod_BZ
@@ -15,19 +16,32 @@ namespace MroshawMods.CreaturePetMod_BZ
         /// </summary>
         [HarmonyPatch(typeof(Pickupable))]
         [HarmonyPatch("OnHandHover")]
-        internal class CursorHoverOverCreature
+        internal class CursorHoverOverPet
         {
             [HarmonyPrefix]
             public static bool ShowPetInfo(Pickupable __instance, GUIHand hand)
             {
+                // Logger.Log(Logger.Level.Debug, $"In OnHandOver");
                 HandReticle main = HandReticle.main;
                 if (!hand.IsFreeToInteract()) return true;
+                /// Logger.Log(Logger.Level.Debug, $"Hand is free...");
                 CreaturePet creaturePet = __instance.GetComponentInParent<CreaturePet>();
                 if (!creaturePet) return true;
-                TechType techType = __instance.GetTechType();
+                // Logger.Log(Logger.Level.Debug, $"Cursor over pet: {creaturePet.GetPetName()}");
+
+                // Check for right mouse click
+                if (Player.main.GetRightHandDown())
+                {
+                    // Walk towards the player
+                    creaturePet.WalkToPlayerWithDelay();
+                    return false;
+                }
+
+                    TechType techType = __instance.GetTechType();
                 main.SetIcon(HandReticle.IconType.Hand, 1f);
-                main.SetText(HandReticle.TextType.Hand, $"Pet {creaturePet.GetPetName()}", true, GameInput.Button.LeftHand);
-                HandReticle.main.SetText(HandReticle.TextType.HandSubscript, creaturePet.petCreatureType.ToString(), false, GameInput.Button.None);
+                main.SetText(HandReticle.TextType.Hand, $"Pet {creaturePet.GetPetName()}", false, GameInput.Button.LeftHand);
+                main.SetText(HandReticle.TextType.HandSubscript, $"Beckon {creaturePet.GetPetName()}", false, GameInput.Button.RightHand);
+                //  HandReticle.main.SetText(HandReticle.TextType.HandSubscript, creaturePet.petCreatureType.ToString(), false, GameInput.Button.None);
                 return false;
             }
         }
@@ -37,7 +51,7 @@ namespace MroshawMods.CreaturePetMod_BZ
         /// </summary>
         [HarmonyPatch(typeof(Pickupable))]
         [HarmonyPatch("OnHandClick")]
-        internal class PlayerClickedOnCreature
+        internal class PlayerClickedOnPet
         {
             [HarmonyPrefix]
             public static bool PlayWithPet(Pickupable __instance, GUIHand hand)
@@ -48,7 +62,6 @@ namespace MroshawMods.CreaturePetMod_BZ
                     CreaturePet creaturePet = __instance.GetComponentInParent<CreaturePet>();
                     if (creaturePet)
                     {
-
                         // Hold down CTRL key and click, to beckon pet towards player position
                         if (Input.GetKey(KeyCode.LeftControl))
                         {
@@ -66,6 +79,81 @@ namespace MroshawMods.CreaturePetMod_BZ
                     }
                 }
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Patch the "Player Hover Over" method for the Trivalve Pet
+        /// </summary>
+        [HarmonyPatch(typeof(TrivalvePlayerInteraction))]
+        [HarmonyPatch("OnHandHover")]
+        internal class CursorHoverOverPetTrivalve
+        {
+            [HarmonyPrefix]
+            public static bool ShowPetInfoTrivalve(TrivalvePlayerInteraction __instance, GUIHand hand)
+            {
+                // Logger.Log(Logger.Level.Debug, "In TrivalvePlayerInteraction.OnHandOver");
+                CreaturePet creaturePet = __instance.GetComponentInParent<CreaturePet>();
+                // Call original class method if not dealing with a Pet
+                if (!creaturePet)
+                {
+                    // Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandOver: not a pet Trivalve!");
+                    return true;
+                }
+                if (!creaturePet.AllowedToInteract(__instance.trivalve.swimWalkController.state))
+                {
+                    // Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandOver: Pet Trivalve, not allowed to interact!");
+                    return false;
+                }
+                if (Player.main.GetRightHandDown())
+                {
+                    // Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandOver: Play command animation!");
+                    __instance.Invoke("PlayCommandAnimation", 0f);
+                    return false;
+                }
+                // Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandOver: Setting reticule text!");
+                string text = __instance.trivalve.followingPlayer ? "FishStopFollow" : "FishStartFollow";
+                // HandReticle.main.SetText(HandReticle.TextType.Hand, "PlayWithFish", true, GameInput.Button.LeftHand);
+                HandReticle.main.SetText(HandReticle.TextType.Hand, $"Play with {creaturePet.GetPetName()}", false, GameInput.Button.LeftHand);
+                HandReticle.main.SetText(HandReticle.TextType.HandSubscript, text, true, GameInput.Button.RightHand);
+                HandReticle.main.SetIcon(HandReticle.IconType.Hand, 1f);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Patch the "On Hand Click" method for the Trivalve pet
+        /// </summary>
+        [HarmonyPatch(typeof(TrivalvePlayerInteraction))]
+        [HarmonyPatch("OnHandClick")]
+        internal class PlayerClickOnTrivalvePet
+        {
+            [HarmonyPrefix]
+            public static bool PlayWithPetTrivalve(TrivalvePlayerInteraction __instance, GUIHand hand)
+            {
+                CreaturePet creaturePet = __instance.GetComponentInParent<CreaturePet>();
+                // Call original class method if not dealing with a Pet
+                if (!creaturePet)
+                {
+                    Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandClick: not a pet Trivalve!");
+                    return true;
+                }
+
+                SwimWalkCreatureController.State state = __instance.trivalve.swimWalkController.state;
+                if (!creaturePet.AllowedToInteract(state))
+                {
+                    Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandClick: Pet Trivalve, not allowed to interact!");
+                    return false;
+                }
+                if (state == SwimWalkCreatureController.State.Swim)
+                {
+                    Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandClick: Swimming state!");
+                    __instance.PrepareWaterCinematic(hand.player);
+                    return false;
+                }
+                Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandClick: Land state!");
+                __instance.PrepareLandCinematic(hand.player);
+                return false;
             }
         }
 
@@ -102,7 +190,7 @@ namespace MroshawMods.CreaturePetMod_BZ
             /// <param name="deltaTime"></param>
             /// <returns></returns>
             [HarmonyPrefix]
-            private static bool PerformOverride(MoveOnSurface __instance, float time, float deltaTime)
+            private static bool MovePetOnSurface(MoveOnSurface __instance, float time, float deltaTime)
             {
                 // Get parent Creature and check that it's a Pet
                 Creature creature = __instance.creature;
@@ -144,7 +232,7 @@ namespace MroshawMods.CreaturePetMod_BZ
         }
 
         /// <summary>
-        /// Class to manage the death of a pet
+        /// Patch Creature Death, to register as a Pet death and handle appropriately
         /// </summary>
         [HarmonyPatch(typeof(Creature))]
         [HarmonyPatch("OnKill")]
@@ -163,6 +251,9 @@ namespace MroshawMods.CreaturePetMod_BZ
             }
         }
 
+        /// <summary>
+        /// Patch the Creature Start method, allowing us to hook in Pet behaviours and loading override
+        /// </summary>
         [HarmonyPatch(typeof(Creature))]
         [HarmonyPatch("Start")]
         internal class CreatureCreated
@@ -190,7 +281,7 @@ namespace MroshawMods.CreaturePetMod_BZ
                 // If the GUID is in the list, let's reconfigure
                 PetDetails petDetails = GetPetDetailsWithPrefabId(loadedPrefabId);
                 if (petDetails == null) return;
-                Logger.Log(Logger.Level.Debug, $"ConfigureExistingPets: Loading Creature Prefab Id: {loadedPrefabId} ({petDetails.PetName}");
+                Logger.Log(Logger.Level.Debug, $"ConfigureExistingPets: Loading Creature Prefab Id: {loadedPrefabId} ({petDetails.PetName})");
                 Logger.Log(Logger.Level.Debug, $"ConfigureExistingPets: Adding CreaturePet component...");
                 creaturePet = __instance.gameObject.AddComponent<CreaturePet>();
                 Logger.Log(Logger.Level.Debug, $"ConfigureExistingPets: Adding CreaturePet component... Done");
