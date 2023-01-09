@@ -1,29 +1,29 @@
-﻿using HarmonyLib;
-using Logger = QModManager.Utility.Logger;
+﻿using BepInEx.Logging;
+using HarmonyLib;
 
-namespace SeaTruckSpeedMod_BZ
+namespace Mroshaw.BoosterTankSpeedMod_BZ
 {
-    class BoosterTankMod
+    public class BoosterTankSpeedMod_BZ
     {
         /// <summary>
         /// Harmony hooks to modify the Booster Tank Max Speed
         /// </summary>
         /// 
         [HarmonyPatch(typeof(SuitBoosterTank))]
-        [HarmonyPatch("Awake")]
-        internal class BoosterTankSpeedMod
+        internal class SuitBoosterTank_Patch
         {
+            [HarmonyPatch(nameof(SuitBoosterTank.Awake))]
             [HarmonyPostfix]
-            public static void Postfix(SuitBoosterTank __instance)
+            public static void Awake_Postfix(SuitBoosterTank __instance)
             {
                 // Grab the modifier value from Config and apply to motorForce
-                Logger.Log(Logger.Level.Debug, "In SuitBoosterTank_Awake");
+                BoosterTankSpeedPlugin_BZ.Log.LogInfo("In SuitBoosterTank_Awake");
 
                 // Get current modifiers from menu config
-                float boostModifier = QMod.Config.BoosterTankSpeedModifier;
-                float oxygenModifier = QMod.Config.OxygenConsumptionModifier;
-                Logger.Log(Logger.Level.Debug, $"Boost Modifier: {boostModifier}");
-                Logger.Log(Logger.Level.Debug, $"Oxygen: Modifier: {oxygenModifier}");
+                float boostModifier = BoosterTankSpeedPlugin_BZ.BoosterSpeedMultiplier.Value;
+                float oxygenModifier = BoosterTankSpeedPlugin_BZ.OxygenConsumptionMultiplier.Value;
+                BoosterTankSpeedPlugin_BZ.Log.LogInfo($"Boost Modifier: {boostModifier}");
+                BoosterTankSpeedPlugin_BZ.Log.LogInfo($"Oxygen: Modifier: {oxygenModifier}");
 
                 // Get current instance values
                 float currentBoostValue = __instance.motor.motorForce;
@@ -32,16 +32,16 @@ namespace SeaTruckSpeedMod_BZ
                 // Apply boost modifier
                 float newBoostValue = currentBoostValue * boostModifier;
                 __instance.motor.motorForce = newBoostValue;
-                Logger.Log(Logger.Level.Debug, $"Changed motorForce from: {currentBoostValue} to: {newBoostValue}");
+                BoosterTankSpeedPlugin_BZ.Log.LogInfo($"Changed motorForce from: {currentBoostValue} to: {newBoostValue}");
 
                // Update oxygen consumption
                 float newOxygenValue = oxygenModifier * currentOxygenValue;
                 __instance.boostOxygenUsePerSecond = newOxygenValue;
-                Logger.Log(Logger.Level.Debug, $"Changed oxygenConsumption from: {currentOxygenValue} to: {newOxygenValue}");
+                BoosterTankSpeedPlugin_BZ.Log.LogInfo($"Changed oxygenConsumption from: {currentOxygenValue} to: {newOxygenValue}");
 
                 // Add to list of instances
                 BoosterTankHistoryItem boosterTankHistoryItem = new BoosterTankHistoryItem(__instance, currentBoostValue, currentOxygenValue);
-                QMod.BoosterTankHistory.Add(boosterTankHistoryItem);
+                BoosterTankSpeedPlugin_BZ.BoosterTankHistory.Add(boosterTankHistoryItem);
             }
         }
       }
