@@ -1,4 +1,4 @@
-﻿namespace SeaTruckSpeedMod_BZ
+﻿namespace Mroshaw.SeaTruckSpeedMod_BZ
 {
     /// <summary>
     /// This class allows us to keep track of SeaTrucks that we've modded so we can dynamically
