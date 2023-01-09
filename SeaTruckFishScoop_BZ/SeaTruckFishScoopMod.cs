@@ -1,30 +1,36 @@
 ﻿using HarmonyLib;
-using Logger = QModManager.Utility.Logger;
 using UnityEngine;
 
-
-namespace SeaTruckFishScoop_BZ
+namespace Mroshaw.SeaTruckFishScoopMod_BZ
 {
-    class FishScoopPatcher
+    /// <summary>
+    /// Patches for the SeaTruck Fish Scoop Mod
+    /// </summary>
+    public class SeaTruckFishScoopMod
     {
+        /// <summary>
+        /// Patch the SeaTruckMotor class
+        /// </summary>
         [HarmonyPatch(typeof(SeaTruckMotor))]
-        [HarmonyPatch("Start")]
-        internal class AddFishScoop
+        internal class SeaTruckMotor_Patch
         {
             /// <summary>
             /// Add a FishScoop to every spawned SeaTruck
             /// </summary>
             /// <param name="__instance"></param>
+            [HarmonyPatch(nameof(SeaTruckMotor.Start))]
             [HarmonyPostfix]
-            public static void AddFishScoopToSeaTruck(SeaTruckMotor __instance)
+            public static void Start_Postfix(SeaTruckMotor __instance)
             {
-                __instance.gameObject.AddComponent<FishScoopComponent>();
+                __instance.gameObject.AddComponent<SeaTruckFishScoopComponent>();
             }
         }
 
+        /// <summary>
+        /// Patch the LiveMixin class
+        /// </summary>
         [HarmonyPatch(typeof(LiveMixin))]
-        [HarmonyPatch("TakeDamage")]
-        internal class VehicleCollisionMod
+        internal class LiveMixin_Patch
         {
             /// <summary>
             /// Here, we're prefixing the TakeDamage method to intecept damage being dealt to a
@@ -33,10 +39,10 @@ namespace SeaTruckFishScoop_BZ
             /// </summary>
             /// <param name="__instance"></param>
             /// <param name="dealer"></param>
+            [HarmonyPatch(nameof(LiveMixin.TakeDamage))]
             [HarmonyPrefix]
-            public static bool TakeDamage(LiveMixin __instance, GameObject dealer = null)
+            public static bool TakeDamage_Prefix(LiveMixin __instance, GameObject dealer = null)
             {
-     
                 if (dealer == null)
                 {
                     return true;
@@ -44,7 +50,7 @@ namespace SeaTruckFishScoop_BZ
 
                 // Get the root context of the damage taker
                 GameObject taker = __instance.gameObject;
-                Logger.Log(Logger.Level.Debug, $"Damage: {dealer.name} did damage to: {taker.name}");
+                SeaTruckFishScoopPlugin_BZ.Log.LogDebug($"Damage: {dealer.name} did damage to: {taker.name}");
                 GameObject rootTaker = UWE.Utils.GetEntityRoot(__instance.gameObject);
                 if (rootTaker == null)
                 {
@@ -57,7 +63,7 @@ namespace SeaTruckFishScoop_BZ
                 {
                     rootDealer = dealer;
                 }
-                Logger.Log(Logger.Level.Debug, $"Dealer root: {rootDealer.name}. Taker root: {rootTaker.name}");
+                SeaTruckFishScoopPlugin_BZ.Log.LogDebug($"Dealer root: {rootDealer.name}. Taker root: {rootTaker.name}");
 
                 // Let's see if whatever dealt the damage was a SeaTruck main cab
                 SeaTruckSegment seaTruckSegment = rootDealer.GetComponent<SeaTruckSegment>();
@@ -71,12 +77,10 @@ namespace SeaTruckFishScoop_BZ
                 }
 
                 // Invoke the might of the scoop
-                FishScoopComponent fishScoop = __instance.gameObject.GetComponent<FishScoopComponent>();
+                SeaTruckFishScoopComponent fishScoop = __instance.gameObject.GetComponent<SeaTruckFishScoopComponent>();
                 bool scoopSuccess = fishScoop.Scoop(rootTaker);
                 return !scoopSuccess;
             }
-
-
         }
     }
 }
