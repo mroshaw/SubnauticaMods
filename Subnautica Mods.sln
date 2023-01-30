@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31402.337
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoosterTankSpeedMod_BZ", "BoosterTankSpeedModifier_BZ\BoosterTankSpeedMod_BZ\BoosterTankSpeedMod_BZ.csproj", "{B709C554-2724-4019-8D94-18FC0FF7E659}"
 EndProject
@@ -18,10 +18,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F119E101-CE62-43D3-BE75-7F14C49C3C0C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreaturePetMod_BZ", "CreaturePetMod_BZ\CreaturePetMod_BZ.csproj", "{7F20D747-77F2-4CA5-B3F8-329C88E867C0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IngenalvusMod_BZ", "IngenalvusMod_BZ\IngenalvusMod_BZ.csproj", "{909576B4-0C4C-4269-B5FF-BE8B908D2EC7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IngenalvusMod_SN", "IngenalvusMod_SN\IngenalvusMod_SN.csproj", "{DD6E43E3-0ECE-4D0A-8065-4E2A84401EC1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreaturePetMod_SN", "CreaturePetMod_SN\CreaturePetMod_SN.csproj", "{E4821B6E-1786-4EF9-B48D-2847405E78F0}"
 EndProject
@@ -89,22 +85,6 @@ Global
 		{7F20D747-77F2-4CA5-B3F8-329C88E867C0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7F20D747-77F2-4CA5-B3F8-329C88E867C0}.Subnautica|Any CPU.ActiveCfg = Subnautica|Any CPU
 		{7F20D747-77F2-4CA5-B3F8-329C88E867C0}.Subnautica|Any CPU.Build.0 = Subnautica|Any CPU
-		{909576B4-0C4C-4269-B5FF-BE8B908D2EC7}.Below Zero|Any CPU.ActiveCfg = Below Zero|Any CPU
-		{909576B4-0C4C-4269-B5FF-BE8B908D2EC7}.Below Zero|Any CPU.Build.0 = Below Zero|Any CPU
-		{909576B4-0C4C-4269-B5FF-BE8B908D2EC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{909576B4-0C4C-4269-B5FF-BE8B908D2EC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{909576B4-0C4C-4269-B5FF-BE8B908D2EC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{909576B4-0C4C-4269-B5FF-BE8B908D2EC7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{909576B4-0C4C-4269-B5FF-BE8B908D2EC7}.Subnautica|Any CPU.ActiveCfg = Subnautica|Any CPU
-		{909576B4-0C4C-4269-B5FF-BE8B908D2EC7}.Subnautica|Any CPU.Build.0 = Subnautica|Any CPU
-		{DD6E43E3-0ECE-4D0A-8065-4E2A84401EC1}.Below Zero|Any CPU.ActiveCfg = Below Zero|Any CPU
-		{DD6E43E3-0ECE-4D0A-8065-4E2A84401EC1}.Below Zero|Any CPU.Build.0 = Below Zero|Any CPU
-		{DD6E43E3-0ECE-4D0A-8065-4E2A84401EC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD6E43E3-0ECE-4D0A-8065-4E2A84401EC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD6E43E3-0ECE-4D0A-8065-4E2A84401EC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD6E43E3-0ECE-4D0A-8065-4E2A84401EC1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD6E43E3-0ECE-4D0A-8065-4E2A84401EC1}.Subnautica|Any CPU.ActiveCfg = Subnautica|Any CPU
-		{DD6E43E3-0ECE-4D0A-8065-4E2A84401EC1}.Subnautica|Any CPU.Build.0 = Subnautica|Any CPU
 		{E4821B6E-1786-4EF9-B48D-2847405E78F0}.Below Zero|Any CPU.ActiveCfg = Below Zero|Any CPU
 		{E4821B6E-1786-4EF9-B48D-2847405E78F0}.Below Zero|Any CPU.Build.0 = Below Zero|Any CPU
 		{E4821B6E-1786-4EF9-B48D-2847405E78F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -118,9 +98,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		    SolutionGuid = {F75DB666-86C3-40EC-BB33-11B2BCDD7844}
-		            SolutionGuid = {B7C207F6-0B63-4258-B838-FA393F8CEA5F}
-		        SolutionGuid = {3DC6A6DD-22CC-45F9-9AC2-ACD7DC8CCBD7}
 		SolutionGuid = {DAF74111-BA59-4F12-9B63-549EB0B8F5D5}
+		        SolutionGuid = {3DC6A6DD-22CC-45F9-9AC2-ACD7DC8CCBD7}
+		            SolutionGuid = {B7C207F6-0B63-4258-B838-FA393F8CEA5F}
+		    SolutionGuid = {F75DB666-86C3-40EC-BB33-11B2BCDD7844}
 	EndGlobalSection
 EndGlobal
