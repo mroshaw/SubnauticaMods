@@ -71,7 +71,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SeaTruckFishScoopComponent.cs" />
+    <Compile Include="SeaTruckFishScoop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeaTruckFishScoopMod.cs" />
     <Compile Include="SeaTruckFishScoopPlugin_BZ.cs" />
