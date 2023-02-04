@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Logger = QModManager.Utility.Logger;
 
-/// <summary>
-/// Courtesy of:
-/// https://github.com/SubnauticaModding/QModManager/blob/Dev/QModManager/Checks/PirateCheck.cs
-/// https://github.com/SubnauticaModding/QModManager/blob/Dev/LICENSE.md
-/// All code attributed to "Subnautica Modding" and "desperationfighter"
-/// </summary>
+/*
+    Courtesy of:
+    https://github.com/SubnauticaModding/QModManager/blob/Dev/QModManager/Checks/PirateCheck.cs
+    https://github.com/SubnauticaModding/QModManager/blob/Dev/LICENSE.md
+    All code attributed to "Subnautica Modding" and "desperationfighter"
+*/
 
-namespace MroshawMods.Checks
+namespace DaftAppleGames.CreaturePetMod_BZ
 {
+    /// <summary>
+    /// Class methods to check if game is likely a pirated version.
+    /// </summary>
     internal static class PirateCheck
     {
-        internal static string Steamapi => "steam_api64.dll";
-        internal static int Steamapilengh => 220000;
+        internal static string SteamApi => "steam_api64.dll";
+        internal static int SteamApiLength => 220000;
 
-        internal static string folder = Environment.CurrentDirectory;
+        internal static string Folder = Environment.CurrentDirectory;
 
-        internal static readonly HashSet<string> CrackedFiles = new HashSet<string>()
+        internal static readonly HashSet<string> CrackedFiles = new HashSet<string>
         {
             "steam_api64.cdx",
             "steam_api64.ini",
@@ -35,25 +37,29 @@ namespace MroshawMods.Checks
             "chuj.cdx",
         };
 
+        /// <summary>
+        /// Run various checks to detect pirated version of the game
+        /// </summary>
+        /// <returns></returns>
         internal static bool IsPirate()
         {
-            string steamDll = Path.Combine(folder, Steamapi);
+            string steamDll = Path.Combine(Folder, SteamApi);
             bool steamStore = File.Exists(steamDll);
             if (steamStore)
             {
                 FileInfo fileInfo = new FileInfo(steamDll);
-                if (fileInfo.Length > Steamapilengh)
+                if (fileInfo.Length > SteamApiLength)
                 {
-                    Logger.Log(Logger.Level.Debug, $"File length check. ({fileInfo.Length})");
+                    CreaturePetPluginBz.Log.LogDebug($"File length check. ({fileInfo.Length})");
                     return true;
                 }
             }
 
             foreach (string file in CrackedFiles)
             {
-                if (File.Exists(Path.Combine(folder, file)))
+                if (File.Exists(Path.Combine(Folder, file)))
                 {
-                    Logger.Log(Logger.Level.Debug, "File exists check.");
+                    CreaturePetPluginBz.Log.LogDebug("File exists check.");
                     return true;
                 }
             }

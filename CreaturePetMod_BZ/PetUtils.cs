@@ -2,56 +2,57 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UWE;
-using Logger = QModManager.Utility.Logger;
 
-namespace MroshawMods.CreaturePetMod_BZ
+namespace DaftAppleGames.CreaturePetMod_BZ
 {
     /// <summary>
     /// Class to support spawning of a new Pet
     /// </summary>
-    internal static class PetSpawner
+    internal static class PetUtils
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="prefabId"></param>
+        /// <returns></returns>
+        internal static PetDetails GetPetDetailsWithPrefabId(string prefabId)
+        {
+            foreach (PetDetails petDetails in CreaturePetPluginBz.PetDetailsHashSet)
+            {
+                if (petDetails.PrefabId == prefabId)
+                {
+                    return petDetails;
+                }
+            }
+            return null;
+        }
+
         /// <summary>
         /// Main class for handling pet spawn
         /// </summary>
         internal static bool SpawnCreaturePet()
         {
             // Decide where to spawn. This will be 1m in front of the player, at floor level
-            Logger.Log(Logger.Level.Debug, "Getting spawn position");
+            CreaturePetPluginBz.Log.LogDebug("Getting spawn position");
 
             // Determine spawn position and rotation
             GetSpawnLocation(out Quaternion spawnRotation, out Vector3 spawnPosition);
 
             // First up, we want to check that we can spawn here. Use the toggle combined with IsInterior to decide
-            Logger.Log(Logger.Level.Debug, "Checking player position");
+            CreaturePetPluginBz.Log.LogDebug("Checking player position");
             GameObject interiorGameObject = GetPlayerBaseRoom();
             bool isSpawnInBoundary = IsSpawnInBoundary(spawnPosition);
 
             if (!isSpawnInBoundary)
             {
-                Logger.Log(Logger.Level.Debug, "Spawn location too close to wall or object");
+                CreaturePetPluginBz.Log.LogDebug("Spawn location too close to wall or object");
                 ErrorMessage.AddMessage("Too close to wall or object!");
                 return false;
             }
 
-            if (!interiorGameObject && QMod.Config.IndoorPetOnly && !IsSpawnInBoundary(spawnPosition))
-            {
-                Logger.Log(Logger.Level.Debug, "Not inside and indoor pet only, so won't spawn");
-                ErrorMessage.AddMessage("Can't spawn pet outside!");
-                return false;
-            }
-
-            // Have we reach the limit of pets per room?
-            if (NumPetsInRoom(interiorGameObject) >= QMod.Config.MaxPetsPerRoom )
-            {
-                ErrorMessage.AddMessage("Maximum pets reached!");
-                Logger.Log(Logger.Level.Debug, "Reached max pet numbers");
-                return false;
-            }
-
             // Call the routine to find the prefab and instantiate the creature
-            Logger.Log(Logger.Level.Debug, "Setting up Creature!");
-            CoroutineHost.StartCoroutine(SetUpCreaturePet(interiorGameObject, spawnPosition, spawnRotation, QMod.Config.PetType));
+            CreaturePetPluginBz.Log.LogDebug("Setting up Creature!");
+            CoroutineHost.StartCoroutine(SetUpCreaturePet(interiorGameObject, spawnPosition, spawnRotation, CreaturePetPluginBz.PetTypeConfig.Value));
             return true;
         }
 
@@ -59,25 +60,25 @@ namespace MroshawMods.CreaturePetMod_BZ
         /// Gets the players interior GameObject, if they are inside
         /// </summary>
         /// <returns></returns>
-        private static GameObject GetPlayerBaseRoom()
+        public static GameObject GetPlayerBaseRoom()
         {
             IInteriorSpace playerInterior = Player.main.currentInterior;
             if (playerInterior == null)
             {
-                Logger.Log(Logger.Level.Debug, "Can't find interior, so must be outside");
+                CreaturePetPluginBz.Log.LogDebug("Can't find interior, so must be outside");
                 return null;
             }
             // We have an interior object, so let's check we're really in it. No reason why we wouldn't be
             // but checking for "belt and braces" purposes!
             GameObject interiorGameObject = playerInterior.GetGameObject();
             bool isPlayerInside = playerInterior.IsPlayerInside();
-            Logger.Log(Logger.Level.Debug, $"Is Player inside: {isPlayerInside}");
+            CreaturePetPluginBz.Log.LogDebug($"Is Player inside: {isPlayerInside}");
             if (!isPlayerInside)
             {
-                Logger.Log(Logger.Level.Debug, "Player is not inside");
+                CreaturePetPluginBz.Log.LogDebug("Player is not inside");
                 return null;
             }
-            Logger.Log(Logger.Level.Debug, $"Player is inside: {interiorGameObject.name}");
+            CreaturePetPluginBz.Log.LogDebug($"Player is inside: {interiorGameObject.name}");
 
             return interiorGameObject;
         }
@@ -89,7 +90,7 @@ namespace MroshawMods.CreaturePetMod_BZ
         /// <returns></returns>
         private static int NumPetsInRoom(GameObject interior)
         {
-            Logger.Log(Logger.Level.Debug, "Counting room pets");
+            CreaturePetPluginBz.Log.LogDebug("Counting room pets");
             CreaturePet[] petsInRoom = interior.GetAllComponentsInChildren<CreaturePet>();
             int alivePetCount = 0;
             foreach (CreaturePet pet in petsInRoom)
@@ -99,7 +100,7 @@ namespace MroshawMods.CreaturePetMod_BZ
                     alivePetCount++;
                 }
             }
-            Logger.Log(Logger.Level.Debug, $"Found: {alivePetCount} live pets");
+            CreaturePetPluginBz.Log.LogDebug($"Found: {alivePetCount} live pets");
             return alivePetCount;
         }
 
@@ -116,24 +117,25 @@ namespace MroshawMods.CreaturePetMod_BZ
             Transform cameraTransform = MainCameraControl.main.transform;
             Transform playerTransform = Player.main.transform;
             spawnPosition = cameraTransform.position;
+            
             // Get the creature looking at the player
             spawnRotation = cameraTransform.rotation * Quaternion.Euler(0, 180f, 0);
 
-            Logger.Log(Logger.Level.Debug, $"Camera position is: {spawnPosition.x} {spawnPosition.y} {spawnPosition.z}");
             // Give a little room to spawn the beastie
+            CreaturePetPluginBz.Log.LogDebug($"Camera position is: {spawnPosition.x} {spawnPosition.y} {spawnPosition.z}");
             spawnPosition = playerTransform.position + (cameraTransform.forward * 1.2f);
-            Logger.Log(Logger.Level.Debug, $"Camera forward position is: {spawnPosition.x} {spawnPosition.y} {spawnPosition.z}");
+            CreaturePetPluginBz.Log.LogDebug($"Camera forward position is: {spawnPosition.x} {spawnPosition.y} {spawnPosition.z}");
 
             // Get ground height
             if (Physics.Raycast(spawnPosition, Vector3.down, out RaycastHit hit, 10.0f))
             {
-                Logger.Log(Logger.Level.Debug, $"Hit position is: {hit.point.x} {hit.point.y} {hit.point.z}");
+                CreaturePetPluginBz.Log.LogDebug($"Hit position is: {hit.point.x} {hit.point.y} {hit.point.z}");
                 spawnPosition = hit.point + new Vector3(0, cameraTransform.localScale.y / 2, 0);
-                Logger.Log(Logger.Level.Debug, $"Spawn position is: {spawnPosition.x} {spawnPosition.y} {spawnPosition.z}");
+                CreaturePetPluginBz.Log.LogDebug($"Spawn position is: {spawnPosition.x} {spawnPosition.y} {spawnPosition.z}");
             }
             else
             {
-                Logger.Log(Logger.Level.Debug, "Raycast didn't hit. Using player position");
+                CreaturePetPluginBz.Log.LogDebug("Raycast didn't hit. Using player position");
             }
         }
 
@@ -149,11 +151,11 @@ namespace MroshawMods.CreaturePetMod_BZ
             Vector3 toPosition = spawnPosition;
             if (Physics.Linecast(fromPosition, toPosition, out RaycastHit hit))
             {
-                Logger.Log(Logger.Level.Debug, $"Spawn would be outside boundary. Hit: {hit.collider.gameObject.name}");
+                CreaturePetPluginBz.Log.LogDebug($"Spawn would be outside boundary. Hit: {hit.collider.gameObject.name}");
                 return false;
             }
 
-            Logger.Log(Logger.Level.Debug, "Spawn would be within boundary");
+            CreaturePetPluginBz.Log.LogDebug("Spawn would be within boundary");
             return true;
         }
 
@@ -168,7 +170,7 @@ namespace MroshawMods.CreaturePetMod_BZ
         internal static IEnumerator SetUpCreaturePet(GameObject parentBase, Vector3 spawnPosition, Quaternion spawnRotation, PetCreatureType petType)
         {
             // Setup Prefab
-            Logger.Log(Logger.Level.Debug, "In SetUpCreaturePet");
+            CreaturePetPluginBz.Log.LogDebug("In SetUpCreaturePet");
 
             // Get the TechType for the required Prefab
             TechType petTechType;
@@ -197,24 +199,26 @@ namespace MroshawMods.CreaturePetMod_BZ
                     break;
 
                 default:
-                    Logger.Log(Logger.Level.Debug, $"Invalid Pet Choice: {petType}");
+                    CreaturePetPluginBz.Log.LogDebug($"Invalid Pet Choice: {petType}");
                     yield break;
             }
 
             CoroutineTask<GameObject> task = CraftData.GetPrefabForTechTypeAsync(petTechType);
             yield return task;
             GameObject creaturePetPrefab = task.GetResult();
-            Logger.Log(Logger.Level.Debug, "Instantiating new GameObject");
+            CreaturePetPluginBz.Log.LogDebug("Instantiating new GameObject");
             GameObject petCreatureGameObject;
 
             if (parentBase)
             {
- #pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
+                CreaturePetPluginBz.Log.LogDebug($"Parent is {parentBase.name}...");
                 petCreatureGameObject = GameObject.Instantiate(creaturePetPrefab, spawnPosition, spawnRotation, parentBase.transform);
  #pragma warning restore CS0618 // Type or member is obsolete
             }
             else
             {
+                CreaturePetPluginBz.Log.LogDebug("No parent base found...");
                 petCreatureGameObject = GameObject.Instantiate(creaturePetPrefab, spawnPosition, spawnRotation);
             }
 
@@ -222,31 +226,54 @@ namespace MroshawMods.CreaturePetMod_BZ
             petCreatureGameObject.SetActive(false);
 
             // Do the configuration
-            Logger.Log(Logger.Level.Debug, "Adding CreaturePet component...");
-            string petName = QMod.Config.PetName.ToString();
-            Creature creature = petCreatureGameObject.GetComponent<Creature>();
-            CreaturePet creaturePet = petCreatureGameObject.AddComponent<CreaturePet>();
-            Logger.Log(Logger.Level.Debug, "Adding CreaturePet component... Done.");
-            Logger.Log(Logger.Level.Debug, "Configuring Pet...");
-            PetDetails petDetails =  creaturePet.ConfigurePet(QMod.Config.PetType, QMod.Config.PetName.ToString());
-            Logger.Log(Logger.Level.Debug, "Configuring Pet... Done.");
-            // Set the GameObject to Active
-            Logger.Log(Logger.Level.Debug, "Enable Game Object...");
-            petCreatureGameObject.SetActive(true);
-            Logger.Log(Logger.Level.Debug, "Enable Game Object... Done.");
+            CreaturePetPluginBz.Log.LogDebug("Adding CreaturePet component...");
 
-            Logger.Log(Logger.Level.Debug, "Adding to HashSet...");
-            if (QMod.PetDetailsHashSet == null)
+            // Set up the name and type of Pet
+            string newPetName = CreaturePetPluginBz.PetNameConfig.Value.ToString();
+            PetCreatureType newPetType = CreaturePetPluginBz.PetTypeConfig.Value;
+
+            // Add and configure the new component
+            CreaturePet creaturePet = petCreatureGameObject.AddComponent<CreaturePet>();
+            CreaturePetPluginBz.Log.LogDebug("Adding CreaturePet component... Done.");
+            CreaturePetPluginBz.Log.LogDebug("Configuring Pet...");
+            PetDetails petDetails =  creaturePet.ConfigurePet(newPetType, newPetName);
+            CreaturePetPluginBz.Log.LogDebug("Configuring Pet... Done.");
+
+            // Set the GameObject to Active
+            CreaturePetPluginBz.Log.LogDebug("Enable Game Object...");
+            petCreatureGameObject.SetActive(true);
+            CreaturePetPluginBz.Log.LogDebug("Enable Game Object... Done.");
+
+            // Update our internal Hashset for loading and saving
+            CreaturePetPluginBz.Log.LogDebug("Adding to HashSet...");
+            if (CreaturePetPluginBz.PetDetailsHashSet == null)
             {
-                QMod.PetDetailsHashSet = new HashSet<PetDetails>();
+                CreaturePetPluginBz.PetDetailsHashSet = new HashSet<PetDetails>();
 
             }
-            QMod.PetDetailsHashSet.Add(petDetails);
-            Logger.Log(Logger.Level.Debug, "Adding to HashSet... Done");
+            CreaturePetPluginBz.PetDetailsHashSet.Add(petDetails);
+            CreaturePetPluginBz.Log.LogDebug("Adding to HashSet... Done");
+
+            // Set parent, just in case
+            petCreatureGameObject.transform.SetParent(parentBase.transform);
 
             // Done
-            ErrorMessage.AddMessage($"You have a new pet! Welcome, {petName}");
+            ErrorMessage.AddMessage($"You have a new pet! Welcome, {newPetName}!");
+        }
 
+        /// <summary>
+        /// Kills ALL pets. Use with caution!
+        /// </summary>
+        internal static void KillAllPets()
+        {
+            CreaturePet[] creaturePets = GameObject.FindObjectsOfType<CreaturePet>();
+            CreaturePetPluginBz.Log.LogDebug($"Killing {creaturePets.Length} pets...");
+
+            // Loop through all Pets and kill them, one by one
+            foreach (CreaturePet creaturePet in creaturePets)
+            {
+                creaturePet.Kill();
+            }
         }
     }
 }

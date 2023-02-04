@@ -7,7 +7,7 @@
     <ProjectGuid>{7F20D747-77F2-4CA5-B3F8-329C88E867C0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CreaturePetMod_BZ</RootNamespace>
+    <RootNamespace>DaftAppleGames.CreaturePetMod_BZ</RootNamespace>
     <AssemblyName>CreaturePetMod_BZ</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -30,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Subnautica|AnyCPU'">
     <OutputPath>bin\</OutputPath>
@@ -51,22 +52,30 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll</HintPath>
     </Reference>
-    <Reference Include="QModInstaller, Version=4.4.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\plugins\QModManager\QModInstaller.dll</HintPath>
+    <Reference Include="BepInEx">
+      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
-    <Reference Include="SMLHelper, Version=2.12.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\QMods\SMLHelper_BZ\SMLHelper.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.AIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.AIModule.dll</HintPath>
@@ -93,22 +102,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Buildables\PenglingBuildable.cs" />
-    <Compile Include="Buildables\PetBuildable.cs" />
-    <Compile Include="Buildables\TrivalveBlueBuildable.cs" />
-    <Compile Include="Buildables\TrivalveYellowBuildable.cs" />
-    <Compile Include="PetDetailsV1.cs" />
-    <Compile Include="Buildables\PetFabricator.cs" />
-    <Compile Include="PetPatcher.cs" />
+    <Compile Include="CreaturePetPlugin_BZ.cs" />
+    <Compile Include="LoadSaveMod.cs" />
+    <Compile Include="CreaturePetPatches_BZ.cs" />
+    <Compile Include="ModInputManager.cs" />
     <Compile Include="PetDetails.cs" />
-    <Compile Include="PetSpawner.cs" />
+    <Compile Include="PetUtils.cs" />
     <Compile Include="CreaturePet.cs" />
     <Compile Include="PirateCheck.cs" />
-    <Compile Include="QMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="mod.json" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -117,15 +119,12 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\" />
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir "E:\Games\Steam\steamapps\common\SubnauticaZero\QMods\$(TargetName)"
-mkdir "E:\Games\Steam\steamapps\common\SubnauticaZero\QMods\$(TargetName)\Assets"
-xcopy /q/y/i "$(TargetPath)" "E:\Games\Steam\steamapps\common\SubnauticaZero\QMods\$(TargetName)" /E /H /C
-echo f|xcopy /q/y/i "$(ProjectDir)mod.json" "E:\Games\Steam\steamapps\common\SubnauticaZero\QMods\$(TargetName)\mod.json" /E /H /C
-xcopy /q/y/i "$(ProjectDir)/Assets" "E:\Games\Steam\steamapps\common\SubnauticaZero\QMods\$(TargetName)\Assets" /E /H /C
-</PostBuildEvent>
+    <PostBuildEvent>mkdir "E:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\plugins\$(TargetName)"
+xcopy /q /y /-i "$(TargetPath)" "E:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\plugins\$(TargetName)\$(TargetFileName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

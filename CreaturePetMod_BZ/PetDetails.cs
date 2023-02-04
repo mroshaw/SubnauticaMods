@@ -1,4 +1,4 @@
-﻿namespace MroshawMods.CreaturePetMod_BZ
+﻿namespace DaftAppleGames.CreaturePetMod_BZ
 {
     /// <summary>
     /// Class for storing custom pet details.
@@ -7,10 +7,10 @@
     /// </summary>
     public class PetDetails
     {
-        public string PrefabId;
-        public string PetName;
-        public bool IsAlive;
-        public PetCreatureType PetType;
+        public string PrefabId { get; set; }
+        public string PetName { get; set; }
+        public bool IsAlive { get; set; }
+        public PetCreatureType PetType { get; set; }
 
         /// <summary>
         /// Default empty constructor

@@ -1,33 +1,54 @@
 ﻿using HarmonyLib;
-using System.Collections.Generic;
+using mset;
 using UnityEngine;
-using Story;
-using Logger = QModManager.Utility.Logger;
 
-namespace MroshawMods.CreaturePetMod_BZ
+namespace DaftAppleGames.CreaturePetMod_BZ
 {
     /// <summary>
     /// Provides patched methods for Pet specific behaviour
     /// </summary>
-    class PetPatcher
+    public class CreaturePetPatches
     {
+
+        [HarmonyPatch(typeof(SkyApplier))]
+        internal class SkyApplierPatch
+        {
+            [HarmonyPrefix]
+            [HarmonyPatch(nameof(SkyApplier.SetSky))]
+            public static void SetSky_Prefix(SkyApplier __instance, Skies skyMode)
+            {
+                if (__instance.gameObject.GetComponent<Trivalve>())
+                {
+                    CreaturePetPluginBz.Log.LogDebug("Trivalve: In SetSky");
+                }
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch(nameof(SkyApplier.SetCustomSky))]
+            public static void SetCustomSky_Prefix(SkyApplier __instance, Sky customSky)
+            {
+                if (__instance.gameObject.GetComponent<Trivalve>())
+                {
+                    CreaturePetPluginBz.Log.LogDebug("Trivalve: In SetCustomSky");
+                }
+            }
+
+        }
+
         /// <summary>
         /// Show pet info on hand over
         /// </summary>
         [HarmonyPatch(typeof(Pickupable))]
-        [HarmonyPatch("OnHandHover")]
-        internal class CursorHoverOverPet
+        internal class PickupablePatch
         {
             [HarmonyPrefix]
-            public static bool ShowPetInfo(Pickupable __instance, GUIHand hand)
+            [HarmonyPatch(nameof(Pickupable.OnHandHover))]
+            public static bool OnHandOver_Prefix(Pickupable __instance, GUIHand hand)
             {
-                // Logger.Log(Logger.Level.Debug, $"In OnHandOver");
                 HandReticle main = HandReticle.main;
                 if (!hand.IsFreeToInteract()) return true;
-                /// Logger.Log(Logger.Level.Debug, $"Hand is free...");
                 CreaturePet creaturePet = __instance.GetComponentInParent<CreaturePet>();
                 if (!creaturePet) return true;
-                // Logger.Log(Logger.Level.Debug, $"Cursor over pet: {creaturePet.GetPetName()}");
 
                 // Check for right mouse click
                 if (Player.main.GetRightHandDown())
@@ -37,26 +58,22 @@ namespace MroshawMods.CreaturePetMod_BZ
                     return false;
                 }
 
-                    TechType techType = __instance.GetTechType();
-                main.SetIcon(HandReticle.IconType.Hand, 1f);
+                main.SetIcon(HandReticle.IconType.Hand);
                 main.SetText(HandReticle.TextType.Hand, $"Pet {creaturePet.GetPetName()}", false, GameInput.Button.LeftHand);
                 main.SetText(HandReticle.TextType.HandSubscript, $"Beckon {creaturePet.GetPetName()}", false, GameInput.Button.RightHand);
-                //  HandReticle.main.SetText(HandReticle.TextType.HandSubscript, creaturePet.petCreatureType.ToString(), false, GameInput.Button.None);
                 return false;
             }
-        }
 
-        /// <summary>
-        /// Handle clicking or "Petting" of Pets
-        /// </summary>
-        [HarmonyPatch(typeof(Pickupable))]
-        [HarmonyPatch("OnHandClick")]
-        internal class PlayerClickedOnPet
-        {
+            /// <summary>
+            /// Patch in the Click Pet behaviour
+            /// </summary>
+            /// <param name="__instance"></param>
+            /// <param name="hand"></param>
+            /// <returns></returns>
             [HarmonyPrefix]
+            [HarmonyPatch(nameof(Pickupable.OnHandClick))]
             public static bool PlayWithPet(Pickupable __instance, GUIHand hand)
             {
-                HandReticle main = HandReticle.main;
                 if (hand.IsFreeToInteract())
                 {
                     CreaturePet creaturePet = __instance.GetComponentInParent<CreaturePet>();
@@ -72,9 +89,6 @@ namespace MroshawMods.CreaturePetMod_BZ
 
                         // Perform random animation
                         creaturePet.PetWithAnimation();
-                        // main.SetText(HandReticle.TextType.Hand, $"Pet: {creaturePet.petTechType.AsString(false)}", true, GameInput.Button.None);
-                        // HandReticle.main.SetText(HandReticle.TextType.HandSubscript, creaturePet.GetPetName(), false, GameInput.Button.None);
-
                         return false;
                     }
                 }
@@ -86,86 +100,78 @@ namespace MroshawMods.CreaturePetMod_BZ
         /// Patch the "Player Hover Over" method for the Trivalve Pet
         /// </summary>
         [HarmonyPatch(typeof(TrivalvePlayerInteraction))]
-        [HarmonyPatch("OnHandHover")]
-        internal class CursorHoverOverPetTrivalve
+        internal class TrivalvePlayerInteractionPatch
         {
+            [HarmonyPatch(nameof(TrivalvePlayerInteraction.OnHandHover))]
             [HarmonyPrefix]
-            public static bool ShowPetInfoTrivalve(TrivalvePlayerInteraction __instance, GUIHand hand)
+            public static bool OnHandHover_Prefix(TrivalvePlayerInteraction __instance, GUIHand hand)
             {
-                // Logger.Log(Logger.Level.Debug, "In TrivalvePlayerInteraction.OnHandOver");
+                // CreaturePetPlugin_BZ.Log.LogDebug("In TrivalvePlayerInteraction.OnHandOver");
                 CreaturePet creaturePet = __instance.GetComponentInParent<CreaturePet>();
                 // Call original class method if not dealing with a Pet
                 if (!creaturePet)
                 {
-                    // Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandOver: not a pet Trivalve!");
                     return true;
                 }
                 if (!creaturePet.AllowedToInteract(__instance.trivalve.swimWalkController.state))
                 {
-                    // Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandOver: Pet Trivalve, not allowed to interact!");
                     return false;
                 }
                 if (Player.main.GetRightHandDown())
                 {
-                    // Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandOver: Play command animation!");
                     __instance.Invoke("PlayCommandAnimation", 0f);
                     return false;
                 }
-                // Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandOver: Setting reticule text!");
+
+                // Configure cursor
                 string text = __instance.trivalve.followingPlayer ? "FishStopFollow" : "FishStartFollow";
-                // HandReticle.main.SetText(HandReticle.TextType.Hand, "PlayWithFish", true, GameInput.Button.LeftHand);
                 HandReticle.main.SetText(HandReticle.TextType.Hand, $"Play with {creaturePet.GetPetName()}", false, GameInput.Button.LeftHand);
                 HandReticle.main.SetText(HandReticle.TextType.HandSubscript, text, true, GameInput.Button.RightHand);
-                HandReticle.main.SetIcon(HandReticle.IconType.Hand, 1f);
+                HandReticle.main.SetIcon(HandReticle.IconType.Hand);
                 return false;
             }
-        }
 
-        /// <summary>
-        /// Patch the "On Hand Click" method for the Trivalve pet
-        /// </summary>
-        [HarmonyPatch(typeof(TrivalvePlayerInteraction))]
-        [HarmonyPatch("OnHandClick")]
-        internal class PlayerClickOnTrivalvePet
-        {
+            [HarmonyPatch(nameof(TrivalvePlayerInteraction.OnHandClick))]
             [HarmonyPrefix]
-            public static bool PlayWithPetTrivalve(TrivalvePlayerInteraction __instance, GUIHand hand)
+            public static bool OnHandClick_Prefix(TrivalvePlayerInteraction __instance, GUIHand hand)
             {
                 CreaturePet creaturePet = __instance.GetComponentInParent<CreaturePet>();
                 // Call original class method if not dealing with a Pet
                 if (!creaturePet)
                 {
-                    Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandClick: not a pet Trivalve!");
+                    CreaturePetPluginBz.Log.LogDebug("TrivalvePlayerInteraction.OnHandClick: not a pet Trivalve!");
                     return true;
                 }
 
                 SwimWalkCreatureController.State state = __instance.trivalve.swimWalkController.state;
                 if (!creaturePet.AllowedToInteract(state))
                 {
-                    Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandClick: Pet Trivalve, not allowed to interact!");
+                    CreaturePetPluginBz.Log.LogDebug("TrivalvePlayerInteraction.OnHandClick: Pet Trivalve, not allowed to interact!");
                     return false;
                 }
                 if (state == SwimWalkCreatureController.State.Swim)
                 {
-                    Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandClick: Swimming state!");
+                    CreaturePetPluginBz.Log.LogDebug("TrivalvePlayerInteraction.OnHandClick: Swimming state!");
                     __instance.PrepareWaterCinematic(hand.player);
                     return false;
                 }
-                Logger.Log(Logger.Level.Debug, "TrivalvePlayerInteraction.OnHandClick: Land state!");
+                CreaturePetPluginBz.Log.LogDebug("TrivalvePlayerInteraction.OnHandClick: Land state!");
                 __instance.PrepareLandCinematic(hand.player);
                 return false;
             }
+
+
         }
 
         /// <summary>
         /// Override interaction with Player as a platform
         /// </summary>
         [HarmonyPatch(typeof(GroundMotor))]
-        [HarmonyPatch("IsValidPlatform")]
-        internal class CheckForValidPlatform
+        internal class GroundMotorPatch
         {
+            [HarmonyPatch(nameof(GroundMotor.IsValidPlatform))]
             [HarmonyPostfix]
-            public static void OverrideIsPlatform(GroundMotor __instance, GameObject go, ref bool __result)
+            public static void IsValidPlatform_Postfix(GroundMotor __instance, GameObject go, ref bool __result)
             {
                 Creature creature = go.GetComponentInParent<Creature>();
                 if (creature)
@@ -179,8 +185,7 @@ namespace MroshawMods.CreaturePetMod_BZ
         /// Patches surface movement
         /// </summary>
         [HarmonyPatch(typeof(MoveOnSurface))]
-        [HarmonyPatch("Perform")]
-        private class MoveOnSurfacePatch
+        internal class MoveOnSurfacePatch
         {
             /// <summary>
             /// Overrides the Perform method specifically for SnowStalkerBaby pets, forcing the GoToInternal behaviour
@@ -189,13 +194,14 @@ namespace MroshawMods.CreaturePetMod_BZ
             /// <param name="time"></param>
             /// <param name="deltaTime"></param>
             /// <returns></returns>
+            [HarmonyPatch(nameof(MoveOnSurface.Perform))]
             [HarmonyPrefix]
-            private static bool MovePetOnSurface(MoveOnSurface __instance, float time, float deltaTime)
+            private static bool Perform_Prefix(MoveOnSurface __instance, float time, float deltaTime)
             {
                 // Get parent Creature and check that it's a Pet
                 Creature creature = __instance.creature;
                 CreaturePet creaturePet = __instance.gameObject.GetComponent<CreaturePet>();
-                if (!creaturePet || creaturePet.petCreatureType != PetCreatureType.SnowstalkerBaby)
+                if (!creaturePet || creaturePet.PetCreatureType != PetCreatureType.SnowstalkerBaby)
                 {
                     // Invoke the "unpatched" method
                     return true;
@@ -206,28 +212,27 @@ namespace MroshawMods.CreaturePetMod_BZ
                 __instance.timeNextTarget = time + __instance.updateTargetInterval + __instance.updateTargetRandomInterval * Random.value;
                 // Enforce the "GoToInternal" behaviour
                 __instance.walkBehaviour.GoToInternal(__instance.desiredPosition, (__instance.desiredPosition - creature.transform.position).normalized, __instance.moveVelocity);
-                Logger.Log(Logger.Level.Debug, $"{creature.GetType()} is walking to random target");
+                CreaturePetPluginBz.Log.LogDebug( $"{creature.GetType()} is walking to random target");
                 return false;
             }
         }
 
-        /// Class to manage "spawning" of a new pet
+
+        /// <summary>
+        /// Patch in the Player methods
         /// </summary>
         [HarmonyPatch(typeof(Player))]
-        [HarmonyPatch("Update")]
-        internal class SpawnKeyPress
+
+        internal class PlayerPatch
         {
+            [HarmonyPatch(nameof(Player.Awake))]
             [HarmonyPostfix]
-            public static void OnSpawn()
+            public static void Awake_Postfix(Player __instance)
             {
-                // Check for "Spawn Pet" keypress
-                if (Input.GetKeyUp(QMod.Config.SpawnPetKey))
-                {
-                    Logger.Log(Logger.Level.Debug, "Spawn keypress detected");
-                    PetSpawner.SpawnCreaturePet();
-                    Logger.Log(Logger.Level.Debug, "Pet spawned!");
-                    ErrorMessage.AddMessage($"Pet spawned! Welcome, {QMod.Config.PetName}!");
-                }
+                // Add the Mod Input Manager to the Player GameObject.
+                // Ensures there is only one component, monitoring keyboard input.
+                __instance.gameObject.AddComponent<ModInputManager>();
+                CreaturePetPluginBz.Log.LogDebug("Added ModInputManager component.");
             }
         }
 
@@ -235,34 +240,27 @@ namespace MroshawMods.CreaturePetMod_BZ
         /// Patch Creature Death, to register as a Pet death and handle appropriately
         /// </summary>
         [HarmonyPatch(typeof(Creature))]
-        [HarmonyPatch("OnKill")]
-        internal class CreatureKilled
+        internal class CreaturePatch
         {
+            [HarmonyPatch(nameof(Creature.OnKill))]
             [HarmonyPostfix]
-            public static void OnKill(Creature __instance)
+            public static void OnKill_Postfix (Creature __instance)
             {
                 CreaturePet creaturePet = __instance.gameObject.GetComponent<CreaturePet>();
                 // Check to see if the creature is a Pet
                 if (creaturePet)
                 {
-                    Logger.Log(Logger.Level.Debug, "Pet death detected");
+                    CreaturePetPluginBz.Log.LogDebug("Pet death detected");
                     creaturePet.Dead();
                 }
             }
-        }
 
-        /// <summary>
-        /// Patch the Creature Start method, allowing us to hook in Pet behaviours and loading override
-        /// </summary>
-        [HarmonyPatch(typeof(Creature))]
-        [HarmonyPatch("Start")]
-        internal class CreatureCreated
-        {
             /// <summary>
             /// This fixes an issue where loading a save game "undoes" our GameObject changes
             /// We lose our "creaturePet", so need another way to identify the loaded creature.
             /// </summary>
             /// <param name="__instance"></param>
+            [HarmonyPatch(nameof(Creature.Start))]
             [HarmonyPostfix]
             public static void ConfigureExistingPets(Creature __instance)
             {
@@ -271,7 +269,7 @@ namespace MroshawMods.CreaturePetMod_BZ
                 CreaturePet creaturePet = __instance.gameObject.GetComponent<CreaturePet>();
                 if (creaturePet)
                 {
-                    Logger.Log(Logger.Level.Debug, "Creature Start: Already a pet, no need to reconfigure.");
+                    CreaturePetPluginBz.Log.LogDebug("Creature Start: Already a pet, no need to reconfigure.");
                     return;
                 }
 
@@ -279,33 +277,16 @@ namespace MroshawMods.CreaturePetMod_BZ
                 string loadedPrefabId = __instance.gameObject.GetComponent<PrefabIdentifier>().Id;
 
                 // If the GUID is in the list, let's reconfigure
-                PetDetails petDetails = GetPetDetailsWithPrefabId(loadedPrefabId);
+                PetDetails petDetails = PetUtils.GetPetDetailsWithPrefabId(loadedPrefabId);
                 if (petDetails == null) return;
-                Logger.Log(Logger.Level.Debug, $"ConfigureExistingPets: Loading Creature Prefab Id: {loadedPrefabId} ({petDetails.PetName})");
-                Logger.Log(Logger.Level.Debug, $"ConfigureExistingPets: Adding CreaturePet component...");
+                CreaturePetPluginBz.Log.LogDebug( $"ConfigureExistingPets: Loading Creature Prefab Id: {loadedPrefabId} ({petDetails.PetName})");
+                CreaturePetPluginBz.Log.LogDebug( "ConfigureExistingPets: Adding CreaturePet component...");
                 creaturePet = __instance.gameObject.AddComponent<CreaturePet>();
-                Logger.Log(Logger.Level.Debug, $"ConfigureExistingPets: Adding CreaturePet component... Done");
-                Logger.Log(Logger.Level.Debug, $"ConfigureExistingPetsConfiguring Pet...");
+                CreaturePetPluginBz.Log.LogDebug( "ConfigureExistingPets: Adding CreaturePet component... Done");
+                CreaturePetPluginBz.Log.LogDebug( "ConfigureExistingPetsConfiguring Pet...");
                 petDetails = creaturePet.ConfigurePet(petDetails.PetType, petDetails.PetName);
-                Logger.Log(Logger.Level.Debug, $"ConfigureExistingPetsConfiguring Pet... Done.");
-                Logger.Log(Logger.Level.Debug, $"Finished loading CreaturePet Prefab Id: {loadedPrefabId}");
-            }
-
-            /// <summary>
-            /// Get the Pet Details from internal storage
-            /// </summary>
-            /// <param name="prefabid"></param>
-            /// <returns></returns>
-            internal static PetDetails GetPetDetailsWithPrefabId(string prefabid)
-            {
-                foreach (PetDetails petDetails in QMod.PetDetailsHashSet)
-                {
-                    if (petDetails.PrefabId == prefabid)
-                    {
-                        return petDetails;
-                    }
-                }
-                return null;
+                CreaturePetPluginBz.Log.LogDebug( "ConfigureExistingPetsConfiguring Pet... Done.");
+                CreaturePetPluginBz.Log.LogDebug( $"Finished loading CreaturePet Prefab Id: {loadedPrefabId}");
             }
         }
     }

@@ -1,14 +1,22 @@
-﻿using MroshawMods.Checks;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using mset;
 using UnityEngine;
 using UnityEngine.AI;
-using Logger = QModManager.Utility.Logger;
 using Random = System.Random;
 
-namespace MroshawMods.CreaturePetMod_BZ
+namespace DaftAppleGames.CreaturePetMod_BZ
 {
+    /// <summary>
+    /// Used to allow the player a choice of pet to spawn
+    /// </summary>
+    public enum PetCreatureType { SnowstalkerBaby, PenglingBaby, PenglingAdult, Pinnicarid, BlueTrivalve, YellowTrivalve, Unknown }
+    // SnowstalkerJuvinile
+
+    // Some pet names to choose from
+    public enum PetCreatureName { Anise, Beethoven, Bitey, Buddy, Cheerio, Clifford, Denali, Fuzzy, Gandalf, Hera, Jasper, Juju, Kovu, Lassie, Lois, Meera, Mochi, Oscar, Picasso, Ranger, Sampson, Shadow, Sprinkles, Stinky, Tobin, Wendy, Zola }
+
     /// <summary>
     /// This Component allows us to "tag" a creature as a Pet
     /// We can then look for this component in a GameObject to distinguish between
@@ -28,47 +36,59 @@ namespace MroshawMods.CreaturePetMod_BZ
         private static readonly string[] PinnacaridAnims = { "flutter", "beg", "bite", "fidget", "flinch", "call" };
         private static readonly string[] TrivalveAnims = { };
 
+        // Public attributes
+        public TechType PetTechType;
+        public PetCreatureType PetCreatureType;
+
+        // Useful component refs
         private PetDetails _petDetails;
-         private Creature _creature;
+        private Creature _creature;
         private Animator _animator;
-        public TechType petTechType;
-        public PetCreatureType petCreatureType;
         private MoveOnSurface _moveOnSurface;
         private TrivalvePlayerInteraction _trivalvePlayerInteraction;
         private string _prefabId;
 
-        public PetDetails ConfigurePet(PetCreatureType petType, string name)
+
+        /// <summary>
+        /// Main method to set up a newly spawned pet
+        /// </summary>
+        /// <param name="petType"></param>
+        /// <param name="petName"></param>
+        /// <returns></returns>
+        public PetDetails ConfigurePet(PetCreatureType petType, string petName)
         {
             // Set main components
-            Logger.Log(Logger.Level.Debug, "ConfigurePet: Setting up main components...");
+            CreaturePetPluginBz.Log.LogDebug("ConfigurePet: Setting up main components...");
             _creature = GetComponent<Creature>();
             if (!_creature)
             {
-                Logger.Log(Logger.Level.Error, "ConfigurePet: CreaturePet cannot find Creature component!");
+                CreaturePetPluginBz.Log.LogError("ConfigurePet: CreaturePet cannot find Creature component!");
                 return null;
             }
             _animator = _creature.GetAnimator();
             _moveOnSurface = GetComponent<MoveOnSurface>();
             if (!_moveOnSurface)
             {
-                Logger.Log(Logger.Level.Debug, "ConfigurePet: Can't find MoveOnFurface component!");
+                CreaturePetPluginBz.Log.LogDebug("ConfigurePet: Can't find MoveOnFurface component!");
             }
 
             _trivalvePlayerInteraction = GetComponentInChildren<TrivalvePlayerInteraction>();
             if(!_trivalvePlayerInteraction)
             {
-                Logger.Log(Logger.Level.Debug, "ConfigurePet: Can't find TrivalvePlayerInteraction component. Probably not a Trivalve.");
+                CreaturePetPluginBz.Log.LogDebug("ConfigurePet: Can't find TrivalvePlayerInteraction component. Probably not a Trivalve.");
             }
-            petTechType = CraftData.GetTechType(gameObject);
-            Logger.Log(Logger.Level.Debug, "ConfigurePet: Setting up main components... Done");
+            PetTechType = CraftData.GetTechType(gameObject);
+            CreaturePetPluginBz.Log.LogDebug("ConfigurePet: Setting up main components... Done");
 
             // Set Pet Details
-            Logger.Log(Logger.Level.Debug, "ConfigurePet: Setting up PetDetails...");
-            _petDetails = new PetDetails();
-            _petDetails.PetName = name;
-            _petDetails.PetType = petType;
+            CreaturePetPluginBz.Log.LogDebug("ConfigurePet: Setting up PetDetails...");
+            _petDetails = new PetDetails
+            {
+                PetName = petName,
+                PetType = petType
+            };
 
-            Logger.Log(Logger.Level.Debug, "ConfigurePet: Get PrefabId");
+            CreaturePetPluginBz.Log.LogDebug("ConfigurePet: Get PrefabId");
             PrefabIdentifier prefabIdentifier = gameObject.GetComponent<PrefabIdentifier>();
             if (prefabIdentifier)
             {
@@ -77,39 +97,39 @@ namespace MroshawMods.CreaturePetMod_BZ
             }
             else
             {
-                Logger.Log(Logger.Level.Error, "ConfigurePet: Cannot find PrefabIdentifier on GameObject!");
+                CreaturePetPluginBz.Log.LogError("ConfigurePet: Cannot find PrefabIdentifier on GameObject!");
             }
-            Logger.Log(Logger.Level.Debug, "ConfigurePet: Setting up PetDetails... Done");
+            CreaturePetPluginBz.Log.LogDebug("ConfigurePet: Setting up PetDetails... Done");
 
             if (petType == PetCreatureType.Unknown)
             {
-                petCreatureType = GetPetTypeByTechType();
+                PetCreatureType = GetPetTypeByTechType();
             }
             else
             {
-                petCreatureType = petType;
+                PetCreatureType = petType;
             }
 
             // Configure default traits
-            Logger.Log(Logger.Level.Debug, "ConfigurePet: Configurng traits...");
+            CreaturePetPluginBz.Log.LogDebug("ConfigurePet: Configurng traits...");
             ConfigurePetTraits();
-            Logger.Log(Logger.Level.Debug, "ConfigurePet: Configurng traits... Done");
+            CreaturePetPluginBz.Log.LogDebug("ConfigurePet: Configurng traits... Done");
 
-            Logger.Log(Logger.Level.Debug, "ConfigurePet: Configure PetCreature...");
+            CreaturePetPluginBz.Log.LogDebug("ConfigurePet: Configure PetCreature...");
             ConfigurePetCreature();
-            Logger.Log(Logger.Level.Debug, "ConfigurePet: Configure PetCreature... Done");
+            CreaturePetPluginBz.Log.LogDebug("ConfigurePet: Configure PetCreature... Done");
 
             // Clean up the left over NavMesh components
-            Logger.Log(Logger.Level.Debug, "ConfigurePet: Cleaning up the Mesh...");
+            CreaturePetPluginBz.Log.LogDebug("ConfigurePet: Cleaning up the Mesh...");
             CleanUpMesh();
-            Logger.Log(Logger.Level.Debug, "ConfigurePet: Cleaning up the Mesh... Done");
+            CreaturePetPluginBz.Log.LogDebug("ConfigurePet: Cleaning up the Mesh... Done");
 
             // Refresh Actions based on amended Component allocation
-            Logger.Log(Logger.Level.Debug, "ConfigurePet: Scanning creature actions...");
+            CreaturePetPluginBz.Log.LogDebug("ConfigurePet: Scanning creature actions...");
             _creature.ScanCreatureActions();
-            Logger.Log(Logger.Level.Debug, "ConfigurePet: Scanning creature actions... Done.");
+            CreaturePetPluginBz.Log.LogDebug("ConfigurePet: Scanning creature actions... Done.");
 
-            Logger.Log(Logger.Level.Debug, "ConfigurePet: All done! :)");
+            CreaturePetPluginBz.Log.LogDebug("ConfigurePet: All done! :)");
             LongJohnSilverCheck();
             return _petDetails;
         }
@@ -119,44 +139,45 @@ namespace MroshawMods.CreaturePetMod_BZ
         /// </summary>
         private void CleanUpMesh()
         {
+            CreaturePetPluginBz.Log.LogDebug("... CleanUpMesh: Destroying MoveOnNavMesh");
+
             // Remove NavMesh components
             MoveOnNavMesh navMeshComp = gameObject.GetComponent<MoveOnNavMesh>();
-            Logger.Log(Logger.Level.Debug, "... CleanUpMesh: Destroying MoveOnNavMesh");
             if (navMeshComp)
             {
                 Destroy(navMeshComp);
             }
             else
             {
-                Logger.Log(Logger.Level.Error, "... CleanUpMesh: Couldn't find MoveOnNavMesh!");
+                CreaturePetPluginBz.Log.LogError("... CleanUpMesh: Couldn't find MoveOnNavMesh!");
             }
 
             NavMeshFollowing navMeshFollowComp = gameObject.GetComponent<NavMeshFollowing>();
-            Logger.Log(Logger.Level.Debug, "... CleanUpMesh: Destroying NavMeshFollowing");
+            CreaturePetPluginBz.Log.LogDebug("... CleanUpMesh: Destroying NavMeshFollowing");
             if (navMeshFollowComp)
             {
                 Destroy(navMeshFollowComp);
             }
             else
             {
-                Logger.Log(Logger.Level.Error, "... CleanUpMesh: Couldn't find NavMeshFollowing!");
+                CreaturePetPluginBz.Log.LogError("... CleanUpMesh: Couldn't find NavMeshFollowing!");
             }
 
             // Destroy the NavMesh Agent
             NavMeshAgent navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
-            Logger.Log(Logger.Level.Debug, "... Destroying NavMeshAgent");
+            CreaturePetPluginBz.Log.LogDebug("... Destroying NavMeshAgent");
             if(navMeshAgent)
             {
                 Destroy(navMeshAgent);
 
                 // Remove NavMesh behaviour
-                Logger.Log(Logger.Level.Debug, "... Removing NavMesh Behaviour");
+                CreaturePetPluginBz.Log.LogDebug("... Removing NavMesh Behaviour");
                 SwimWalkCreatureController swimWalkCreatureController = gameObject.GetComponent<SwimWalkCreatureController>();
-                swimWalkCreatureController.walkBehaviours = RemoveBehaviourItem(swimWalkCreatureController.walkBehaviours, typeof(UnityEngine.AI.NavMeshAgent));
+                swimWalkCreatureController.walkBehaviours = RemoveBehaviourItem(swimWalkCreatureController.walkBehaviours, typeof(NavMeshAgent));
             }
             else
             {
-                Logger.Log(Logger.Level.Error, "... CleanUpMesh: Couldn't find NavMeshAgent!");
+                CreaturePetPluginBz.Log.LogError("... CleanUpMesh: Couldn't find NavMeshAgent!");
             }
         }
 
@@ -166,29 +187,29 @@ namespace MroshawMods.CreaturePetMod_BZ
         private void ConfigurePetCreature()
         {
             // Get the CreatureType
-            Logger.Log(Logger.Level.Debug, $"... ConfigurePetCreature: Configuring {petCreatureType}...");
+            CreaturePetPluginBz.Log.LogDebug( $"... ConfigurePetCreature: Configuring {PetCreatureType}...");
 
             // Configure base creature
             // Configure base creature behaviours
 
-            // Set the name for easy debugging
-            gameObject.name = $"{petCreatureType}(Pet)";
+            // Set the petName for easy debugging
+            gameObject.name = $"{PetCreatureType}(Pet)";
 
             // Prevent Pet from swimming in interiors   
-            Logger.Log(Logger.Level.Debug, "... ConfigurePetCreature:  LandCreatureGravity...");
+            CreaturePetPluginBz.Log.LogDebug("... ConfigurePetCreature:  LandCreatureGravity...");
             LandCreatureGravity landCreatureGravity = gameObject.GetComponent<LandCreatureGravity>();
             landCreatureGravity.forceLandMode = true;
             landCreatureGravity.enabled = true;
 
             // Remove the CreatureDeath component, to prevent floating on death
-            Logger.Log(Logger.Level.Debug, "... ConfigurePetCreature:  CreatureDeath...");
+            CreaturePetPluginBz.Log.LogDebug("... ConfigurePetCreature:  CreatureDeath...");
             CreatureDeath creatureDeath = gameObject.GetComponent<CreatureDeath>();
             Destroy(creatureDeath);
 
             // Configure the Pickupable component
-            if (petCreatureType != PetCreatureType.BlueTrivalve && petCreatureType != PetCreatureType.YellowTrivalve)
+            if (PetCreatureType != PetCreatureType.BlueTrivalve && PetCreatureType != PetCreatureType.YellowTrivalve)
             {
-                Logger.Log(Logger.Level.Debug, "... ConfigurePetCreature:  Pickupable...");
+                CreaturePetPluginBz.Log.LogDebug("... ConfigurePetCreature:  Pickupable...");
                 Pickupable pickupable = gameObject.GetComponent<Pickupable>();
                 if (!pickupable)
                 {
@@ -198,7 +219,7 @@ namespace MroshawMods.CreaturePetMod_BZ
             }
 
             // Add creature specific config
-            switch (petCreatureType)
+            switch (PetCreatureType)
             {
                 case PetCreatureType.SnowstalkerBaby:
                     ConfigureSnowStalkerBaby();
@@ -222,10 +243,10 @@ namespace MroshawMods.CreaturePetMod_BZ
                     break;
 
                 default:
-                    Logger.Log(Logger.Level.Debug, $"... Invalid Pet Type: {petCreatureType}");
+                    CreaturePetPluginBz.Log.LogDebug( $"... Invalid Pet Type: {PetCreatureType}");
                     break;
             }
-            Logger.Log(Logger.Level.Debug, "... ConfigurePetCreature:  Done");
+            CreaturePetPluginBz.Log.LogDebug("... ConfigurePetCreature:  Done");
         }
 
         /// <summary>
@@ -248,7 +269,7 @@ namespace MroshawMods.CreaturePetMod_BZ
         {
             yield return new WaitForSeconds(delay);
             Kill();
-            ErrorMessage.AddMessage($"Arrr, yer Pet be restin'! Plunder ye a legit copy of the game, if it pleases ye!");
+            ErrorMessage.AddMessage("Arrr, yer Pet be restin'! Plunder ye a legit copy of the game, if it pleases ye!");
         }
 
         /// <summary>
@@ -256,9 +277,10 @@ namespace MroshawMods.CreaturePetMod_BZ
         /// </summary>
         public void WalkToPlayerWithDelay()
         {
-            Logger.Log(Logger.Level.Debug, $"{GetPetType()} is walking to towards player");
-            StartCoroutine(WalkToPlayAsync(QMod.Config.beckonDelay));
+            CreaturePetPluginBz.Log.LogDebug( $"{GetPetType()} is walking to towards player");
+            StartCoroutine(WalkToPlayAsync(CreaturePetPluginBz.BeckonDelayConfig.Value));
         }
+
 
         /// <summary>
         /// Async method to walk pet to players position after given delay
@@ -278,7 +300,7 @@ namespace MroshawMods.CreaturePetMod_BZ
         /// <returns></returns>
         private PetCreatureType GetPetTypeByTechType()
         {
-            switch (petTechType)
+            switch (PetTechType)
             {
                 case TechType.SnowStalkerBaby:
                     return PetCreatureType.SnowstalkerBaby;
@@ -301,10 +323,10 @@ namespace MroshawMods.CreaturePetMod_BZ
         private void ConfigureSnowStalkerBaby()
         {
             SnowStalkerBaby snowStalkerPet = GetComponent<SnowStalkerBaby>();
-            Logger.Log(Logger.Level.Debug, $"... Configuring SnowStalkerBaby: {GetPetName()}");
+            CreaturePetPluginBz.Log.LogDebug( $"... Configuring SnowStalkerBaby: {GetPetName()}");
 
             // Add a SurfaceMovement component, get that little bugger moving around!
-            Logger.Log(Logger.Level.Debug, $"... Configuring movement components ...");
+            CreaturePetPluginBz.Log.LogDebug( "... Configuring movement components ...");
             OnSurfaceTracker onSurfaceTracker = gameObject.GetComponent<OnSurfaceTracker>();
             WalkBehaviour walkBehaviour = gameObject.GetComponent<WalkBehaviour>();
             OnSurfaceMovement onSurfaceMovement = gameObject.AddComponent<OnSurfaceMovement>();
@@ -318,24 +340,24 @@ namespace MroshawMods.CreaturePetMod_BZ
             walkBehaviour.onSurfaceMovement = onSurfaceMovement;
             walkBehaviour.onSurfaceTracker = onSurfaceTracker;
             snowStalkerPet.onSurfaceMovement = onSurfaceMovement;
-            Logger.Log(Logger.Level.Debug, $"... Configuring movement components ... Done");
+            CreaturePetPluginBz.Log.LogDebug( "... Configuring movement components ... Done");
 
             // Add Obstacle Avoidance components
-            Logger.Log(Logger.Level.Debug, $"... Configuring AvoidObstaclesOnLand...");
+            CreaturePetPluginBz.Log.LogDebug( "... Configuring AvoidObstaclesOnLand...");
             AvoidObstaclesOnLand avoidObstaclesOnLand = gameObject.AddComponent<AvoidObstaclesOnLand>();
             AvoidObstaclesOnSurface avoidObstaclesOnSurface = gameObject.AddComponent<AvoidObstaclesOnSurface>();
             avoidObstaclesOnLand.creature = snowStalkerPet;
             avoidObstaclesOnSurface.creature = snowStalkerPet;
             avoidObstaclesOnLand.swimBehaviour = walkBehaviour;
             avoidObstaclesOnLand.scanDistance = 0.5f;
-            Logger.Log(Logger.Level.Debug, $"... Configuring AvoidObstaclesOnLand... Done");
+            CreaturePetPluginBz.Log.LogDebug( "... Configuring AvoidObstaclesOnLand... Done");
 
             // Configure swim behaviour
-            Logger.Log(Logger.Level.Debug, $"... Configuring SwimRandom and LastTarget...");
+            CreaturePetPluginBz.Log.LogDebug( "... Configuring SwimRandom and LastTarget...");
             LastTarget lastTarget = gameObject.AddComponent<LastTarget>();
             SwimRandom swimRandom = gameObject.GetComponent<SwimRandom>();
             swimRandom.swimBehaviour = walkBehaviour;
-            Logger.Log(Logger.Level.Debug, $"... Configuring SwimRandom and LastTarget... Done");
+            CreaturePetPluginBz.Log.LogDebug( "... Configuring SwimRandom and LastTarget... Done");
 
 
             // Play first anim
@@ -345,19 +367,19 @@ namespace MroshawMods.CreaturePetMod_BZ
             }
             else
             {
-                Logger.Log(Logger.Level.Debug, $"... Animator not set! WARNING!");
+                CreaturePetPluginBz.Log.LogDebug( "... Animator not set! WARNING!");
             }
         }
 
         /// <summary>
         /// Configure Snowstalker Juvenile pet
         /// </summary>
-        /// <param name="petCreatureGO"></param>
+        /// <param petName="petCreatureGO"></param>
         private void ConfigureSnowStalkerJuvenile()
         {
             SnowStalker snowStalkerPet = gameObject.GetComponent<SnowStalker>();
-            Logger.Log(Logger.Level.Debug, $"... Configuring SnowStalker Juvenile: {snowStalkerPet.name}...");
-            Logger.Log(Logger.Level.Debug, $"... Configuring SnowStalker Juvenile: {snowStalkerPet.name}... Done");
+            CreaturePetPluginBz.Log.LogDebug( $"... Configuring SnowStalker Juvenile: {snowStalkerPet.name}...");
+            CreaturePetPluginBz.Log.LogDebug( $"... Configuring SnowStalker Juvenile: {snowStalkerPet.name}... Done");
 
             // Play first anim
             _animator.SetTrigger("dryFur");
@@ -370,8 +392,8 @@ namespace MroshawMods.CreaturePetMod_BZ
         private void ConfigurePenglingBaby()
         {
             PenguinBaby penglingPet = gameObject.GetComponent<PenguinBaby>();
-            Logger.Log(Logger.Level.Debug, $"... Configuring Pengling Baby: {penglingPet.name}...");
-            Logger.Log(Logger.Level.Debug, $"... Configuring Pengling Baby: {penglingPet.name}... Done");
+            CreaturePetPluginBz.Log.LogDebug( $"... Configuring Pengling Baby: {penglingPet.name}...");
+            CreaturePetPluginBz.Log.LogDebug( $"... Configuring Pengling Baby: {penglingPet.name}... Done");
 
             // Play first anim
             _animator.SetTrigger("flutter");
@@ -384,8 +406,8 @@ namespace MroshawMods.CreaturePetMod_BZ
         private void ConfigurePenglingAdult()
         {
             Penguin penglingPet = gameObject.GetComponent<Penguin>();
-            Logger.Log(Logger.Level.Debug, $"... Configuring Pengling: {penglingPet.name}...");
-            Logger.Log(Logger.Level.Debug, $"... Configuring Pengling: {penglingPet.name}... Done");
+            CreaturePetPluginBz.Log.LogDebug( $"... Configuring Pengling: {penglingPet.name}...");
+            CreaturePetPluginBz.Log.LogDebug( $"... Configuring Pengling: {penglingPet.name}... Done");
 
             // Play first anim
             _animator.SetTrigger("flutter");
@@ -397,8 +419,8 @@ namespace MroshawMods.CreaturePetMod_BZ
         private void ConfigurePinnicarid()
         {
             Pinnacarid pinnicaridPet = gameObject.GetComponent<Pinnacarid>();
-            Logger.Log(Logger.Level.Debug, $"... Configuring Pinnicarid: {pinnicaridPet.name}...");
-            Logger.Log(Logger.Level.Debug, $"... Configuring Pinnicarid: {pinnicaridPet.name}... Done");
+            CreaturePetPluginBz.Log.LogDebug( $"... Configuring Pinnicarid: {pinnicaridPet.name}...");
+            CreaturePetPluginBz.Log.LogDebug( $"... Configuring Pinnicarid: {pinnicaridPet.name}... Done");
 
             // Play first anim
             _animator.SetTrigger("flutter");
@@ -410,13 +432,27 @@ namespace MroshawMods.CreaturePetMod_BZ
         private void ConfigureTrivalve()
         {
             Trivalve trivalvePet = gameObject.GetComponent<Trivalve>();
-            Logger.Log(Logger.Level.Debug, $"... Configuring Trivalve: {trivalvePet.name}...");
-            Logger.Log(Logger.Level.Debug, $"... Configuring Trivalve: {trivalvePet.name}... Done");
+            CreaturePetPluginBz.Log.LogDebug( $"... Configuring Trivalve: {trivalvePet.name}...");
+
+            // Force parenting to base section
+            GameObject baseGameObject = FindObjectOfType<Base>().gameObject;
+            if (baseGameObject)
+            {
+                Sky baseSky = baseGameObject.GetComponent<Sky>();
+                SkyApplier skyApplier = gameObject.GetComponent<SkyApplier>();
+                if (skyApplier)
+                {
+                    CreaturePetPluginBz.Log.LogDebug($"... Configuring Trivalve: Setting Base SkyApplier..");
+                    skyApplier.SetCustomSky(baseSky);
+                }
+            }
+
+            CreaturePetPluginBz.Log.LogDebug( $"... Configuring Trivalve: {trivalvePet.name}... Done");
 
             // Play first anim
             _animator.SetTrigger("flutter");
         }
-
+        
         /// <summary>
         /// Configure the Pet Details
         /// </summary>
@@ -434,7 +470,6 @@ namespace MroshawMods.CreaturePetMod_BZ
                 _petDetails.PetType = petType;
             }
         }
-
 
         /// <summary>
         /// Returns the PetDetails PetName
@@ -486,17 +521,17 @@ namespace MroshawMods.CreaturePetMod_BZ
         /// </summary>
         public void Dead()
         {
-            QMod.PetDetailsHashSet.Remove(_petDetails);
+            CreaturePetPluginBz.PetDetailsHashSet.Remove(_petDetails);
             // Stop floating away!
             Rigidbody rigidBody = gameObject.GetComponent<Rigidbody>();
             if (rigidBody)
             {
-                Logger.Log(Logger.Level.Error, "Dead: Preventing floating away...");
+                CreaturePetPluginBz.Log.LogError("Dead: Preventing floating away...");
                 rigidBody.mass = 10.0f;
             }
             else
             {
-                Logger.Log(Logger.Level.Error, "Dead: Couldn't find RigidBody!");
+                CreaturePetPluginBz.Log.LogError("Dead: Couldn't find RigidBody!");
             }
 
             // So long, fuzzball.
@@ -515,7 +550,7 @@ namespace MroshawMods.CreaturePetMod_BZ
             LiveMixin liveMixin = GetComponentInParent<LiveMixin>();
 
             // Kill the Creature
-            Logger.Log(Logger.Level.Debug, $"Killing {creature.GetType()} ({GetPetName()})");
+            CreaturePetPluginBz.Log.LogDebug( $"Killing {creature.GetType()} ({GetPetName()})");
             liveMixin.Kill();
             _petDetails.IsAlive = false;
 
@@ -535,7 +570,7 @@ namespace MroshawMods.CreaturePetMod_BZ
             Random random = new Random();
 
             // Pick a random animation and play it
-            switch (petCreatureType)
+            switch (PetCreatureType)
             {
                 case PetCreatureType.PenglingAdult:
                     index = random.Next(PenglingAdultAnims.Length);
@@ -560,12 +595,12 @@ namespace MroshawMods.CreaturePetMod_BZ
                     break;
                 case PetCreatureType.Unknown:
                 default:
-                    Logger.Log(Logger.Level.Debug, $"Random animation: Invalid Tech Type. {petTechType.ToString()}");
+                    CreaturePetPluginBz.Log.LogDebug( $"Random animation: Invalid Tech Type. {PetTechType.ToString()}");
                     return;
             }
 
             _animator.SetTrigger(petAnimation);
-            Logger.Log(Logger.Level.Debug, $"{GetPetName()}: Random animation: {petAnimation}");
+            CreaturePetPluginBz.Log.LogDebug( $"{GetPetName()}: Random animation: {petAnimation}");
         }
 
         /// <summary>
@@ -591,8 +626,8 @@ namespace MroshawMods.CreaturePetMod_BZ
         private static IEnumerator DestroyAsync(float seconds, GameObject gameObject)
         {
             yield return new WaitForSeconds(seconds);
-            Logger.Log(Logger.Level.Debug, $"GameObject destroyed.");
-            GameObject.Destroy(gameObject);
+            CreaturePetPluginBz.Log.LogDebug( "GameObject destroyed.");
+            Destroy(gameObject);
         }
 
         /// <summary>
@@ -603,22 +638,22 @@ namespace MroshawMods.CreaturePetMod_BZ
         /// <returns></returns>
         private static Behaviour[] RemoveBehaviourItem(Behaviour[] array, Type typeToRemove)
         {
-            Logger.Log(Logger.Level.Debug, $"... Removing behaviour: {typeToRemove}");
+            CreaturePetPluginBz.Log.LogDebug( $"... Removing behaviour: {typeToRemove}");
             List<Behaviour> behaviourList = new List<Behaviour>(array);
             Behaviour behaviorToRemove = behaviourList.Find(x => x.GetType() == typeToRemove);
             behaviourList.Remove(behaviorToRemove);
-            Logger.Log(Logger.Level.Debug, $"... Behaviour removed: {typeToRemove}");
+            CreaturePetPluginBz.Log.LogDebug( $"... Behaviour removed: {typeToRemove}");
             return behaviourList.ToArray();
         }
 
         public void AddConstructable()
         {
-            Logger.Log(Logger.Level.Debug, $"Adding Constructable...");
+            CreaturePetPluginBz.Log.LogDebug( "Adding Constructable...");
             Constructable constructable = gameObject.AddComponent<Constructable>();
-            Logger.Log(Logger.Level.Debug, $"Adding Constructable... Done.");
-            Logger.Log(Logger.Level.Debug, $"Configuring Constructable...");
+            CreaturePetPluginBz.Log.LogDebug( "Adding Constructable... Done.");
+            CreaturePetPluginBz.Log.LogDebug( "Configuring Constructable...");
             // constructable.
-            Logger.Log(Logger.Level.Debug, $"Configuring Constructable... Done.");
+            CreaturePetPluginBz.Log.LogDebug( "Configuring Constructable... Done.");
         }
 
         /// <summary>
@@ -630,30 +665,30 @@ namespace MroshawMods.CreaturePetMod_BZ
         {
             if (_trivalvePlayerInteraction.state != TrivalvePlayerInteraction.State.None)
             {
-                // Logger.Log(Logger.Level.Debug, $"CreaturePet.AllowedToInteract: State is not None!");
+                // CreaturePetPlugin_BZ.Log.LogDebug( $"CreaturePet.AllowedToInteract: State is not None!");
                 return false;
             }
             if (PlayerCinematicController.cinematicModeCount > 0)
             {
-                // Logger.Log(Logger.Level.Debug, $"CreaturePet.AllowedToInteract: Player cinematic count is not 0!");
+                // CreaturePetPlugin_BZ.Log.LogDebug( $"CreaturePet.AllowedToInteract: Player cinematic count is not 0!");
                 return false;
             }
             if (!_trivalvePlayerInteraction.liveMixin.IsAlive())
             {
-                // Logger.Log(Logger.Level.Debug, $"CreaturePet.AllowedToInteract: Trivalve is not alive!");
+                // CreaturePetPlugin_BZ.Log.LogDebug( $"CreaturePet.AllowedToInteract: Trivalve is not alive!");
                 return false;
             }
-            Player localPlayerComp = global::Utils.GetLocalPlayerComp();
+            Player localPlayerComp = Utils.GetLocalPlayerComp();
             if (localPlayerComp == null)
             {
-                // Logger.Log(Logger.Level.Debug, $"CreaturePet.AllowedToInteract: Can't find LocalPlayerComp!");
+                // CreaturePetPlugin_BZ.Log.LogDebug( $"CreaturePet.AllowedToInteract: Can't find LocalPlayerComp!");
                 return false;
             }
             if (swimWalkState == SwimWalkCreatureController.State.Swim)
             {
                 if (!localPlayerComp.IsSwimming())
                 {
-                    // Logger.Log(Logger.Level.Debug, $"CreaturePet.AllowedToInteract: Trivale is swimming and Player is not!!");
+                    // CreaturePetPlugin_BZ.Log.LogDebug( $"CreaturePet.AllowedToInteract: Trivale is swimming and Player is not!!");
                     return false;
                 }
             }
@@ -661,7 +696,7 @@ namespace MroshawMods.CreaturePetMod_BZ
             {
                 if (!_trivalvePlayerInteraction.trivalve.onSurfaceTracker.onSurface)
                 {
-                    // Logger.Log(Logger.Level.Debug, $"CreaturePet.AllowedToInteract: Trivalve not on surface!");
+                    // CreaturePetPlugin_BZ.Log.LogDebug( $"CreaturePet.AllowedToInteract: Trivalve not on surface!");
                     return false;
                 }
 
@@ -670,7 +705,7 @@ namespace MroshawMods.CreaturePetMod_BZ
                 /*
                 if (localPlayerComp.motorMode != Player.MotorMode.Run || !localPlayerComp.groundMotor.IsGrounded())
                 {
-                    Logger.Log(Logger.Level.Debug, $"CreaturePet.AllowedToInteract: Player is not grounded or player is running!");
+                    CreaturePetPlugin_BZ.Log.LogDebug( $"CreaturePet.AllowedToInteract: Player is not grounded or player is running!");
                     return false;
                 }
                 */
