@@ -11,7 +11,7 @@ namespace DaftAppleGames.CreaturePetMod_BZ
     /// <summary>
     /// Internal class to support loading and saving of Pet details alongside standard game saves
     /// </summary>
-    internal class LoadSaveMod
+    internal class LoadSavePatches
     {
         private static readonly string SaveFileName = "pet_creatures.json";
         private static readonly string SaveFileFolder = "CreaturePetMod_BZ";

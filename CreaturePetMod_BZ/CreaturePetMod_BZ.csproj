@@ -103,7 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreaturePetPlugin_BZ.cs" />
-    <Compile Include="LoadSaveMod.cs" />
+    <Compile Include="LoadSavePatches.cs" />
     <Compile Include="CreaturePetPatches_BZ.cs" />
     <Compile Include="ModInputManager.cs" />
     <Compile Include="PetDetails.cs" />
