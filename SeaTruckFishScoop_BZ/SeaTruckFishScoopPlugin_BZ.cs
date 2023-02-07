@@ -4,22 +4,22 @@ using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
 
-namespace Mroshaw.SeaTruckFishScoopMod_BZ
+namespace DaftAppleGames.SeaTruckFishScoopMod_BZ
 {
-    [BepInPlugin(myGUID, pluginName, versionString)]
-    public class SeaTruckFishScoopPlugin_BZ : BaseUnityPlugin
+    [BepInPlugin(MyGuid, PluginName, VersionString)]
+    public class SeaTruckFishScoopPluginBz : BaseUnityPlugin
     {
         // Plugin properties
-        private const string myGUID = "com.mroshaw.seatruckfishscoopmodbz";
-        private const string pluginName = "Sea Truck Fish Scoop Mod BZ";
-        private const string versionString = "2.0.0";
+        private const string MyGuid = "com.mroshaw.seatruckfishscoopmodbz";
+        private const string PluginName = "Sea Truck Fish Scoop Mod BZ";
+        private const string VersionString = "2.0.0";
 
         // Config properties
-        private const string enableConfigKey = "Enable Fish Scoop";
-        private const string scoopWhileStaticKey = "Scoop While Static";
-        private const string scoopWhilePilotingKey = "Scoop While Piloting";
-        private const string toggleScoopKeyboardKey = "Scoop Toggle Keyboard Shortcut";
-        private const string releaseAllKeyboardKey = "Release All Fish Keyboard Shortcut";
+        private const string EnableConfigKey = "Enable Fish Scoop";
+        private const string ScoopWhileStaticKey = "Scoop While Static";
+        private const string ScoopWhilePilotingKey = "Scoop While Piloting";
+        private const string ToggleScoopKeyboardKey = "Scoop Toggle Keyboard Shortcut";
+        private const string ReleaseAllKeyboardKey = "Release All Fish Keyboard Shortcut";
 
         // Static config settings
         public static ConfigEntry<bool> EnableFishScoop;
@@ -28,7 +28,7 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
         public static ConfigEntry<KeyboardShortcut> ToggleScoopKeyboardShortcut;
         public static ConfigEntry<KeyboardShortcut> ReleaseAllKeyboardShortcut;
 
-        private static readonly Harmony harmony = new Harmony(myGUID);
+        private static readonly Harmony Harmony = new Harmony(MyGuid);
 
         public static ManualLogSource Log;
 
@@ -36,31 +36,31 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
         {
             // Modifier config
             EnableFishScoop = Config.Bind("General",
-                enableConfigKey,
+                EnableConfigKey,
                 true,
                 "Enable fish scoop.");
 
             ScoopWhileStatic = Config.Bind("General",
-                scoopWhileStaticKey,
+                ScoopWhileStaticKey,
                 true,
                 "Scoop while static.");
 
             ScoopWhileNotPiloting = Config.Bind("General",
-                scoopWhilePilotingKey,
+                ScoopWhilePilotingKey,
                 true,
                 "Scoop while piloting.");
 
             ToggleScoopKeyboardShortcut = Config.Bind("General",
-                toggleScoopKeyboardKey,
+                ToggleScoopKeyboardKey,
                 new KeyboardShortcut(KeyCode.Delete));
 
             ReleaseAllKeyboardShortcut = Config.Bind("General",
-                releaseAllKeyboardKey,
+                ReleaseAllKeyboardKey,
                 new KeyboardShortcut(KeyCode.Insert));
 
             // Patch in our MOD
-            harmony.PatchAll();
-            Logger.LogInfo(pluginName + " " + versionString + " " + "loaded.");
+            Harmony.PatchAll();
+            Logger.LogInfo(PluginName + " " + VersionString + " " + "loaded.");
             Log = Logger;
         }
     }

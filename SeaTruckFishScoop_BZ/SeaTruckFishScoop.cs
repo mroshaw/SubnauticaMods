@@ -1,8 +1,7 @@
 ﻿using BepInEx.Configuration;
 using UnityEngine;
-using Plugin = Mroshaw.SeaTruckFishScoopMod_BZ.SeaTruckFishScoopPlugin_BZ;
 
-namespace Mroshaw.SeaTruckFishScoopMod_BZ
+namespace DaftAppleGames.SeaTruckFishScoopMod_BZ
 {
     public class SeaTruckFishScoop : MonoBehaviour
     {
@@ -13,22 +12,22 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
 
         // Static FMODAsset for playing sounds
         private static readonly FMODAsset SoundsToPlay = ScriptableObject.CreateInstance<FMODAsset>();
-        private static readonly string fishScoopPowerOnSoundPath = "event:/sub/cyclops/start";
-        private static readonly string fishScoopPowerOffSoundPath = "event:/sub/base/power_off";
-        private static readonly string aquariumPurgeSoundPath = "event:/player/bubbles";
+        private static readonly string FishScoopPowerOnSoundPath = "event:/sub/cyclops/start";
+        private static readonly string FishScoopPowerOffSoundPath = "event:/sub/base/power_off";
+        private static readonly string AquariumPurgeSoundPath = "event:/player/bubbles";
 
         /// <summary>
         /// Initialise the scoop
         /// </summary>
         public void Start()
         {
-            _toggleScoopKeyboardShortcut = Plugin.ToggleScoopKeyboardShortcut.Value;
-            _purgeKeyboardShortcut = Plugin.ReleaseAllKeyboardShortcut.Value;
+            _toggleScoopKeyboardShortcut = SeaTruckFishScoopPluginBz.ToggleScoopKeyboardShortcut.Value;
+            _purgeKeyboardShortcut = SeaTruckFishScoopPluginBz.ReleaseAllKeyboardShortcut.Value;
             _isOn = false;
             _mainMotor = GetComponentInParent<SeaTruckMotor>();
             if(!_mainMotor)
             {
-                Plugin.Log.LogDebug("FishScoop Start: Could not find SeaTruckMotor!");
+                SeaTruckFishScoopPluginBz.Log.LogDebug("FishScoop Start: Could not find SeaTruckMotor!");
             }
         }
 
@@ -40,32 +39,32 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
             // Check for "toggle fish scoop" keypress
             if (_toggleScoopKeyboardShortcut.IsDown())
             {
-                Plugin.Log.LogDebug($"Toggle keypress detected");
+                SeaTruckFishScoopPluginBz.Log.LogDebug($"Toggle keypress detected");
                 // Only toggle when pilotinbg Seatruck
                 if (!Player.main.IsPilotingSeatruck())
                 {
-                    Plugin.Log.LogDebug("Toggle: Not piloting. Abort.");
+                    SeaTruckFishScoopPluginBz.Log.LogDebug("Toggle: Not piloting. Abort.");
                     return;
                 }
 
                 // Toggle scoop
-                Plugin.Log.LogDebug("Toggling scoop...");
+                SeaTruckFishScoopPluginBz.Log.LogDebug("Toggling scoop...");
                 ToggleScoop();
             }
 
             // Check for "purge aquariums" keypress
             if (_purgeKeyboardShortcut.IsDown())
             {
-                Plugin.Log.LogDebug("Purge keypress detected");
+                SeaTruckFishScoopPluginBz.Log.LogDebug("Purge keypress detected");
                 // Only allow when pilotinbg Seatruck
                 if (!Player.main.IsPilotingSeatruck())
                 {
-                    Plugin.Log.LogDebug("Purge: Not piloting. Abort.");
+                    SeaTruckFishScoopPluginBz.Log.LogDebug("Purge: Not piloting. Abort.");
                     return;
                 }
-                Plugin.Log.LogDebug("Attempting to purge Aquariums...");
+                SeaTruckFishScoopPluginBz.Log.LogDebug("Attempting to purge Aquariums...");
                 PurgeAquariums();
-                Plugin.Log.LogDebug("Aquariums purged!");
+                SeaTruckFishScoopPluginBz.Log.LogDebug("Aquariums purged!");
             }
         }
 
@@ -74,7 +73,7 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
         /// </summary>
         private void ToggleScoop()
         {
-            Plugin.Log.LogDebug($"Toggling fish scoop from: {_isOn}...");
+            SeaTruckFishScoopPluginBz.Log.LogDebug($"Toggling fish scoop from: {_isOn}...");
 
             // If we're not in the SeaTruck, call it a day
             if (!_mainMotor)
@@ -100,14 +99,14 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
             {
                 _isOn = false;
                 ErrorMessage.AddMessage($"Fish scoop DISABLED");
-                SoundsToPlay.path = fishScoopPowerOffSoundPath;
+                SoundsToPlay.path = FishScoopPowerOffSoundPath;
                 FMODUWE.PlayOneShot(SoundsToPlay, _mainMotor.transform.position);
             }
             else
             {
                 _isOn = true;
                 ErrorMessage.AddMessage($"Fish scoop ENABLED");
-                SoundsToPlay.path = fishScoopPowerOnSoundPath;
+                SoundsToPlay.path = FishScoopPowerOnSoundPath;
                 FMODUWE.PlayOneShot(SoundsToPlay, _mainMotor.transform.position);
             }
         }
@@ -133,20 +132,20 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
 
             // Check if seatruck is being piloted and whether or not we're allowed to scoop
             bool isPiloted = _mainMotor.IsPiloted();
-            if (!isPiloted && !Plugin.ScoopWhileNotPiloting.Value)
+            if (!isPiloted && !SeaTruckFishScoopPluginBz.ScoopWhileNotPiloting.Value)
             {
                 return false;
             }
 
             // Check if static against the config options
             float velicityMagnitude = _mainMotor.useRigidbody.velocity.magnitude;
-            if ((velicityMagnitude == 0.0f) && !Plugin.ScoopWhileStatic.Value)
+            if ((velicityMagnitude == 0.0f) && !SeaTruckFishScoopPluginBz.ScoopWhileStatic.Value)
             {
                  return false;
             }
 
             // We've passed our checks, now try to add the fish
-            Plugin.Log.LogDebug("Taker is a supported fish");
+            SeaTruckFishScoopPluginBz.Log.LogDebug("Taker is a supported fish");
             bool fishAdded = AddFishToFreeAquarium(objectToScoop);
             return fishAdded;
         }
@@ -158,19 +157,19 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
         /// <returns></returns>
         private bool IsValidObject(GameObject takerGameObject)
         {
-            Plugin.Log.LogDebug("In IsValidObject");
+            SeaTruckFishScoopPluginBz.Log.LogDebug("In IsValidObject");
             if (!takerGameObject.GetComponent<AquariumFish>())
             {
-                Plugin.Log.LogDebug("IsValidObject: Not an AquariumFish. No Scoop.");
+                SeaTruckFishScoopPluginBz.Log.LogDebug("IsValidObject: Not an AquariumFish. No Scoop.");
                 return false;
             }
             WaterParkCreature waterParkCreature = takerGameObject.GetComponent<WaterParkCreature>();
             if (waterParkCreature && waterParkCreature.IsInsideWaterPark())
             {
-                Plugin.Log.LogDebug("IsValidObject: Target IsInsideWaterPark. No Scoop.");
+                SeaTruckFishScoopPluginBz.Log.LogDebug("IsValidObject: Target IsInsideWaterPark. No Scoop.");
                 return false;
             }
-            Plugin.Log.LogDebug("IsValidObject: Target IsInsideWaterPark. No Scoop.");
+            SeaTruckFishScoopPluginBz.Log.LogDebug("IsValidObject: Target IsInsideWaterPark. No Scoop.");
             return true;
         }
 
@@ -189,20 +188,20 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
             // Check if we have any aquarium modules attached
             if (!IsAquariumAttached())
             {
-                Plugin.Log.LogDebug($"Couldn't find any Aquariums!");
+                SeaTruckFishScoopPluginBz.Log.LogDebug($"Couldn't find any Aquariums!");
                 ErrorMessage.AddMessage($"No aquariums attached!");
                 return;
             }
 
             // Checks all done, we can purge the modules
             SeaTruckAquarium[] seaTruckAquariums = _mainMotor.GetComponentsInChildren<SeaTruckAquarium>();
-            Plugin.Log.LogDebug($"Found {seaTruckAquariums.Length} aquarium modules");
-            SoundsToPlay.path = aquariumPurgeSoundPath;
+            SeaTruckFishScoopPluginBz.Log.LogDebug($"Found {seaTruckAquariums.Length} aquarium modules");
+            SoundsToPlay.path = AquariumPurgeSoundPath;
             FMODUWE.PlayOneShot(SoundsToPlay, _mainMotor.transform.position);
             foreach (SeaTruckAquarium seaTruckAquarium in seaTruckAquariums)
             {
                 PurgeFishFromAquarium(seaTruckAquarium);
-                Plugin.Log.LogDebug($"Purged aquarium: {seaTruckAquarium.name}");
+                SeaTruckFishScoopPluginBz.Log.LogDebug($"Purged aquarium: {seaTruckAquarium.name}");
             }
             ErrorMessage.AddMessage($"All aquariums purged!");
         }
@@ -215,11 +214,11 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
         private bool IsAquariumAttached()
         {
             SeaTruckAquarium[] seaTruckAquariums = _mainMotor.GetComponentsInChildren<SeaTruckAquarium>();
-            Plugin.Log.LogDebug($"Found {seaTruckAquariums.Length} aquarium modules");
+            SeaTruckFishScoopPluginBz.Log.LogDebug($"Found {seaTruckAquariums.Length} aquarium modules");
             // Check to see if there are any aquariums
             if (seaTruckAquariums.Length == 0)
             {
-                Plugin.Log.LogDebug("No aquariums found.");
+                SeaTruckFishScoopPluginBz.Log.LogDebug("No aquariums found.");
                 return false;
             }
             else
@@ -239,12 +238,12 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
             // We hit a supported fish with our SeaTruck cab. Iterate over all Aquarium modules and add the fish to
             // the first one with space
             SeaTruckAquarium[] seaTruckAquariums = _mainMotor.GetComponentsInChildren<SeaTruckAquarium>();
-            Plugin.Log.LogDebug($"Found {seaTruckAquariums.Length} aquarium modules");
+            SeaTruckFishScoopPluginBz.Log.LogDebug($"Found {seaTruckAquariums.Length} aquarium modules");
 
             // Check to see if there are any aquariums
             if (seaTruckAquariums.Length == 0)
             {
-                Plugin.Log.LogDebug("No aquariums found.");
+                SeaTruckFishScoopPluginBz.Log.LogDebug("No aquariums found.");
                 return false;
             }
 
@@ -253,16 +252,16 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
                 if (AddFishToAquarium(seaTruckAquarium, fish))
                 {
                     string friendlyFishName = GetFriendlyName(fish.name);
-                    Plugin.Log.LogDebug($"Fish successfully added {fish.name} as {friendlyFishName}");
+                    SeaTruckFishScoopPluginBz.Log.LogDebug($"Fish successfully added {fish.name} as {friendlyFishName}");
                     ErrorMessage.AddMessage($"Fish scoop successful! Added {friendlyFishName}");
                     return true;
                 }
                 else
                 {
-                    Plugin.Log.LogDebug($"Unable to add fish to this aquarium ({seaTruckAquarium.name}). Likely full or fish is already in one.");
+                    SeaTruckFishScoopPluginBz.Log.LogDebug($"Unable to add fish to this aquarium ({seaTruckAquarium.name}). Likely full or fish is already in one.");
                 }
             }
-            Plugin.Log.LogDebug("No free aquariums!");
+            SeaTruckFishScoopPluginBz.Log.LogDebug("No free aquariums!");
             ErrorMessage.AddMessage($"Aquariums are full. Fish scoop failed!");
             return false;
         }
@@ -283,12 +282,12 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
                 Pickupable fishPickupable = fishItem.item;
                 Transform playerTransform = Player.main.transform;
                 Vector3 fishPosition = playerTransform.position + (playerTransform.forward * 3.0f);
-                Plugin.Log.LogDebug($"Dropping fish at: {fishPosition}");
+                SeaTruckFishScoopPluginBz.Log.LogDebug($"Dropping fish at: {fishPosition}");
                 fishPickupable.Drop(fishPosition);
 
                 // Remove from aquarium container
                 container.RemoveItem(fishPickupable, true);
-                Plugin.Log.LogDebug($"Removed {fishPickupable.name}");
+                SeaTruckFishScoopPluginBz.Log.LogDebug($"Removed {fishPickupable.name}");
             }
         }
 

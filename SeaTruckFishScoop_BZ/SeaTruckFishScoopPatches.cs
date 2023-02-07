@@ -1,19 +1,18 @@
 ﻿using HarmonyLib;
 using UnityEngine;
-using Plugin = Mroshaw.SeaTruckFishScoopMod_BZ.SeaTruckFishScoopPlugin_BZ;
 
-namespace Mroshaw.SeaTruckFishScoopMod_BZ
+namespace DaftAppleGames.SeaTruckFishScoopMod_BZ
 {
     /// <summary>
     /// Patches for the SeaTruck Fish Scoop Mod
     /// </summary>
-    public class SeaTruckFishScoopMod
+    public class SeaTruckFishScoopPatches
     {
         /// <summary>
         /// Patch the SeaTruckMotor class
         /// </summary>
         [HarmonyPatch(typeof(SeaTruckSegment))]
-        internal class SeaTruckSegment_Patch
+        internal class SeaTruckSegmentPatch
         {
             /// <summary>
             /// Add a FishScoop to every spawned SeaTruck
@@ -25,9 +24,9 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
             {
                 if (__instance.isMainCab)
                 {
-                    Plugin.Log.LogDebug("Adding SeaTruckFishScoopComponent...");
+                    SeaTruckFishScoopPluginBz.Log.LogDebug("Adding SeaTruckFishScoopComponent...");
                     __instance.gameObject.AddComponent<SeaTruckFishScoop>();
-                    Plugin.Log.LogDebug("SeaTruckFishScoopComponent added.");
+                    SeaTruckFishScoopPluginBz.Log.LogDebug("SeaTruckFishScoopComponent added.");
                 }
             }
         }
@@ -36,7 +35,7 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
         /// Patch the LiveMixin class
         /// </summary>
         [HarmonyPatch(typeof(LiveMixin))]
-        internal class LiveMixin_Patch
+        internal class LiveMixinPatch
         {
             /// <summary>
             /// Here, we're prefixing the TakeDamage method to intecept damage being dealt to a
@@ -56,7 +55,7 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
 
                 // Get the root context of the damage taker
                 GameObject taker = __instance.gameObject;
-                Plugin.Log.LogDebug($"Damage: {dealer.name} did damage to: {taker.name}");
+                SeaTruckFishScoopPluginBz.Log.LogDebug($"Damage: {dealer.name} did damage to: {taker.name}");
                 GameObject rootTaker = UWE.Utils.GetEntityRoot(__instance.gameObject);
                 if (rootTaker == null)
                 {
@@ -69,18 +68,18 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
                 {
                     rootDealer = dealer;
                 }
-                Plugin.Log.LogDebug($"Dealer root: {rootDealer.name}. Taker root: {rootTaker.name}");
+                SeaTruckFishScoopPluginBz.Log.LogDebug($"Dealer root: {rootDealer.name}. Taker root: {rootTaker.name}");
 
                 // Let's see if whatever dealt the damage was a SeaTruck main cab
                 SeaTruckSegment seaTruckSegment = rootDealer.GetComponent<SeaTruckSegment>();
                 if (seaTruckSegment == null)
                 {
-                    Plugin.Log.LogDebug("SeaTruckSegment is null. No Scoop.");
+                    SeaTruckFishScoopPluginBz.Log.LogDebug("SeaTruckSegment is null. No Scoop.");
                     return true;
                 }
                 if (!seaTruckSegment.isMainCab)
                 {
-                    Plugin.Log.LogDebug("SeaTruckSegment is not Main Cab. No Scoop.");
+                    SeaTruckFishScoopPluginBz.Log.LogDebug("SeaTruckSegment is not Main Cab. No Scoop.");
                     return true;
                 }
 
@@ -88,13 +87,13 @@ namespace Mroshaw.SeaTruckFishScoopMod_BZ
                 SeaTruckFishScoop fishScoop = dealer.gameObject.GetComponent<SeaTruckFishScoop>();
                 if(fishScoop!= null)
                 {
-                    Plugin.Log.LogDebug("Calling Scoop...");
+                    SeaTruckFishScoopPluginBz.Log.LogDebug("Calling Scoop...");
                     bool scoopSuccess = fishScoop.Scoop(rootTaker);
                     return !scoopSuccess;
                 }
                 else
                 {
-                    Plugin.Log.LogDebug("No FishScoop found. No Scoop.");
+                    SeaTruckFishScoopPluginBz.Log.LogDebug("No FishScoop found. No Scoop.");
                     return false;
                 }
             }

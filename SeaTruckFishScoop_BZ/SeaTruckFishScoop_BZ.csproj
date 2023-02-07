@@ -73,7 +73,7 @@
   <ItemGroup>
     <Compile Include="SeaTruckFishScoop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SeaTruckFishScoopMod.cs" />
+    <Compile Include="SeaTruckFishScoopPatches.cs" />
     <Compile Include="SeaTruckFishScoopPlugin_BZ.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
