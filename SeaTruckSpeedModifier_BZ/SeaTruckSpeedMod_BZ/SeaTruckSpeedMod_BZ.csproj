@@ -65,7 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SeaTruckHistoryItem.cs" />
-    <Compile Include="SeaTruckSpeedMod_BZ.cs" />
+    <Compile Include="SeaTruckSpeedPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeaTruckSpeedPlugin_BZ.cs" />
   </ItemGroup>

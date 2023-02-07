@@ -4,18 +4,18 @@ using BepInEx.Logging;
 using HarmonyLib;
 using System.Collections.Generic;
 
-namespace Mroshaw.SeaTruckSpeedMod_BZ
+namespace DaftAppleGames.SeaTruckSpeedMod_BZ
 {
-    [BepInPlugin(myGUID, pluginName, versionString)]
-    public class SeaTruckSpeedPlugin_BZ : BaseUnityPlugin
+    [BepInPlugin(MyGuid, PluginName, VersionString)]
+    public class SeaTruckSpeedPluginBz : BaseUnityPlugin
     {
         // Plugin properties
-        private const string myGUID = "com.mroshaw.seatruckspeedmodbz";
-        private const string pluginName = "Sea Truck Speed Mod BZ";
-        private const string versionString = "2.0.0";
+        private const string MyGuid = "com.mroshaw.seatruckspeedmodbz";
+        private const string PluginName = "Sea Truck Speed Mod BZ";
+        private const string VersionString = "2.0.0";
 
         // Config properties
-        private const string speedMultiplierConfigKey = "Speed Multiplier";
+        private const string SpeedMultiplierConfigKey = "Speed Multiplier";
 
         // Static config settings
         public static ConfigEntry<float> BoosterSpeedMultiplier;
@@ -23,7 +23,7 @@ namespace Mroshaw.SeaTruckSpeedMod_BZ
         // Static tracking list of booster tanks to update
         internal static List<SeaTruckHistoryItem> SeaTruckHistory = new List<SeaTruckHistoryItem>();
 
-        private static readonly Harmony harmony = new Harmony(myGUID);
+        private static readonly Harmony Harmony = new Harmony(MyGuid);
 
         public static ManualLogSource Log;
 
@@ -31,7 +31,7 @@ namespace Mroshaw.SeaTruckSpeedMod_BZ
         {
             // Modifier config - speed
             BoosterSpeedMultiplier = Config.Bind("General",
-                speedMultiplierConfigKey,
+                SpeedMultiplierConfigKey,
                 1.0f,
                 new ConfigDescription("SeaTruck speed multiplier.", new AcceptableValueRange<float>(0.0f, 10.0f)));
 
@@ -39,8 +39,8 @@ namespace Mroshaw.SeaTruckSpeedMod_BZ
             BoosterSpeedMultiplier.SettingChanged += ConfigSettingChanged;
 
             // Patch in our MOD
-            harmony.PatchAll();
-            Logger.LogInfo(pluginName + " " + versionString + " " + "loaded.");
+            Harmony.PatchAll();
+            Logger.LogInfo(PluginName + " " + VersionString + " " + "loaded.");
             Log = Logger;
         }
 
@@ -54,7 +54,7 @@ namespace Mroshaw.SeaTruckSpeedMod_BZ
             SettingChangedEventArgs settingChangedEventArgs = e as SettingChangedEventArgs;
 
             // Speed setting changed
-            if (settingChangedEventArgs.ChangedSetting.Definition.Key == speedMultiplierConfigKey)
+            if (settingChangedEventArgs.ChangedSetting.Definition.Key == SpeedMultiplierConfigKey)
             {
                 float newValue = (float)settingChangedEventArgs.ChangedSetting.BoxedValue;
                 UpdateHistory(newValue);
