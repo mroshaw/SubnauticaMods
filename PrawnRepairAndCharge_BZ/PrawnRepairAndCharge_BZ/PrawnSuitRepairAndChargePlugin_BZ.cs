@@ -3,22 +3,22 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 
-namespace Mroshaw.PrawnSuitRepairAndCharge_BZ
+namespace DaftAppleGames.PrawnSuitRepairAndCharge_BZ
 {
-    [BepInPlugin(myGUID, pluginName, versionString)]
-    public class PrawnSuitRepairAndChargePlugin_BZ : BaseUnityPlugin
+    [BepInPlugin(MyGuid, PluginName, VersionString)]
+    public class PrawnSuitRepairAndChargePluginBz : BaseUnityPlugin
     {
         // Plugin properties
-        private const string myGUID = "com.mroshaw.prawnsuitrepairandchargemodbz";
-        private const string pluginName = "Prawn Suit Repair And Charge Mod BZ";
-        private const string versionString = "2.1.0";
+        private const string MyGuid = "com.mroshaw.prawnsuitrepairandchargemodbz";
+        private const string PluginName = "Prawn Suit Repair And Charge Mod BZ";
+        private const string VersionString = "2.1.0";
 
         // Config properties
-        private const string enableInMoonpoolConfigKey = "Enable in Moonpool";
-        private const string enableInSeaTruckConfigKey = "Enable on SeaTruck";
-        private const string consumeSeaTruckPowerConfigKey = "Consume SeaTruck Power";
-        private const string seatruckPowerUseChargeModifierConfigKey = "SeaTruck Power Use Modifier";
-        private const string seatruckPowerUseRepairModifierConfigKey = "SeaTruck Repair Use Modifier";
+        private const string EnableInMoonpoolConfigKey = "Enable in Moonpool";
+        private const string EnableInSeaTruckConfigKey = "Enable on SeaTruck";
+        private const string ConsumeSeaTruckPowerConfigKey = "Consume SeaTruck Power";
+        private const string SeatruckPowerUseChargeModifierConfigKey = "SeaTruck Power Use Modifier";
+        private const string SeatruckPowerUseRepairModifierConfigKey = "SeaTruck Repair Use Modifier";
 
         // Static config settings
         public static ConfigEntry<bool> EnableInMoonPool;
@@ -27,7 +27,7 @@ namespace Mroshaw.PrawnSuitRepairAndCharge_BZ
         public static ConfigEntry<float> SeaTruckPowerUseChargeModifier;
         public static ConfigEntry<float> SeaTruckPowerUseRepairModifier;
 
-        private static readonly Harmony harmony = new Harmony(myGUID);
+        private static readonly Harmony Harmony = new Harmony(MyGuid);
 
         public static ManualLogSource Log;
 
@@ -35,33 +35,33 @@ namespace Mroshaw.PrawnSuitRepairAndCharge_BZ
         {
             // Modifier config
             EnableInMoonPool = Config.Bind("General",
-                enableInMoonpoolConfigKey,
+                EnableInMoonpoolConfigKey,
                 true,
                 "Enabled in Moonpool docking.");
 
             EnableInSeaTruck = Config.Bind("General",
-                enableInSeaTruckConfigKey,
+                EnableInSeaTruckConfigKey,
                 true,
                 "Enabled on Seatruck docking.");
 
             ConsumeSeaTruckPower = Config.Bind("General",
-                consumeSeaTruckPowerConfigKey,
+                ConsumeSeaTruckPowerConfigKey,
                 true,
                 "Consume SeaTruck Power on charge and repair.");
 
             SeaTruckPowerUseChargeModifier = Config.Bind("General",
-                seatruckPowerUseChargeModifierConfigKey,
+                SeatruckPowerUseChargeModifierConfigKey,
                 0.5f,
                 "How much relative power to draw from SeaTruck on re-charge.");
 
             SeaTruckPowerUseRepairModifier = Config.Bind("General",
-                seatruckPowerUseRepairModifierConfigKey,
+                SeatruckPowerUseRepairModifierConfigKey,
                 0.1f,
                 "How much relative power to draw from SeaTruck on repair.");
 
             // Patch in our MOD
-            harmony.PatchAll();
-            Logger.LogInfo(pluginName + " " + versionString + " " + "loaded.");
+            Harmony.PatchAll();
+            Logger.LogInfo(PluginName + " " + VersionString + " " + "loaded.");
             Log = Logger;
         }
     }
