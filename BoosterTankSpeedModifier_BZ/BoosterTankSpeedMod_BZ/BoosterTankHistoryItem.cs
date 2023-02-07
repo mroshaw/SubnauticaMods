@@ -1,4 +1,4 @@
-﻿namespace Mroshaw.BoosterTankSpeedMod_BZ
+﻿namespace DaftAppleGames.BoosterTankSpeedMod_BZ
 {
     /// <summary>
     /// This class allows us to keep track of Booster Tanks that we've modded so we can dynamically

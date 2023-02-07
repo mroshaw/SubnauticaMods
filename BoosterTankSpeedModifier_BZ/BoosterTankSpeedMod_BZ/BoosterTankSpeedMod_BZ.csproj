@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoosterTankHistoryItem.cs" />
-    <Compile Include="BoosterTankSpeedMod_BZ.cs" />
+    <Compile Include="BoosterTankSpeedPatches.cs" />
     <Compile Include="BoosterTankSpeedPlugin_BZ.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

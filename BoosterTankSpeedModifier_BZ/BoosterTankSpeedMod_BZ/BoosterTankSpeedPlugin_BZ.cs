@@ -4,7 +4,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using System.Collections.Generic;
 
-namespace Mroshaw.BoosterTankSpeedMod_BZ
+namespace DaftAppleGames.BoosterTankSpeedMod_BZ
 {
     /// <summary>
     /// Used to determine what's changed in Config during the game
@@ -15,17 +15,17 @@ namespace Mroshaw.BoosterTankSpeedMod_BZ
         Motor
     }
 
-    [BepInPlugin(myGUID, pluginName, versionString)]
-    public class BoosterTankSpeedPlugin_BZ : BaseUnityPlugin
+    [BepInPlugin(MyGuid, PluginName, VersionString)]
+    public class BoosterTankSpeedPluginBz : BaseUnityPlugin
     {
         // Plugin properties
-        private const string myGUID = "com.mroshaw.boostertankspeedmodbz";
-        private const string pluginName = "Booster Tank Speed Mod BZ";
-        private const string versionString = "2.0.0";
+        private const string MyGuid = "com.mroshaw.boostertankspeedmodbz";
+        private const string PluginName = "Booster Tank Speed Mod BZ";
+        private const string VersionString = "2.0.0";
 
         // Config properties
-        private const string speedMultiplierConfigKey = "Booster Speed Multiplier";
-        private const string oxygenMultiplierConfigKey = "Oxygen Consumption Multiplier";
+        private const string SpeedMultiplierConfigKey = "Booster Speed Multiplier";
+        private const string OxygenMultiplierConfigKey = "Oxygen Consumption Multiplier";
 
         // Static config settings
         public static ConfigEntry<float> BoosterSpeedMultiplier;
@@ -34,7 +34,7 @@ namespace Mroshaw.BoosterTankSpeedMod_BZ
         // Static tracking list of booster tanks to update
         internal static List<BoosterTankHistoryItem> BoosterTankHistory = new List<BoosterTankHistoryItem>();
 
-        private static readonly Harmony harmony = new Harmony(myGUID);
+        private static readonly Harmony Harmony = new Harmony(MyGuid);
 
         public static ManualLogSource Log;
 
@@ -42,13 +42,13 @@ namespace Mroshaw.BoosterTankSpeedMod_BZ
         {
             // Modifier config - speed
             BoosterSpeedMultiplier = Config.Bind("General",
-                speedMultiplierConfigKey,
+                SpeedMultiplierConfigKey,
                 1.0f,
                 new ConfigDescription("Booster speed multiplier.", new AcceptableValueRange<float>(0.0f, 10.0f)));
 
             // Modifier config - oxygen
             OxygenConsumptionMultiplier = Config.Bind("General",
-                oxygenMultiplierConfigKey,
+                OxygenMultiplierConfigKey,
                 1.0f,
                 new ConfigDescription("Oxygen consumption multiplier.", new AcceptableValueRange<float>(0.0f, 10.0f)));
 
@@ -57,8 +57,8 @@ namespace Mroshaw.BoosterTankSpeedMod_BZ
             OxygenConsumptionMultiplier.SettingChanged += ConfigSettingChanged;
 
             // Patch in our MOD
-            harmony.PatchAll();
-            Logger.LogInfo(pluginName + " " + versionString + " " + "loaded.");
+            Harmony.PatchAll();
+            Logger.LogInfo(PluginName + " " + VersionString + " " + "loaded.");
             Log = Logger;
         }
 
@@ -72,14 +72,14 @@ namespace Mroshaw.BoosterTankSpeedMod_BZ
             SettingChangedEventArgs settingChangedEventArgs = e as SettingChangedEventArgs;
 
             // Speed setting changed
-            if(settingChangedEventArgs.ChangedSetting.Definition.Key == speedMultiplierConfigKey)
+            if(settingChangedEventArgs.ChangedSetting.Definition.Key == SpeedMultiplierConfigKey)
             {
                 float newValue = (float)settingChangedEventArgs.ChangedSetting.BoxedValue;
                 UpdateHistory(ChangeType.Motor, newValue);
             }
 
             // Oxygen setting changed
-            if (settingChangedEventArgs.ChangedSetting.Definition.Key == oxygenMultiplierConfigKey)
+            if (settingChangedEventArgs.ChangedSetting.Definition.Key == OxygenMultiplierConfigKey)
             {
                 float newValue = (float)settingChangedEventArgs.ChangedSetting.BoxedValue;
                 UpdateHistory(ChangeType.Oxygen, newValue);
