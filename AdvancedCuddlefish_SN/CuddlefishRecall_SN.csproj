@@ -7,8 +7,8 @@
     <ProjectGuid>{669BCD3F-84E8-4E3F-B436-3A8541EB19EC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DaftAppleGames.EnhancedCuddlefish_SN</RootNamespace>
-    <AssemblyName>EnhancedCuddlefish_SN</AssemblyName>
+    <RootNamespace>DaftAppleGames.CuddlefishRecall_SN</RootNamespace>
+    <AssemblyName>CuddlefishRecall_SN</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -58,13 +58,18 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>E:\Games\Steam\steamapps\common\Subnautica\Subnautica_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnhancedCuddlefishPlugin.cs" />
+    <Compile Include="CuddlefishRecallPlugin.cs" />
     <Compile Include="MonoBehaviours\CreatureRecaller.cs" />
     <Compile Include="MonoBehaviours\CreatureRecallListener.cs" />
-    <Compile Include="MonoBehaviours\EnhancedCuddlefish.cs" />
+    <Compile Include="MonoBehaviours\HealthRegen.cs" />
     <Compile Include="MonoBehaviours\ModInputManager.cs" />
+    <Compile Include="Patches\CuteFishHandTargetPatches.cs" />
     <Compile Include="Patches\CuteFishPatches.cs" />
     <Compile Include="Patches\PlayerPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

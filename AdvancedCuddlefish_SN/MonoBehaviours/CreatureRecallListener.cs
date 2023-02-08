@@ -1,44 +1,93 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using static Oculus.Platform.Models.Product;
 
-namespace DaftAppleGames.EnhancedCuddlefish_SN.MonoBehaviours
+namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
 {
     internal class CreatureRecallListener : MonoBehaviour
     {
+        private const string CantRecallMessage = "Cannot recall Cuddlefish to this location!";
+        private const string RecallSuccessfulMessage = "Cuddlefish recalled!";
+        private const string RecallEnRoute = "Cuddlefish is en-route!";
         private SwimBehaviour _swimBehaviour;
+        private SwimRandom _swimRandom;
 
+        // Parameters for the "Swim To" function
+        private Vector3 _currentTarget;
+        private bool _isBeingRecalled = false;
+
+        /// <summary>
+        /// Initialise the component
+        /// </summary>
         public void Start()
         {
-            EnhancedCuddlefishPlugin.Log.LogDebug("Finding SwimBehaviour...");
+            CuddlefishRecallPlugin.Log.LogDebug("Finding SwimBehaviour...");
             _swimBehaviour = GetComponent<SwimBehaviour>();
-            if (!_swimBehaviour)
+            _swimRandom = GetComponent<SwimRandom>();
+
+        }
+
+        /// <summary>
+        /// Used to call the SwimTo behaviour, if enabled
+        /// </summary>
+        public void Update()
+        {
+            if (!_isBeingRecalled)
             {
-                EnhancedCuddlefishPlugin.Log.LogDebug("SwimBehaviour found.");
+                return;
             }
-            else
+            // Check to see if we've arrived
+            if (Vector3.Distance(transform.position, Player.main.transform.position) < 2.0f)
             {
-                EnhancedCuddlefishPlugin.Log.LogDebug("SwimBehaviour not found!");
+                ErrorMessage.AddMessage("Cuddlefish has arrived!");
+                _isBeingRecalled = false;
+                return;
             }
+
+            // Swim to target
+            _swimBehaviour.SwimTo(Player.main.transform.position, CuddlefishRecallPlugin.RecallSwimVelocity.Value);
         }
 
         /// <summary>
         /// Public method to recall the creature to the target transform
         /// </summary>
         /// <param name="targetPosition"></param>
-        public void RecallCreature(Vector3 targetPosition)
+        public void RecallCreature(float buffer)
         {
             // Teleport method
-            if (EnhancedCuddlefishPlugin.RecallMethod.Value == RecallMoveMethod.Teleport)
+            if (CuddlefishRecallPlugin.RecallMethod.Value == RecallMoveMethod.Teleport)
             {
-                EnhancedCuddlefishPlugin.Log.LogDebug($"Teleporting GameObject to: {targetPosition}");
+                Vector3 targetPosition = Player.main.transform.position + (Vector3.forward * buffer);
+                CuddlefishRecallPlugin.Log.LogDebug($"Teleporting GameObject to: {targetPosition}");
+ 
+                if (Player.main.GetBiomeString().StartsWith("precursor", StringComparison.OrdinalIgnoreCase))
+                {
+                    ErrorMessage.AddMessage(CantRecallMessage);
+                    return;
+                }
+
+                int num = UWE.Utils.OverlapSphereIntoSharedBuffer(transform.position, 5f, -1, QueryTriggerInteraction.UseGlobal);
+                for (int i = 0; i < num; i++)
+                {
+                    if (UWE.Utils.sharedColliderBuffer[i].GetComponentInParent<SubRoot>())
+                    {
+                        ErrorMessage.AddMessage(CantRecallMessage);
+                        return;
+                    }
+                }
+
                 gameObject.transform.position = targetPosition;
-                EnhancedCuddlefishPlugin.Log.LogDebug("GameObject teleported.");
+                ErrorMessage.AddMessage(RecallSuccessfulMessage);
+                CuddlefishRecallPlugin.Log.LogDebug("GameObject teleported.");
             }
 
-            if (EnhancedCuddlefishPlugin.RecallMethod.Value == RecallMoveMethod.SwimTo)
+            // Swim to method
+            if (CuddlefishRecallPlugin.RecallMethod.Value == RecallMoveMethod.SwimTo)
             {
-                EnhancedCuddlefishPlugin.Log.LogDebug($"Swimming to: {targetPosition}");
-                _swimBehaviour.SwimTo(targetPosition, 1.0f);
-                EnhancedCuddlefishPlugin.Log.LogDebug("Swimming target set.");
+                CuddlefishRecallPlugin.Log.LogDebug($"Swimming to Player position");
+                _isBeingRecalled = true;
+                CuddlefishRecallPlugin.Log.LogDebug("Swimming to player in progress...");
+                ErrorMessage.AddMessage(RecallEnRoute);
             }
         }
     }

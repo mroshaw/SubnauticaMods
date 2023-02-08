@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DaftAppleGames.EnhancedCuddlefish_SN.MonoBehaviours
+namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
 {
     /// <summary>
     /// Simple helper MonoBehaviour to monitor for Keyboard Input
@@ -11,15 +11,15 @@ namespace DaftAppleGames.EnhancedCuddlefish_SN.MonoBehaviours
 
         public void Start()
         {
-            EnhancedCuddlefishPlugin.Log.LogDebug("Getting CreatureRecaller...");
+            CuddlefishRecallPlugin.Log.LogDebug("Getting CreatureRecaller...");
             _creatureRecaller = GetComponent<CreatureRecaller>();
             if (_creatureRecaller)
             {
-                EnhancedCuddlefishPlugin.Log.LogDebug("CreatureRecaller found.");
+                CuddlefishRecallPlugin.Log.LogDebug("CreatureRecaller found.");
             }
             else
             {
-                EnhancedCuddlefishPlugin.Log.LogDebug("CreatureRecaller not found!");
+                CuddlefishRecallPlugin.Log.LogDebug("CreatureRecaller not found!");
             }
         }
 
@@ -29,11 +29,11 @@ namespace DaftAppleGames.EnhancedCuddlefish_SN.MonoBehaviours
         public void Update()
         {
             // Check for "Spawn Pet" keypress
-            if (EnhancedCuddlefishPlugin.RecallKeyboardShortcut.Value.IsDown())
+            if (CuddlefishRecallPlugin.RecallKeyboardShortcut.Value.IsDown())
             {
-                EnhancedCuddlefishPlugin.Log.LogDebug("Recall keypress detected...");
+                CuddlefishRecallPlugin.Log.LogDebug("Recall keypress detected...");
                 _creatureRecaller.RecallAllCreatures();
-                EnhancedCuddlefishPlugin.Log.LogDebug("All creatures recalled!");
+                CuddlefishRecallPlugin.Log.LogDebug("All creatures recalled!");
             }
         }
     }

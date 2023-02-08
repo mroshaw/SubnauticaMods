@@ -1,7 +1,7 @@
-﻿using DaftAppleGames.EnhancedCuddlefish_SN.MonoBehaviours;
+﻿using DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours;
 using HarmonyLib;
 
-namespace DaftAppleGames.EnhancedCuddlefish_SN.Patches
+namespace DaftAppleGames.CuddlefishRecall_SN.Patches
 {
     /// <summary>
     /// Harmony patches for the Cuddlefish
@@ -18,11 +18,11 @@ namespace DaftAppleGames.EnhancedCuddlefish_SN.Patches
                 // Add the Mod Input Manager to the Player GameObject.
                 // Ensures there is only one component, monitoring keyboard input.
                 __instance.gameObject.AddComponent<CreatureRecallListener>();
-                EnhancedCuddlefishPlugin.Log.LogDebug("Added CreatureRecallListener component.");
+                CuddlefishRecallPlugin.Log.LogDebug("Added CreatureRecallListener component.");
 
                 // Add the EnhancedCuddlefish component
-                __instance.gameObject.AddComponent<EnhancedCuddlefish>();
-                EnhancedCuddlefishPlugin.Log.LogDebug("Added EnhancedCuddlefish component.");
+                __instance.gameObject.AddComponent<HealthRegen>();
+                CuddlefishRecallPlugin.Log.LogDebug("Added EnhancedCuddlefish component.");
             }
         }
     }

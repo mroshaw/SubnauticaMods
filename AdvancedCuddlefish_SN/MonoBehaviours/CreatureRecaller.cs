@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using static WorldStreaming.BatchOctreesStreamer;
+﻿using UnityEngine;
 
-namespace DaftAppleGames.EnhancedCuddlefish_SN.MonoBehaviours
+namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
 {
     /// <summary>
     /// MonoBehaviour to recall all CreatureRecallListeners to current transform location
@@ -25,9 +19,9 @@ namespace DaftAppleGames.EnhancedCuddlefish_SN.MonoBehaviours
         /// </summary>
         private void RefreshCreatureRecallListeners()
         {
-            EnhancedCuddlefishPlugin.Log.LogDebug("Refreshing CreatureRecallListeners...");
+            CuddlefishRecallPlugin.Log.LogDebug("Refreshing CreatureRecallListeners...");
             _allCreatureRecallListeners = FindObjectsOfType<CreatureRecallListener>();
-            EnhancedCuddlefishPlugin.Log.LogDebug($"Found {_allCreatureRecallListeners.Length} CreatureRecallListeners.");
+            CuddlefishRecallPlugin.Log.LogDebug($"Found {_allCreatureRecallListeners.Length} CreatureRecallListeners.");
         }
 
         /// <summary>
@@ -36,16 +30,16 @@ namespace DaftAppleGames.EnhancedCuddlefish_SN.MonoBehaviours
         public void RecallAllCreatures()
         {
             RefreshCreatureRecallListeners();
-            EnhancedCuddlefishPlugin.Log.LogDebug($"Recalling all RecallCreatureListeners ({_allCreatureRecallListeners.Length})");
+            CuddlefishRecallPlugin.Log.LogDebug($"Recalling all RecallCreatureListeners ({_allCreatureRecallListeners.Length})");
             float buffer = 1.0f;
 
             foreach (CreatureRecallListener listener in _allCreatureRecallListeners)
             {
-                EnhancedCuddlefishPlugin.Log.LogDebug($"Recalling {listener.gameObject.name}...");
-                Vector3 targetPosition = transform.position + (Vector3.forward * buffer);
-                listener.RecallCreature(targetPosition);
+                CuddlefishRecallPlugin.Log.LogDebug($"Recalling {listener.gameObject.name}...");
+                
+                listener.RecallCreature(buffer);
                 buffer++;
-                EnhancedCuddlefishPlugin.Log.LogDebug($"{listener.gameObject.name} recalled.");
+                CuddlefishRecallPlugin.Log.LogDebug($"{listener.gameObject.name} recalled.");
             }
         }
     }

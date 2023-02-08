@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EnhancedCuddlefish_SN")]
+[assembly: AssemblyTitle("CuddlefishRecall_SN")]
 [assembly: AssemblyDescription("A Subnautica mod to enhance the Cuddlefish")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Daft Apple Games")]
-[assembly: AssemblyProduct("EnhancedCuddlefish_SN")]
+[assembly: AssemblyProduct("CuddlefishRecall_SN")]
 [assembly: AssemblyCopyright("Copyright ©Daft Apple Games  2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
