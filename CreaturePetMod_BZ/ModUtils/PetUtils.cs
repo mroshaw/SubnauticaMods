@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DaftAppleGames.CreaturePetMod_BZ.MonoBehaviours;
 using UnityEngine;
 using UWE;
 
-namespace DaftAppleGames.CreaturePetMod_BZ
+namespace DaftAppleGames.CreaturePetMod_BZ.ModUtils
 {
     /// <summary>
     /// Class to support spawning of a new Pet

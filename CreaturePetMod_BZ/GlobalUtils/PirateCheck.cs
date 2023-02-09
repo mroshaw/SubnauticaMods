@@ -9,7 +9,7 @@ using System.IO;
     All code attributed to "Subnautica Modding" and "desperationfighter"
 */
 
-namespace DaftAppleGames.CreaturePetMod_BZ
+namespace DaftAppleGames.CreaturePetMod_BZ.GlobalUtils
 {
     /// <summary>
     /// Class methods to check if game is likely a pirated version.

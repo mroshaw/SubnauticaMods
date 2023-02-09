@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using DaftAppleGames.CreaturePetMod_BZ.MonoBehaviours;
 using HarmonyLib;
 using Newtonsoft.Json;
 
-namespace DaftAppleGames.CreaturePetMod_BZ
+namespace DaftAppleGames.CreaturePetMod_BZ.Patches
 {
 
     /// <summary>

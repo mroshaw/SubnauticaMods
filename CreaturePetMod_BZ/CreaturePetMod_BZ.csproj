@@ -103,13 +103,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreaturePetPlugin_BZ.cs" />
-    <Compile Include="LoadSavePatches.cs" />
-    <Compile Include="CreaturePetPatches_BZ.cs" />
-    <Compile Include="ModInputManager.cs" />
-    <Compile Include="PetDetails.cs" />
-    <Compile Include="PetUtils.cs" />
-    <Compile Include="CreaturePet.cs" />
-    <Compile Include="PirateCheck.cs" />
+    <Compile Include="Patches\LoadSavePatches.cs" />
+    <Compile Include="Patches\CreaturePetPatches_BZ.cs" />
+    <Compile Include="MonoBehaviours\ModInputManager.cs" />
+    <Compile Include="MonoBehaviours\PetDetails.cs" />
+    <Compile Include="ModUtils\PetUtils.cs" />
+    <Compile Include="MonoBehaviours\CreaturePet.cs" />
+    <Compile Include="GlobalUtils\PirateCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -118,10 +118,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "E:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\plugins\$(TargetName)"

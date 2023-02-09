@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DaftAppleGames.CreaturePetMod_BZ.GlobalUtils;
 using mset;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = System.Random;
 
-namespace DaftAppleGames.CreaturePetMod_BZ
+namespace DaftAppleGames.CreaturePetMod_BZ.MonoBehaviours
 {
     /// <summary>
     /// Used to allow the player a choice of pet to spawn

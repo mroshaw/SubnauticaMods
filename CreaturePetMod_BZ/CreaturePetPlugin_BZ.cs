@@ -2,6 +2,7 @@
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
+using DaftAppleGames.CreaturePetMod_BZ.MonoBehaviours;
 using HarmonyLib;
 using UnityEngine;
 

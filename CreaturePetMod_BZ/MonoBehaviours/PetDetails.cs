@@ -1,4 +1,5 @@
-﻿namespace DaftAppleGames.CreaturePetMod_BZ
+﻿
+namespace DaftAppleGames.CreaturePetMod_BZ.MonoBehaviours
 {
     /// <summary>
     /// Class for storing custom pet details.

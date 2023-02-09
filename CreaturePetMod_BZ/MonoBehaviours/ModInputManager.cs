@@ -1,7 +1,8 @@
 ﻿using DaftAppleGames.CreaturePetMod_BZ;
+using DaftAppleGames.CreaturePetMod_BZ.ModUtils;
 using UnityEngine;
 
-namespace DaftAppleGames.CreaturePetMod_BZ
+namespace DaftAppleGames.CreaturePetMod_BZ.MonoBehaviours
 {
     /// <summary>
     /// Simple helper MonoBehaviour to monitor for Keyboard Input

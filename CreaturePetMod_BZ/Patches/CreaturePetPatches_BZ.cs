@@ -1,8 +1,10 @@
-﻿using HarmonyLib;
+﻿using DaftAppleGames.CreaturePetMod_BZ.ModUtils;
+using DaftAppleGames.CreaturePetMod_BZ.MonoBehaviours;
+using HarmonyLib;
 using mset;
 using UnityEngine;
 
-namespace DaftAppleGames.CreaturePetMod_BZ
+namespace DaftAppleGames.CreaturePetMod_BZ.Patches
 {
     /// <summary>
     /// Provides patched methods for Pet specific behaviour
