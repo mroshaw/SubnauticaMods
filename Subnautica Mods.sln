@@ -21,6 +21,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreaturePetMod_BZ", "Creatu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreaturePetMod_SN", "CreaturePetMod_SN\CreaturePetMod_SN.csproj", "{E4821B6E-1786-4EF9-B48D-2847405E78F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeaglideSpeedMod_BZ", "SeaglideSpeedMod_BZ\SeaglideSpeedMod_BZ.csproj", "{94716D93-EA9A-48C9-A630-C31A0A0FD400}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CuddlefishRecall_SN", "CuddlefishRecall_SN\CuddlefishRecall_SN.csproj", "{669BCD3F-84E8-4E3F-B436-3A8541EB19EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeatruckRecall_BZ", "SeatruckRecall_BZ\SeatruckRecall_BZ.csproj", "{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityModTemplate", "UnityModTemplate\UnityModTemplate.csproj", "{C81D9969-6E8C-4353-8C10-3A97111295AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Below Zero|Any CPU = Below Zero|Any CPU
@@ -93,6 +101,38 @@ Global
 		{E4821B6E-1786-4EF9-B48D-2847405E78F0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E4821B6E-1786-4EF9-B48D-2847405E78F0}.Subnautica|Any CPU.ActiveCfg = Subnautica|Any CPU
 		{E4821B6E-1786-4EF9-B48D-2847405E78F0}.Subnautica|Any CPU.Build.0 = Subnautica|Any CPU
+		{94716D93-EA9A-48C9-A630-C31A0A0FD400}.Below Zero|Any CPU.ActiveCfg = Debug|Any CPU
+		{94716D93-EA9A-48C9-A630-C31A0A0FD400}.Below Zero|Any CPU.Build.0 = Debug|Any CPU
+		{94716D93-EA9A-48C9-A630-C31A0A0FD400}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94716D93-EA9A-48C9-A630-C31A0A0FD400}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94716D93-EA9A-48C9-A630-C31A0A0FD400}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94716D93-EA9A-48C9-A630-C31A0A0FD400}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94716D93-EA9A-48C9-A630-C31A0A0FD400}.Subnautica|Any CPU.ActiveCfg = Debug|Any CPU
+		{94716D93-EA9A-48C9-A630-C31A0A0FD400}.Subnautica|Any CPU.Build.0 = Debug|Any CPU
+		{669BCD3F-84E8-4E3F-B436-3A8541EB19EC}.Below Zero|Any CPU.ActiveCfg = Debug|Any CPU
+		{669BCD3F-84E8-4E3F-B436-3A8541EB19EC}.Below Zero|Any CPU.Build.0 = Debug|Any CPU
+		{669BCD3F-84E8-4E3F-B436-3A8541EB19EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{669BCD3F-84E8-4E3F-B436-3A8541EB19EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{669BCD3F-84E8-4E3F-B436-3A8541EB19EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{669BCD3F-84E8-4E3F-B436-3A8541EB19EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{669BCD3F-84E8-4E3F-B436-3A8541EB19EC}.Subnautica|Any CPU.ActiveCfg = Debug|Any CPU
+		{669BCD3F-84E8-4E3F-B436-3A8541EB19EC}.Subnautica|Any CPU.Build.0 = Debug|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Below Zero|Any CPU.ActiveCfg = Debug|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Below Zero|Any CPU.Build.0 = Debug|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Subnautica|Any CPU.ActiveCfg = Debug|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Subnautica|Any CPU.Build.0 = Debug|Any CPU
+		{C81D9969-6E8C-4353-8C10-3A97111295AF}.Below Zero|Any CPU.ActiveCfg = Debug|Any CPU
+		{C81D9969-6E8C-4353-8C10-3A97111295AF}.Below Zero|Any CPU.Build.0 = Debug|Any CPU
+		{C81D9969-6E8C-4353-8C10-3A97111295AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C81D9969-6E8C-4353-8C10-3A97111295AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C81D9969-6E8C-4353-8C10-3A97111295AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C81D9969-6E8C-4353-8C10-3A97111295AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C81D9969-6E8C-4353-8C10-3A97111295AF}.Subnautica|Any CPU.ActiveCfg = Debug|Any CPU
+		{C81D9969-6E8C-4353-8C10-3A97111295AF}.Subnautica|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
