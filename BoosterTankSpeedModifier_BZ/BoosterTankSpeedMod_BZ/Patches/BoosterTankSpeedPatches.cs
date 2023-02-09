@@ -1,7 +1,7 @@
 ﻿using BepInEx.Logging;
 using HarmonyLib;
 
-namespace DaftAppleGames.BoosterTankSpeedMod_BZ
+namespace DaftAppleGames.BoosterTankSpeedMod_BZ.Patches
 {
     public class BoostTankSpeedPatches
     {

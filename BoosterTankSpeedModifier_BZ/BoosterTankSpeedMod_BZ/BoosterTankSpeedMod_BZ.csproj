@@ -63,10 +63,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoosterTankHistoryItem.cs" />
-    <Compile Include="BoosterTankSpeedPatches.cs" />
+    <Compile Include="Patches\BoosterTankSpeedPatches.cs" />
     <Compile Include="BoosterTankSpeedPlugin_BZ.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "E:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\plugins\$(TargetName)"
