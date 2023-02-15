@@ -59,6 +59,7 @@ namespace DaftAppleGames.SeaTruckFishScoopMod_BZ
                 new KeyboardShortcut(KeyCode.Insert));
 
             // Patch in our MOD
+            Logger.LogInfo(PluginName + " " + VersionString + " " + "loading...");
             Harmony.PatchAll();
             Logger.LogInfo(PluginName + " " + VersionString + " " + "loaded.");
             Log = Logger;

@@ -71,11 +71,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SeaTruckFishScoop.cs" />
+    <Compile Include="MonoBehaviours\SeaTruckFishScoop.cs" />
+    <Compile Include="Patches\LiveMixinPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SeaTruckFishScoopPatches.cs" />
+    <Compile Include="Patches\SeatruckSegmentPatches.cs" />
     <Compile Include="SeaTruckFishScoopPlugin_BZ.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "E:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\plugins\$(TargetName)"
