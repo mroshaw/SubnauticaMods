@@ -1,0 +1,86 @@
+﻿using DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours;
+using HarmonyLib;
+
+namespace DaftAppleGames.SeatruckRecall_BZ.Patches
+{
+    /// <summary>
+    /// Harmony patching methods for the SeatruckDock
+    /// </summary>
+    [HarmonyPatch(typeof(MoonpoolExpansionManager))]
+    internal class MoonpoolExpansionManagerPatches
+    {
+        /// <summary>
+        /// Patch the Start method, adding the new component
+        /// and register with the static list.
+        /// </summary>
+        /// <param name="__instance"></param>
+        [HarmonyPatch(nameof(MoonpoolExpansionManager.Start))]
+        [HarmonyPostfix]
+        internal static void StartPostfix(MoonpoolExpansionManager __instance)
+        {
+            // Add the SeatruckRecall component
+            if (!__instance.gameObject.GetComponent<SeaTruckDockRecaller>())
+            {
+                SeaTruckDockRecallPlugin.Log.LogDebug("Adding SeaTruckRecaller component...");
+                SeaTruckDockRecaller newDockRecaller = __instance.gameObject.AddComponent<SeaTruckDockRecaller>();
+                SeaTruckDockRecallPlugin.Log.LogDebug($"Added SeaTruckRecaller component to {__instance.gameObject.name}!");
+
+                SeaTruckDockRecallPlugin.Log.LogDebug("Registering DockRecaller...");
+                SeaTruckDockRecallPlugin.RegisterDockRecaller(newDockRecaller);
+                SeaTruckDockRecallPlugin.Log.LogDebug("DockRecaller registered.");
+            }
+        }
+
+        /// <summary>
+        /// Patch the OnDestroy method, removing the instance
+        /// from the static list
+        /// </summary>
+        /// <param name="__instance"></param>
+        [HarmonyPatch(nameof(MoonpoolExpansionManager.OnDestroy))]
+        [HarmonyPostfix]
+        internal static void OnDestroyPostfix(MoonpoolExpansionManager __instance)
+        {
+            SeaTruckDockRecaller dockRecaller = __instance.GetComponent<SeaTruckDockRecaller>();
+            if (dockRecaller)
+            {
+                SeaTruckDockRecallPlugin.Log.LogDebug("Unregistering DockRecaller...");
+                SeaTruckDockRecallPlugin.RegisterDockRecaller(dockRecaller);
+                SeaTruckDockRecallPlugin.Log.LogDebug("DockRecaller unregistered.");
+            }
+        }
+
+        /// <summary>
+        /// Keep the Recall Dock status updated - when docking complete
+        /// </summary>
+        /// <param name="__instance"></param>
+        [HarmonyPatch(nameof(MoonpoolExpansionManager.OnDockingTimelineCompleted))]
+        [HarmonyPostfix]
+        internal static void OnDockingTimelineCompletedPostfix(MoonpoolExpansionManager __instance)
+        {
+            SeaTruckDockRecallPlugin.Log.LogDebug("Docking......");
+            SeaTruckDockRecaller dockRecaller = __instance.GetComponent<SeaTruckDockRecaller>();
+            if (dockRecaller)
+            {
+                SeaTruckDockRecallPlugin.Log.LogDebug("Docking complete.");
+                dockRecaller.SetDocked();
+            }
+        }
+
+        /// <summary>
+        /// Keep the Recall Dock status updated - when un-docking complete
+        /// </summary>
+        /// <param name="__instance"></param>
+        [HarmonyPatch(nameof(MoonpoolExpansionManager.OnUndockingTimelineCompleted))]
+        [HarmonyPostfix]
+        internal static void OnUndockingTimelineCompletedPostfix(MoonpoolExpansionManager __instance)
+        {
+            SeaTruckDockRecallPlugin.Log.LogDebug("Undocking......");
+            SeaTruckDockRecaller dockRecaller = __instance.GetComponent<SeaTruckDockRecaller>();
+            if (dockRecaller)
+            {
+                SeaTruckDockRecallPlugin.Log.LogDebug("Undocking complete.");
+                dockRecaller.SetUndocked();
+            }
+        }
+    }
+}

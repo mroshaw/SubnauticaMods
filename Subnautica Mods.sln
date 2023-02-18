@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeaglideSpeedMod_BZ", "Seag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CuddlefishRecall_SN", "CuddlefishRecall_SN\CuddlefishRecall_SN.csproj", "{669BCD3F-84E8-4E3F-B436-3A8541EB19EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeatruckRecall_BZ", "SeatruckRecall_BZ\SeatruckRecall_BZ.csproj", "{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeaTruckRecall_BZ", "SeatruckRecall_BZ\SeaTruckRecall_BZ.csproj", "{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityModTemplate", "UnityModTemplate\UnityModTemplate.csproj", "{C81D9969-6E8C-4353-8C10-3A97111295AF}"
 EndProject
@@ -138,9 +138,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {DAF74111-BA59-4F12-9B63-549EB0B8F5D5}
-		        SolutionGuid = {3DC6A6DD-22CC-45F9-9AC2-ACD7DC8CCBD7}
-		            SolutionGuid = {B7C207F6-0B63-4258-B838-FA393F8CEA5F}
 		    SolutionGuid = {F75DB666-86C3-40EC-BB33-11B2BCDD7844}
+		            SolutionGuid = {B7C207F6-0B63-4258-B838-FA393F8CEA5F}
+		        SolutionGuid = {3DC6A6DD-22CC-45F9-9AC2-ACD7DC8CCBD7}
+		SolutionGuid = {DAF74111-BA59-4F12-9B63-549EB0B8F5D5}
 	EndGlobalSection
 EndGlobal
