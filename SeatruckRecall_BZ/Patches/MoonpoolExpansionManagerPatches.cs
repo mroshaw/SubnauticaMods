@@ -25,6 +25,16 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
                 SeaTruckDockRecaller newDockRecaller = __instance.gameObject.AddComponent<SeaTruckDockRecaller>();
                 SeaTruckDockRecallPlugin.Log.LogDebug($"Added SeaTruckRecaller component to {__instance.gameObject.name}!");
 
+                SeaTruckDockRecallPlugin.Log.LogDebug("Finding terminal...");
+                MoonpoolExpansionTerminal terminal = __instance.GetComponentInChildren<MoonpoolExpansionTerminal>();
+                if (terminal)
+                {
+                    SeaTruckDockRecallPlugin.Log.LogDebug("Found terminal...");
+                    SeaTruckDockRecallPlugin.Log.LogDebug("Adding GUI component...");
+                    terminal.gameObject.AddComponent<SeaTruckDockRecallerUi>();
+                    SeaTruckDockRecallPlugin.Log.LogDebug("Added GUI component!");
+                }
+
                 SeaTruckDockRecallPlugin.Log.LogDebug("Registering DockRecaller...");
                 SeaTruckDockRecallPlugin.RegisterDockRecaller(newDockRecaller);
                 SeaTruckDockRecallPlugin.Log.LogDebug("DockRecaller registered.");
@@ -46,6 +56,18 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
                 SeaTruckDockRecallPlugin.Log.LogDebug("Unregistering DockRecaller...");
                 SeaTruckDockRecallPlugin.RegisterDockRecaller(dockRecaller);
                 SeaTruckDockRecallPlugin.Log.LogDebug("DockRecaller unregistered.");
+            }
+        }
+
+        [HarmonyPatch(nameof(MoonpoolExpansionManager.AllowedToDock))]
+        [HarmonyPostfix]
+        internal static void AllowedToDockPostfix(MoonpoolExpansionManager __instance, ref bool __result)
+        {
+            SeaTruckDockRecaller dockRecaller = __instance.GetComponent<SeaTruckDockRecaller>();
+            if (dockRecaller)
+            {
+                SeaTruckDockRecallPlugin.Log.LogDebug($"Allowed to dock returned: {__result}.");
+                __result = true;
             }
         }
 

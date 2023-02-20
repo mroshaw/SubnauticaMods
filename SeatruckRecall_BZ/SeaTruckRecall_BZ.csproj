@@ -52,6 +52,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
@@ -73,8 +76,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MonoBehaviours\Waypoint.cs" />
+    <Compile Include="MonoBehaviours\WaypointNavigation.cs" />
     <Compile Include="MonoBehaviours\SeaTruckDockRecaller.cs" />
-    <Compile Include="MonoBehaviours\SeaTruckRecallerUi.cs" />
+    <Compile Include="MonoBehaviours\SeaTruckDockRecallerUi.cs" />
     <Compile Include="MonoBehaviours\SeaTruckAutoPilot.cs" />
     <Compile Include="Utils\GlobalUtils.cs" />
     <Compile Include="Patches\MoonpoolExpansionManagerPatches.cs" />

@@ -15,30 +15,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ
         Autopilot
     };
 
-    public enum DockRecallStatus
-    {
-        None,
-        Docked,
-        DockClear,
-        RecallInProgress,
-        RecallAborted,
-        NoSeaTrucks,
-        NoneInRange,
-        FoundClosestSeaTruck
-    }
-
-    public enum SeaTruckRecallStatus
-    {
-        None,
-        Docked,
-        InTransit,
-        ArrivedAtDock,
-        RotatingToPosition,
-        InPosition,
-        Docking,
-        Blocked
-    }
-
     [BepInPlugin(MyGuid, PluginName, VersionString)]
     public class SeaTruckDockRecallPlugin : BaseUnityPlugin
     {
@@ -49,19 +25,21 @@ namespace DaftAppleGames.SeatruckRecall_BZ
 
         // Config properties
         internal static string RecallKeyboardShortcutKey = "Recall Keyboard Shortcut";
-        private const string RecallMethodKey = "Recall Travel Method";
-        private const string RecallRangeKey = "Recall Maximum Range";
-        private const string TransitSpeedKey = "Recall Transit Speed";
+        private const string TravelMethodKey = "Travel Method";
+        private const string MaximumRangeKey = "Maximum Range";
+        private const string TransitSpeedKey = "Transit Speed";
+        private const string RotationSpeedKey = "Rotation Speed";
 
         // Static config settings
-        internal static ConfigEntry<RecallMoveMethod> RecallMethod;
+        internal static ConfigEntry<RecallMoveMethod> TravelMethod;
         internal static ConfigEntry<KeyboardShortcut> RecallKeyboardShortcut;
-        internal static ConfigEntry<float> RecallRange;
+        internal static ConfigEntry<float> MaximumRange;
         internal static ConfigEntry<float> TransitSpeed;
+        internal static ConfigEntry<float> RotationSpeed;
 
         // Static global list of SeaTruck Docking Recall modules
-        private static List<SeaTruckDockRecaller> _allDockRecallers = new List<SeaTruckDockRecaller>();
-        private static List<SeaTruckAutoPilot> _allSeaTruckAutoPilots = new List<SeaTruckAutoPilot>();
+        internal static List<SeaTruckDockRecaller> AllDockRecallers = new List<SeaTruckDockRecaller>();
+        internal static List<SeaTruckAutoPilot> AllSeaTruckAutoPilots = new List<SeaTruckAutoPilot>();
 
         private static readonly Harmony Harmony = new Harmony(MyGuid);
 
@@ -76,23 +54,28 @@ namespace DaftAppleGames.SeatruckRecall_BZ
                 new KeyboardShortcut(KeyCode.R, KeyCode.LeftControl));
 
             // Travel method for the recall process
-            RecallMethod = Config.Bind("General",
-                RecallMethodKey,
+            TravelMethod = Config.Bind("General",
+                TravelMethodKey,
                 RecallMoveMethod.Teleport,
                 "Determines how the SeaTruck will move to the dock location");
 
             TransitSpeed = Config.Bind("General",
                 TransitSpeedKey,
-                2.0f,
+                5.0f,
                 new ConfigDescription("The speed at which the SeaTruck will travel on autopilot.",
-                    new AcceptableValueRange<float>(1.0f, 10.0f)));
+                    new AcceptableValueRange<float>(0.1f, 10.0f)));
 
-
-            RecallRange = Config.Bind("General",
-                RecallRangeKey,
-                100.0f,
+            MaximumRange = Config.Bind("General",
+                MaximumRangeKey,
+                200.0f,
                 new ConfigDescription("The maximum range of the recall function.",
                     new AcceptableValueRange<float>(10.0f, 500.0f)));
+
+            RotationSpeed = Config.Bind("General",
+                RotationSpeedKey,
+                20.0f,
+                new ConfigDescription("The speed at which the SeaTruck will rotate.",
+                    new AcceptableValueRange<float>(0.1f, 30.0f)));
 
             // Patch in our MOD
             Logger.LogInfo(PluginName + " " + VersionString + " " + "loading...");
@@ -108,7 +91,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ
         internal static void RegisterDockRecaller(SeaTruckDockRecaller dockRecaller)
         {
             SeaTruckDockRecallPlugin.Log.LogDebug("Registering SeaTruckDockRecaller...");
-            _allDockRecallers.Add(dockRecaller);
+            AllDockRecallers.Add(dockRecaller);
             SeaTruckDockRecallPlugin.Log.LogDebug("Registered SeaTruckDockRecaller!");
         }
 
@@ -119,7 +102,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ
         internal static void UnregisterDockRecaller(SeaTruckDockRecaller dockRecaller)
         {
             SeaTruckDockRecallPlugin.Log.LogInfo("Unregistering SeaTruckDockRecaller...");
-            _allDockRecallers.Remove(dockRecaller);
+            AllDockRecallers.Remove(dockRecaller);
             SeaTruckDockRecallPlugin.Log.LogInfo("Unregistered SeaTruckDockRecaller!");
         }
 
@@ -130,7 +113,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ
         internal static void RegisterAutoPilot(SeaTruckAutoPilot autoPilot)
         {
             SeaTruckDockRecallPlugin.Log.LogDebug("Registering SeaTruckAutoPilot...");
-            _allSeaTruckAutoPilots.Add(autoPilot);
+            AllSeaTruckAutoPilots.Add(autoPilot);
             SeaTruckDockRecallPlugin.Log.LogDebug("Registered SeaTruckAutoPilot!");
         }
 
@@ -141,7 +124,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ
         internal static void UnRegisterAutoPilot(SeaTruckAutoPilot autoPilot)
         {
             SeaTruckDockRecallPlugin.Log.LogInfo("Unregistering SeaTruckAutoPilot...");
-            _allSeaTruckAutoPilots.Remove(autoPilot);
+            AllSeaTruckAutoPilots.Remove(autoPilot);
             SeaTruckDockRecallPlugin.Log.LogInfo("Unregistered SeaTruckAutoPilot!");
         }
 
@@ -151,7 +134,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ
         /// <returns></returns>
         internal static List<SeaTruckAutoPilot> GetAllAutoPilots()
         {
-            return _allSeaTruckAutoPilots;
+            return AllSeaTruckAutoPilots;
         }
     }
 }

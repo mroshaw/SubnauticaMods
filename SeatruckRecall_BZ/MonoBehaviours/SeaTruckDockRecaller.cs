@@ -4,6 +4,19 @@ using UnityEngine.Events;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
 {
+    // Recaller Status
+    public enum DockRecallStatus
+    {
+        None,
+        Docked,
+        DockClear,
+        RecallInProgress,
+        RecallAborted,
+        NoSeaTrucks,
+        NoneInRange,
+        FoundClosestSeaTruck
+    }
+
     /// <summary>
     /// MonoBehaviour class to attach to a SeatruckDock
     /// that implements the recall behaviour
@@ -16,12 +29,13 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         // Internal tracking and audit
         private DockRecallStatus _latestRecallStatus = DockRecallStatus.None;
         private SeaTruckAutoPilot _currentRecallAutoPilot;
+        private AutoPilotState _currentAutoPilotState;
 
         // Internal properties
-        private Vector3 _endOfDocktubePosition;
+        private List<Waypoint> _dockingWaypoints;
 
         // Event triggered with latest recall state and distance
-        public UnityEvent OnRecallUpdatedEvent;
+        public UnityEvent OnRecallUpdatedEvent = new UnityEvent();
 
         /// <summary>
         /// Initialise the component
@@ -34,8 +48,49 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
             // Set the initial dock status
             SetDockedStatus();
 
-            // Set the location of the end of the docking tube
-            _endOfDocktubePosition = transform.position;
+            // Set up the docking waypoints
+            CreateWaypoints();
+        }
+
+        /// <summary>
+        /// Set up the docking waypoints for this dock
+        /// </summary>
+        private void CreateWaypoints()
+        {
+            _dockingWaypoints = new List<Waypoint>();
+
+            // Waypoint above the entrance to the docking tube
+            GameObject aboveDockingTubeWaypoint = new GameObject("Top of End of Tube Waypoint")
+            {
+                transform =
+                {
+                    position = gameObject.transform.position + (-gameObject.transform.right * 30.0f) + (gameObject.transform.up * 10.0f)
+                }
+            };
+            _dockingWaypoints.Add(new Waypoint(aboveDockingTubeWaypoint.transform, WaypointAction.RotateBeforeMove));
+            SeaTruckDockRecallPlugin.Log.LogDebug($"Dock tube above end position: {aboveDockingTubeWaypoint.transform.position}");
+
+            // Waypoint at the end of the docking tube.
+            GameObject endOfDockTubeWaypoint = new GameObject("End of Tube Waypoint")
+            {
+                transform =
+                {
+                    position = gameObject.transform.position + (-gameObject.transform.right * 30.0f)
+                }
+            };
+            _dockingWaypoints.Add(new Waypoint(endOfDockTubeWaypoint.transform, WaypointAction.RotateBeforeMove));
+            SeaTruckDockRecallPlugin.Log.LogDebug($"Dock tube end position: {endOfDockTubeWaypoint.transform.position}");
+
+            // Waypoint into the docking tube itself
+            GameObject dockingWaypoint = new GameObject("Docking Waypoint")
+            {
+                transform =
+                {
+                    position = gameObject.transform.position + (-gameObject.transform.right * 11.0f)
+                }
+            };
+            _dockingWaypoints.Add(new Waypoint(dockingWaypoint.transform, WaypointAction.RotateBeforeMove));
+            SeaTruckDockRecallPlugin.Log.LogDebug($"Dock final position: {dockingWaypoint.transform.position}");
         }
 
         /// <summary>
@@ -43,9 +98,21 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         /// </summary>
         public void Update()
         {
+
+            // DEBUG ONLY!!!
+            if (SeaTruckDockRecallPlugin.RecallKeyboardShortcut.Value.IsDown())
+            {
+                RecallClosestSeatruck();
+            }
+
             switch (_latestRecallStatus)
             {
                 case DockRecallStatus.RecallInProgress:
+                    if (_currentRecallAutoPilot.AutoPilotState != _currentAutoPilotState)
+                    {
+                        _currentAutoPilotState = _currentRecallAutoPilot.AutoPilotState;
+                        RecallStatusChanged();
+                    }
                     break;
 
                 default:
@@ -54,9 +121,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         }
 
         /// <summary>
-        /// Called every frame when recall is in progress
+        /// Called whenever state changes
         /// </summary>
-        private void UpdateRecallStatus()
+        private void RecallStatusChanged()
         {
             // Update any listeners
             if (OnRecallUpdatedEvent != null)
@@ -78,6 +145,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
             {
                 _latestRecallStatus = DockRecallStatus.DockClear;
             }
+
+            _currentAutoPilotState = AutoPilotState.Ready;
         }
 
         /// <summary>
@@ -128,7 +197,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
             _latestRecallStatus = DockRecallStatus.RecallInProgress;
 
             // Recall the SeaTruck
-            _currentRecallAutoPilot.RecallToDock(this, _endOfDocktubePosition);
+            _currentRecallAutoPilot.RecallToDock(this, _dockingWaypoints);
 
             return true;
         }
@@ -144,7 +213,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
             float closestDistance = 0.0f;
             List<SeaTruckAutoPilot> allSeaTrucks = SeaTruckDockRecallPlugin.GetAllAutoPilots();
 
-            float maxRange = SeaTruckDockRecallPlugin.RecallRange.Value;
+            float maxRange = SeaTruckDockRecallPlugin.MaximumRange.Value;
 
             // Don't need to do anything if there are no Seatrucks
             if (allSeaTrucks.Count == 0)

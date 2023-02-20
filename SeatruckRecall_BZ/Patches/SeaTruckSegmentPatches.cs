@@ -32,6 +32,12 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
 
                     // Register the new AutoPilot component with all registered Dock Recallers
                     SeaTruckDockRecallPlugin.RegisterAutoPilot(newAutoPilot);
+
+                    // Add the Waypoint Nav component
+                    SeaTruckDockRecallPlugin.Log.LogInfo("Adding WaypointNavigation component...");
+                    WaypointNavigation waypointNav = __instance.gameObject.AddComponent<WaypointNavigation>();
+                    SeaTruckDockRecallPlugin.Log.LogInfo(
+                        $"Added WaypointNavigation component to {__instance.gameObject.name}!");
                 }
             }
         }
