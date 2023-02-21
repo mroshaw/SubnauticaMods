@@ -298,12 +298,70 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
             }
 
             // Apply rigid body rotation
-            Vector3 targetDirection = _currentWaypoint.Transform.position - SourceTransform.position;
+            RotateByTorque(SourceTransform, _currentWaypoint.Transform, rotateSpeed);
+        }
+
+        /// <summary>
+        /// Rotate the rigid body using torque
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <param name="rotationTorque"></param>
+        private void RotateByTorque(Transform source, Transform target, float rotationTorque)
+        {
+            Vector3 torque = ComputeTorque(source, target, rotationTorque);
+            rigidbody.AddTorque(torque, ForceMode.Impulse);
+        }
+
+        /// <summary>
+        /// Rotate the rigid body using MoveRotation
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <param name="rotSpeed"></param>
+        private void RotateByMove(Transform source, Transform target, float rotSpeed)
+        {
+            Vector3 targetDirection = target.position - source.position;
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-            Quaternion deltaRotation = Quaternion.RotateTowards(rigidbody.rotation, targetRotation, rotateSpeed * Time.deltaTime);
+            Quaternion deltaRotation = Quaternion.RotateTowards(rigidbody.rotation, targetRotation, rotSpeed * Time.deltaTime);
 
             rigidbody.MoveRotation(deltaRotation);
+        }
 
+        /// <summary>
+        /// Calculate the amount of torque to apply to rotate
+        /// between current and target transforms
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <param name="rotSpeed"></param>
+        /// <returns></returns>
+        private Vector3 ComputeTorque(Transform source, Transform target, float rotSpeed)
+        {
+            Vector3 targetDirection = target.position - source.position;
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+
+            // Rotate from our current rotation to desired rotation
+            Quaternion deltaRotation = targetRotation * Quaternion.Inverse(source.rotation);
+
+            // Convert to angle axis representation so we can do math with angular velocity
+            Vector3 angleAxis;
+            deltaRotation.ToAngleAxis(out float axisMagnitude, out angleAxis);
+            angleAxis.Normalize();
+
+            // Angular velocity we need to achieve
+            Vector3 angluarVelocity = angleAxis * axisMagnitude * Mathf.Deg2Rad / Time.fixedDeltaTime * 0.5f;
+            angluarVelocity -= rigidbody.angularVelocity;
+
+            // to multiply with inertia tensor local then rotationTensor coords
+            Vector3 transformDirection = source.InverseTransformDirection(angluarVelocity);
+            Vector3 transformRotation;
+            Vector3 tensorRotation = transformDirection;
+            tensorRotation = rigidbody.inertiaTensorRotation * tensorRotation;
+            tensorRotation.Scale(rigidbody.inertiaTensor);
+            transformRotation = Quaternion.Inverse(rigidbody.inertiaTensorRotation) * tensorRotation;
+            Vector3 torqueToApply = source.TransformDirection(transformRotation);
+            return torqueToApply;
         }
     }
 }
