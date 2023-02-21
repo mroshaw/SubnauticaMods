@@ -9,14 +9,14 @@ using UnityEngine;
 namespace DaftAppleGames.SeatruckRecall_BZ
 {
     // Mod supports "Teleporting" a Seatruck, and forcing a an "Autopilot" behaviour
-    public enum RecallMoveMethod
+    internal enum RecallMoveMethod
     {
         Teleport,
         Autopilot
     };
 
     [BepInPlugin(MyGuid, PluginName, VersionString)]
-    public class SeaTruckDockRecallPlugin : BaseUnityPlugin
+    internal class SeaTruckDockRecallPlugin : BaseUnityPlugin
     {
         // Plugin properties
         private const string MyGuid = "com.mroshaw.seatruckrecallbz";

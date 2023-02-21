@@ -17,7 +17,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         private Rigidbody _rigidBody;
         private SeaTruckSegment _headSegment;
         private float _moveSpeed;
-
         internal AutoPilotState AutoPilotState { get; set; }
 
         private WaypointNavigation _waypointNav;
@@ -25,7 +24,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         /// <summary>
         /// Initialise the component
         /// </summary>
-        public void Start()
+        internal void Start()
         {
             // Get core components
             _seatruckMotor = GetComponent<SeaTruckMotor>();
@@ -47,7 +46,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         /// <param name="seaTruckRecaller"></param>
         /// <param name="dockingWaypoints"></param>
         /// <returns></returns>
-        public bool RecallToDock(SeaTruckDockRecaller seaTruckRecaller, List<Waypoint> dockingWaypoints)
+        internal bool RecallToDock(SeaTruckDockRecaller seaTruckRecaller, List<Waypoint> dockingWaypoints)
         {
             // Abort, if already being recalled
             if (AutoPilotState != AutoPilotState.Ready)
@@ -74,7 +73,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         /// <summary>
         /// Handle the state transitions
         /// </summary>
-        public void Update()
+        internal void Update()
         {
             if (AutoPilotState == AutoPilotState.Ready)
             {

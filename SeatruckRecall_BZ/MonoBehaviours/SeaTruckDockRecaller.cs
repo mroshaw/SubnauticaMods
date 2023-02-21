@@ -33,18 +33,17 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         // Internal tracking and audit
         private DockRecallStatus _latestRecallStatus = DockRecallStatus.None;
         private SeaTruckAutoPilot _currentRecallAutoPilot;
-        private AutoPilotState _currentAutoPilotState;
 
         // Internal properties
         private List<Waypoint> _dockingWaypoints;
 
         // Event triggered with latest recall state and distance
-        public DockRecallStatusEvent OnRecallUpdatedEvent = new DockRecallStatusEvent();
+        internal DockRecallStatusEvent OnRecallUpdatedEvent = new DockRecallStatusEvent();
 
         /// <summary>
         /// Initialise the component
         /// </summary>
-        public void Start()
+        internal void Start()
         {
             // Init useful local components
             _dockingManager = GetComponent<MoonpoolExpansionManager>();
@@ -100,7 +99,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         /// <summary>
         /// Handle updating current state, if recall is underway
         /// </summary>
-        public void Update()
+        internal void Update()
         {
             // DEBUG ONLY!!!
             if (SeaTruckDockRecallPlugin.RecallKeyboardShortcut.Value.IsDown())
@@ -134,8 +133,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
             {
                 _latestRecallStatus = DockRecallStatus.DockClear;
             }
-
-            _currentAutoPilotState = AutoPilotState.Ready;
         }
 
         /// <summary>

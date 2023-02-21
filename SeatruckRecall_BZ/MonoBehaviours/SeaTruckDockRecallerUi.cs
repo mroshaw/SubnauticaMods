@@ -24,7 +24,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         private GameObject _inactiveScreenGo;
         private GameObject _inactiveTextGo;
         private TextMeshProUGUI _inactiveText;
-        private Button _recallButton;
         private string _origStatusText;
 
         // SeatruckRecaller component
@@ -33,7 +32,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         /// <summary>
         /// Initialise the component
         /// </summary>
-        public void Start()
+        internal void Start()
         {
             _seatruckRecaller = GetComponentInParent<SeaTruckDockRecaller>();
             if (!_seatruckRecaller)
@@ -77,7 +76,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         /// <summary>
         /// Create the UI
         /// </summary>
-        public void CreateUi()
+        private void CreateUi()
         {
             SeaTruckDockRecallPlugin.Log.LogDebug("Creating UI...");
 

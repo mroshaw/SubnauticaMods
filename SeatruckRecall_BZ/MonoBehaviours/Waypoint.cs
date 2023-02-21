@@ -11,10 +11,10 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
     internal class Waypoint
     {
         // Target transform
-        public Transform Transform { get; set; }
+        internal Transform Transform { get; set; }
 
         // Whether to rotate while moving or once at target
-        public WaypointAction Action { get; set; }
+        internal WaypointAction Action { get; set; }
 
         /// <summary>
         /// Default constructor

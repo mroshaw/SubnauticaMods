@@ -35,7 +35,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
 
         // Current Waypoint
         private Waypoint _currentWaypoint;
-        private Vector3 _currentRotationTarget;
         internal NavigationState NavState { get; set; }
         private bool _currentMoveComplete;
         private bool _currentRotateComplete;
@@ -73,7 +72,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         /// Unity Awake method. Runs every frame so remove this if not required.
         /// Runs frequently, so remove if not required.
         /// </summary>
-        public void Update()
+        internal void Update()
         {
             ManageStateUpdate();
         }
@@ -82,7 +81,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         /// Unity Physics Update (FixedUpdate) method.
         /// Runs frequently, so remove if not required.
         /// </summary>
-        public void FixedUpdate()
+        internal void FixedUpdate()
         {
             ManageMoveUpdate();
         }
@@ -136,7 +135,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         /// <summary>
         /// Public method to start navigating waypoint list
         /// </summary>
-        public void StartNavigation()
+        internal void StartNavigation()
         {
             ResetState();
             _totalWaypoints = Waypoints.Count;
@@ -148,7 +147,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         /// <summary>
         /// Public method to pause navigation. Can be restarted
         /// </summary>
-        public void PauseNavigation()
+        internal void PauseNavigation()
         {
             if (NavState == NavigationState.Moving)
             {
@@ -159,7 +158,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
         /// <summary>
         /// Public method to pause navigation. Can be restarted
         /// </summary>
-        public void RestartNavigation()
+        internal void RestartNavigation()
         {
             if (NavState == NavigationState.Moving)
             {
@@ -167,7 +166,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
             }
         }
 
-        public void StopNavigation()
+        internal void StopNavigation()
         {
             NavState = NavigationState.Stopped;
         }
@@ -216,7 +215,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours
                 _currentWaypoint = Waypoints[_currentWaypointIndex];
                 _currentMoveComplete = false;
                 _currentRotateComplete = false;
-                _currentRotationTarget = Vector3.zero;
                 return true;
             }
             return false;
