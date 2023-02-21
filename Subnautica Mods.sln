@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeaTruckRecall_BZ", "Seatru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityModTemplate", "UnityModTemplate\UnityModTemplate.csproj", "{C81D9969-6E8C-4353-8C10-3A97111295AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubnauticaCheater_BZ", "SubnauticaCheater_BZ\SubnauticaCheater_BZ.csproj", "{C9CB7209-33AC-40CF-8E73-5AFCC9123676}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Below Zero|Any CPU = Below Zero|Any CPU
@@ -133,14 +135,22 @@ Global
 		{C81D9969-6E8C-4353-8C10-3A97111295AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C81D9969-6E8C-4353-8C10-3A97111295AF}.Subnautica|Any CPU.ActiveCfg = Debug|Any CPU
 		{C81D9969-6E8C-4353-8C10-3A97111295AF}.Subnautica|Any CPU.Build.0 = Debug|Any CPU
+		{C9CB7209-33AC-40CF-8E73-5AFCC9123676}.Below Zero|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9CB7209-33AC-40CF-8E73-5AFCC9123676}.Below Zero|Any CPU.Build.0 = Debug|Any CPU
+		{C9CB7209-33AC-40CF-8E73-5AFCC9123676}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9CB7209-33AC-40CF-8E73-5AFCC9123676}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9CB7209-33AC-40CF-8E73-5AFCC9123676}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9CB7209-33AC-40CF-8E73-5AFCC9123676}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9CB7209-33AC-40CF-8E73-5AFCC9123676}.Subnautica|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9CB7209-33AC-40CF-8E73-5AFCC9123676}.Subnautica|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		    SolutionGuid = {F75DB666-86C3-40EC-BB33-11B2BCDD7844}
-		            SolutionGuid = {B7C207F6-0B63-4258-B838-FA393F8CEA5F}
-		        SolutionGuid = {3DC6A6DD-22CC-45F9-9AC2-ACD7DC8CCBD7}
 		SolutionGuid = {DAF74111-BA59-4F12-9B63-549EB0B8F5D5}
+		        SolutionGuid = {3DC6A6DD-22CC-45F9-9AC2-ACD7DC8CCBD7}
+		            SolutionGuid = {B7C207F6-0B63-4258-B838-FA393F8CEA5F}
+		    SolutionGuid = {F75DB666-86C3-40EC-BB33-11B2BCDD7844}
 	EndGlobalSection
 EndGlobal
