@@ -18,7 +18,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN
     {
         private const string MyGUID = "com.mroshaw.cuddlefishrecallmodsn";
         private const string PluginName = "Cuddlefish Recall Mod SN";
-        private const string VersionString = "1.0.0";
+        private const string VersionString = "1.1.0";
 
         // Config entry key strings
         public static string HealthRegenModifierKey = "Health Regen Modifier";
@@ -41,7 +41,8 @@ namespace DaftAppleGames.CuddlefishRecall_SN
             HealthRegenModifier = Config.Bind("General",   // The section under which the option is shown
                 HealthRegenModifierKey,                           // The key of the configuration option
                 0.01f,                                 // The default value
-                "Health Regen Modifier.");              // Description of the config value
+                new ConfigDescription("Health Regen Modifier.",   // Description of the config value
+                    new AcceptableValueRange<float>(0.0f, 1.0f)));  // Permitted range of values              
 
             // Recall creature keyboard shortcut
             RecallKeyboardShortcut = Config.Bind("General",
@@ -57,7 +58,8 @@ namespace DaftAppleGames.CuddlefishRecall_SN
             RecallSwimVelocity = Config.Bind("General",
                 RecallSwimVelocityKey,
                 5.0f,
-                "The velocity at which the Cuddlefish will swim to the player.");
+                new ConfigDescription("The velocity at which the Cuddlefish will swim to the player.",
+                    new AcceptableValueRange<float>(1.0f, 10.0f)));
 
             // Patch in our MOD
             Harmony.PatchAll();
