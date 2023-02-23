@@ -2,7 +2,8 @@
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
-using DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours;
+using DaftAppleGames.SeatruckRecall_BZ.AutoPilot;
+using DaftAppleGames.SeatruckRecall_BZ.DockRecaller;
 using HarmonyLib;
 using UnityEngine;
 
@@ -39,7 +40,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ
 
         // Static global list of SeaTruck Docking Recall modules
         internal static List<SeaTruckDockRecaller> AllDockRecallers = new List<SeaTruckDockRecaller>();
-        internal static List<SeaTruckAutoPilot> AllSeaTruckAutoPilots = new List<SeaTruckAutoPilot>();
+        internal static List<BaseAutoPilot> AllSeaTruckAutoPilots = new List<AutoPilot.BaseAutoPilot>();
 
         private static readonly Harmony Harmony = new Harmony(MyGuid);
 
@@ -110,7 +111,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ
         /// Register a Seatruck with the recaller
         /// </summary>
         /// <param name="seatruck"></param>
-        internal static void RegisterAutoPilot(SeaTruckAutoPilot autoPilot)
+        internal static void RegisterAutoPilot(BaseAutoPilot autoPilot)
         {
             SeaTruckDockRecallPlugin.Log.LogDebug("Registering SeaTruckAutoPilot...");
             AllSeaTruckAutoPilots.Add(autoPilot);
@@ -121,7 +122,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ
         /// Unregister a Seatruck with the recaller
         /// </summary>
         /// <param name="seatruck"></param>
-        internal static void UnRegisterAutoPilot(SeaTruckAutoPilot autoPilot)
+        internal static void UnRegisterAutoPilot(BaseAutoPilot autoPilot)
         {
             SeaTruckDockRecallPlugin.Log.LogInfo("Unregistering SeaTruckAutoPilot...");
             AllSeaTruckAutoPilots.Remove(autoPilot);
@@ -132,7 +133,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ
         /// Return the current list of SeaTruckAutoPilots
         /// </summary>
         /// <returns></returns>
-        internal static List<SeaTruckAutoPilot> GetAllAutoPilots()
+        internal static List<BaseAutoPilot> GetAllAutoPilots()
         {
             return AllSeaTruckAutoPilots;
         }
