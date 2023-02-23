@@ -1,4 +1,4 @@
-﻿using DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours;
+﻿using DaftAppleGames.SeatruckRecall_BZ.DockRecaller;
 using HarmonyLib;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.Patches
@@ -61,13 +61,24 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
 
         [HarmonyPatch(nameof(MoonpoolExpansionManager.AllowedToDock))]
         [HarmonyPostfix]
-        internal static void AllowedToDockPostfix(MoonpoolExpansionManager __instance, ref bool __result)
+        internal static void AllowedToDockPostfix(MoonpoolExpansionManager __instance, Dockable dockable, ref bool __result)
         {
             SeaTruckDockRecaller dockRecaller = __instance.GetComponent<SeaTruckDockRecaller>();
             if (dockRecaller)
             {
-                SeaTruckDockRecallPlugin.Log.LogDebug($"Allowed to dock returned: {__result}.");
-                __result = true;
+                __result = !(dockable == null) && !(dockable.truckSegment == null) && !__instance.IsOccupied() && !(__instance.exitingTruck != null)
+                           
+                           && !__instance.DockingBlockersInTheWay() &&
+                           (__instance.isLoading || __instance.IsPowered())
+                           && (__instance.isLoading || !__instance.CheckIfSeatruckModulePresent(__instance.tailDockingPosition.position));
+                if (__result)
+                {
+                    SeaTruckDockRecallPlugin.Log.LogDebug("Allowed to dock is true.");
+                }
+                else
+                {
+                    SeaTruckDockRecallPlugin.Log.LogDebug("Allowed to dock is false.");
+                }
             }
         }
 
@@ -75,9 +86,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
         /// Keep the Recall Dock status updated - when docking complete
         /// </summary>
         /// <param name="__instance"></param>
-        [HarmonyPatch(nameof(MoonpoolExpansionManager.OnDockingTimelineCompleted))]
+        [HarmonyPatch(nameof(MoonpoolExpansionManager.StartDocking))]
         [HarmonyPostfix]
-        internal static void OnDockingTimelineCompletedPostfix(MoonpoolExpansionManager __instance)
+        internal static void StartDockingPostfix(MoonpoolExpansionManager __instance)
         {
             SeaTruckDockRecallPlugin.Log.LogDebug("Docking......");
             SeaTruckDockRecaller dockRecaller = __instance.GetComponent<SeaTruckDockRecaller>();
@@ -92,9 +103,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
         /// Keep the Recall Dock status updated - when un-docking complete
         /// </summary>
         /// <param name="__instance"></param>
-        [HarmonyPatch(nameof(MoonpoolExpansionManager.OnUndockingTimelineCompleted))]
+        [HarmonyPatch(nameof(MoonpoolExpansionManager.StartUndocking))]
         [HarmonyPostfix]
-        internal static void OnUndockingTimelineCompletedPostfix(MoonpoolExpansionManager __instance)
+        internal static void StartUndockingPostfix(MoonpoolExpansionManager __instance)
         {
             SeaTruckDockRecallPlugin.Log.LogDebug("Undocking......");
             SeaTruckDockRecaller dockRecaller = __instance.GetComponent<SeaTruckDockRecaller>();
