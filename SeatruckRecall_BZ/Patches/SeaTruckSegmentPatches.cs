@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
-using DaftAppleGames.SeatruckRecall_BZ.MonoBehaviours;
+using DaftAppleGames.SeatruckRecall_BZ.AutoPilot;
+using DaftAppleGames.SeatruckRecall_BZ.Navigation;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.Patches
 {
@@ -28,7 +29,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
                     SeaTruckDockRecallPlugin.Log.LogInfo("Adding SeaTruckAutopilot component...");
                     SeaTruckAutoPilot newAutoPilot = __instance.gameObject.AddComponent<SeaTruckAutoPilot>();
                     SeaTruckDockRecallPlugin.Log.LogInfo(
-                        $"Added SeaTruckAutopilot component to {__instance.gameObject.name}!");
+                    $"Added SeaTruckAutopilot component to {__instance.gameObject.name}!");
 
                     // Register the new AutoPilot component with all registered Dock Recallers
                     SeaTruckDockRecallPlugin.RegisterAutoPilot(newAutoPilot);
@@ -38,6 +39,14 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
                     WaypointNavigation waypointNav = __instance.gameObject.AddComponent<WaypointNavigation>();
                     SeaTruckDockRecallPlugin.Log.LogInfo(
                         $"Added WaypointNavigation component to {__instance.gameObject.name}!");
+
+                    // Add the RigidBody based NavMovement component
+                    SeaTruckDockRecallPlugin.Log.LogInfo("Adding NavMovement component...");
+                    INavMovement newNavMovement = __instance.gameObject.AddComponent<RigidbodyNavMovement>();
+                    // INavMovement newNavMovement = __instance.gameObject.AddComponent<TeleportNavMovement>();
+                    // INavMovement newNavMovement = __instance.gameObject.AddComponent<TransformNavMovement>();
+                    SeaTruckDockRecallPlugin.Log.LogInfo(
+                        $"Added NavMovement component to {__instance.gameObject.name}!");
                 }
             }
         }

@@ -76,11 +76,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MonoBehaviours\Waypoint.cs" />
-    <Compile Include="MonoBehaviours\WaypointNavigation.cs" />
-    <Compile Include="MonoBehaviours\SeaTruckDockRecaller.cs" />
-    <Compile Include="MonoBehaviours\SeaTruckDockRecallerUi.cs" />
-    <Compile Include="MonoBehaviours\SeaTruckAutoPilot.cs" />
+    <Compile Include="AutoPilot\SeaTruckAutoPilot.cs" />
+    <Compile Include="Navigation\TeleportNavMovement.cs" />
+    <Compile Include="Navigation\TransformNavMovement.cs" />
+    <Compile Include="Navigation\Waypoint.cs" />
+    <Compile Include="Navigation\WaypointNavigation.cs" />
+    <Compile Include="DockRecaller\SeaTruckDockRecaller.cs" />
+    <Compile Include="DockRecaller\SeaTruckDockRecallerUi.cs" />
+    <Compile Include="AutoPilot\BaseAutoPilot.cs" />
+    <Compile Include="Navigation\BaseNavMovement.cs" />
+    <Compile Include="Navigation\INavMovement.cs" />
+    <Compile Include="Navigation\RigidbodyNavMovement.cs" />
     <Compile Include="Utils\GlobalUtils.cs" />
     <Compile Include="Patches\MoonpoolExpansionManagerPatches.cs" />
     <Compile Include="Patches\SeaTruckSegmentPatches.cs" />
