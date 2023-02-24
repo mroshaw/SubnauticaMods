@@ -7,21 +7,18 @@ using UnityEngine.Events;
 namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
 {
     // Recaller Status
-    internal enum DockRecallStatus
+    internal enum DockRecallState
     {
         None,
-        Docked,
-        DockClear,
-        DockBlocked,
-        RecallInProgress,
-        RecallAborted,
-        NoSeaTrucks,
+        Ready,
         NoneInRange,
-        FoundClosestSeaTruck
+        Recalling,
+        Aborted,
+        Docked
     }
 
     // Unity Event to publish DockRecallStatus changes
-    internal class DockRecallStatusChangedEvent : UnityEvent<DockRecallStatus>
+    internal class DockRecallStatusChangedEvent : UnityEvent<DockRecallState, AutoPilotState, Waypoint>
     {
     }
 
@@ -40,15 +37,17 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         private MoonpoolExpansionManager _dockingManager;
 
         // Internal tracking and audit
-        private DockRecallStatus _currentRecallStatus = DockRecallStatus.None;
-        private DockRecallStatus _previousRecallStatus = DockRecallStatus.None;
-        private AutoPilot.BaseAutoPilot _currentRecallAutoPilot;
+        private DockRecallState _currentRecallState = DockRecallState.None;
+        private DockRecallState _previousRecallState;
+        private BaseAutoPilot _currentRecallAutoPilot;
+        private AutoPilotState _currentAutoPilotState;
+        private Waypoint _currentWaypoint;
 
         // Internal fields
         private List<Waypoint> _dockingWaypoints;
 
         // Event publishing latest recall state and distance
-        internal DockRecallStatusChangedEvent OnDockRecallStatusChangedEvent = new DockRecallStatusChangedEvent();
+        internal DockRecallStatusChangedEvent OnRecallStateChanged = new DockRecallStatusChangedEvent();
 
         /// <summary>
         /// Initialise the component
@@ -63,9 +62,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
 
             // Set up the docking waypoints
             CreateWaypoints();
-
-            // Check if dock entrance is clear
-            IsDockEntranceClear();
         }
 
         /// <summary>
@@ -129,35 +125,48 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
                 RecallClosestSeatruck();
             }
 
-            if (UpdateRecallStatus())
-            {
-                RecallStatusChanged();
-            }
+            CheckState();
         }
 
         /// <summary>
         /// Checks for changes in the recall status
         /// </summary>
         /// <returns></returns>
-        private bool UpdateRecallStatus()
+        private void CheckState()
         {
-            if (_previousRecallStatus == _currentRecallStatus)
+            if (_previousRecallState != _currentRecallState)
             {
-                return false;
+                _previousRecallState = _currentRecallState;
+                StateOrWaypointChanged();
             }
-            _previousRecallStatus = _currentRecallStatus;
-            return true;
         }
-
+    
         /// <summary>
         /// Called whenever state changes
         /// </summary>
-        private void RecallStatusChanged()
+        private void StateOrWaypointChanged()
         {
-            // Update any listeners
-            if (OnDockRecallStatusChangedEvent != null)
+            // Handle case when AutoPilot is docked
+            switch (_currentAutoPilotState)
             {
-                OnDockRecallStatusChangedEvent.Invoke(_currentRecallStatus);
+                case AutoPilotState.Arrived:
+                    _currentRecallState = DockRecallState.Docked;
+                    _currentRecallAutoPilot.OnAutopilotStatusChanged.RemoveAllListeners();
+                    break;
+                case AutoPilotState.Moving:
+                case AutoPilotState.WaypointReached:
+                    _currentRecallState = DockRecallState.Recalling;
+                    break;
+                case AutoPilotState.RouteBlocked:
+                case AutoPilotState.WaypointBlocked:
+                    _currentRecallState = DockRecallState.Aborted;
+                    break;
+            }
+
+            // Update any listeners
+            if (OnRecallStateChanged != null)
+            {
+                OnRecallStateChanged.Invoke(_currentRecallState, _currentAutoPilotState, _currentWaypoint);
             }
         }
 
@@ -168,11 +177,11 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         {
             if (IsDockOccupied())
             {
-                _currentRecallStatus = DockRecallStatus.Docked;
+                _currentRecallState = DockRecallState.Docked;
             }
             else
             {
-                _currentRecallStatus = DockRecallStatus.DockClear;
+                _currentRecallState = DockRecallState.Ready;
             }
         }
 
@@ -191,7 +200,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         /// </summary>
         internal void SetDocked()
         {
-            _currentRecallStatus = DockRecallStatus.Docked;
+            _currentRecallState = DockRecallState.Docked;
         }
 
         /// <summary>
@@ -199,14 +208,25 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         /// </summary>
         internal void SetUndocked()
         {
-            _currentRecallStatus = DockRecallStatus.DockClear;
+            _currentRecallState = DockRecallState.Ready;
+        }
+
+        /// <summary>
+        /// Handle Waypoint change
+        /// </summary>
+        /// <param name="waypoint"></param>
+        private void AutoPilotStateChangedHandler(AutoPilotState autoPilotState, Waypoint waypoint)
+        {
+            _currentAutoPilotState = autoPilotState;
+            _currentWaypoint = waypoint;
+            StateOrWaypointChanged();
         }
 
         /// <summary>
         /// Public method to recall the closest Seatruck
         /// </summary>
         /// <returns></returns>
-        internal bool RecallClosestSeatruck()
+        internal void RecallClosestSeatruck()
         {
             SeaTruckDockRecallPlugin.Log.LogDebug("Finding closest Seatruck...");
             _currentRecallAutoPilot = GetClosestSeaTruck();
@@ -214,42 +234,13 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
             {
                 // Couldn't find a closest Seatruck
                 SeaTruckDockRecallPlugin.Log.LogDebug("No Seatrucks found!");
-
-                return false;
+                _currentRecallState = DockRecallState.NoneInRange;
+                return;
             }
-
-            // TODO
-            // Set the Recall status
-            SeaTruckDockRecallPlugin.Log.LogDebug("Recalling to dock...");
-            _currentRecallStatus = DockRecallStatus.RecallInProgress;
 
             // Recall the SeaTruck
+            _currentRecallAutoPilot.OnAutopilotStatusChanged.AddListener(AutoPilotStateChangedHandler);
             _currentRecallAutoPilot.BeginNavigation(_dockingWaypoints);
-
-            return true;
-        }
-
-        /// <summary>
-        /// Uses an OverlapSphere to see if there is enough room in front of the dock
-        /// for the autopilot to manoeuvre
-        /// </summary>
-        /// <returns></returns>
-        private bool IsDockEntranceClear()
-        {
-            Vector3 entrancePosition =  gameObject.transform.position + (-gameObject.transform.right * 50.0f);
-            Collider[] allColliders = Physics.OverlapSphere(entrancePosition, 25.0f);
-            foreach (Collider collider in allColliders)
-            {
-                SeaTruckDockRecallPlugin.Log.LogInfo($"Found this Collider in dock entrance sphere: {collider.gameObject.name}");
-            }
-
-            GameObject testSphereGo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            testSphereGo.name = "EntranceSphere";
-            testSphereGo.transform.position = entrancePosition;
-            testSphereGo.transform.localScale = new Vector3(25.0f, 25.0f, 25.0f);
-
-
-            return true;
         }
 
         /// <summary>
@@ -269,7 +260,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
             if (allSeaTrucks.Count == 0)
             {
                 SeaTruckDockRecallPlugin.Log.LogInfo("No Seatrucks registered.");
-                _currentRecallStatus = DockRecallStatus.NoSeaTrucks;
+                _currentRecallState = DockRecallState.NoneInRange;
 
                 return null;
             }
@@ -304,12 +295,10 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
             if (closestSeaTruck == null)
             {
                 SeaTruckDockRecallPlugin.Log.LogInfo($"No SeaTrucks found within range!");
-                _currentRecallStatus = DockRecallStatus.NoneInRange;
             }
             else
             {
                 SeaTruckDockRecallPlugin.Log.LogInfo($"Closest Seatruck found: {closestSeaTruck.gameObject.name} at {closestDistance}");
-                _currentRecallStatus = DockRecallStatus.FoundClosestSeaTruck;
             }
             
             return closestSeaTruck;
