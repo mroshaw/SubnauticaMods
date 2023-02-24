@@ -5,14 +5,17 @@ using UnityEngine.Events;
 namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 {
     // Manages state of full Waypoint navigation process
-    internal enum NavigationState
+    internal enum NavState
     {
-        Stopped,
-        Blocked,
-        Paused,
+        None,
+        Idle,
         Moving,
+        Paused,
+        Stopped,
         WaypointReached,
-        FinalWaypointReached
+        Arrived,
+        WaypointBlocked,
+        RouteBlocked,
     };
 
     /// <summary>
@@ -22,8 +25,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
     /// </summary>
     internal class WaypointNavigation : MonoBehaviour
     {
-        // Unity Event class to publish Waypoint changes
-        internal class WaypointChangedEvent : UnityEvent<Waypoint>
+        internal class NavStateChangedEvent : UnityEvent<NavState, Waypoint>
         {
         }
 
@@ -31,17 +33,22 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         internal List<Waypoint> Waypoints { get; set; }
         private INavMovement _navMovement;
 
-        // Event to subscribe
-        internal WaypointChangedEvent OnWaypointChangedEvent = new WaypointChangedEvent();
+        // Events to publish current state of Navigation
+        internal NavStateChangedEvent OnNavStateChanged = new NavStateChangedEvent();
         internal int StartingWaypointIndex = 0;
 
         // Internal tracking fields
         private int _currentWaypointIndex;
         private int _totalWaypoints;
         
-        // Current Waypoint
+        // Waypoint tracking
+        private Waypoint _previousWaypoint;
         private Waypoint _currentWaypoint;
-        internal NavigationState NavState { get; set; }
+
+        // Navigation state
+        private NavState _currentNavState = NavState.None;
+        private NavState _previousNavState;
+
         private bool _currentMoveComplete;
         private bool _currentRotateComplete;
 
@@ -69,7 +76,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         private void ResetState()
         {
             _currentWaypointIndex = 0;
-            NavState = NavigationState.Stopped;
+            _currentNavState = NavState.None;
         }
 
         /// <summary>
@@ -78,7 +85,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// </summary>
         internal void Update()
         {
-            ManageStateUpdate();
+            SetNextState();
+            CheckState();
         }
 
         /// <summary>
@@ -93,26 +101,26 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// <summary>
         /// Handles the state transitions
         /// </summary>
-        private void ManageStateUpdate()
+        private void SetNextState()
         {
-            switch (NavState)
+            switch (_currentNavState)
             {
-                case NavigationState.Stopped:
-                case NavigationState.FinalWaypointReached:
+                case NavState.Stopped:
+                case NavState.Arrived:
                     return;
 
-                case NavigationState.WaypointReached:
+                case NavState.WaypointReached:
                     if (!NoMoreWaypoints())
                     {
                         SeaTruckDockRecallPlugin.Log.LogDebug("Moving to next waypoint.");
                         NextWaypoint();
-                        NavState = NavigationState.Moving;
+                        _currentNavState = NavState.Moving;
                     }
                     else
                     {
                         SeaTruckDockRecallPlugin.Log.LogDebug("Final Waypoint Reached.");
-                        NavState = NavigationState.FinalWaypointReached;
                         StopNavigation();
+                        _currentNavState = NavState.Arrived;
                     }
                     break;
 
@@ -126,9 +134,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// </summary>
         private void ManageMoveUpdate()
         {
-            switch (NavState)
+            switch (_currentNavState)
             {
-                case NavigationState.Moving:
+                case NavState.Moving:
                     MoveToWaypointUpdate();
                     break;
 
@@ -145,10 +153,10 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             ResetState();
             _totalWaypoints = Waypoints.Count;
             _currentWaypointIndex = StartingWaypointIndex -1;
-            NavState = NavigationState.Moving;
+            _currentNavState = NavState.Moving;
+            SeaTruckDockRecallPlugin.Log.LogDebug("Starting Waypoint Navigation...");
             _navMovement.PreNavigate();
             NextWaypoint();
-            SeaTruckDockRecallPlugin.Log.LogDebug("Starting Waypoint Navigation...");
         }
 
         /// <summary>
@@ -156,9 +164,32 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// </summary>
         internal void PauseNavigation()
         {
-            if (NavState == NavigationState.Moving)
+            if (_currentNavState == NavState.Moving)
             {
-                NavState = NavigationState.Paused;
+                _currentNavState = NavState.Paused;
+            }
+        }
+
+        /// <summary>
+        /// Check for changes in status and trigger event
+        /// </summary>
+        private void CheckState()
+        {
+            if (_currentNavState != _previousNavState)
+            {
+                _previousNavState = _currentNavState;
+                StateOrWaypointChanged();
+            }
+        }
+
+        /// <summary>
+        /// Handle a change to Event State or Waypoints
+        /// </summary>
+        private void StateOrWaypointChanged()
+        {
+            if (OnNavStateChanged != null)
+            {
+                OnNavStateChanged.Invoke(_currentNavState, _currentWaypoint);
             }
         }
 
@@ -173,7 +204,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         internal void StopNavigation()
         {
             ResetState();
-            NavState = NavigationState.Stopped;
+            _currentNavState = NavState.Stopped;
             _navMovement.PostNavigate();
         }
 
@@ -198,10 +229,30 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
                 return false;
             }
 
+            // Update waypoint
+            _previousWaypoint = _currentWaypoint;
             _currentWaypoint = Waypoints[_currentWaypointIndex];
-            OnWaypointChangedEvent.Invoke(_currentWaypoint);
+
+            // Publish Waypoint change event
+            StateOrWaypointChanged();
+
+            // Reset Waypoint nav status
             _currentMoveComplete = false;
             _currentRotateComplete = false;
+
+            /*
+            if (!IsWaypointClear(_currentWaypoint, 25.0f))
+            {
+                _currentNavState = NavState.WaypointBlocked;
+                return false;
+            }
+
+            if (!IsPathToWaypointClear(gameObject.transform, _currentWaypoint, 25.0f))
+            {
+                _currentNavState = NavState.RouteBlocked;
+                return false;
+            }
+            */
             return true;
         }
 
@@ -213,7 +264,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             if (_currentMoveComplete && _currentRotateComplete)
             {
                 SeaTruckDockRecallPlugin.Log.LogDebug($"Waypoint {_currentWaypointIndex} complete.");
-                NavState = NavigationState.WaypointReached;
+                _currentNavState = NavState.WaypointReached;
             }
 
             // Move to current waypoint
@@ -265,6 +316,49 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
                 SeaTruckDockRecallPlugin.Log.LogDebug($"Waypoint {_currentWaypointIndex} rotation complete.");
                 _currentRotateComplete = true;
             }
+        }
+
+        /// <summary>
+        /// Uses an OverlapSphere to see if there is enough room in front of the dock
+        /// for the autopilot to manoeuvre
+        /// </summary>
+        /// <returns></returns>
+        private bool IsWaypointClear(Waypoint waypoint, float radius)
+        {
+            Vector3 position = waypoint.Transform.position;
+            Collider[] allColliders = Physics.OverlapSphere(position, radius);
+            foreach (Collider collider in allColliders)
+            {
+                SeaTruckDockRecallPlugin.Log.LogInfo($"Found this Collider in waypoint radius: {collider.gameObject.name}");
+            }
+
+            /*
+            GameObject testSphereGo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            testSphereGo.name = "WaypointSphere";
+            testSphereGo.transform.position = position;
+            testSphereGo.transform.localScale = new Vector3(25.0f, 25.0f, 25.0f);
+            */
+            return true;
+        }
+
+        /// <summary>
+        /// Uses a SphereCast to see if the path between two waypoints is clear
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <param name="radius"></param>
+        /// <returns></returns>
+        private bool IsPathToWaypointClear(Transform source, Waypoint targetWaypoint, float radius)
+        {
+            float distance = Vector3.Distance(source.position, targetWaypoint.Transform.position);
+            Vector3 direction = (targetWaypoint.Transform.position - source.position).normalized;
+
+            if (Physics.SphereCast(source.position, radius, direction, out RaycastHit hit, distance))
+            {
+                SeaTruckDockRecallPlugin.Log.LogInfo($"Found this Collider from current position to this Waypoint {targetWaypoint.Name}: {hit.collider.gameObject.name}");
+            }
+
+            return true;
         }
     }
 }
