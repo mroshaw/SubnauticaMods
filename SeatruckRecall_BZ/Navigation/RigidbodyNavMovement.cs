@@ -30,7 +30,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         {
             _distanceToTarget = Vector3.Distance(SourceTransform.position, targetTransform.position);
             _currentDirection = (targetTransform.position - SourceTransform.position).normalized;
-
             if (_distanceToTarget > SlowDistance)
             {
                 _sourceRigidbody.velocity = _currentDirection * MoveSpeed;
@@ -54,7 +53,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         {
             Vector3 torque = ComputeRotationTorque(targetTransform);
             _sourceRigidbody.AddTorque(torque, ForceMode.Impulse);
-
             if (IsRotationComplete(targetTransform))
             {
                 RotationCompleted(targetTransform);
@@ -110,6 +108,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
                     allRigidBodies[bodyNum].drag = 0.0f;
                 }
             }
+
+            UWE.Utils.SetIsKinematicAndUpdateInterpolation(_sourceRigidbody, false, false);
         }
 
         /// <summary>
