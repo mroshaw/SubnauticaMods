@@ -60,11 +60,36 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
         [HarmonyPostfix]
         internal static void OnDestroyPostfix(SeaTruckSegment __instance)
         {
-            SeaTruckAutoPilot newAutoPilot = __instance.GetComponent<SeaTruckAutoPilot>();
-            if (newAutoPilot)
+            SeaTruckAutoPilot autoPilot = __instance.GetComponent<SeaTruckAutoPilot>();
+            if (autoPilot)
             {
-                SeaTruckDockRecallPlugin.UnRegisterAutoPilot(newAutoPilot);
+                SeaTruckDockRecallPlugin.UnRegisterAutoPilot(autoPilot);
             }
+        }
+
+        /// <summary>
+        /// Patch UpdateKinematicState, to prevent the Rigidbody being disabled
+        /// </summary>
+        /// <param name="__instance"></param>
+        [HarmonyPatch(nameof(SeaTruckSegment.UpdateKinematicState))]
+        [HarmonyPrefix]
+        internal static bool UpdateKinematicStatePrefix(SeaTruckSegment __instance)
+        {
+            SeaTruckDockRecallPlugin.Log.LogInfo($"In UpdateKinematicState....{__instance.gameObject.name}");
+
+            SeaTruckSegment firstSegment = __instance.GetFirstSegment();
+            SeaTruckAutoPilot autoPilot = firstSegment.GetComponent<SeaTruckAutoPilot>();
+            if (autoPilot)
+            {
+                if (true) //autoPilot.AutoPilotEnabled)
+                {
+                    SeaTruckDockRecallPlugin.Log.LogInfo("Overriding UpdateKinematicState....");
+                    UWE.Utils.SetIsKinematicAndUpdateInterpolation(firstSegment.rb, false, false);
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
