@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DaftAppleGames.Common.Utils;
 using DaftAppleGames.SeatruckRecall_BZ.AutoPilot;
 using DaftAppleGames.SeatruckRecall_BZ.Navigation;
 using UnityEngine;
@@ -14,7 +15,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         NoneInRange,
         Recalling,
         Aborted,
-        Docked
+        Docked,
+        PirateDetected
     }
 
     // Unity Event to publish DockRecallStatus changes
@@ -119,12 +121,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         /// </summary>
         internal void Update()
         {
-            // DEBUG ONLY!!!
-            if (SeaTruckDockRecallPlugin.RecallKeyboardShortcut.Value.IsDown())
-            {
-                RecallClosestSeatruck();
-            }
-
             CheckState();
         }
 
@@ -146,23 +142,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         /// </summary>
         private void StateOrWaypointChanged()
         {
-            // Handle case when AutoPilot is docked
-            switch (_currentAutoPilotState)
-            {
-                case AutoPilotState.Arrived:
-                    _currentRecallState = DockRecallState.Docked;
-                    _currentRecallAutoPilot.OnAutopilotStatusChanged.RemoveAllListeners();
-                    break;
-                case AutoPilotState.Moving:
-                case AutoPilotState.WaypointReached:
-                    _currentRecallState = DockRecallState.Recalling;
-                    break;
-                case AutoPilotState.RouteBlocked:
-                case AutoPilotState.WaypointBlocked:
-                    _currentRecallState = DockRecallState.Aborted;
-                    break;
-            }
-
             // Update any listeners
             if (OnRecallStateChanged != null)
             {
@@ -217,8 +196,26 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         /// <param name="waypoint"></param>
         private void AutoPilotStateChangedHandler(AutoPilotState autoPilotState, Waypoint waypoint)
         {
+            SeaTruckDockRecallPlugin.Log.LogDebug($"DockRecaller.AutoPilotStateChangedHandler: {autoPilotState}.");
             _currentAutoPilotState = autoPilotState;
             _currentWaypoint = waypoint;
+
+            // Handle case when AutoPilot is docked
+            switch (_currentAutoPilotState)
+            {
+                case AutoPilotState.Arrived:
+                    _currentRecallState = DockRecallState.Docked;
+                    _currentRecallAutoPilot.OnAutopilotStatusChanged.RemoveAllListeners();
+                    break;
+                case AutoPilotState.Moving:
+                case AutoPilotState.WaypointReached:
+                    _currentRecallState = DockRecallState.Recalling;
+                    break;
+                case AutoPilotState.RouteBlocked:
+                case AutoPilotState.WaypointBlocked:
+                    _currentRecallState = DockRecallState.Aborted;
+                    break;
+            }
             StateOrWaypointChanged();
         }
 
@@ -228,6 +225,13 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         /// <returns></returns>
         internal void RecallClosestSeatruck()
         {
+            // Check for pirate
+            if (GlobalUtils.IsPirate())
+            {
+                _currentRecallState = DockRecallState.PirateDetected;
+                return;
+            }
+
             SeaTruckDockRecallPlugin.Log.LogDebug("Finding closest Seatruck...");
             _currentRecallAutoPilot = GetClosestSeaTruck();
             if (_currentRecallAutoPilot == null)
@@ -272,9 +276,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
             {
                 // Check if already docked
                 SeaTruckSegment segment = seatruck.GetComponent<SeaTruckSegment>();
-                if (segment.isDocked)
+                if (segment.isDocked || seatruck.AutoPilotEnabled)
                 {
-                    SeaTruckDockRecallPlugin.Log.LogInfo($"Seatruck {seatruck.gameObject.name} is already docked. Skipping...");
+                    SeaTruckDockRecallPlugin.Log.LogInfo($"Seatruck {seatruck.gameObject.name} is already docking or docked. Skipping...");
                     continue;
                 }
 

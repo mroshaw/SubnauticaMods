@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System;
+using DaftAppleGames.SeatruckRecall_BZ;
 using UnityEngine;
 
-namespace DaftAppleGames.SeatruckRecall_BZ.Utils
+namespace DaftAppleGames.Common.Utils
 {
     /// <summary>
     /// Class of global useful static mod utilities

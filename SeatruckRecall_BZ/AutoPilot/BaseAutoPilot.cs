@@ -80,9 +80,15 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
 
             // Start navigation
             SeaTruckDockRecallPlugin.Log.LogDebug("AutoPilot engaged...");
+            AutoPilotEnabled = true;
             _waypointNav.StartNavigation();
 
             return true;
+        }
+
+        internal void EndNavigation()
+        {
+            AutoPilotEnabled = false;
         }
 
         /// <summary>
@@ -115,16 +121,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
             {
                 OnAutopilotStatusChanged.Invoke(_currentAutoPilotState, _currentWaypoint);
             }
-
-            switch (_currentAutoPilotState)
-            {
-                case AutoPilotState.Ready:
-                    AutoPilotEnabled = true;
-                    break;
-                default:
-                    AutoPilotEnabled = false;
-                    break;
-            }
         }
 
         /// <summary>
@@ -132,6 +128,26 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
         /// </summary>
         private void SetNextState()
         {
+            switch (_currentAutoPilotState)
+            {
+                case AutoPilotState.Arrived:
+                    EndNavigation();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Handle Waypoint change
+        /// </summary>
+        /// <param name="waypoint"></param>
+        private void NavStateChangedHandler(NavState navState, Waypoint waypoint)
+        {
+            SeaTruckDockRecallPlugin.Log.LogDebug($"AutoPilot.NavStateChangeHandler: {navState}.");
+            _currentWaypoint = waypoint;
+            _currentNavState = navState;
+
             // Handle the various SeaTruck states
             switch (_currentNavState)
             {
@@ -154,16 +170,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
                 default:
                     return;
             }
-        }
-
-        /// <summary>
-        /// Handle Waypoint change
-        /// </summary>
-        /// <param name="waypoint"></param>
-        private void NavStateChangedHandler(NavState navState, Waypoint waypoint)
-        {
-            _currentWaypoint = waypoint;
-            _currentNavState = navState;
             StateOrWaypointChanged();
         }
     }

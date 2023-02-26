@@ -1,4 +1,5 @@
 ﻿using DaftAppleGames.SeatruckRecall_BZ.DockRecaller;
+using DaftAppleGames.SeatruckRecall_BZ.DockRecaller.Ui;
 using HarmonyLib;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.Patches

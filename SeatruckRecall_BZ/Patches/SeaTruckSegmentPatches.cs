@@ -81,7 +81,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
             SeaTruckAutoPilot autoPilot = firstSegment.GetComponent<SeaTruckAutoPilot>();
             if (autoPilot)
             {
-                if (true) //autoPilot.AutoPilotEnabled)
+                if (autoPilot.AutoPilotEnabled)
                 {
                     SeaTruckDockRecallPlugin.Log.LogInfo("Overriding UpdateKinematicState....");
                     UWE.Utils.SetIsKinematicAndUpdateInterpolation(firstSegment.rb, false, false);

@@ -82,17 +82,18 @@
     <Compile Include="Navigation\Waypoint.cs" />
     <Compile Include="Navigation\WaypointNavigation.cs" />
     <Compile Include="DockRecaller\SeaTruckDockRecaller.cs" />
-    <Compile Include="DockRecaller\SeaTruckDockRecallerUi.cs" />
+    <Compile Include="DockRecaller\Ui\SeaTruckDockRecallerUi.cs" />
     <Compile Include="AutoPilot\BaseAutoPilot.cs" />
     <Compile Include="Navigation\BaseNavMovement.cs" />
     <Compile Include="Navigation\INavMovement.cs" />
     <Compile Include="Navigation\RigidbodyNavMovement.cs" />
-    <Compile Include="Utils\GlobalUtils.cs" />
+    <Compile Include="Common\Utils\GlobalUtils.cs" />
     <Compile Include="Patches\MoonpoolExpansionManagerPatches.cs" />
     <Compile Include="Patches\SeaTruckSegmentPatches.cs" />
     <Compile Include="SeaTruckDockRecallPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\SeatruckRecallUtils.cs" />
+    <Compile Include="Common\Ui\UiUtils.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
