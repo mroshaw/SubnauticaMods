@@ -36,6 +36,9 @@ namespace CreaturePetMod_SN.MonoBehaviours
             set => _petCreatureType = value;
         }
 
+        /// <summary>
+        /// Add a listener for the input spawn key pressed event
+        /// </summary>
         public void OnEnable()
         {
             // Subscribe to the Input Manager
@@ -44,14 +47,6 @@ namespace CreaturePetMod_SN.MonoBehaviours
             {
                 inputManager.ButtonPressedEvent.AddListener(SpawnPet);
             }
-        }
-
-        /// <summary>
-        /// Unity Awake method.
-        /// </summary>
-        public void Awake()
-        {
-
         }
 
         /// <summary>
@@ -154,8 +149,8 @@ namespace CreaturePetMod_SN.MonoBehaviours
             {
                 case PetCreatureType.CaveCrawler:
                     return TechType.CaveCrawler;
-                case PetCreatureType.RockGrub:
-                    return TechType.Rockgrub;
+                case PetCreatureType.BloodCrawler:
+                    return TechType.Shuttlebug;
                 default:
                     return TechType.None;
             }

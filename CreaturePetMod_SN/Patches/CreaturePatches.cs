@@ -19,6 +19,11 @@ namespace CreaturePetMod_SN.Patches
         [HarmonyPostfix]
         public static void Start_PostFix(Creature __instance)
         {
+            // If already a pet, move on
+            if (__instance.GetComponent<Pet>())
+            {
+                return;
+            }
             // Get the creatures PrefabId
             string loadedPrefabId = __instance.gameObject.GetComponent<PrefabIdentifier>().Id;
 
@@ -31,6 +36,7 @@ namespace CreaturePetMod_SN.Patches
                 pet.PetName = petDetails.PetName;
                 pet.PetCreatureType = petDetails.PetType;
                 pet.PetSaverDetails = petDetails;
+                __instance.gameObject.name = $"{__instance.gameObject.name}_Pet";
             }
         }
 

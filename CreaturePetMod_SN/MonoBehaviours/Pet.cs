@@ -1,11 +1,14 @@
-﻿using System;
+﻿using mset;
+using System;
 using UnityEngine;
 using static CreaturePetMod_SN.CreaturePetMod_SNPlugin;
 
 namespace CreaturePetMod_SN.MonoBehaviours
 {
-    public enum PetCreatureType { CaveCrawler, RockGrub }
-    public enum PetName { Anise, Beethoven, Bitey, Buddy, Cheerio, Clifford, Denali, Fuzzy, Gandalf, Hera, Jasper, Juju, Kovu, Lassie, Lois, Meera, Mochi, Oscar, Picasso, Ranger, Sampson, Shadow, Sprinkles, Stinky, Tobin, Wendy, Zola }
+    public enum PetCreatureType { CaveCrawler, BloodCrawler }
+    public enum PetName { Anise, Beethoven, Bitey, Buddy, Cheerio, Clifford, Denali, Fuzzy, Gandalf,
+        Grob, Hera, Jasper, Juju, Kovu, Lassie, Lois, Meera, Mochi, Oscar, Picasso, Ranger, Sampson, 
+        Shadow, Sprinkles, Stinky, Tobin, Wendy, Zola }
 
     // TODO Review this file and update to your own requirements, or remove it altogether if not required
     /// <summary>
@@ -63,6 +66,11 @@ namespace CreaturePetMod_SN.MonoBehaviours
             AddNewComponents();
             Log.LogDebug($"Pet: Adding new Pet components... Done.");
 
+            Log.LogDebug($"Pet: Configure components...");
+            ConfigureSkyApplier();
+            Log.LogDebug($"Pet: Configure components... Done.");
+
+
         }
 
         /// <summary>
@@ -105,6 +113,22 @@ namespace CreaturePetMod_SN.MonoBehaviours
             Log.LogDebug($"Pet: Adding PetHandTarget component...");
             gameObject.AddComponent<PetHandTarget>();
             Log.LogDebug($"Pet: Adding PetHandTarget component... Done.");
+        }
+
+        /// <summary>
+        /// Configures the Sky and SkyApplier, to ensure
+        /// creature mesh shaders don't look "dull".
+        /// </summary>
+        private void ConfigureSkyApplier()
+        {
+            SkyApplier skyApplier = gameObject.GetComponent<SkyApplier>();
+            if (!skyApplier)
+            {
+                skyApplier = gameObject.AddComponent<SkyApplier>();
+            }
+            Log.LogDebug($"Pet: Configuring Sky and SkyApplier...");
+            skyApplier.SetSky(Skies.BaseInterior);
+            Log.LogDebug($"Pet: Configuring Sky and SkyApplier... Done.");
         }
     }
 }
