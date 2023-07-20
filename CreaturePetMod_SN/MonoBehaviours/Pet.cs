@@ -20,9 +20,13 @@ namespace CreaturePetMod_SN.MonoBehaviours
         // Private pet info
         private PetCreatureType _petCreatureType;
         private PetName _petName;
+        private MoveOnSurface _moveOnSurface;
+        private Animator _animator;
 
         // Used to keep tabs on saved pets
         private PetSaver.PetDetails _petSaverDetails;
+
+        private bool _isFollowingPlayer = false;
 
         /// <summary>
         /// Public getter and setter for PetCreatureType
@@ -57,6 +61,18 @@ namespace CreaturePetMod_SN.MonoBehaviours
         public void Start()
         {
             Log.LogDebug($"Pet: In Pet.Start on parent Game Object: {gameObject.name}");
+
+            _moveOnSurface = GetComponent<MoveOnSurface>();
+            if (!_moveOnSurface)
+            {
+                Log.LogDebug("Pet: No MoveOnSurface component found, so no beckoning.");
+            }
+
+            _animator = GetComponent<Animator>();
+            if (!_animator)
+            {
+                Log.LogDebug($"PetHandTarget: No animator found, so no pet animations will play");
+            }
 
             Log.LogDebug($"Pet: Cleaning up components...");
             CleanUpComponents();
@@ -129,6 +145,52 @@ namespace CreaturePetMod_SN.MonoBehaviours
             Log.LogDebug($"Pet: Configuring Sky and SkyApplier...");
             skyApplier.SetSky(Skies.BaseInterior);
             Log.LogDebug($"Pet: Configuring Sky and SkyApplier... Done.");
+        }
+
+        /// <summary>
+        /// Play a pet animation
+        /// </summary>
+        public void PlayAnimation()
+        {
+            if (_animator)
+            {
+                _animator.SetTrigger("flinch");
+            }
+            else
+            {
+                Log.LogDebug("Pet: No animator found, so can't play animation.");
+            }
+        }
+
+        /// <summary>
+        /// Move the pet towards the player location
+        /// </summary>
+        public void WalkToPlayer()
+        {
+            if (_moveOnSurface)
+            {
+                _moveOnSurface.walkBehaviour.GoToInternal(Player.main.transform.position, (Player.main.transform.position - transform.position).normalized, _moveOnSurface.moveVelocity);
+            }
+            else
+            {
+                Log.LogDebug("Pet: No MoveOnSurface, so can't walk to player");
+            }
+        }
+
+        /// <summary>
+        /// Pet will follow the player until told to stop
+        /// </summary>
+        public void FollowPlayer()
+        {
+            _isFollowingPlayer = true;
+        }
+
+        /// <summary>
+        /// Stop following the player
+        /// </summary>
+        public void StopFollowingPlayer()
+        {
+            _isFollowingPlayer = false;
         }
     }
 }

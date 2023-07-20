@@ -12,19 +12,18 @@ namespace CreaturePetMod_SN.MonoBehaviours
         // Useful pointer to pet component
         private Pet _pet;
 
+
         /// <summary>
         /// Initialise the component
         /// </summary>
         public void Start()
         {
+            Log.LogDebug($"PetHandTarget: In PetHandTarget.Start on parent Game Object: {gameObject.name}");
+
             _pet = GetComponent<Pet>();
             if (!_pet)
             {
                 Log.LogError("PetHandTarget: GameObject MUST have a Pet component!");
-            }
-            else
-            {
-                Log.LogDebug($"Pet: In PetHandTarget.Start on parent Game Object: {gameObject.name}");
             }
         }
 
@@ -46,7 +45,8 @@ namespace CreaturePetMod_SN.MonoBehaviours
             if (Player.main.GetRightHandDown())
             {
                 // Walk towards the player
-                // pet.WalkToPlayerWithDelay();
+                Log.LogDebug("PetHandTarget: Walking to player...");
+                _pet.WalkToPlayer();
                 return;
             }
 
@@ -68,7 +68,8 @@ namespace CreaturePetMod_SN.MonoBehaviours
             }
 
             // Play random animation
-
+            Log.LogDebug("PetHandTarget: Playing animation...");
+            _pet.PlayAnimation();
         }
     }
 }
