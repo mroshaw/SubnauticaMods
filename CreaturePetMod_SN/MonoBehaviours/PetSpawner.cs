@@ -151,6 +151,10 @@ namespace CreaturePetMod_SN.MonoBehaviours
                     return TechType.CaveCrawler;
                 case PetCreatureType.BloodCrawler:
                     return TechType.Shuttlebug;
+                case PetCreatureType.CrabSquid:
+                    return TechType.CrabSquid;
+                case PetCreatureType.AlienRobot:
+                    return TechType.PrecursorDroid;
                 default:
                     return TechType.None;
             }

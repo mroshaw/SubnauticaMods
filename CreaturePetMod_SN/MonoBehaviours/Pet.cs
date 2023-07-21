@@ -5,15 +5,14 @@ using static CreaturePetMod_SN.CreaturePetMod_SNPlugin;
 
 namespace CreaturePetMod_SN.MonoBehaviours
 {
-    public enum PetCreatureType { CaveCrawler, BloodCrawler }
+    public enum PetCreatureType { CaveCrawler, BloodCrawler, CrabSquid, AlienRobot }
     public enum PetName { Anise, Beethoven, Bitey, Buddy, Cheerio, Clifford, Denali, Fuzzy, Gandalf,
         Grob, Hera, Jasper, Juju, Kovu, Lassie, Lois, Meera, Mochi, Oscar, Picasso, Ranger, Sampson, 
         Shadow, Sprinkles, Stinky, Tobin, Wendy, Zola }
 
-    // TODO Review this file and update to your own requirements, or remove it altogether if not required
+
     /// <summary>
-    /// Template MonoBehaviour class. Use this to add new functionality and behaviours to
-    /// the game.
+    /// MonoBehaviour component providing Pet behaviours and properties
     /// </summary>
     public class Pet : MonoBehaviour
     {
