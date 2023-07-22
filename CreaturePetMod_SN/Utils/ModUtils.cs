@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using BepInEx.Configuration;
-using CreaturePetMod_SN.MonoBehaviours;
+using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours;
+using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets;
 using UnityEngine;
-using static CreaturePetMod_SN.CreaturePetMod_SNPlugin;
+using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
+using Object = UnityEngine.Object;
 
-namespace CreaturePetMod_SN.Utils
+namespace DaftAppleGames.CreaturePetMod_SN.Utils
 {
     /// <summary>
     /// Static utilities class for common functions and properties to be used within your mod code
@@ -28,7 +30,7 @@ namespace CreaturePetMod_SN.Utils
         /// <param name="newKeyboardShortcut"></param>
         internal static void UpdateSpawnKeyboardShortcut(KeyboardShortcut newKeyboardShortcut)
         {
-            ModInputManager inputManager = GameObject.FindObjectOfType<ModInputManager>();
+            ModInputManager inputManager = Object.FindObjectOfType<ModInputManager>();
             if (inputManager != null)
             {
                 inputManager.KeyboardShortcut = newKeyboardShortcut;
@@ -45,7 +47,7 @@ namespace CreaturePetMod_SN.Utils
         /// <param name="newPetType"></param>
         internal static void UpdatePetType(PetCreatureType newPetType)
         {
-            PetSpawner petSpawner = GameObject.FindObjectOfType<PetSpawner>();
+            PetSpawner petSpawner = Object.FindObjectOfType<PetSpawner>();
             if (petSpawner != null)
             {
                 petSpawner.PetCreatureType = newPetType;
@@ -62,7 +64,7 @@ namespace CreaturePetMod_SN.Utils
         /// <param name="newPetName"></param>
         internal static void UpdatePetName(PetName newPetName)
         {
-            PetSpawner petSpawner = GameObject.FindObjectOfType<PetSpawner>();
+            PetSpawner petSpawner = Object.FindObjectOfType<PetSpawner>();
             if (petSpawner != null)
             {
                 petSpawner.PetName = newPetName;

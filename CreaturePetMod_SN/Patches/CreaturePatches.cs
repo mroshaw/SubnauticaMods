@@ -1,8 +1,10 @@
-﻿using CreaturePetMod_SN.MonoBehaviours;
+﻿using CreaturePetMod_SN.Utils;
+using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours;
+using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets;
 using HarmonyLib;
-using static CreaturePetMod_SN.CreaturePetMod_SNPlugin;
+using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
 
-namespace CreaturePetMod_SN.Patches
+namespace DaftAppleGames.CreaturePetMod_SN.Patches
 {
     /// <summary>
     /// Patches Creature methods, to ensure we add the Pet component
@@ -32,9 +34,7 @@ namespace CreaturePetMod_SN.Patches
             PetSaver.PetDetails petDetails = Saver.GetPetDetailsWithPrefabId(loadedPrefabId);
             if (petDetails != null)
             {
-                Pet pet = __instance.gameObject.AddComponent<Pet>();
-                pet.PetName = petDetails.PetName;
-                pet.PetCreatureType = petDetails.PetType;
+                Pet pet = PetUtils.AddPetComponent(__instance.gameObject, petDetails.PetType, petDetails.PetName);
                 pet.PetSaverDetails = petDetails;
                 __instance.gameObject.name = $"{__instance.gameObject.name}_Pet";
             }
@@ -51,6 +51,5 @@ namespace CreaturePetMod_SN.Patches
                 Saver.RemovePet(pet);
             }
         }
-
     }
 }

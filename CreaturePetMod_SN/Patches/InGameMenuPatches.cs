@@ -1,8 +1,7 @@
-﻿using CreaturePetMod_SN.MonoBehaviours;
-using HarmonyLib;
-using static CreaturePetMod_SN.CreaturePetMod_SNPlugin;
+﻿using HarmonyLib;
+using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
 
-namespace CreaturePetMod_SN.Patches
+namespace DaftAppleGames.CreaturePetMod_SN.Patches
 {
     /// <summary>
     /// Patches to support loading and saving of Pets details

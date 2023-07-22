@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System;
+using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets;
 using Newtonsoft.Json;
 using UnityEngine;
-using static CreaturePetMod_SN.CreaturePetMod_SNPlugin;
+using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
 
-namespace CreaturePetMod_SN.MonoBehaviours
+namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
 {
     /// <summary>
     /// Load and Save pet details alongside save games
@@ -58,10 +59,8 @@ namespace CreaturePetMod_SN.MonoBehaviours
             {
                 return prefabIdentifier.Id;
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         /// <summary>
@@ -130,7 +129,7 @@ namespace CreaturePetMod_SN.MonoBehaviours
             Log.LogDebug($"PetSaver: Saving {saveFile}...");
 
             // Serialize to JSON and write the save file
-            string serializedJson = JsonConvert.SerializeObject(newSave, Newtonsoft.Json.Formatting.Indented);
+            string serializedJson = JsonConvert.SerializeObject(newSave, Formatting.Indented);
             File.WriteAllText(saveFile, serializedJson);
             Log.LogDebug($"PetSaver: Saved {saveFile}.");
         }
@@ -178,8 +177,8 @@ namespace CreaturePetMod_SN.MonoBehaviours
         /// </summary>
         public class PetDetails
         {
-            public string PrefabId { get; set; }
-            public PetName PetName { get; set; }
+            public string PrefabId { get; }
+            public PetName PetName { get; }
             public PetCreatureType PetType { get; set; }
 
 

@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using static CreaturePetMod_SN.CreaturePetMod_SNPlugin;
+﻿using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets;
+using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
 
-namespace CreaturePetMod_SN.MonoBehaviours
+namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
 {
     /// <summary>
     /// Template MonoBehaviour class. Use this to add new functionality and behaviours to
@@ -46,7 +46,7 @@ namespace CreaturePetMod_SN.MonoBehaviours
             {
                 // Walk towards the player
                 Log.LogDebug("PetHandTarget: Walking to player...");
-                _pet.WalkToPlayer();
+                _pet.MoveToPlayer();
                 return;
             }
 

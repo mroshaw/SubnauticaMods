@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace CreaturePetMod_SN.MonoBehaviours
+namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
 {
     /// <summary>
     /// Simple MonoBehavior to monitor for key presses. Uses the legacy Unity input system.

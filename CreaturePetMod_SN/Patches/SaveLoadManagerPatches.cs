@@ -1,7 +1,6 @@
 ﻿using System.Collections;
-using CreaturePetMod_SN.MonoBehaviours;
 using HarmonyLib;
-using static CreaturePetMod_SN.CreaturePetMod_SNPlugin;
+using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
 
 namespace CreaturePetMod_SN.Patches
 {

@@ -1,8 +1,10 @@
 ﻿using System.Collections;
+using CreaturePetMod_SN.Utils;
+using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets;
 using UnityEngine;
-using static CreaturePetMod_SN.CreaturePetMod_SNPlugin;
+using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
 
-namespace CreaturePetMod_SN.MonoBehaviours
+namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
 {
     /// <summary>
     /// Template MonoBehaviour class. Use this to add new functionality and behaviours to
@@ -69,7 +71,7 @@ namespace CreaturePetMod_SN.MonoBehaviours
                 {
                     if (CheckPetSpawnLocation(desiredSpawnLocation))
                     {
-                        Log.LogDebug($"Preparing to Spawn!");
+                        Log.LogDebug("Preparing to Spawn!");
                         InstantiatePet(desiredSpawnLocation);
                     }
                 }
@@ -108,18 +110,18 @@ namespace CreaturePetMod_SN.MonoBehaviours
 
             if (techType == TechType.None)
             {
-                Log.LogDebug($"Failed to instantiate! Invalid TechType detected");
+                Log.LogDebug("Failed to instantiate! Invalid TechType detected");
                 yield break;
             }
-            Log.LogDebug($"Instantiating Pet...");
+            Log.LogDebug("Instantiating Pet...");
             CoroutineTask<GameObject> task = CraftData.GetPrefabForTechTypeAsync(techType);
             yield return task;
             GameObject newCreaturePrefab = task.GetResult();
             GameObject newCreatureGameObject = Instantiate(newCreaturePrefab);
 
             // Add the Pet component and configure name and type
-            Log.LogDebug($"Adding Pet component...");
-            Pet newPet = newCreatureGameObject.AddComponent<Pet>();
+            Log.LogDebug("Adding Pet component...");
+            Pet newPet = PetUtils.AddPetComponent(newCreatureGameObject, _petCreatureType, _petName);
             newPet.PetCreatureType = _petCreatureType;
             newPet.PetName = _petName;
 
@@ -129,13 +131,13 @@ namespace CreaturePetMod_SN.MonoBehaviours
             newCreatureGameObject.name = $"{newCreatureGameObject.name}_Pet";
 
             // Register pet with the saver
-            Log.LogDebug($"Pet: Registering new Pet...");
+            Log.LogDebug("Pet: Registering new Pet...");
             newPet.RegisterNewPet();
-            Log.LogDebug($"Pet: Registering new Pet... Done.");
+            Log.LogDebug("Pet: Registering new Pet... Done.");
 
             Log.LogDebug($"Instantiated {_petCreatureType} at {spawnLocation} as {newCreatureGameObject.name}");
             ErrorMessage.AddMessage($"Welcome your new pet {_petCreatureType},  {_petName}!");
-            Log.LogDebug($"Done!");
+            Log.LogDebug("Done!");
         }
 
         /// <summary>
@@ -169,11 +171,11 @@ namespace CreaturePetMod_SN.MonoBehaviours
             if(!_player.IsInBase())
             {
                 _spawnFailReason = "Player must be in a base to spawn a pet.";
-                Log.LogDebug($"CheckPlayerSpawnConditions: Player is not in base.");
+                Log.LogDebug("CheckPlayerSpawnConditions: Player is not in base.");
 
                 return false;
             }
-            Log.LogDebug($"CheckPlayerSpawnConditions: Spawning conditions met.");
+            Log.LogDebug("CheckPlayerSpawnConditions: Spawning conditions met.");
             return true;
         }
 
@@ -191,11 +193,9 @@ namespace CreaturePetMod_SN.MonoBehaviours
                 _spawnFailReason = $"There is blocking the spawn location: {hit.collider.gameObject.name}";
                 return false;
             }
-            else
-            {
-                Log.LogDebug($"CheckPetSpawnLocation: Linecast has found no objects in it's path.");
-                return true;
-            }
+
+            Log.LogDebug("CheckPetSpawnLocation: Linecast has found no objects in it's path.");
+            return true;
         }
 
         /// <summary>
@@ -217,12 +217,10 @@ namespace CreaturePetMod_SN.MonoBehaviours
                 Log.LogDebug($"GetSpawnLocation: Location on ground has been found: {spawnPosition}.");
                 return true;
             }
-            else
-            {
-                Log.LogDebug($"GetSpawnLocation: Could not find location on ground.");
-                return false;
-            }
-            
+
+            Log.LogDebug("GetSpawnLocation: Could not find location on ground.");
+            return false;
+
         }
 
         /// <summary>
@@ -230,6 +228,7 @@ namespace CreaturePetMod_SN.MonoBehaviours
         /// the given samplePosition.
         /// </summary>
         /// <param name="samplePosition"></param>
+        /// <param name="groundPosition"></param>
         /// <returns></returns>
         private bool GetGroundPosition(Vector3 samplePosition, out Vector3 groundPosition)
         {
@@ -241,12 +240,10 @@ namespace CreaturePetMod_SN.MonoBehaviours
                 Log.LogDebug($"GetGroundPosition: Raycast hit ground: {groundPosition}.");
                 return true;
             }
-            else
-            {
-                Log.LogDebug($"GetGroundPosition: Raycast did not hit ground.");
-                groundPosition = new Vector3();
-                return false;
-            }
+
+            Log.LogDebug("GetGroundPosition: Raycast did not hit ground.");
+            groundPosition = new Vector3();
+            return false;
         }
     }
 }
