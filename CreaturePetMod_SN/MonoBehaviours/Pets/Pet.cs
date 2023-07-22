@@ -1,9 +1,7 @@
-﻿using mset;
-using System;
-using UnityEngine;
-using static CreaturePetMod_SN.CreaturePetMod_SNPlugin;
+﻿using UnityEngine;
+using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
 
-namespace CreaturePetMod_SN.MonoBehaviours
+namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
 {
     public enum PetCreatureType { CaveCrawler, BloodCrawler, CrabSquid, AlienRobot }
     public enum PetName { Anise, Beethoven, Bitey, Buddy, Cheerio, Clifford, Denali, Fuzzy, Gandalf,
@@ -12,9 +10,10 @@ namespace CreaturePetMod_SN.MonoBehaviours
 
 
     /// <summary>
-    /// MonoBehaviour component providing Pet behaviours and properties
+    /// MonoBehaviour component providing Pet behaviours and properties.
+    /// Acts as a base to be inherited by Creature specific classes
     /// </summary>
-    public class Pet : MonoBehaviour
+    public abstract class Pet : MonoBehaviour, IPet
     {
         // Private pet info
         private PetCreatureType _petCreatureType;
@@ -25,7 +24,7 @@ namespace CreaturePetMod_SN.MonoBehaviours
         // Used to keep tabs on saved pets
         private PetSaver.PetDetails _petSaverDetails;
 
-        private bool _isFollowingPlayer = false;
+        private bool _isFollowingPlayer;
 
         /// <summary>
         /// Public getter and setter for PetCreatureType
@@ -57,7 +56,7 @@ namespace CreaturePetMod_SN.MonoBehaviours
         /// <summary>
         /// Unity Start method
         /// </summary>
-        public void Start()
+        public virtual void Start()
         {
             Log.LogDebug($"Pet: In Pet.Start on parent Game Object: {gameObject.name}");
 
@@ -70,22 +69,20 @@ namespace CreaturePetMod_SN.MonoBehaviours
             _animator = GetComponent<Animator>();
             if (!_animator)
             {
-                Log.LogDebug($"PetHandTarget: No animator found, so no pet animations will play");
+                Log.LogDebug("PetHandTarget: No animator found, so no pet animations will play");
             }
 
-            Log.LogDebug($"Pet: Cleaning up components...");
-            CleanUpComponents();
-            Log.LogDebug($"Pet: Cleaning up components... Done.");
+            Log.LogDebug("Pet: Cleaning up components...");
+            RemoveComponents();
+            Log.LogDebug("Pet: Cleaning up components... Done.");
 
-            Log.LogDebug($"Pet: Adding new Pet components...");
-            AddNewComponents();
-            Log.LogDebug($"Pet: Adding new Pet components... Done.");
+            Log.LogDebug("Pet: Adding new Pet components...");
+            AddComponents();
+            Log.LogDebug("Pet: Adding new Pet components... Done.");
 
-            Log.LogDebug($"Pet: Configure components...");
-            ConfigureSkyApplier();
-            Log.LogDebug($"Pet: Configure components... Done.");
-
-
+            Log.LogDebug("Pet: Configure components...");
+            UpdateComponents();
+            Log.LogDebug("Pet: Configure components... Done.");
         }
 
         /// <summary>
@@ -108,26 +105,36 @@ namespace CreaturePetMod_SN.MonoBehaviours
         /// <summary>
         /// Removes unwanted components
         /// </summary>
-        private void CleanUpComponents()
+        public virtual void RemoveComponents()
         {
-            Log.LogDebug($"Pet: Removing Pickupable component...");
+            Log.LogDebug("Pet: Removing Pickupable component...");
             Pickupable pickupable = gameObject.GetComponent<Pickupable>();
             if (pickupable)
             {
-                Log.LogDebug($"Pet: Destroying Pickupable component...");
+                Log.LogDebug("Pet: Destroying Pickupable component...");
                 Destroy(pickupable);
             }
-            Log.LogDebug($"Pet: Removing Pickupable component... Done.");
+            Log.LogDebug("Pet: Removing Pickupable component... Done.");
         }
 
         /// <summary>
         /// Add new pet specific components
         /// </summary>
-        private void AddNewComponents()
+        public virtual void AddComponents()
         {
-            Log.LogDebug($"Pet: Adding PetHandTarget component...");
+            Log.LogDebug("Pet: Adding PetHandTarget component...");
             gameObject.AddComponent<PetHandTarget>();
-            Log.LogDebug($"Pet: Adding PetHandTarget component... Done.");
+            Log.LogDebug("Pet: Adding PetHandTarget component... Done.");
+        }
+
+        /// <summary>
+        /// Updates pet specific components
+        /// </summary>
+        public virtual void UpdateComponents()
+        {
+            Log.LogDebug("Pet: Configuring Sky and SkyApplier...");
+            ConfigureSkyApplier();
+            Log.LogDebug("Pet: Configuring Sky and SkyApplier... Done.");
         }
 
         /// <summary>
@@ -141,15 +148,14 @@ namespace CreaturePetMod_SN.MonoBehaviours
             {
                 skyApplier = gameObject.AddComponent<SkyApplier>();
             }
-            Log.LogDebug($"Pet: Configuring Sky and SkyApplier...");
+
             skyApplier.SetSky(Skies.BaseInterior);
-            Log.LogDebug($"Pet: Configuring Sky and SkyApplier... Done.");
         }
 
         /// <summary>
         /// Play a pet animation
         /// </summary>
-        public void PlayAnimation()
+        public virtual void PlayAnimation()
         {
             if (_animator)
             {
@@ -164,7 +170,7 @@ namespace CreaturePetMod_SN.MonoBehaviours
         /// <summary>
         /// Move the pet towards the player location
         /// </summary>
-        public void WalkToPlayer()
+        public void MoveToPlayer()
         {
             if (_moveOnSurface)
             {
