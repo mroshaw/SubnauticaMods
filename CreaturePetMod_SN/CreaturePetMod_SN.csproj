@@ -77,10 +77,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MonoBehaviours\Pets\AlienRobotPet.cs" />
+    <Compile Include="MonoBehaviours\Pets\BloodCrawlerPet.cs" />
+    <Compile Include="MonoBehaviours\Pets\CaveCrawlerPet.cs" />
     <Compile Include="MonoBehaviours\PetSaver.cs" />
     <Compile Include="MonoBehaviours\PetHandTarget.cs" />
     <Compile Include="MonoBehaviours\ModInputManager.cs" />
-    <Compile Include="MonoBehaviours\Pet.cs" />
+    <Compile Include="MonoBehaviours\Pets\CrabSquidPet.cs" />
+    <Compile Include="MonoBehaviours\Pets\IPet.cs" />
+    <Compile Include="MonoBehaviours\Pets\Pet.cs" />
     <Compile Include="MonoBehaviours\PetSpawner.cs" />
     <Compile Include="Patches\CreaturePatches.cs" />
     <Compile Include="Patches\InGameMenuPatches.cs" />

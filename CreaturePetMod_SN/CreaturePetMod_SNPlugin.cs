@@ -1,17 +1,19 @@
-﻿using BepInEx;
+﻿using System;
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
-using CreaturePetMod_SN.MonoBehaviours;
-using CreaturePetMod_SN.Utils;
+using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours;
+using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets;
+using DaftAppleGames.CreaturePetMod_SN.Utils;
 using HarmonyLib;
 using UnityEngine;
 
-namespace CreaturePetMod_SN
+namespace DaftAppleGames.CreaturePetMod_SN
 {
     // TODO Review this file and update to your own requirements.
 
     [BepInPlugin(MyGUID, PluginName, VersionString)]
-    public class CreaturePetMod_SNPlugin : BaseUnityPlugin
+    public class CreaturePetModSnPlugin : BaseUnityPlugin
     {
         // Mod specific details. MyGUID should be unique, and follow the reverse domain pattern
         // e.g.
@@ -90,7 +92,7 @@ namespace CreaturePetMod_SN
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ConfigSettingChanged(object sender, System.EventArgs e)
+        private void ConfigSettingChanged(object sender, EventArgs e)
         {
             SettingChangedEventArgs settingChangedEventArgs = e as SettingChangedEventArgs;
 
@@ -126,7 +128,6 @@ namespace CreaturePetMod_SN
                 PetName newPetName = (PetName)settingChangedEventArgs.ChangedSetting.BoxedValue;
                 Log.LogDebug("Updating pet name...");
                 ModUtils.UpdatePetName(newPetName);
-                return;
             }
 
         }
