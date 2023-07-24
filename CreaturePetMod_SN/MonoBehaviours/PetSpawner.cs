@@ -47,7 +47,8 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
             ModInputManager inputManager = GetComponent<ModInputManager>();
             if (inputManager != null)
             {
-                inputManager.ButtonPressedEvent.AddListener(SpawnPet);
+                inputManager.SpawnButtonPressedEvent.AddListener(SpawnPet);
+                inputManager.KillAllButtonPressedEvent.AddListener(KillAllPets);
             }
         }
 
@@ -136,7 +137,7 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
             Log.LogDebug("Pet: Registering new Pet... Done.");
 
             Log.LogDebug($"Instantiated {_petCreatureType} at {spawnLocation} as {newCreatureGameObject.name}");
-            ErrorMessage.AddMessage($"Welcome your new pet {_petCreatureType},  {_petName}!");
+            newPet.Born();
             Log.LogDebug("Done!");
         }
 
@@ -244,6 +245,18 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
             Log.LogDebug("GetGroundPosition: Raycast did not hit ground.");
             groundPosition = new Vector3();
             return false;
+        }
+
+        /// <summary>
+        /// Kills all spawned pets
+        /// </summary>
+        public void KillAllPets()
+        {
+            Pet[] allPets = FindObjectsOfType<Pet>();
+            foreach (Pet pet in allPets)
+            {
+                pet.Kill();
+            }
         }
     }
 }
