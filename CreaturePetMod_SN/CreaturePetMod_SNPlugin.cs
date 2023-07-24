@@ -29,11 +29,13 @@ namespace DaftAppleGames.CreaturePetMod_SN
         // These will appear in the config file created by BepInEx and can also be used
         // by the OnSettingsChange event to determine which setting has changed.
         public static string SpawnKeyboardShortcutKey = "Spawn Keyboard Shortcut";
+        public static string KillAllKeyboardShortcutKey = "Kill All Keyboard Shortcut";
         public static string PetCreatureTypeKey = "Pet Creature Type";
         public static string PetNameKey = "Pet Name";
 
         // Configuration entries. Static, so can be accessed directly elsewhere in code via
         public static ConfigEntry<KeyboardShortcut> SpawnKeyboardShortcutConfig;
+        public static ConfigEntry<KeyboardShortcut> KillAllKeyboardShortcutConfig;
         public static ConfigEntry<PetCreatureType> PetCreatureTypeConfig;
         public static ConfigEntry<PetName> PetNameConfig;
 
@@ -47,12 +49,20 @@ namespace DaftAppleGames.CreaturePetMod_SN
         /// </summary>
         private void Awake()
         {
-            // Keyboard shortcut setting example
+            // Spawn keyboard setting
             SpawnKeyboardShortcutConfig = Config.Bind("Keyboard Settings",
                 SpawnKeyboardShortcutKey,
                 new KeyboardShortcut(KeyCode.Keypad0, KeyCode.LeftControl));
 
             SpawnKeyboardShortcutConfig.SettingChanged += ConfigSettingChanged;
+
+            // Kill all keyboard setting
+            KillAllKeyboardShortcutConfig = Config.Bind("Keyboard Settings",
+                KillAllKeyboardShortcutKey,
+                new KeyboardShortcut(KeyCode.K, KeyCode.LeftControl));
+
+            KillAllKeyboardShortcutConfig.SettingChanged += ConfigSettingChanged;
+
 
             PetCreatureTypeConfig = Config.Bind("Pet Settings",
                 PetCreatureTypeKey,
@@ -102,13 +112,24 @@ namespace DaftAppleGames.CreaturePetMod_SN
                 return;
             }
 
-            // Update Input Managers if shortcut is changed
+            // Update Input Managers if Spawn shortcut is changed
             if (settingChangedEventArgs.ChangedSetting.Definition.Key == SpawnKeyboardShortcutKey)
             {
                 KeyboardShortcut newKeyboardShortcut =
                     (KeyboardShortcut)settingChangedEventArgs.ChangedSetting.BoxedValue;
                 Log.LogDebug("Updating keyboard shortcut...");
                 ModUtils.UpdateSpawnKeyboardShortcut(newKeyboardShortcut);
+                return;
+
+            }
+
+            // Update Input Managers if Kill All shortcut is changed
+            if (settingChangedEventArgs.ChangedSetting.Definition.Key == KillAllKeyboardShortcutKey)
+            {
+                KeyboardShortcut newKeyboardShortcut =
+                    (KeyboardShortcut)settingChangedEventArgs.ChangedSetting.BoxedValue;
+                Log.LogDebug("Updating Kill All keyboard shortcut...");
+                ModUtils.UpdateKillAllKeyboardShortcut(newKeyboardShortcut);
                 return;
 
             }
@@ -129,7 +150,6 @@ namespace DaftAppleGames.CreaturePetMod_SN
                 Log.LogDebug("Updating pet name...");
                 ModUtils.UpdatePetName(newPetName);
             }
-
         }
     }
 }

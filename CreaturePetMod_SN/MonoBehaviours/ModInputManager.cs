@@ -10,18 +10,25 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
     /// </summary>
     internal class ModInputManager : MonoBehaviour
     {
-        public UnityEvent ButtonPressedEvent = new UnityEvent();
+        public UnityEvent SpawnButtonPressedEvent = new UnityEvent();
+        public UnityEvent KillAllButtonPressedEvent = new UnityEvent();
 
         // Configurable keyCode to instigate action
 
-        private KeyboardShortcut _keyboardShortcut;
+        private KeyboardShortcut _spawnKeyboardShortcut;
+        private KeyboardShortcut _killAllKeyboardShortcut;
 
         /// <summary>
         /// Public setter
         /// </summary>
-        public KeyboardShortcut KeyboardShortcut
+        public KeyboardShortcut SpawnKeyboardShortcut
         {
-            set => _keyboardShortcut = value;
+            set => _spawnKeyboardShortcut = value;
+        }
+
+        public KeyboardShortcut KillAllKeyboardShortcut
+        {
+            set => _killAllKeyboardShortcut = value;
         }
 
         /// <summary>
@@ -29,9 +36,14 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
         /// </summary>
         public void Update()
         {
-            if (_keyboardShortcut.IsDown())
+            if (_spawnKeyboardShortcut.IsDown())
             {
-                ButtonPressedEvent.Invoke();
+                SpawnButtonPressedEvent.Invoke();
+            }
+
+            if (_killAllKeyboardShortcut.IsDown())
+            {
+                KillAllButtonPressedEvent.Invoke();
             }
         }
     }
