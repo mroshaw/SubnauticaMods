@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using DaftAppleGames.CreaturePetMod_SN.Utils;
+using UnityEngine;
 using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
 
 namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
@@ -15,12 +17,22 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
     /// </summary>
     public abstract class Pet : MonoBehaviour, IPet
     {
+        // Public properties
+
+        // Scale factor is set as the LocalScale of spawned gameobject
+        // across all axis
+        public abstract float ScaleFactor { get; }
+
         // Private pet info
         private PetCreatureType _petCreatureType;
         private PetName _petName;
         private MoveOnSurface _moveOnSurface;
+        private MoveOnGround _moveOnGround;
         private Animator _animator;
+        private Creature _creature;
 
+        private bool _canMove = false;
+        
         // Used to keep tabs on saved pets
         private PetSaver.PetDetails _petSaverDetails;
 
@@ -33,6 +45,22 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
         {
             set => _petCreatureType = value;
             get => _petCreatureType;
+        }
+
+        /// <summary>
+        /// Gets a "display friendly" version of the Pet Type
+        /// </summary>
+        public string PetTypeString
+        {
+            get => ModUtils.AddSpacesInCamelCase(_petCreatureType.ToString());
+        }
+
+        /// <summary>
+        /// Gets a "display friendly" version of the Pet Name
+        /// </summary>
+        public string PetNameString
+        {
+            get => ModUtils.AddSpacesInCamelCase(_petName.ToString());
         }
 
         /// <summary>
@@ -63,14 +91,40 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
             _moveOnSurface = GetComponent<MoveOnSurface>();
             if (!_moveOnSurface)
             {
-                Log.LogDebug("Pet: No MoveOnSurface component found, so no beckoning.");
+                Log.LogDebug("Pet: No MoveOnSurface component found.");
             }
 
-            _animator = GetComponent<Animator>();
+            _moveOnGround = GetComponent<MoveOnGround>();
+            if (!_moveOnGround)
+            {
+                Log.LogDebug("Pet: No MoveOnGround component found.");
+            }
+
+            _canMove = _moveOnGround || _moveOnSurface;
+
+            if (!_canMove)
+            {
+                Log.LogDebug("Pet: No ground movement behaviour found. Cannot move to player!");
+            }
+
+            _creature = gameObject.GetComponent<Creature>();
+            if (_creature)
+            {
+                _animator = _creature.GetAnimator();
+            }
+            else
+            {
+                Log.LogDebug("PetHandTarget: Couldn't find Creature component. Unable to find Animator.");
+            }
+
             if (!_animator)
             {
                 Log.LogDebug("PetHandTarget: No animator found, so no pet animations will play");
             }
+
+            Log.LogDebug($"Pet: Setting Pet Scale to {ScaleFactor}...");
+            SetScale();
+            Log.LogDebug($"Pet: Setting Pet Scale to {ScaleFactor}...");
 
             Log.LogDebug("Pet: Cleaning up components...");
             RemoveComponents();
@@ -83,6 +137,10 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
             Log.LogDebug("Pet: Configure components...");
             UpdateComponents();
             Log.LogDebug("Pet: Configure components... Done.");
+
+            Log.LogDebug("Pet: Refreshing creature actions...");
+            UpdateActions();
+            Log.LogDebug("Pet: Refreshing creature actions... Done.");
         }
 
         /// <summary>
@@ -107,14 +165,8 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
         /// </summary>
         public virtual void RemoveComponents()
         {
-            Log.LogDebug("Pet: Removing Pickupable component...");
-            Pickupable pickupable = gameObject.GetComponent<Pickupable>();
-            if (pickupable)
-            {
-                Log.LogDebug("Pet: Destroying Pickupable component...");
-                Destroy(pickupable);
-            }
-            Log.LogDebug("Pet: Removing Pickupable component... Done.");
+            ModUtils.DestroyComponentsInChildren<Pickupable>(gameObject);
+            Log.LogDebug("Pet: Destroying components... Done.");
         }
 
         /// <summary>
@@ -135,6 +187,23 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
             Log.LogDebug("Pet: Configuring Sky and SkyApplier...");
             ConfigureSkyApplier();
             Log.LogDebug("Pet: Configuring Sky and SkyApplier... Done.");
+        }
+
+        /// <summary>
+        /// Sets the pet scale
+        /// </summary>
+        private void SetScale()
+        {
+            gameObject.transform.localScale = new Vector3(ScaleFactor, ScaleFactor, ScaleFactor);
+        }
+
+        /// <summary>
+        /// Rescans the creature for valid actions. Used after adding or removing
+        /// new actions.
+        /// </summary>
+        private void UpdateActions()
+        {
+            _creature.ScanCreatureActions();
         }
 
         /// <summary>
@@ -175,14 +244,25 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
         /// </summary>
         public void MoveToPlayer()
         {
+            if (!_canMove)
+            {
+                Log.LogDebug("Pet: No movement component found, so can't walk to player");
+                return;
+            }
+
             if (_moveOnSurface)
             {
+                Log.LogDebug("Pet: Moving via MoveOnSurface");
                 _moveOnSurface.walkBehaviour.GoToInternal(Player.main.transform.position, (Player.main.transform.position - transform.position).normalized, _moveOnSurface.moveVelocity);
+                return;
             }
-            else
+
+            if (_moveOnGround)
             {
-                Log.LogDebug("Pet: No MoveOnSurface, so can't walk to player");
+                Log.LogDebug("Pet: Moving via MoveOnGround");
+                _moveOnGround.swimBehaviour.GoToInternal(Player.main.transform.position, (Player.main.transform.position - transform.position).normalized, _moveOnGround.swimVelocity);
             }
+            
         }
 
         /// <summary>
@@ -199,6 +279,28 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
         public void StopFollowingPlayer()
         {
             _isFollowingPlayer = false;
+        }
+
+        /// <summary>
+        /// Kills the pet by applying damage
+        /// </summary>
+        public void Kill()
+        {
+            LiveMixin liveMixin = GetComponent<LiveMixin>();
+            if (liveMixin)
+            {
+                liveMixin.Kill();
+                
+                ErrorMessage.AddMessage($"Goodbye, {PetNameString}! You've been the goodest {PetTypeString}!");
+            }
+        }
+
+        /// <summary>
+        /// Pet is "Born"
+        /// </summary>
+        public void Born()
+        {
+            ErrorMessage.AddMessage($"Welcome to your new {PetTypeString}, {PetNameString}!");
         }
     }
 }

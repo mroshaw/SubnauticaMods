@@ -7,6 +7,8 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
     /// </summary>
     internal class CaveCrawlerPet : Pet
     {
+        // Cave Crawler scale factor
+        public override float ScaleFactor => 1.0f;
         /// <summary>
         /// Add Creature specific components
         /// </summary>

@@ -7,6 +7,9 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
     /// </summary>
     internal class AlienRobotPet : Pet
     {
+        // Alien Robot scale factor
+        public override float ScaleFactor => 1.0f;
+
         /// <summary>
         /// Add Creature specific components
         /// </summary>

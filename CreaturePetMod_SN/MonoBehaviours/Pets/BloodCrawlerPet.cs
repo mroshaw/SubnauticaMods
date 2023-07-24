@@ -7,6 +7,9 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
     /// </summary>
     internal class BloodCrawlerPet : Pet
     {
+        // Blood Crawler scale factor
+        public override float ScaleFactor => 0.3f;
+
         /// <summary>
         /// Add Creature specific components
         /// </summary>
