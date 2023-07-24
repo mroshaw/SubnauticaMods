@@ -150,6 +150,9 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
             }
 
             skyApplier.SetSky(Skies.BaseInterior);
+
+            Renderer[] creatureRenderers = gameObject.GetComponentsInChildren<Renderer>();
+            skyApplier.renderers = creatureRenderers;
         }
 
         /// <summary>
