@@ -19,7 +19,8 @@ namespace DaftAppleGames.CreaturePetMod_SN.Patches
         {
             // Add and configure the InputManager component
             ModInputManager inputManager = __instance.gameObject.AddComponent<ModInputManager>();
-            inputManager.KeyboardShortcut = CreaturePetModSnPlugin.SpawnKeyboardShortcutConfig.Value;
+            inputManager.SpawnKeyboardShortcut = CreaturePetModSnPlugin.SpawnKeyboardShortcutConfig.Value;
+            inputManager.KillAllKeyboardShortcut = CreaturePetModSnPlugin.KillAllKeyboardShortcutConfig.Value;
 
             // Add and configure the PetSpawner component
             PetSpawner petSpawner =  __instance.gameObject.AddComponent<PetSpawner>();
