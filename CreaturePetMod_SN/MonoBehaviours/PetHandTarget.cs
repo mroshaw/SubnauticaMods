@@ -35,18 +35,18 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
         {
             HandReticle main = HandReticle.main;
 
-            // If hand is not free, allow the method to continue
-            if (!hand.IsFreeToInteract())
-            {
-                return;
-            }
-
             // Check for right mouse click
             if (Player.main.GetRightHandDown())
             {
                 // Walk towards the player
                 Log.LogDebug("PetHandTarget: Walking to player...");
                 _pet.MoveToPlayer();
+                return;
+            }
+
+            // If hand is not free, allow the method to continue
+            if (!hand.IsFreeToInteract())
+            {
                 return;
             }
 
@@ -62,6 +62,8 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
         /// <param name="hand"></param>
         public void OnHandClick(GUIHand hand)
         {
+            Log.LogDebug("PetHandTarget: In OnHandClick");
+
             if (!hand.IsFreeToInteract())
             {
                 return;
