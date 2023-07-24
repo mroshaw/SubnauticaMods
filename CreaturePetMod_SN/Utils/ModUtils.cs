@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using BepInEx.Configuration;
 using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours;
 using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets;
@@ -25,7 +26,7 @@ namespace DaftAppleGames.CreaturePetMod_SN.Utils
         }
 
         /// <summary>
-        /// Updates the InputManager shortcut key
+        /// Updates the InputManager Spawn shortcut key
         /// </summary>
         /// <param name="newKeyboardShortcut"></param>
         internal static void UpdateSpawnKeyboardShortcut(KeyboardShortcut newKeyboardShortcut)
@@ -33,7 +34,24 @@ namespace DaftAppleGames.CreaturePetMod_SN.Utils
             ModInputManager inputManager = Object.FindObjectOfType<ModInputManager>();
             if (inputManager != null)
             {
-                inputManager.KeyboardShortcut = newKeyboardShortcut;
+                inputManager.SpawnKeyboardShortcut = newKeyboardShortcut;
+            }
+            else
+            {
+                Log.LogDebug("UpdateSpawnKeyboardShortcut: Didn't find a ModInputManager");
+            }
+        }
+
+        /// <summary>
+        /// Updates the InputManager Kill All shortcut key
+        /// </summary>
+        /// <param name="newKeyboardShortcut"></param>
+        internal static void UpdateKillAllKeyboardShortcut(KeyboardShortcut newKeyboardShortcut)
+        {
+            ModInputManager inputManager = Object.FindObjectOfType<ModInputManager>();
+            if (inputManager != null)
+            {
+                inputManager.KillAllKeyboardShortcut = newKeyboardShortcut;
             }
             else
             {
@@ -76,58 +94,35 @@ namespace DaftAppleGames.CreaturePetMod_SN.Utils
         }
 
         /// <summary>
-        /// Class methods to check if game is likely a pirated version.
+        /// Destroys all child components of a given type
         /// </summary>
-        internal static class PirateCheck
+        /// <typeparam name="T"></typeparam>
+        internal static void DestroyComponentsInChildren<T>(GameObject gameObject)
         {
-            internal static string SteamApi => "steam_api64.dll";
-            internal static int SteamApiLength => 220000;
+            Log.LogDebug($"ModUtils: Destroying all components of type: {typeof(T)}");
+            var components = gameObject.GetComponentsInChildren<T>(true);
 
-            internal static string Folder = Environment.CurrentDirectory;
+            Log.LogDebug($"ModUtils: Found {components.Length} instances to destroy");
 
-            internal static readonly HashSet<string> CrackedFiles = new HashSet<string>
+            // Iterate through all child components and destroy them
+            foreach (var component in components)
             {
-                "steam_api64.cdx",
-                "steam_api64.ini",
-                "steam_emu.ini",
-                "valve.ini",
-                "SmartSteamEmu.ini",
-                "Subnautica_Data/Plugins/steam_api64.cdx",
-                "Subnautica_Data/Plugins/steam_api64.ini",
-                "Subnautica_Data/Plugins/steam_emu.ini",
-                "Profile/SteamUserID.cfg",
-                "Profile/Stats/Achievements.Bin",
-                "launcher.bat",
-                "chuj.cdx",
-            };
-
-            /// <summary>
-            /// Run various checks to detect pirated version of the game
-            /// </summary>
-            /// <returns></returns>
-            internal static bool IsPirate()
-            {
-                string steamDll = Path.Combine(Folder, SteamApi);
-                bool steamStore = File.Exists(steamDll);
-                if (steamStore)
-                {
-                    FileInfo fileInfo = new FileInfo(steamDll);
-                    if (fileInfo.Length > SteamApiLength)
-                    {
-                        return true;
-                    }
-                }
-
-                foreach (string file in CrackedFiles)
-                {
-                    if (File.Exists(Path.Combine(Folder, file)))
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
+                GameObject.Destroy(component as MonoBehaviour);
+                Log.LogDebug($"ModUtils: Destroyed: {component.GetType()}");
             }
+            Log.LogDebug($"ModUtils: Destroying all components of type: {typeof(T)}. Done.");
+        }
+
+        /// <summary>
+        /// Adds spaces in CaselCase strings.
+        /// So the above becomes "Camel Case".
+        /// Used to "prettify" enum strings, for example.
+        /// </summary>
+        /// <param name="enumString"></param>
+        /// <returns></returns>
+        internal static string AddSpacesInCamelCase(string enumString)
+        {
+            return Regex.Replace(enumString, "([A-Z])", " $1").Trim();
         }
     }
 }
