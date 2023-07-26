@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using HarmonyLib;
-using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
+using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
-namespace CreaturePetMod_SN.Patches
+namespace DaftAppleGames.CreaturePetModSn.Patches
 {
 
     /// <summary>

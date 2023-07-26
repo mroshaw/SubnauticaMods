@@ -1,9 +1,8 @@
-﻿using System;
-using DaftAppleGames.CreaturePetMod_SN.Utils;
+﻿using DaftAppleGames.CreaturePetModSn.Utils;
 using UnityEngine;
-using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
+using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
-namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
+namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets
 {
     public enum PetCreatureType { CaveCrawler, BloodCrawler, CrabSquid, AlienRobot }
     public enum PetName { Anise, Beethoven, Bitey, Buddy, Cheerio, Clifford, Denali, Fuzzy, Gandalf,

@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -77,6 +79,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigOptions\PetModConfig.cs" />
+    <Compile Include="Utils\PetFabricatorUtils.cs" />
+    <Compile Include="Utils\PetBuildableUtils.cs" />
+    <Compile Include="MonoBehaviours\PetWorkbench.cs" />
+    <Compile Include="ConfigOptions\PetModOptions.cs" />
     <Compile Include="MonoBehaviours\Pets\AlienRobotPet.cs" />
     <Compile Include="MonoBehaviours\Pets\BloodCrawlerPet.cs" />
     <Compile Include="MonoBehaviours\Pets\CaveCrawlerPet.cs" />
@@ -90,14 +97,17 @@
     <Compile Include="Patches\CreaturePatches.cs" />
     <Compile Include="Patches\InGameMenuPatches.cs" />
     <Compile Include="Patches\PlayerPatches.cs" />
-    <Compile Include="CreaturePetMod_SNPlugin.cs" />
+    <Compile Include="CreaturePetModSnPlugin.cs" />
     <Compile Include="Patches\SaveLoadManagerPatches.cs" />
+    <Compile Include="Utils\PetDnaPrefabUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\ModUtils.cs" />
     <Compile Include="Utils\PetUtils.cs" />
-    <Compile Include="Utils\PirateCheck.cs" />
+    <Compile Include="Utils\PirateCheckUtils.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Buildables\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "E:\Games\Steam\steamapps\common\Subnautica\BepInEx\plugins\$(TargetName)"

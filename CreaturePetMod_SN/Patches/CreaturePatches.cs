@@ -1,10 +1,10 @@
-﻿using CreaturePetMod_SN.Utils;
-using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours;
-using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets;
+﻿using DaftAppleGames.CreaturePetModSn.MonoBehaviours;
+using DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets;
+using DaftAppleGames.CreaturePetModSn.Utils;
 using HarmonyLib;
-using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
+using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
-namespace DaftAppleGames.CreaturePetMod_SN.Patches
+namespace DaftAppleGames.CreaturePetModSn.Patches
 {
     /// <summary>
     /// Patches Creature methods, to ensure we add the Pet component

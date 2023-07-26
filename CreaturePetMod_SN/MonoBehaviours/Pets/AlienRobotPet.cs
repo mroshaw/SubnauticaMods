@@ -1,6 +1,4 @@
-﻿using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
-
-namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
+﻿namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets
 {
     /// <summary>
     /// Implements AlienRobot specific Pet functionality

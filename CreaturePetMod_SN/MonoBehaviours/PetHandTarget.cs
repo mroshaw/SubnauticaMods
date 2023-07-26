@@ -1,7 +1,7 @@
-﻿using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets;
-using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
+﻿using DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets;
+using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
-namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
+namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
 {
     /// <summary>
     /// Template MonoBehaviour class. Use this to add new functionality and behaviours to

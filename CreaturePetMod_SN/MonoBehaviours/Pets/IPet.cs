@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
+﻿namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets
 {
     /// <summary>
     /// Provides a simple interface to provide Pet functionality

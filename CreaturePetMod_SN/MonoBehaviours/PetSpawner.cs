@@ -1,10 +1,10 @@
 ﻿using System.Collections;
-using CreaturePetMod_SN.Utils;
-using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets;
+using DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets;
+using DaftAppleGames.CreaturePetModSn.Utils;
 using UnityEngine;
-using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
+using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
-namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
+namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
 {
     /// <summary>
     /// Template MonoBehaviour class. Use this to add new functionality and behaviours to
@@ -39,20 +39,6 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
         }
 
         /// <summary>
-        /// Add a listener for the input spawn key pressed event
-        /// </summary>
-        public void OnEnable()
-        {
-            // Subscribe to the Input Manager
-            ModInputManager inputManager = GetComponent<ModInputManager>();
-            if (inputManager != null)
-            {
-                inputManager.SpawnButtonPressedEvent.AddListener(SpawnPet);
-                inputManager.KillAllButtonPressedEvent.AddListener(KillAllPets);
-            }
-        }
-
-        /// <summary>
         /// Unity Start method
         /// </summary>
         public void Start()
@@ -63,7 +49,7 @@ namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
         /// <summary>
         /// Spawn a pet with current settings
         /// </summary>
-        private void SpawnPet()
+        public void SpawnPet()
         {
             Log.LogDebug($"Spawning Pet. Type: {_petCreatureType}, Name: {_petName}");
             if (CheckPlayerSpawnConditions())

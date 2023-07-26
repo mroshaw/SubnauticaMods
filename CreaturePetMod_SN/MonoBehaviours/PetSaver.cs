@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets;
+using DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets;
 using Newtonsoft.Json;
 using UnityEngine;
-using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
+using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
-namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours
+namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
 {
     /// <summary>
     /// Load and Save pet details alongside save games

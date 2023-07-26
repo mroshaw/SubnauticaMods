@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using static Oculus.Platform.Models.Product;
 
 namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
 {

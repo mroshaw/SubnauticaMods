@@ -1,8 +1,7 @@
-﻿using DaftAppleGames.CreaturePetMod_SN.Utils;
-using UnityEngine;
-using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
+﻿using DaftAppleGames.CreaturePetModSn.Utils;
+using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
-namespace DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets
+namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets
 {
     /// <summary>
     /// Implements CrabSquid specific Pet functionality

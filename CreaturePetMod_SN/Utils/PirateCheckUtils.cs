@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace CreaturePetMod_SN.Utils
+namespace DaftAppleGames.CreaturePetModSn.Utils
 {
     /// <summary>
     /// Static utilities class for common functions and properties to be used within your mod code
     /// </summary>
-    internal static class PirateCheck
+    internal static class PirateCheckUtils
     {
         internal static string SteamApi => "steam_api64.dll";
         internal static int SteamApiLength => 220000;

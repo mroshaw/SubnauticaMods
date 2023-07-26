@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
-using BepInEx.Configuration;
-using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours;
-using DaftAppleGames.CreaturePetMod_SN.MonoBehaviours.Pets;
+﻿using System.Text.RegularExpressions;
+using DaftAppleGames.CreaturePetModSn.MonoBehaviours;
+using DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets;
 using UnityEngine;
-using static DaftAppleGames.CreaturePetMod_SN.CreaturePetModSnPlugin;
+using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 using Object = UnityEngine.Object;
 
-namespace DaftAppleGames.CreaturePetMod_SN.Utils
+namespace DaftAppleGames.CreaturePetModSn.Utils
 {
     /// <summary>
     /// Static utilities class for common functions and properties to be used within your mod code
@@ -28,13 +24,13 @@ namespace DaftAppleGames.CreaturePetMod_SN.Utils
         /// <summary>
         /// Updates the InputManager Spawn shortcut key
         /// </summary>
-        /// <param name="newKeyboardShortcut"></param>
-        internal static void UpdateSpawnKeyboardShortcut(KeyboardShortcut newKeyboardShortcut)
+        /// <param name="newKeyCode"></param>
+        internal static void UpdateSpawnKeyboardShortcut(KeyCode newKeyCode)
         {
             ModInputManager inputManager = Object.FindObjectOfType<ModInputManager>();
             if (inputManager != null)
             {
-                inputManager.SpawnKeyboardShortcut = newKeyboardShortcut;
+                inputManager.SpawnKeyCode = newKeyCode;
             }
             else
             {
@@ -43,15 +39,50 @@ namespace DaftAppleGames.CreaturePetMod_SN.Utils
         }
 
         /// <summary>
-        /// Updates the InputManager Kill All shortcut key
+        /// Updates the InputManager Spawn Modifier shortcut key
         /// </summary>
-        /// <param name="newKeyboardShortcut"></param>
-        internal static void UpdateKillAllKeyboardShortcut(KeyboardShortcut newKeyboardShortcut)
+        /// <param name="newKeyCode"></param>
+        internal static void UpdateSpawnKeyboardModifierShortcut(KeyCode newKeyCode)
         {
             ModInputManager inputManager = Object.FindObjectOfType<ModInputManager>();
             if (inputManager != null)
             {
-                inputManager.KillAllKeyboardShortcut = newKeyboardShortcut;
+                inputManager.SpawnModifierKeyCode = newKeyCode;
+            }
+            else
+            {
+                Log.LogDebug("UpdateSpawnKeyboardShortcut: Didn't find a ModInputManager");
+            }
+        }
+
+
+        /// <summary>
+        /// Updates the InputManager Kill All shortcut key
+        /// </summary>
+        /// <param name="newKeyCode"></param>
+        internal static void UpdateKillAllKeyboardShortcut(KeyCode newKeyCode)
+        {
+            ModInputManager inputManager = Object.FindObjectOfType<ModInputManager>();
+            if (inputManager != null)
+            {
+                inputManager.KillAllKeyCode = newKeyCode;
+            }
+            else
+            {
+                Log.LogDebug("UpdateSpawnKeyboardShortcut: Didn't find a ModInputManager");
+            }
+        }
+
+        /// <summary>
+        /// Updates the InputManager Spawn Modifier shortcut key
+        /// </summary>
+        /// <param name="newKeyCode"></param>
+        internal static void UpdateKillAllKeyboardModifierShortcut(KeyCode newKeyCode)
+        {
+            ModInputManager inputManager = Object.FindObjectOfType<ModInputManager>();
+            if (inputManager != null)
+            {
+                inputManager.KillAllModifierKeyCode = newKeyCode;
             }
             else
             {
