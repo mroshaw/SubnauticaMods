@@ -1,4 +1,6 @@
-﻿namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
+﻿using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
+
+namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
 {
 
     /// <summary>
@@ -6,14 +8,5 @@
     /// </summary>
     public class PetWorkbench : Workbench
     {
-        public override void Start()
-        {
-            base.Start();
-        }
-
-        public override void OnCraftingEnd()
-        {
-            // Spawn the pet here. Don't call the base end function
-        }
     }
 }

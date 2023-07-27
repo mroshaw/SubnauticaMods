@@ -20,7 +20,7 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
 
         private string _spawnFailReason = "";
 
-        private Player _player;
+        private bool _isSpawnerPlayer = false;
 
         /// <summary>
         /// Public setter for Pet Name
@@ -43,7 +43,27 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         /// </summary>
         public void Start()
         {
-            _player = GetComponent<Player>();
+            // Determine if the player is the spawner
+            _isSpawnerPlayer = GetComponent<Player>();
+        }
+
+        /// <summary>
+        /// Spawns a Pet given a CreatureType
+        /// </summary>
+        /// <param name="petCreatureType"></param>
+        public void SpawnPet(PetCreatureType petCreatureType)
+        {
+            _petCreatureType = petCreatureType;
+            SpawnPet();
+        }
+
+        /// <summary>
+        /// Spawns a Pet given a TechType
+        /// </summary>
+        /// <param name="petTechType"></param>
+        public void SpawnPet(TechType petTechType)
+        {
+            SpawnPet(GetPetCreatureType(petTechType));
         }
 
         /// <summary>
@@ -52,14 +72,27 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         public void SpawnPet()
         {
             Log.LogDebug($"Spawning Pet. Type: {_petCreatureType}, Name: {_petName}");
-            if (CheckPlayerSpawnConditions())
+
+            Vector3 desiredSpawnLocation;
+
+            // If the player is the spawner, do some checks before spawning
+            if (_isSpawnerPlayer)
             {
-                if (GetSpawnLocation(out Vector3 desiredSpawnLocation))
+                Log.LogDebug("PetSpawner: Player is spawner.");
+                if (CheckPlayerSpawnConditions())
                 {
-                    if (CheckPetSpawnLocation(desiredSpawnLocation))
+                    if (GetSpawnLocation(out desiredSpawnLocation))
                     {
-                        Log.LogDebug("Preparing to Spawn!");
-                        InstantiatePet(desiredSpawnLocation);
+                        if (CheckPetSpawnLocation(desiredSpawnLocation))
+                        {
+                            Log.LogDebug("Preparing to Spawn from Player location!");
+                            InstantiatePet(desiredSpawnLocation);
+                        }
+                    }
+                    else
+                    {
+                        ErrorMessage.AddMessage($"You can't spawn a pet here! {_spawnFailReason}");
+                        Log.LogDebug($"You can't spawn a pet here! {_spawnFailReason}");
                     }
                 }
                 else
@@ -70,8 +103,10 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
             }
             else
             {
-                ErrorMessage.AddMessage($"You can't spawn a pet here! {_spawnFailReason}");
-                Log.LogDebug($"You can't spawn a pet here! {_spawnFailReason}");
+                Log.LogDebug("PetSpawner: Player is not spawner. Assume Fabricator.");
+                desiredSpawnLocation = gameObject.transform.position + (Vector3.up * 0.8f);
+                Log.LogDebug("Preparing to Spawn from Fabricator location!");
+                InstantiatePet(desiredSpawnLocation);
             }
         }
 
@@ -149,13 +184,36 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
             }
         }
 
+
+        /// <summary>
+        /// Look up the CreatureType from the TechType
+        /// </summary>
+        /// <param name="techType"></param>
+        /// <returns></returns>
+        private PetCreatureType GetPetCreatureType(TechType techType)
+        {
+            switch (techType)
+            {
+                case TechType.CaveCrawler:
+                    return PetCreatureType.CaveCrawler;
+                case TechType.Shuttlebug:
+                    return PetCreatureType.BloodCrawler;
+                case TechType.CrabSquid:
+                    return PetCreatureType.CrabSquid;
+                case TechType.PrecursorDroid:
+                    return PetCreatureType.AlienRobot;
+                default:
+                    return PetCreatureType.CaveCrawler;
+            }
+        }
+
         /// <summary>
         /// Determines whether it's possible to spawn a pet at the current point in time
         /// </summary>
         /// <returns></returns>
         private bool CheckPlayerSpawnConditions()
         {
-            if(!_player.IsInBase())
+            if(!Player.main.IsInBase())
             {
                 _spawnFailReason = "Player must be in a base to spawn a pet.";
                 Log.LogDebug("CheckPlayerSpawnConditions: Player is not in base.");
