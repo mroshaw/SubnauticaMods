@@ -65,10 +65,8 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
             // Look for Spawn key and modifier
             if (Input.GetKey(_spawnModifierKeyCode))
             {
-                Log.LogDebug("ModInputManager: Spawn modifier detected");
                 if (Input.GetKeyDown(_spawnKeyCode))
                 {
-                    Log.LogDebug("ModInputManager: Spawn keypress detected");
                     SpawnButtonPressedEvent.Invoke();
                 }
             }
@@ -76,10 +74,8 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
             // Look for Kill All key and modifier
             if (Input.GetKey(_killAllModifierKeyCode))
             {
-                Log.LogDebug("ModInputManager: Kill All modifier detected");
                 if (Input.GetKeyDown(_killAllKeyCode))
                 {
-                    Log.LogDebug("ModInputManager: Kill All keypress detected");
                     KillAllButtonPressedEvent.Invoke();
                 }
             }
