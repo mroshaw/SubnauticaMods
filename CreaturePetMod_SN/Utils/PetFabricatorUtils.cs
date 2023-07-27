@@ -1,8 +1,11 @@
-﻿using Nautilus.Assets.PrefabTemplates;
+﻿using DaftAppleGames.CreaturePetModSn.MonoBehaviours;
+using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
+using UnityEngine;
 using static CraftData;
+using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
 namespace DaftAppleGames.CreaturePetModSn.Utils
 {
@@ -16,8 +19,8 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
         /// </summary>
         public static void InitPetFabricator()
         {
-            CustomPrefab customFab = new CustomPrefab("PetFab", "Pet Fabricator", "A special fabricator for replicating pets!",
-                SpriteManager.Get(TechType.Fabricator));
+            CustomPrefab customFab = new CustomPrefab("PetFabricator", "Pet Fabricator", "A special fabricator for replicating pets!",
+                SpriteManager.Get(TechType.Workbench));
 
             customFab.CreateFabricator(out CraftTree.Type treeType)
                 // Add our Pet Buildables
@@ -28,7 +31,9 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
 
             FabricatorTemplate fabPrefab = new FabricatorTemplate(customFab.Info, treeType)
             {
-                FabricatorModel = FabricatorTemplate.Model.Workbench
+                FabricatorModel = FabricatorTemplate.Model.Workbench,
+                ModifyPrefab = ConfigureFabComponents
+
             };
             customFab.SetGameObject(fabPrefab);
             /*
@@ -55,6 +60,22 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
                 .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule);
 
             customFab.Register();
+        }
+
+        /// <summary>
+        /// Set up our custom "Workbench" component, replacing the default one
+        /// </summary>
+        /// <param name="fabricatorGameObject"></param>
+        private static void ConfigureFabComponents(GameObject fabricatorGameObject)
+        {
+            Log.LogDebug("PetFabricatorUtils: Adding PetWorkbench component...");
+            PetWorkbench newWorkbench = fabricatorGameObject.AddComponent<PetWorkbench>();
+            Log.LogDebug("PetFabricatorUtils: Adding PetWorkbench component... Done.");
+
+            Log.LogDebug("PetFabricatorUtils: Adding PetSpawner component...");
+            PetSpawner newPetSpawner = fabricatorGameObject.AddComponent<PetSpawner>();
+            Log.LogDebug("PetFabricatorUtils: Adding PetSpawner component... Done.");
+
         }
     }
 }

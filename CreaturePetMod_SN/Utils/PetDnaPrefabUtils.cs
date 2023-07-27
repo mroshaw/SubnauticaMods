@@ -1,7 +1,10 @@
-﻿using Nautilus.Assets.PrefabTemplates;
+﻿using System.IO;
+using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
 using UnityEngine;
 using Nautilus.Assets.Gadgets;
+using System.Reflection;
+using Nautilus.Utility;
 
 namespace DaftAppleGames.CreaturePetModSn.Utils
 {
@@ -17,6 +20,8 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
         public static PrefabInfo BloodCrawlerDnaPrefabInfo;
         public static PrefabInfo CrabSquidDnaPrefabInfo;
         public static PrefabInfo AlienRobotDnaPrefabInfo;
+
+        public static string SpritePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Sprites";
 
         /// <summary>
         /// Register all prefabs
@@ -35,7 +40,7 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
         private static void InitCaveCrawlerDnaPrefab()
         {
             PrefabInfo caveCrawlerDnaInfo = PrefabInfo.WithTechType("CaveCrawlerDna", "Cave Crawler DNA", "DNA from a Cave Crawler.");
-            caveCrawlerDnaInfo.WithIcon(SpriteManager.Get(TechType.ReefbackDNA));
+            caveCrawlerDnaInfo.WithIcon(ImageUtils.LoadSpriteFromFile(SpritePath + "\\DnaStrand94x110.png"));
             CaveCrawlerDnaPrefabInfo = caveCrawlerDnaInfo;
             CustomPrefab caveCrawlerDna = new CustomPrefab(caveCrawlerDnaInfo);
             PrefabTemplate cloneTemplate = new CloneTemplate(caveCrawlerDnaInfo, TechType.ReefbackDNA)
@@ -56,7 +61,7 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
         private static void InitBloodCrawlerDnaPrefab()
         {
             PrefabInfo bloodCrawlerDnaInfo = PrefabInfo.WithTechType("BloodCrawlerDna", "Blood Crawler DNA", "DNA from a Blood Crawler.");
-            bloodCrawlerDnaInfo.WithIcon(SpriteManager.Get(TechType.ReefbackDNA));
+            bloodCrawlerDnaInfo.WithIcon(ImageUtils.LoadSpriteFromFile(SpritePath + "\\DnaStrand94x110.png"));
             BloodCrawlerDnaPrefabInfo = bloodCrawlerDnaInfo;
             CustomPrefab bloodCrawlerDna = new CustomPrefab(bloodCrawlerDnaInfo);
             PrefabTemplate cloneTemplate = new CloneTemplate(bloodCrawlerDnaInfo, TechType.ReefbackDNA)
@@ -77,7 +82,7 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
         private static void InitCrabSquidDnaPrefab()
         {
             PrefabInfo crabSquidDnaInfo = PrefabInfo.WithTechType("CrabSquidDna", "Crab Squid DNA", "DNA from a Crab Squid.");
-            crabSquidDnaInfo.WithIcon(SpriteManager.Get(TechType.ReefbackDNA));
+            crabSquidDnaInfo.WithIcon(ImageUtils.LoadSpriteFromFile(SpritePath + "\\DnaStrand94x110.png"));
             CrabSquidDnaPrefabInfo = crabSquidDnaInfo;
             CustomPrefab crabSquidDna = new CustomPrefab(crabSquidDnaInfo);
             PrefabTemplate cloneTemplate = new CloneTemplate(crabSquidDnaInfo, TechType.ReefbackDNA)
@@ -98,7 +103,7 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
         private static void InitAlienRobotDnaPrefab()
         {
             PrefabInfo alienRobotDnaInfo = PrefabInfo.WithTechType("AlienRobotDna", "Alien Robot DNA", "DNA from an Alien Robot.");
-            alienRobotDnaInfo.WithIcon(SpriteManager.Get(TechType.ReefbackDNA));
+            alienRobotDnaInfo.WithIcon(ImageUtils.LoadSpriteFromFile(SpritePath + "\\DnaStrand94x110.png"));
             AlienRobotDnaPrefabInfo = alienRobotDnaInfo;
             CustomPrefab alienRobotDna = new CustomPrefab(alienRobotDnaInfo);
             PrefabTemplate cloneTemplate = new CloneTemplate(alienRobotDnaInfo, TechType.ReefbackDNA)

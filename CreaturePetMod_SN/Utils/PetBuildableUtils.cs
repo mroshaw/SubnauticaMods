@@ -1,10 +1,13 @@
-﻿using Nautilus.Assets.PrefabTemplates;
+﻿using System.IO;
+using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
 using Nautilus.Utility;
 using UnityEngine;
 using static CraftData;
+using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
+using System.Reflection;
 
 namespace DaftAppleGames.CreaturePetModSn.Utils
 {
@@ -17,11 +20,14 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
         public static PrefabInfo CrabSquidPetBuildablePrefabInfo;
         public static PrefabInfo AlienRobotBuildablePefabInfo;
 
+        public static string SpritePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Sprites";
+
         /// <summary>
         /// Initialise all Pet buildables
         /// </summary>
         public static void InitPetBuildables()
         {
+            Log.LogDebug($"PetBuildableUtils: Current Sprite path is: {SpritePath}");
             CaveCrawlerBuildable.Register();
             BloodCrawlerBuildable.Register();
             CrabSquidBuildable.Register();
@@ -36,7 +42,7 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
             public static PrefabInfo Info { get; } = PrefabInfo
                 .WithTechType("CaveCrawlerPet", "Cave Crawler Pet", "A pet cave crawler.")
                 // set the icon to that of the vanilla locker:
-                .WithIcon(SpriteManager.Get(TechType.CaveCrawler));
+                .WithIcon(ImageUtils.LoadSpriteFromFile(SpritePath + "\\CaveCrawler94x110.png"));
 
             public static void Register()
             {
@@ -47,8 +53,8 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
                 // create prefab:
                 CustomPrefab prefab = new CustomPrefab(Info);
 
-                // copy the model of the Cave Crawler:
-                CloneTemplate caveCrawlerClone = new CloneTemplate(Info, "7ce2ca9d-6154-4988-9b02-38f670e741b8");
+                // copy the model of the Cave Crawler: WorldEntities/Creatures/CaveCrawler.prefab
+                CloneTemplate caveCrawlerClone = new CloneTemplate(Info, "3e0a11f1-e2b2-4c4f-9a8e-0b0a77dcc065");
 
                 // modify the cloned model:
                 caveCrawlerClone.ModifyPrefab += obj =>
@@ -57,7 +63,15 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
                     ConstructableFlags constructableFlags = ConstructableFlags.Inside;
 
                     // find the object that holds the model:
-                    GameObject model = obj.transform.Find("submarine_locker_04").gameObject;
+                    GameObject model = obj.transform.Find("cave_crawler_03").gameObject;
+                    if (!model)
+                    {
+                        Log.LogDebug("PetBuildableUtils: CaveCrawlerBuildable cannot find object model in prefab!");
+                    }
+                    else
+                    {
+                        Log.LogDebug($"PetBuildableUtils: CaveCrawlerBuildable found model on {model.name}");
+                    }
 
                     // add all components necessary for it to be built:
                     PrefabUtils.AddConstructable(obj, Info.TechType, constructableFlags, model);
@@ -68,7 +82,7 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
 
 
                 // set recipe:
-                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.CarbonOld, 3),
+                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
                     new Ingredient(PetDnaPrefabUtils.CaveCrawlerDnaPrefabInfo.TechType, 5)));
 
                 // finally, register it into the game:
@@ -84,7 +98,7 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
             public static PrefabInfo Info { get; } = PrefabInfo
                 .WithTechType("BloodCrawlerPet", "Blood Crawler Pet", "A pet blood crawler.")
                 // set the icon to that of the vanilla locker:
-                .WithIcon(SpriteManager.Get(TechType.Shuttlebug));
+                .WithIcon(ImageUtils.LoadSpriteFromFile(SpritePath + "\\BloodCrawler94x110.png"));
 
             public static void Register()
             {
@@ -95,8 +109,8 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
                 // create prefab:
                 CustomPrefab prefab = new CustomPrefab(Info);
 
-                // copy the model of the Blood Crawler
-                CloneTemplate caveCrawlerClone = new CloneTemplate(Info, "cd34fecd-794c-4a0c-8012-dd81b77f2840");
+                // copy the model of the Blood Crawler. WorldEntities/Slots/BloodKelp/BloodKelp_Creature_Unique.prefab
+                CloneTemplate caveCrawlerClone = new CloneTemplate(Info, "314e0fd9-56c5-4f80-9663-15fa077abc15");
 
                 // modify the cloned model:
                 caveCrawlerClone.ModifyPrefab += obj =>
@@ -105,7 +119,16 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
                     ConstructableFlags constructableFlags = ConstructableFlags.Inside;
 
                     // find the object that holds the model:
-                    GameObject model = obj.transform.Find("submarine_locker_04").gameObject;
+                    GameObject model = obj.transform.Find("cave_crawler_03").gameObject;
+                    if (!model)
+                    {
+                        Log.LogDebug("PetBuildableUtils: BloodCrawlerBuildable cannot find object model in prefab!");
+                    }
+                    else
+                    {
+                        Log.LogDebug($"PetBuildableUtils: BloodCrawlerBuildable found model on {model.name}");
+                    }
+
 
                     // add all components necessary for it to be built:
                     PrefabUtils.AddConstructable(obj, Info.TechType, constructableFlags, model);
@@ -116,7 +139,7 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
 
 
                 // set recipe:
-                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.CarbonOld, 3),
+                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
                     new Ingredient(PetDnaPrefabUtils.BloodCrawlerDnaPrefabInfo.TechType, 5)));
 
                 // finally, register it into the game:
@@ -143,8 +166,8 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
                 // create prefab:
                 CustomPrefab prefab = new CustomPrefab(Info);
 
-                // copy the model of a CrabSquid
-                CloneTemplate caveCrawlerClone = new CloneTemplate(Info, "cd34fecd-794c-4a0c-8012-dd81b77f2840");
+                // copy the model of a CrabSquid - WorldEntities/Creatures/CrabSquid.prefab
+                CloneTemplate caveCrawlerClone = new CloneTemplate(Info, "4c2808fe-e051-44d2-8e64-120ddcdc8abb");
 
                 // modify the cloned model:
                 caveCrawlerClone.ModifyPrefab += obj =>
@@ -153,7 +176,15 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
                     ConstructableFlags constructableFlags = ConstructableFlags.Inside;
 
                     // find the object that holds the model:
-                    GameObject model = obj.transform.Find("submarine_locker_04").gameObject;
+                    GameObject model = obj.transform.Find("models").gameObject;
+                    if (!model)
+                    {
+                        Log.LogDebug("PetBuildableUtils: CrabSquidBuilding cannot find object model in prefab!");
+                    }
+                    else
+                    {
+                        Log.LogDebug($"PetBuildableUtils: CrabSquidBuilding found model on {model.name}");
+                    }
 
                     // add all components necessary for it to be built:
                     PrefabUtils.AddConstructable(obj, Info.TechType, constructableFlags, model);
@@ -164,7 +195,7 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
 
 
                 // set recipe:
-                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.CarbonOld, 3),
+                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
                     new Ingredient(PetDnaPrefabUtils.CrabSquidDnaPrefabInfo.TechType, 5)));
 
                 // finally, register it into the game:
@@ -180,7 +211,7 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
             public static PrefabInfo Info { get; } = PrefabInfo
                 .WithTechType("AlienRobotPet", "Alien Robot Pet", "A pet alien robot.")
                 // set the icon to that of the vanilla locker:
-                .WithIcon(SpriteManager.Get(TechType.PrecursorDroid));
+                .WithIcon(ImageUtils.LoadSpriteFromFile(SpritePath + "\\AlienRobot94x110.png"));
 
             public static void Register()
             {
@@ -191,8 +222,8 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
                 // create prefab:
                 CustomPrefab prefab = new CustomPrefab(Info);
 
-                // copy the model of an Alien Robot
-                CloneTemplate caveCrawlerClone = new CloneTemplate(Info, "cd34fecd-794c-4a0c-8012-dd81b77f2840");
+                // copy the model of an Alien Robot - WorldEntities/Creatures/Precursor_Droid.prefab
+                CloneTemplate caveCrawlerClone = new CloneTemplate(Info, "4fae8fa4-0280-43bd-bcf1-f3cba97eed77");
 
                 // modify the cloned model:
                 caveCrawlerClone.ModifyPrefab += obj =>
@@ -201,8 +232,15 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
                     ConstructableFlags constructableFlags = ConstructableFlags.Inside;
 
                     // find the object that holds the model:
-                    GameObject model = obj.transform.Find("submarine_locker_04").gameObject;
-
+                    GameObject model = obj.transform.Find("models").gameObject;
+                    if (!model)
+                    {
+                        Log.LogDebug("PetBuildableUtils: AlienRobotBuildable - cannot find object model in prefab!");
+                    }
+                    else
+                    {
+                        Log.LogDebug($"PetBuildableUtils: AlienRobotBuildable found model on {model.name}");
+                    }
                     // add all components necessary for it to be built:
                     PrefabUtils.AddConstructable(obj, Info.TechType, constructableFlags, model);
                 };
@@ -212,7 +250,7 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
 
 
                 // set recipe:
-                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.CarbonOld, 3),
+                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
                     new Ingredient(PetDnaPrefabUtils.AlienRobotDnaPrefabInfo.TechType, 5)));
 
                 // finally, register it into the game:
