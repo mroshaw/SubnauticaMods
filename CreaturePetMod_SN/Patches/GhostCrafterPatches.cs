@@ -1,6 +1,6 @@
 ﻿using DaftAppleGames.CreaturePetModSn.MonoBehaviours;
 using DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets;
-using DaftAppleGames.CreaturePetModSn.Utils;
+using DaftAppleGames.CreaturePetModSn.CustomObjects;
 using HarmonyLib;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 

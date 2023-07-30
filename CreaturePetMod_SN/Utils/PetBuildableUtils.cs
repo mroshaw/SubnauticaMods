@@ -9,7 +9,7 @@ using static CraftData;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 using System.Reflection;
 
-namespace DaftAppleGames.CreaturePetModSn.Utils
+namespace DaftAppleGames.CreaturePetModSn.CustomObjects
 {
 
     public static class PetBuildableUtils
@@ -83,7 +83,7 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
 
                 // set recipe:
                 prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
-                    new Ingredient(PetDnaPrefabUtils.CaveCrawlerDnaPrefabInfo.TechType, 5)));
+                    new Ingredient(PetDnaPrefab.CaveCrawlerDnaPrefabInfo.TechType, 5)));
 
                 // finally, register it into the game:
                 prefab.Register();
@@ -140,7 +140,7 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
 
                 // set recipe:
                 prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
-                    new Ingredient(PetDnaPrefabUtils.BloodCrawlerDnaPrefabInfo.TechType, 5)));
+                    new Ingredient(PetDnaPrefab.BloodCrawlerDnaPrefabInfo.TechType, 5)));
 
                 // finally, register it into the game:
                 prefab.Register();
@@ -196,7 +196,7 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
 
                 // set recipe:
                 prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
-                    new Ingredient(PetDnaPrefabUtils.CrabSquidDnaPrefabInfo.TechType, 5)));
+                    new Ingredient(PetDnaPrefab.CrabSquidDnaPrefabInfo.TechType, 5)));
 
                 // finally, register it into the game:
                 prefab.Register();
@@ -251,7 +251,7 @@ namespace DaftAppleGames.CreaturePetModSn.Utils
 
                 // set recipe:
                 prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
-                    new Ingredient(PetDnaPrefabUtils.AlienRobotDnaPrefabInfo.TechType, 5)));
+                    new Ingredient(PetDnaPrefab.AlienRobotDnaPrefabInfo.TechType, 5)));
 
                 // finally, register it into the game:
                 prefab.Register();

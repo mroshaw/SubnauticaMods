@@ -7,19 +7,19 @@ using UnityEngine;
 using static CraftData;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
-namespace DaftAppleGames.CreaturePetModSn.Utils
+namespace DaftAppleGames.CreaturePetModSn.CustomObjects
 {
     /// <summary>
     /// Static utilities class for creating the new Pet Fabricator
     /// </summary>
-    internal static class PetFabricatorUtils
+    internal static class PetFabricatorPrefab
     {
         /// <summary>
         /// Makes the new Pet Fabricator available for use.
         /// </summary>
         public static void InitPetFabricator()
         {
-            CustomPrefab customFab = new CustomPrefab("PetFabricator", "Pet Fabricator", "A special fabricator for replicating pets!",
+            CustomPrefab customFab = new CustomPrefab("PetFabricator", "Pet Fabricator", "A special fabricator for replicating pet creatures from fragments of DNA.",
                 SpriteManager.Get(TechType.Workbench));
 
             customFab.CreateFabricator(out CraftTree.Type treeType)

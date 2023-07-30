@@ -4,7 +4,7 @@ using BepInEx.Logging;
 using DaftAppleGames.CreaturePetModSn.ConfigOptions;
 using DaftAppleGames.CreaturePetModSn.MonoBehaviours;
 using DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets;
-using DaftAppleGames.CreaturePetModSn.Utils;
+using DaftAppleGames.CreaturePetModSn.CustomObjects;
 using HarmonyLib;
 using Nautilus.Options;
 using System;
@@ -83,13 +83,16 @@ namespace DaftAppleGames.CreaturePetModSn
             Saver = gameObject.AddComponent<PetSaver>();
 
             // Initialise Pet DNA prefabs
-            PetDnaPrefabUtils.InitPetPrefabs();
+            PetDnaPrefab.InitPetPrefabs();
 
             // Initialise the Pet Buildables
             PetBuildableUtils.InitPetBuildables();
 
             // Init the Pet Fabricator
-            PetFabricatorUtils.InitPetFabricator();
+            PetFabricatorPrefab.InitPetFabricator();
+
+            // Init the Pet Console
+            PetConsolePrefab.InitPetConsole();
         }
         #endregion
 

@@ -5,7 +5,7 @@ using UnityEngine;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 using Object = UnityEngine.Object;
 
-namespace DaftAppleGames.CreaturePetModSn.Utils
+namespace DaftAppleGames.CreaturePetModSn.CustomObjects
 {
     /// <summary>
     /// Static utilities class for common functions and properties to be used within your mod code

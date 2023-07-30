@@ -1,14 +1,14 @@
 ﻿using System.Collections;
 using DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets;
-using DaftAppleGames.CreaturePetModSn.Utils;
+using DaftAppleGames.CreaturePetModSn.CustomObjects;
 using UnityEngine;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
 namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
 {
     /// <summary>
-    /// Template MonoBehaviour class. Use this to add new functionality and behaviours to
-    /// the game.
+    /// PetSpawner MonoBehaviour. Allows the spawning of a pet. Can be attached
+    /// to a Player, or to a Fabricator / Workbench
     /// </summary>
     internal class PetSpawner : MonoBehaviour
     {

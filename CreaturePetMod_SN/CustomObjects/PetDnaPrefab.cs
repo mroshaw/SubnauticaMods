@@ -5,15 +5,16 @@ using UnityEngine;
 using Nautilus.Assets.Gadgets;
 using System.Reflection;
 using Nautilus.Utility;
+using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
-namespace DaftAppleGames.CreaturePetModSn.Utils
+namespace DaftAppleGames.CreaturePetModSn.CustomObjects
 {
     // TODO Review this file and update to your own requirements, or remove it altogether if not required
     /// <summary>
     /// Template MonoBehaviour class. Use this to add new functionality and behaviours to
     /// the game.
     /// </summary>
-    internal class PetDnaPrefabUtils : MonoBehaviour
+    internal class PetDnaPrefab : MonoBehaviour
     {
         // Static references for consumers
         public static PrefabInfo CaveCrawlerDnaPrefabInfo;

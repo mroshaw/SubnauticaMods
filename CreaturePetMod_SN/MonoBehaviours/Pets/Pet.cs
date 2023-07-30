@@ -1,4 +1,4 @@
-﻿using DaftAppleGames.CreaturePetModSn.Utils;
+﻿using DaftAppleGames.CreaturePetModSn.CustomObjects;
 using UnityEngine;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 

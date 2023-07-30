@@ -1,7 +1,7 @@
 ﻿using DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets;
 using UnityEngine;
 
-namespace DaftAppleGames.CreaturePetModSn.Utils
+namespace DaftAppleGames.CreaturePetModSn.CustomObjects
 {
     /// <summary>
     /// Static utilities class for common functions and properties to be used within your mod code
