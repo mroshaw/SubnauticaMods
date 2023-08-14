@@ -28,6 +28,7 @@ namespace DaftAppleGames.CreaturePetModSn.Patches
             PetSpawner petSpawner =  __instance.gameObject.AddComponent<PetSpawner>();
             petSpawner.PetCreatureType = CreaturePetModSnPlugin.PetCreatureTypeConfig.Value;
             petSpawner.PetName = CreaturePetModSnPlugin.PetNameConfig.Value;
+            petSpawner.SkipSpawnObstacleCheck = CreaturePetModSnPlugin.SkipSpawnObstacleCheckConfig.Value;
 
             // For this use case, we'll trigger the spawner via the InputManager event
             // We'll use the Fabriactor events in the fabricator use case

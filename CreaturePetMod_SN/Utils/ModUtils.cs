@@ -125,6 +125,24 @@ namespace DaftAppleGames.CreaturePetModSn.CustomObjects
         }
 
         /// <summary>
+        /// Update all SkipObstacleCheck values
+        /// </summary>
+        /// <param name="skipObstacleCheck"></param>
+        internal static void UpdateSkipObstacleCheck(bool skipObstacleCheck)
+        {
+            PetSpawner petSpawner = Object.FindObjectOfType<PetSpawner>();
+            if (petSpawner != null)
+            {
+                petSpawner.SkipSpawnObstacleCheck = skipObstacleCheck;
+            }
+            else
+            {
+                Log.LogDebug("UpdateSkipObstacleCheck: Didn't find a PetSpawner");
+            }
+
+        }
+
+        /// <summary>
         /// Destroys all child components of a given type
         /// </summary>
         /// <typeparam name="T"></typeparam>

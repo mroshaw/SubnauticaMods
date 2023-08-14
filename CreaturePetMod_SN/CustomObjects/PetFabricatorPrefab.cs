@@ -3,6 +3,7 @@ using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
+using Nautilus.Utility;
 using UnityEngine;
 using static CraftData;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
@@ -20,14 +21,16 @@ namespace DaftAppleGames.CreaturePetModSn.CustomObjects
         public static void InitPetFabricator()
         {
             CustomPrefab customFab = new CustomPrefab("PetFabricator", "Pet Fabricator", "A special fabricator for replicating pet creatures from fragments of DNA.",
-                SpriteManager.Get(TechType.Workbench));
+                ImageUtils.LoadSpriteFromFile($"{SpritePath}\\{PetWorkbenchSprite}"));
+
+            // SpriteManager.Get(TechType.Workbench));
 
             customFab.CreateFabricator(out CraftTree.Type treeType)
                 // Add our Pet Buildables
-                .AddCraftNode(PetBuildableUtils.CaveCrawlerPetBuildablePrefabInfo.TechType)
-                .AddCraftNode(PetBuildableUtils.BloodCrawlerPetBuildablePrefabInfo.TechType)
-                .AddCraftNode(PetBuildableUtils.CrabSquidPetBuildablePrefabInfo.TechType)
-                .AddCraftNode(PetBuildableUtils.AlienRobotBuildablePefabInfo.TechType);
+                .AddCraftNode(PetBuildablePrefab.CaveCrawlerPetBuildablePrefabInfo.TechType)
+                .AddCraftNode(PetBuildablePrefab.BloodCrawlerPetBuildablePrefabInfo.TechType)
+                .AddCraftNode(PetBuildablePrefab.CrabSquidPetBuildablePrefabInfo.TechType)
+                .AddCraftNode(PetBuildablePrefab.AlienRobotBuildablePefabInfo.TechType);
 
             FabricatorTemplate fabPrefab = new FabricatorTemplate(customFab.Info, treeType)
             {
@@ -71,9 +74,10 @@ namespace DaftAppleGames.CreaturePetModSn.CustomObjects
             Log.LogDebug("PetFabricatorUtils: Adding PetWorkbench component...");
             PetWorkbench newWorkbench = fabricatorGameObject.AddComponent<PetWorkbench>();
             Log.LogDebug("PetFabricatorUtils: Adding PetWorkbench component... Done.");
-
+            
             Log.LogDebug("PetFabricatorUtils: Adding PetSpawner component...");
             PetSpawner newPetSpawner = fabricatorGameObject.AddComponent<PetSpawner>();
+            newPetSpawner.SkipSpawnObstacleCheck = CreaturePetModSnPlugin.SkipSpawnObstacleCheckConfig.Value;
             Log.LogDebug("PetFabricatorUtils: Adding PetSpawner component... Done.");
 
         }

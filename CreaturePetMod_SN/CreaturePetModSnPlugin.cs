@@ -8,7 +8,9 @@ using DaftAppleGames.CreaturePetModSn.CustomObjects;
 using HarmonyLib;
 using Nautilus.Options;
 using System;
+using System.IO;
 using UnityEngine;
+using System.Reflection;
 
 namespace DaftAppleGames.CreaturePetModSn
 {
@@ -28,6 +30,18 @@ namespace DaftAppleGames.CreaturePetModSn
         // Public log static so we can call logging elsewhere in the mod
         public static ManualLogSource Log = new ManualLogSource(PluginName);
 
+        // Public static location of Sprite data
+        public static string SpritePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Sprites";
+        public static string AlienRobotSprite = "AlienRobot.png";
+        public static string BloodCrawlerSprite = "BloodCrawler.png";
+        public static string CaveCrawlerSprite = "CaveCrawler.png";
+        public static string DnaBloodCrawlerSprite = "DnaStrand_BloodCrawler.png";
+        public static string DnaCaveCrawlerSprite = "DnaStrand_CaveCrawler.png";
+        public static string DnaCrabSquidSprite = "DnaStrand_CrabSquid.png";
+        public static string DnaAlienRobotSprite = "DnaStrand_Robot.png";
+        public static string PetConsoleSprite = "PetConsole.png";
+        public static string PetWorkbenchSprite = "PetWorkbench.png";
+
         // Keep a public static Saver for use in load and save operations
         public static PetSaver Saver;
 
@@ -38,6 +52,7 @@ namespace DaftAppleGames.CreaturePetModSn
         public static string KillAllKeyboardShortcutModifierKey = "Kill All Keyboard Shortcut Modifier";
         public static string PetCreatureTypeKey = "Pet Creature Type";
         public static string PetNameKey = "Pet Name";
+        public static string SkipSpawnObstacleCheckKey = "Skip Spawn Obstacle Check";
 
         // Configuration entries. Static, so can be accessed directly elsewhere in code
         public static ConfigEntry<KeyCode> SpawnKeyboardShortcutConfig;
@@ -46,6 +61,7 @@ namespace DaftAppleGames.CreaturePetModSn
         public static ConfigEntry<KeyCode> KillAllKeyboardShortcutModifierConfig;
         public static ConfigEntry<PetCreatureType> PetCreatureTypeConfig;
         public static ConfigEntry<PetName> PetNameConfig;
+        public static ConfigEntry<bool> SkipSpawnObstacleCheckConfig;
         #endregion
         #region MOD_PRIVATE
         private static readonly Harmony Harmony = new Harmony(MyGuid);
@@ -86,7 +102,7 @@ namespace DaftAppleGames.CreaturePetModSn
             PetDnaPrefab.InitPetPrefabs();
 
             // Initialise the Pet Buildables
-            PetBuildableUtils.InitPetBuildables();
+            PetBuildablePrefab.InitPetBuildables();
 
             // Init the Pet Fabricator
             PetFabricatorPrefab.InitPetFabricator();
@@ -157,6 +173,14 @@ namespace DaftAppleGames.CreaturePetModSn
                 PetName.Anise, "Spawned creature's name");
 
             PetNameConfig.SettingChanged += ConfigSettingChanged;
+
+
+            SkipSpawnObstacleCheckConfig = Config.Bind("Debug Settings",
+                SkipSpawnObstacleCheckKey,
+                false,
+                "Skip the check for obstacles when spawning pets.");
+
+            SkipSpawnObstacleCheckConfig.SettingChanged += ConfigSettingChanged;
         }
 
         /// <summary>
@@ -233,6 +257,14 @@ namespace DaftAppleGames.CreaturePetModSn
                 PetName newPetName = (PetName)settingChangedEventArgs.ChangedSetting.BoxedValue;
                 Log.LogDebug("Updating pet name...");
                 ModUtils.UpdatePetName(newPetName);
+            }
+
+            // Update Skip Obstacle check
+            if (settingChangedEventArgs.ChangedSetting.Definition.Key == SkipSpawnObstacleCheckKey)
+            {
+                bool newValue = (bool)settingChangedEventArgs.ChangedSetting.BoxedValue;
+                Log.LogDebug("Updating skip obstacle check...");
+                ModUtils.UpdateSkipObstacleCheck(newValue);
             }
         }
         #endregion

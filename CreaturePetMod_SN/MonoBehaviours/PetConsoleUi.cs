@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using CreaturePetMod_SN.Utils;
+using DaftAppleGames.CreaturePetModSn.CustomObjects;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -17,9 +19,7 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         public UnityEvent KillButtonClickedEvent;
         public UnityEvent RenameButtonClickedEvent;
 
-        private GameObject _uiGameObject;
         private GameObject _uiPanelGameObject;
-        private Canvas _uiCanvas;
 
         private GameObject _consolePrefab;
         private GameObject _consoleGameObject;
@@ -49,33 +49,6 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         private void CreateUi()
         {
             StartCoroutine(CreateUiAsync(gameObject));
-        }
-
-        /// <summary>
-        /// Construct the Pet Console UI
-        /// </summary>
-        private void ConstructUi()
-        {
-            // Create the UI Game Object and Canvas
-            _uiGameObject = new GameObject();
-            _uiGameObject.name = "Pet Console UI";
-            _uiGameObject.transform.localPosition = new Vector3(0, 0, 0);
-            _uiGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
-            _uiGameObject.transform.SetParent(gameObject.transform);
-            _uiCanvas = _uiGameObject.AddComponent<Canvas>();
-            _uiGameObject.AddComponent<GraphicRaycaster>();
-
-            // Configure canvas
-            _uiCanvas.renderMode = RenderMode.WorldSpace;
-            RectTransform canvasRectTransform = _uiCanvas.GetComponent<RectTransform>();
-            canvasRectTransform.sizeDelta = new Vector2(200.0f, 200.0f);
-
-            // Add the Panel GameObject
-            GameObject _uiPanelGameObject = new GameObject();
-            _uiPanelGameObject.name = "Pet Console Panel";
-            _uiPanelGameObject.transform.localPosition = new Vector3(0, 0, 0);
-            _uiPanelGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
-            _uiPanelGameObject.transform.SetParent(_uiGameObject.transform);
         }
 
         /// <summary>
@@ -134,7 +107,7 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         /// </summary>
         private void KillButtonProxy()
         {
-
+            KillButtonClickedEvent.Invoke();
         }
 
         /// <summary>
@@ -163,6 +136,16 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
             GameObject consoleGameObject = Base.pieces[(int)Base.Piece.MoonpoolUpgradeConsole].prefab.gameObject;
             _consolePrefab = consoleGameObject;
             _consoleGameObject = Instantiate(_consolePrefab);
+
+            // Temporarily make source UI visible for debugging
+            _consoleGameObject.name = "PetConsoleUiSource";
+            _consoleGameObject.transform.position = gameObject.transform.position;
+
+            Log.LogDebug("PetConsolePrefab: Removing TranslateOnStart components...");
+            ModUtils.DestroyComponentsInChildren<TranslateOnStart>(consoleGameObject);
+            ModUtils.DestroyComponentsInChildren<NotificationManager>(consoleGameObject);
+            Log.LogDebug("PetConsolePrefab: Removing TranslateOnStart components... Done.");
+
             GameObject uiObject = _consoleGameObject.FindChild("EditScreen");
             if (!uiObject)
             {
@@ -178,6 +161,68 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
             newUiGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
             newUiGameObject.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
             Log.LogDebug("PetConsoleUi: CopyUiFromPrefab done.");
+
+            // Init UI
+            Log.LogDebug("PetConsoleUi: Init Ui...");
+            GameObject newScreen = ModUiUtils.InitUi(newUiGameObject, "PetConsolePanel");
+            Log.LogDebug("PetConsoleUi: Creating buttons...");
+            CreateButtons(newUiGameObject, newScreen);
+            Log.LogDebug("PetConsoleUi: Creating buttons... Done.");
+            Log.LogDebug("PetConsoleUi: Creating text entry...");
+            CreateTextEntry(newUiGameObject, newScreen);
+            Log.LogDebug("PetConsoleUi: Creating text entry... Done.");
+            Log.LogDebug("PetConsoleUi: Creating pet list...");
+            CreatePetList(newUiGameObject, newScreen);
+            Log.LogDebug("PetConsoleUi: Creating pet list... Done.");
+            Log.LogDebug("PetConsoleUi: Add PetConsoleInput...");
+            PetConsoleInput petConsoleInput = newUiGameObject.AddComponent<PetConsoleInput>();
+            Log.LogDebug("PetConsoleUi: Add PetConsoleInput... Done.");
+        }
+
+        /// <summary>
+        /// Create the new button controls
+        /// </summary>
+        /// <param name="sourceUiScreen"></param>
+        /// <param name="targetUiScreen"></param>
+        private void CreateButtons(GameObject sourceUiScreen, GameObject targetUiScreen)
+        {
+            // Rename button
+            GameObject renameButton = ModUiUtils.CreateButton(sourceUiScreen, "Button",
+                "RenamePetButton", "Rename", targetUiScreen, new Vector3(-190, 20, 0));
+            renameButton.GetComponentInChildren<Button>().onClick.AddListener(RenameButtonProxy);
+
+            // Kill button
+            GameObject killButton = ModUiUtils.CreateButton(sourceUiScreen, "Button",
+                "KillPetButton", "Kill", targetUiScreen, new Vector3(-190, -50, 0));
+            renameButton.GetComponentInChildren<Button>().onClick.AddListener(KillButtonProxy);
+
+
+            // Kill All button
+            GameObject killAllButton = ModUiUtils.CreateButton(sourceUiScreen, "Button",
+                "KillAllPetsButton", "Kill All", targetUiScreen, new Vector3(-190, -120, 0));
+            renameButton.GetComponentInChildren<Button>().onClick.AddListener(KillAllButtonProxy);
+        }
+
+        /// <summary>
+        /// Create the new Text Entry controls
+        /// </summary>
+        /// <param name="sourceUiScreen"></param>
+        /// <param name="uiScreen"></param>
+        private void CreateTextEntry(GameObject sourceUiScreen, GameObject targetUiScreen)
+        {
+            // Rename pet field
+            GameObject nameEntry = ModUiUtils.CreateTextEntry(sourceUiScreen, "InputField", "PetNameField",
+                targetUiScreen, new Vector3(-135, 100, 0));
+        }
+
+        /// <summary>
+        /// Create the Pet List controls
+        /// </summary>
+        /// <param name="sourceUiScreen"></param>
+        /// <param name="uiScreen"></param>
+        private void CreatePetList(GameObject sourceUiScreen, GameObject uiScreen)
+        {
+
         }
 
     }

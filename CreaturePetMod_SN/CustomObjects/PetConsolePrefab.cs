@@ -1,13 +1,12 @@
-﻿using System.Collections;
-using DaftAppleGames.CreaturePetModSn.MonoBehaviours;
+﻿using DaftAppleGames.CreaturePetModSn.MonoBehaviours;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
+using Nautilus.Utility;
 using UnityEngine;
 using static CraftData;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
-using static HandReticle;
 
 namespace DaftAppleGames.CreaturePetModSn.CustomObjects
 {
@@ -22,8 +21,11 @@ namespace DaftAppleGames.CreaturePetModSn.CustomObjects
         public static void InitPetConsole()
         {
             // Create our custom prefab
-            CustomPrefab customConsole = new CustomPrefab("PetConsole", "Pet Console", "A special console for managing and naming pet creatures.",
-                SpriteManager.Get(TechType.PictureFrame));
+            CustomPrefab customConsole = new CustomPrefab("PetConsole", "Pet Console",
+                "A special console for managing and naming pet creatures.",
+                ImageUtils.LoadSpriteFromFile($"{SpritePath}\\{PetConsoleSprite}"));
+
+            //               SpriteManager.Get(TechType.PictureFrame));
 
             // We'll use the PictureFrame as a template
             PrefabTemplate consoleTemplate = new CloneTemplate(customConsole.Info, TechType.PictureFrame)
@@ -38,11 +40,11 @@ namespace DaftAppleGames.CreaturePetModSn.CustomObjects
             {
                 craftAmount = 1,
                 Ingredients =
-            {
-                new Ingredient(TechType.Titanium, 1),
-                new Ingredient(TechType.Nickel, 1),
-                new Ingredient(TechType.Copper, 1)
-            }
+                {
+                    new Ingredient(TechType.Titanium, 1),
+                    new Ingredient(TechType.Nickel, 1),
+                    new Ingredient(TechType.Copper, 1)
+                }
             };
 
             // Set the recipe.

@@ -56,22 +56,22 @@ namespace CreaturePetMod_SN.Patches
             {
                 Log.LogDebug($"GhostCrafterPatches: Setting PetCreatureType, ready for spawning {techType}");
 
-                if (techType == PetBuildableUtils.CaveCrawlerPetBuildablePrefabInfo.TechType)
+                if (techType == PetBuildablePrefab.CaveCrawlerPetBuildablePrefabInfo.TechType)
                 {
                     petSpawner.PetCreatureType = PetCreatureType.CaveCrawler;
                 }
 
-                if (techType == PetBuildableUtils.BloodCrawlerPetBuildablePrefabInfo.TechType)
+                if (techType == PetBuildablePrefab.BloodCrawlerPetBuildablePrefabInfo.TechType)
                 {
                     petSpawner.PetCreatureType = PetCreatureType.BloodCrawler;
                 }
 
-                if (techType == PetBuildableUtils.CrabSquidPetBuildablePrefabInfo.TechType)
+                if (techType == PetBuildablePrefab.CrabSquidPetBuildablePrefabInfo.TechType)
                 {
                     petSpawner.PetCreatureType = PetCreatureType.CrabSquid;
                 }
 
-                if (techType == PetBuildableUtils.AlienRobotBuildablePefabInfo.TechType)
+                if (techType == PetBuildablePrefab.AlienRobotBuildablePefabInfo.TechType)
                 {
                     petSpawner.PetCreatureType = PetCreatureType.AlienRobot;
                 }

@@ -63,6 +63,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>E:\Games\Steam\steamapps\common\Subnautica\Subnautica_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>E:\Games\Steam\steamapps\common\Subnautica\Subnautica_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
@@ -92,10 +95,11 @@
     <Compile Include="ConfigOptions\PetModConfig.cs" />
     <Compile Include="MonoBehaviours\PetConsole.cs" />
     <Compile Include="MonoBehaviours\PetConsoleUi.cs" />
+    <Compile Include="MonoBehaviours\PetConsoleInput.cs" />
     <Compile Include="Patches\GhostCrafterPatches.cs" />
     <Compile Include="CustomObjects\PetConsolePrefab.cs" />
     <Compile Include="CustomObjects\PetFabricatorPrefab.cs" />
-    <Compile Include="Utils\PetBuildableUtils.cs" />
+    <Compile Include="CustomObjects\PetBuildablePrefab.cs" />
     <Compile Include="MonoBehaviours\PetWorkbench.cs" />
     <Compile Include="ConfigOptions\PetModOptions.cs" />
     <Compile Include="MonoBehaviours\Pets\AlienRobotPet.cs" />
@@ -118,7 +122,7 @@
     <Compile Include="Utils\ModUtils.cs" />
     <Compile Include="Utils\PetUtils.cs" />
     <Compile Include="Utils\PirateCheckUtils.cs" />
-    <Compile Include="Utils\UiUtils.cs" />
+    <Compile Include="Utils\ModUiUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Buildables\" />

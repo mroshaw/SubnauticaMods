@@ -1,6 +1,4 @@
-﻿using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
-
-namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
+﻿namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
 {
 
     /// <summary>

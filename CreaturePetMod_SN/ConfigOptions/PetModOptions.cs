@@ -18,6 +18,7 @@ namespace DaftAppleGames.CreaturePetModSn.ConfigOptions
         private ModKeybindOption _spawnModifierKeybindOption;
         private ModKeybindOption _killAllKeybindOption;
         private ModKeybindOption _killAllModifierKeybindOption;
+        private ModToggleOption _skipSpawnObstacleCheckOption;
 
         public PetModOptions() : base("Subnautica Pets Options")
         {
@@ -44,6 +45,9 @@ namespace DaftAppleGames.CreaturePetModSn.ConfigOptions
             _petTypeChoiceOption = PetCreatureTypeConfig.ToModChoiceOption();
             _petNameChoiceOption = PetNameConfig.ToModChoiceOption();
 
+            // Set up debug options
+            _skipSpawnObstacleCheckOption = SkipSpawnObstacleCheckConfig.ToModToggleOption();
+
             // Set up changed listeners
             _petTypeChoiceOption.OnChanged += PetTypeOnChanged;
             _petNameChoiceOption.OnChanged += PetNameOnChanged;
@@ -51,6 +55,7 @@ namespace DaftAppleGames.CreaturePetModSn.ConfigOptions
             _spawnModifierKeybindOption.OnChanged += SpawnModifierKeyCodeOnChanged;
             _killAllKeybindOption.OnChanged += KillAllKeyCodeOnChanged;
             _killAllModifierKeybindOption.OnChanged += KillAllModifierKeyCodeOnChanged;
+            _skipSpawnObstacleCheckOption.OnChanged += SpawnObstacleCheckOnChanged;
 
             // Add new items to the mod options
             AddItem(_petTypeChoiceOption);
@@ -59,6 +64,7 @@ namespace DaftAppleGames.CreaturePetModSn.ConfigOptions
             AddItem(_spawnModifierKeybindOption);
             AddItem(_killAllKeybindOption);
             AddItem(_killAllModifierKeybindOption);
+            AddItem(_skipSpawnObstacleCheckOption);
         }
 
         /// <summary>
@@ -140,6 +146,16 @@ namespace DaftAppleGames.CreaturePetModSn.ConfigOptions
         private void KillAllModifierKeyCodeOnChanged(object sender, KeybindChangedEventArgs eventArgs)
         {
             KillAllKeyboardShortcutModifierConfig.Value = eventArgs.Value;
+        }
+
+        /// <summary>
+        /// Handle options changed for Skip Spawn Obstacle Check
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        private void SpawnObstacleCheckOnChanged(object sender, ToggleChangedEventArgs eventArgs)
+        {
+            SkipSpawnObstacleCheckConfig.Value = eventArgs.Value;
         }
     }
 }

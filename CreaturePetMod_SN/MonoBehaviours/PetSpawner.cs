@@ -12,8 +12,12 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
     /// </summary>
     internal class PetSpawner : MonoBehaviour
     {
+        // Distance above the Fabricator position that pet will be spawned
+        public float fabricatorSpawnYAdjustment = 0.8f;
+
         private PetName _petName;
         private PetCreatureType _petCreatureType;
+        private bool _skipSpawnObstacleCheck;
 
         // Added to spawn location to give pet room to spawn
         private readonly float _spawnBuffer = 1.8f;
@@ -36,6 +40,14 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         public PetCreatureType PetCreatureType
         {
             set => _petCreatureType = value;
+        }
+
+        /// <summary>
+        /// Public setter for Skip Obstacle Check
+        /// </summary>
+        public bool SkipSpawnObstacleCheck
+        {
+            set => _skipSpawnObstacleCheck = value;
         }
 
         /// <summary>
@@ -74,6 +86,7 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
             Log.LogDebug($"Spawning Pet. Type: {_petCreatureType}, Name: {_petName}");
 
             Vector3 desiredSpawnLocation;
+            bool spawnSuccess = false;
 
             // If the player is the spawner, do some checks before spawning
             if (_isSpawnerPlayer)
@@ -83,30 +96,29 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
                 {
                     if (GetSpawnLocation(out desiredSpawnLocation))
                     {
-                        if (CheckPetSpawnLocation(desiredSpawnLocation))
+                        if (CheckPetSpawnLocation(desiredSpawnLocation) || _skipSpawnObstacleCheck)
                         {
-                            Log.LogDebug("Preparing to Spawn from Player location!");
+                            Log.LogDebug($"Preparing to Spawn from Player location. Skip obstacle check is {_skipSpawnObstacleCheck}");
                             InstantiatePet(desiredSpawnLocation);
+                            spawnSuccess = true;
                         }
                     }
-                    else
-                    {
-                        ErrorMessage.AddMessage($"You can't spawn a pet here! {_spawnFailReason}");
-                        Log.LogDebug($"You can't spawn a pet here! {_spawnFailReason}");
-                    }
-                }
-                else
-                {
-                    ErrorMessage.AddMessage($"You can't spawn a pet here! {_spawnFailReason}");
-                    Log.LogDebug($"You can't spawn a pet here! {_spawnFailReason}");
                 }
             }
             else
             {
                 Log.LogDebug("PetSpawner: Player is not spawner. Assume Fabricator.");
-                desiredSpawnLocation = gameObject.transform.position + (Vector3.up * 0.8f);
+                desiredSpawnLocation = gameObject.transform.position + (Vector3.up * fabricatorSpawnYAdjustment);
                 Log.LogDebug("Preparing to Spawn from Fabricator location!");
                 InstantiatePet(desiredSpawnLocation);
+                spawnSuccess = true;
+            }
+
+            // Problem encountered, so log and display a message to user
+            if (!spawnSuccess)
+            {
+                ErrorMessage.AddMessage($"You can't spawn a pet here! {_spawnFailReason}");
+                Log.LogDebug($"You can't spawn a pet here! {_spawnFailReason}");
             }
         }
 
@@ -235,7 +247,7 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
             if (Physics.Linecast(fromPosition, spawnPosition, out RaycastHit hit))
             {
                 Log.LogDebug($"CheckPetSpawnLocation: Linecast has hit an object: {hit.collider.gameObject.name}");
-                _spawnFailReason = $"There is blocking the spawn location: {hit.collider.gameObject.name}";
+                _spawnFailReason = $"There is something blocking the spawn location: {hit.collider.gameObject.name}";
                 return false;
             }
 
