@@ -73,6 +73,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>E:\Games\Steam\steamapps\common\Subnautica\Subnautica_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Games\Steam\steamapps\common\Subnautica\Subnautica_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>E:\Games\Steam\steamapps\common\Subnautica\Subnautica_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
@@ -92,15 +96,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigOptions\PetModConfig.cs" />
     <Compile Include="MonoBehaviours\PetConsole.cs" />
-    <Compile Include="MonoBehaviours\PetConsoleUi.cs" />
     <Compile Include="MonoBehaviours\PetConsoleInput.cs" />
     <Compile Include="Patches\GhostCrafterPatches.cs" />
     <Compile Include="CustomObjects\PetConsolePrefab.cs" />
     <Compile Include="CustomObjects\PetFabricatorPrefab.cs" />
     <Compile Include="CustomObjects\PetBuildablePrefab.cs" />
-    <Compile Include="MonoBehaviours\PetWorkbench.cs" />
     <Compile Include="ConfigOptions\PetModOptions.cs" />
     <Compile Include="MonoBehaviours\Pets\AlienRobotPet.cs" />
     <Compile Include="MonoBehaviours\Pets\BloodCrawlerPet.cs" />
@@ -122,17 +123,22 @@
     <Compile Include="Utils\ModUtils.cs" />
     <Compile Include="Utils\PetUtils.cs" />
     <Compile Include="Utils\PirateCheckUtils.cs" />
-    <Compile Include="Utils\ModUiUtils.cs" />
+    <Compile Include="Utils\UiUtils.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Buildables\" />
-    <Folder Include="Sprites\" />
+    <None Include="Assets\petsmodassetbundle">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\petsmodassetbundle.manifest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "E:\Games\Steam\steamapps\common\Subnautica\BepInEx\plugins\$(TargetName)"
-mkdir "E:\Games\Steam\steamapps\common\Subnautica\BepInEx\plugins\$(TargetName)\Sprites"
+mkdir "E:\Games\Steam\steamapps\common\Subnautica\BepInEx\plugins\$(TargetName)\Assets"
 xcopy /q/y/i "$(TargetPath)" "E:\Games\Steam\steamapps\common\Subnautica\BepInEx\plugins\$(TargetName)" /E /H /C
-</PostBuildEvent>
+xcopy /q/y/i "$(TargetDir)\Assets" "E:\Games\Steam\steamapps\common\Subnautica\BepInEx\plugins\$(TargetName)\Assets\*.*" /E /H /C</PostBuildEvent>
   </PropertyGroup>
 </Project>

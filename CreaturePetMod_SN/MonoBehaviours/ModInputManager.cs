@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
 namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
 {
@@ -11,13 +12,6 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
     {
         public UnityEvent SpawnButtonPressedEvent = new UnityEvent();
         public UnityEvent KillAllButtonPressedEvent = new UnityEvent();
-
-        // Configurable keyCode to instigate action
-
-        /*
-        private KeyboardShortcut _spawnKeyboardShortcut;
-        private KeyboardShortcut _killAllKeyboardShortcut;
-        */
 
         private KeyCode _spawnKeyCode;
         private KeyCode _killAllKeyCode;
@@ -66,6 +60,7 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
             {
                 if (Input.GetKeyDown(_spawnKeyCode))
                 {
+                    Log.LogDebug("ModInputManager: Spawn keypress detected.");
                     SpawnButtonPressedEvent.Invoke();
                 }
             }

@@ -24,7 +24,6 @@ namespace DaftAppleGames.CreaturePetModSn.ConfigOptions
         {
             // Register Mod Options
             OptionsPanelHandler.RegisterModOptions(this);
-
             AddModOptions();
         }
 

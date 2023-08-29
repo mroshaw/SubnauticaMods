@@ -1,4 +1,4 @@
-﻿using DaftAppleGames.CreaturePetModSn.CustomObjects;
+﻿using DaftAppleGames.CreaturePetModSn.Utils;
 using UnityEngine;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
@@ -24,7 +24,7 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets
 
         // Private pet info
         private PetCreatureType _petCreatureType;
-        private PetName _petName;
+        private string _petName;
         private MoveOnSurface _moveOnSurface;
         private MoveOnGround _moveOnGround;
         private Animator _animator;
@@ -65,7 +65,7 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets
         /// <summary>
         /// Public getter and setter for CreatureName
         /// </summary>
-        public PetName PetName
+        public string PetName
         {
             set => _petName = value;
             get => _petName;
@@ -140,10 +140,14 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets
             Log.LogDebug("Pet: Refreshing creature actions...");
             UpdateActions();
             Log.LogDebug("Pet: Refreshing creature actions... Done.");
+
+            Log.LogDebug("Pet: Adding Pet to Global List...");
+            Saver.AddPetToList(this);
+            Log.LogDebug("Pet: Adding Pet to Global List... Done.");
         }
 
         /// <summary>
-        /// Registers the new pet with the saver
+        /// Registers the new pet with the saver and UI list
         /// </summary>
         public void RegisterNewPet()
         {
@@ -156,7 +160,17 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets
         /// </summary>
         public void UnregisterPet()
         {
-            Saver.RemovePet(this);
+            Saver.UnregisterPet(this);
+        }
+
+        /// <summary>
+        /// Rename the Pet
+        /// </summary>
+        /// <param name="newName"></param>
+        public void RenamePet(string newName)
+        {
+            PetName = newName;
+            _petSaverDetails.PetName = newName;
         }
 
         /// <summary>
@@ -289,7 +303,6 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets
             if (liveMixin)
             {
                 liveMixin.Kill();
-                
                 ErrorMessage.AddMessage($"Goodbye, {PetNameString}! You've been the goodest {PetTypeString}!");
             }
         }

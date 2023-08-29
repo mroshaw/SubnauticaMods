@@ -1,6 +1,6 @@
 ﻿using DaftAppleGames.CreaturePetModSn.MonoBehaviours;
 using DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets;
-using DaftAppleGames.CreaturePetModSn.CustomObjects;
+using DaftAppleGames.CreaturePetModSn.Utils;
 using HarmonyLib;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
@@ -48,7 +48,8 @@ namespace DaftAppleGames.CreaturePetModSn.Patches
             Pet pet = __instance.GetComponent<Pet>();
             if (pet)
             {
-                Saver.RemovePet(pet);
+                Saver.UnregisterPet(pet);
+                Saver.RemovePetFromList(pet);
             }
         }
     }

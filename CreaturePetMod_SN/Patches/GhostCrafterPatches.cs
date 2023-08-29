@@ -13,7 +13,6 @@ namespace CreaturePetMod_SN.Patches
     [HarmonyPatch(typeof(GhostCrafter))]
     internal class GhostCrafterPatches
     {
-
         /// <summary>
         /// Patches the OnCraftingEnd method, allowing us to cancel
         /// the craft, and spawn our Pet instead
@@ -28,7 +27,7 @@ namespace CreaturePetMod_SN.Patches
             if (petSpawner)
             {
                 Log.LogDebug("GhostCrafterPatches: Pet crafting complete. Spawning pet...");
-                petSpawner.SpawnPet();
+                petSpawner.SpawnPet(SelectedCreaturePetType, SelectedPetName);
                 Log.LogDebug("GhostCrafterPatches: Pet crafting complete. Spawning pet... Done.");
 
                 Log.LogDebug("GhostCrafterPatches: Reset crafter...");
@@ -58,22 +57,22 @@ namespace CreaturePetMod_SN.Patches
 
                 if (techType == PetBuildablePrefab.CaveCrawlerPetBuildablePrefabInfo.TechType)
                 {
-                    petSpawner.PetCreatureType = PetCreatureType.CaveCrawler;
+                    SelectedCreaturePetType = PetCreatureType.CaveCrawler;
                 }
 
                 if (techType == PetBuildablePrefab.BloodCrawlerPetBuildablePrefabInfo.TechType)
                 {
-                    petSpawner.PetCreatureType = PetCreatureType.BloodCrawler;
+                    SelectedCreaturePetType = PetCreatureType.BloodCrawler;
                 }
 
                 if (techType == PetBuildablePrefab.CrabSquidPetBuildablePrefabInfo.TechType)
                 {
-                    petSpawner.PetCreatureType = PetCreatureType.CrabSquid;
+                    SelectedCreaturePetType = PetCreatureType.CrabSquid;
                 }
 
                 if (techType == PetBuildablePrefab.AlienRobotBuildablePefabInfo.TechType)
                 {
-                    petSpawner.PetCreatureType = PetCreatureType.AlienRobot;
+                    SelectedCreaturePetType = PetCreatureType.AlienRobot;
                 }
             }
 

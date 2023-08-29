@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets;
-using DaftAppleGames.CreaturePetModSn.CustomObjects;
+using DaftAppleGames.CreaturePetModSn.Utils;
 using UnityEngine;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
@@ -15,8 +15,6 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         // Distance above the Fabricator position that pet will be spawned
         public float fabricatorSpawnYAdjustment = 0.8f;
 
-        private PetName _petName;
-        private PetCreatureType _petCreatureType;
         private bool _skipSpawnObstacleCheck;
 
         // Added to spawn location to give pet room to spawn
@@ -25,22 +23,6 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         private string _spawnFailReason = "";
 
         private bool _isSpawnerPlayer = false;
-
-        /// <summary>
-        /// Public setter for Pet Name
-        /// </summary>
-        public PetName PetName
-        {
-            set => _petName = value;
-        }
-
-        /// <summary>
-        /// Public setter for Pet Creature Type
-        /// </summary>
-        public PetCreatureType PetCreatureType
-        {
-            set => _petCreatureType = value;
-        }
 
         /// <summary>
         /// Public setter for Skip Obstacle Check
@@ -60,30 +42,29 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         }
 
         /// <summary>
-        /// Spawns a Pet given a CreatureType
-        /// </summary>
-        /// <param name="petCreatureType"></param>
-        public void SpawnPet(PetCreatureType petCreatureType)
-        {
-            _petCreatureType = petCreatureType;
-            SpawnPet();
-        }
-
-        /// <summary>
         /// Spawns a Pet given a TechType
         /// </summary>
         /// <param name="petTechType"></param>
-        public void SpawnPet(TechType petTechType)
+        /// <param name="petName"></param>
+        public void SpawnPet(TechType petTechType, string petName)
         {
-            SpawnPet(GetPetCreatureType(petTechType));
+            SpawnPet(GetPetCreatureType(petTechType), petName);
         }
 
         /// <summary>
         /// Spawn a pet with current settings
         /// </summary>
-        public void SpawnPet()
+        public void SpawnPet(PetCreatureType petType, string petName)
         {
-            Log.LogDebug($"Spawning Pet. Type: {_petCreatureType}, Name: {_petName}");
+            Log.LogDebug($"PetSpawner: Spawning Pet. Type: {petType}, Name: {petName}");
+            Log.LogDebug($"PetSpawner: IsANaughtyBoyThen is {IsANaughtyBoy}");
+
+            // We don't allow Pirates to look after Pets
+            if (IsANaughtyBoy)
+            {
+                ErrorMessage.AddError("Sorry, pirates are not permitted to own a pet!");
+                return;
+            }
 
             Vector3 desiredSpawnLocation;
             bool spawnSuccess = false;
@@ -99,7 +80,7 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
                         if (CheckPetSpawnLocation(desiredSpawnLocation) || _skipSpawnObstacleCheck)
                         {
                             Log.LogDebug($"Preparing to Spawn from Player location. Skip obstacle check is {_skipSpawnObstacleCheck}");
-                            InstantiatePet(desiredSpawnLocation);
+                            InstantiatePet(desiredSpawnLocation, petType, petName);
                             spawnSuccess = true;
                         }
                     }
@@ -110,7 +91,7 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
                 Log.LogDebug("PetSpawner: Player is not spawner. Assume Fabricator.");
                 desiredSpawnLocation = gameObject.transform.position + (Vector3.up * fabricatorSpawnYAdjustment);
                 Log.LogDebug("Preparing to Spawn from Fabricator location!");
-                InstantiatePet(desiredSpawnLocation);
+                InstantiatePet(desiredSpawnLocation, petType, petName);
                 spawnSuccess = true;
             }
 
@@ -126,9 +107,9 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         /// Instantiate prefab instance and configure
         /// </summary>
         /// <param name="spawnLocation"></param>
-        private void InstantiatePet(Vector3 spawnLocation)
+        private void InstantiatePet(Vector3 spawnLocation, PetCreatureType petType, string petName)
         {
-            StartCoroutine(InstantiatePetAsync(spawnLocation));
+            StartCoroutine(InstantiatePetAsync(spawnLocation, petType, petName));
         }
 
         /// <summary>
@@ -137,10 +118,12 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         /// </summary>
         /// <param name="spawnLocation"></param>
         /// <returns></returns>
-        private IEnumerator InstantiatePetAsync(Vector3 spawnLocation)
+        private IEnumerator InstantiatePetAsync(Vector3 spawnLocation, PetCreatureType petType, string petName)
         {
+            Log.LogDebug($"InstantiatePetAsync called with: Type: {petType}, Name: {petName}");
+
             yield return null;
-            TechType techType = GetPetCreatureTechType(_petCreatureType);
+            TechType techType = GetPetCreatureTechType(petType);
 
             if (techType == TechType.None)
             {
@@ -155,9 +138,9 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
 
             // Add the Pet component and configure name and type
             Log.LogDebug("Adding Pet component...");
-            Pet newPet = PetUtils.AddPetComponent(newCreatureGameObject, _petCreatureType, _petName);
-            newPet.PetCreatureType = _petCreatureType;
-            newPet.PetName = _petName;
+            Pet newPet = PetUtils.AddPetComponent(newCreatureGameObject, petType, petName);
+            newPet.PetCreatureType = petType;
+            newPet.PetName = petName;
 
             // Set the position and rotation
             newCreatureGameObject.transform.position = spawnLocation;
@@ -165,13 +148,14 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
             newCreatureGameObject.name = $"{newCreatureGameObject.name}_Pet";
 
             // Register pet with the saver
-            Log.LogDebug("Pet: Registering new Pet...");
+            Log.LogDebug("PetSpawner: Registering new Pet...");
             newPet.RegisterNewPet();
-            Log.LogDebug("Pet: Registering new Pet... Done.");
+            Log.LogDebug("PetSpawner: Registering new Pet... Done.");
 
-            Log.LogDebug($"Instantiated {_petCreatureType} at {spawnLocation} as {newCreatureGameObject.name}");
+            Log.LogDebug($"Instantiated {petType} at {spawnLocation} as {newCreatureGameObject.name}");
             newPet.Born();
             Log.LogDebug("Done!");
+
         }
 
         /// <summary>
@@ -308,11 +292,7 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         /// </summary>
         public void KillAllPets()
         {
-            Pet[] allPets = FindObjectsOfType<Pet>();
-            foreach (Pet pet in allPets)
-            {
-                pet.Kill();
-            }
+            PetUtils.KillAllPets();
         }
     }
 }

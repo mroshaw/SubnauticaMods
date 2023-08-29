@@ -3,12 +3,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
-namespace CreaturePetMod_SN.Utils
+namespace DaftAppleGames.CreaturePetModSn.Utils
 {
     /// <summary>
     /// Utilities class to help construct custom UIs
     /// </summary>
-    internal static class ModUiUtils
+    internal static class UiUtils
     {
         /// <summary>
         /// Disables "original" UI elements in the source UI
@@ -121,6 +121,15 @@ namespace CreaturePetMod_SN.Utils
 
         }
 
+        /// <summary>
+        /// Creates a Text Entry object from the source UI
+        /// </summary>
+        /// <param name="sourceUi"></param>
+        /// <param name="sourceTextName"></param>
+        /// <param name="newTextName"></param>
+        /// <param name="targetUi"></param>
+        /// <param name="localPosition"></param>
+        /// <returns></returns>
         public static GameObject CreateTextEntry(GameObject sourceUi, string sourceTextName, string newTextName, GameObject targetUi, Vector3 localPosition)
         {
             GameObject origTextGameObject = null;
@@ -144,8 +153,7 @@ namespace CreaturePetMod_SN.Utils
             GameObject newTextGameObject = GameObject.Instantiate(origTextGameObject);
 
             // Set new button properties
-            newTextGameObject.name = sourceTextName;
-
+            newTextGameObject.name = newTextName;
 
             newTextGameObject.transform.SetParent(targetUi.transform);
             newTextGameObject.transform.localPosition = localPosition;
@@ -155,6 +163,73 @@ namespace CreaturePetMod_SN.Utils
             newTextGameObject.SetActive(true);
 
             return newTextGameObject;
+        }
+        
+        /// <summary>
+        /// Creates a new label game object from the source
+        /// </summary>
+        /// <param name="sourceUi"></param>
+        /// <param name="sourceLabelName"></param>
+        /// <param name="newLabelName"></param>
+        /// <param name="newLabelText"></param>
+        /// <param name="targetUi"></param>
+        /// <param name="localPosition"></param>
+        /// <returns></returns>
+        public static GameObject CreateLabel(GameObject sourceUi, string sourceLabelName, string newLabelName, string newLabelText, GameObject targetUi, Vector3 localPosition)
+        {
+            GameObject origLabelGameObject = null;
+
+            foreach (Transform child in sourceUi.GetComponentsInChildren<Transform>(true))
+            {
+                if (child.name == sourceLabelName && child.GetComponent<TextMeshProUGUI>())
+                {
+                    origLabelGameObject = child.gameObject;
+                    break;
+                }
+            }
+
+            if (!origLabelGameObject)
+            {
+                Log.LogDebug($"UiUtils: CreateButton can't find a TextEntry in {sourceUi}");
+                return null;
+            }
+
+            // Clone the button Game Object
+            GameObject newLabelGameObject = GameObject.Instantiate(origLabelGameObject);
+
+            // Set new button properties
+            newLabelGameObject.name = newLabelName;
+
+            newLabelGameObject.transform.SetParent(targetUi.transform);
+            newLabelGameObject.transform.localPosition = localPosition;
+            newLabelGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
+            newLabelGameObject.transform.localScale = new Vector3(1, 1, 1);
+            newLabelGameObject.GetComponent<TextMeshProUGUI>().text = newLabelText;
+
+            newLabelGameObject.SetActive(true);
+
+            return newLabelGameObject;
+        }
+
+        /// <summary>
+        /// Creates a new ScrollView game object
+        /// </summary>
+        /// <param name="sourceUi"></param>
+        /// <param name="targetUi"></param>
+        /// <param name="localPosition"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public static GameObject CreateScrollView(GameObject sourceUi,
+            GameObject targetUi, Vector3 localPosition, Vector2 size)
+        {
+            GameObject scrollView = ModUtils.GetGameObjectInstanceFromAssetBundle(ScrollViewObject);
+            scrollView.name = "Pet List Scroll View";
+            scrollView.transform.SetParent(targetUi.transform);
+            scrollView.transform.localPosition = localPosition;
+            scrollView.transform.localRotation = new Quaternion(0, 0, 0, 0);
+            scrollView.transform.localScale = new Vector3(1, 1, 1);
+            GameObject contentGameObject = scrollView.GetComponent<ScrollRect>().content.gameObject;
+            return contentGameObject;
         }
     }
 }

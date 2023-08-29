@@ -1,18 +1,16 @@
-﻿using Nautilus.Assets.PrefabTemplates;
+﻿using DaftAppleGames.CreaturePetModSn.Utils;
+using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
 using UnityEngine;
 using Nautilus.Assets.Gadgets;
-using Nautilus.Utility;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
 namespace DaftAppleGames.CreaturePetModSn.CustomObjects
 {
-    // TODO Review this file and update to your own requirements, or remove it altogether if not required
     /// <summary>
-    /// Template MonoBehaviour class. Use this to add new functionality and behaviours to
-    /// the game.
+    /// Static class for creating the "Pet DNA" collectable objects
     /// </summary>
-    internal class PetDnaPrefab : MonoBehaviour
+    internal class PetDnaPrefab
     {
         // Static references for consumers
         public static PrefabInfo CaveCrawlerDnaPrefabInfo;
@@ -37,10 +35,10 @@ namespace DaftAppleGames.CreaturePetModSn.CustomObjects
         private static void InitCaveCrawlerDnaPrefab()
         {
             PrefabInfo caveCrawlerDnaInfo = PrefabInfo.WithTechType("CaveCrawlerDna", "Cave Crawler DNA", "DNA from a Cave Crawler.");
-            caveCrawlerDnaInfo.WithIcon(ImageUtils.LoadSpriteFromFile($"{SpritePath}\\{DnaCaveCrawlerSprite}"));
+            caveCrawlerDnaInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaCaveCrawlerTexture));
             CaveCrawlerDnaPrefabInfo = caveCrawlerDnaInfo;
             CustomPrefab caveCrawlerDna = new CustomPrefab(caveCrawlerDnaInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(caveCrawlerDnaInfo, TechType.GenericEgg)
+            PrefabTemplate cloneTemplate = new CloneTemplate(caveCrawlerDnaInfo, TechType.BonesharkEgg)
             {
                 // Callback to change all material colors of this clone to blue.
                 ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.magenta))
@@ -58,10 +56,10 @@ namespace DaftAppleGames.CreaturePetModSn.CustomObjects
         private static void InitBloodCrawlerDnaPrefab()
         {
             PrefabInfo bloodCrawlerDnaInfo = PrefabInfo.WithTechType("BloodCrawlerDna", "Blood Crawler DNA", "DNA from a Blood Crawler.");
-            bloodCrawlerDnaInfo.WithIcon(ImageUtils.LoadSpriteFromFile($"{SpritePath}\\{DnaBloodCrawlerSprite}"));
+            bloodCrawlerDnaInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaBloodCrawlerTexture));
             BloodCrawlerDnaPrefabInfo = bloodCrawlerDnaInfo;
             CustomPrefab bloodCrawlerDna = new CustomPrefab(bloodCrawlerDnaInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(bloodCrawlerDnaInfo, TechType.GenericEgg)
+            PrefabTemplate cloneTemplate = new CloneTemplate(bloodCrawlerDnaInfo, TechType.CrabsnakeEgg)
             {
                 // Callback to change all material colors of this clone to red.
                 ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.red))
@@ -79,10 +77,10 @@ namespace DaftAppleGames.CreaturePetModSn.CustomObjects
         private static void InitCrabSquidDnaPrefab()
         {
             PrefabInfo crabSquidDnaInfo = PrefabInfo.WithTechType("CrabSquidDna", "Crab Squid DNA", "DNA from a Crab Squid.");
-            crabSquidDnaInfo.WithIcon(ImageUtils.LoadSpriteFromFile($"{SpritePath}\\{DnaCrabSquidSprite}"));
+            crabSquidDnaInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaCrabSquidTexture));
             CrabSquidDnaPrefabInfo = crabSquidDnaInfo;
             CustomPrefab crabSquidDna = new CustomPrefab(crabSquidDnaInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(crabSquidDnaInfo, TechType.GenericEgg)
+            PrefabTemplate cloneTemplate = new CloneTemplate(crabSquidDnaInfo, TechType.CrabsquidEgg)
             {
                 // Callback to change all material colors of this clone to blue.
                 ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.blue))
@@ -100,10 +98,10 @@ namespace DaftAppleGames.CreaturePetModSn.CustomObjects
         private static void InitAlienRobotDnaPrefab()
         {
             PrefabInfo alienRobotDnaInfo = PrefabInfo.WithTechType("AlienRobotDna", "Alien Robot DNA", "DNA from an Alien Robot.");
-            alienRobotDnaInfo.WithIcon(ImageUtils.LoadSpriteFromFile($"{SpritePath}\\{DnaAlienRobotSprite}"));
+            alienRobotDnaInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaAlienRobotTexture));
             AlienRobotDnaPrefabInfo = alienRobotDnaInfo;
             CustomPrefab alienRobotDna = new CustomPrefab(alienRobotDnaInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(alienRobotDnaInfo, TechType.GenericEgg)
+            PrefabTemplate cloneTemplate = new CloneTemplate(alienRobotDnaInfo, TechType.CrashEgg)
             {
                 // Callback to change all material colors of this clone to grey.
                 ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.grey))

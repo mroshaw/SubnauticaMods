@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
 namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
 {
@@ -20,7 +21,7 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         /// <summary>
         /// Unity Awake method.
         /// </summary>
-        public void Awake()
+        public override void Awake()
         {
             base.Awake();
             terminationSqrDistance = Mathf.Pow(3f, 2f);
@@ -38,7 +39,7 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         /// <summary>
         /// Unity Update
         /// </summary>
-        public void Update()
+        public override void Update()
         {
             base.Update();
             if (focused && player != null && (player.transform.position - rt.position).sqrMagnitude >= terminationSqrDistance)
@@ -53,7 +54,9 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         /// <param name="lockMovement"></param>
         public override void OnSelect(bool lockMovement)
         {
-            base.OnSelect(lockMovement);
+            // base.OnSelect(lockMovement);
+            Log.LogDebug($"PetConsoleInput: OnSelect called with lockMovement: {lockMovement}");
+            base.OnSelect(true);
             player = Player.main;
             GamepadInputModule.current.SetCurrentGrid(panel);
         }
@@ -63,6 +66,8 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         /// </summary>
         public override void OnDeselect()
         {
+            Log.LogDebug($"PetConsoleInput: DeSelect called");
+
             base.OnDeselect();
             player = null;
         }

@@ -4,7 +4,6 @@ using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
 namespace DaftAppleGames.CreaturePetModSn.Patches
 {
-
     /// <summary>
     /// Patches to support loading and saving of Pets details
     /// </summary>

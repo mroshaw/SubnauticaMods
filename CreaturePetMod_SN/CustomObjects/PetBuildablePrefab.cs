@@ -1,4 +1,5 @@
-﻿using Nautilus.Assets.PrefabTemplates;
+﻿using DaftAppleGames.CreaturePetModSn.Utils;
+using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
@@ -9,7 +10,10 @@ using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
 namespace DaftAppleGames.CreaturePetModSn.CustomObjects
 {
-
+    /// <summary>
+    /// This static class provides methods to create our "Buildable Pets", via the
+    /// new Pet Fabricator.
+    /// </summary>
     public static class PetBuildablePrefab
     {
         // Public static references for use by other consumers
@@ -23,7 +27,6 @@ namespace DaftAppleGames.CreaturePetModSn.CustomObjects
         /// </summary>
         public static void InitPetBuildables()
         {
-            Log.LogDebug($"PetBuildableUtils: Current Sprite path is: {SpritePath}");
             CaveCrawlerBuildable.Register();
             BloodCrawlerBuildable.Register();
             CrabSquidBuildable.Register();
@@ -38,7 +41,7 @@ namespace DaftAppleGames.CreaturePetModSn.CustomObjects
             public static PrefabInfo Info { get; } = PrefabInfo
                 .WithTechType("CaveCrawlerPet", "Cave Crawler Pet", "A pet cave crawler.")
                 // set the icon to that of the vanilla locker:
-                .WithIcon(ImageUtils.LoadSpriteFromFile($"{SpritePath}\\{CaveCrawlerSprite}"));
+                .WithIcon(ModUtils.GetSpriteFromAssetBundle(CaveCrawlerTexture));
 
             public static void Register()
             {
@@ -94,7 +97,7 @@ namespace DaftAppleGames.CreaturePetModSn.CustomObjects
             public static PrefabInfo Info { get; } = PrefabInfo
                 .WithTechType("BloodCrawlerPet", "Blood Crawler Pet", "A pet blood crawler.")
                 // set the icon to that of the vanilla locker:
-                .WithIcon(ImageUtils.LoadSpriteFromFile($"{SpritePath}\\{BloodCrawlerSprite}"));
+                .WithIcon(ModUtils.GetSpriteFromAssetBundle(BloodCrawlerTexture));
 
             public static void Register()
             {
@@ -207,7 +210,7 @@ namespace DaftAppleGames.CreaturePetModSn.CustomObjects
             public static PrefabInfo Info { get; } = PrefabInfo
                 .WithTechType("AlienRobotPet", "Alien Robot Pet", "A pet alien robot.")
                 // set the icon to that of the vanilla locker:
-                .WithIcon(ImageUtils.LoadSpriteFromFile($"{SpritePath}\\{AlienRobotSprite}"));
+                .WithIcon(ModUtils.GetSpriteFromAssetBundle(AlienRobotTexture));
 
             public static void Register()
             {

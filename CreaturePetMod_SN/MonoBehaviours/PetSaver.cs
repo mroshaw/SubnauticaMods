@@ -4,6 +4,7 @@ using System.IO;
 using DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Events;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
 namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
@@ -13,38 +14,85 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
     /// </summary>
     public class PetSaver : MonoBehaviour
     {
-        public HashSet<PetDetails> PetDetailsHashSet = new HashSet<PetDetails>();
+        // HashSet used for saving and loading
+        public HashSet<PetDetails> PetDetailsHashSet = new();
+
+        // List to maintain accessible set of active Pets
+        public List<Pet> PetList = new List<Pet>();
+
+        // Unity Events
+        public UnityEvent RegisterPetEvent;
+        public UnityEvent UnregisterPetEvent;
+
+        public UnityEvent PetListAddEvent;
+        public UnityEvent PetListRemoveEvent;
 
         private static readonly string SaveFileName = "pet_creatures.json";
         private static readonly string SaveFileFolder = "CreaturePetMod_SN";
         public static Version LatestSaveDataVersion = new Version(1, 0, 0, 0);
 
         /// <summary>
-        /// Register a new pet to the HashSet
+        /// Register a new pet to the HashSet - used by save and load game
         /// </summary>
         /// <param name="pet"></param>
         public PetDetails RegisterPet(Pet pet)
         {
+            if (PetDetailsHashSet == null)
+            {
+                PetDetailsHashSet = new();
+            }
+
             string prefabId = GetPrefabId(pet);
             if (string.IsNullOrEmpty(prefabId))
             {
                 Log.LogError("PetSaver: Couldn't derive the PrefabId from the Pet GameObject!");
                 return null;
             }
+
+            // Add to the HashSet
             Log.LogDebug("PetSaver: Adding new Pet to HashSet...");
             PetDetails newPetDetails = new PetDetails(prefabId, pet.PetName, pet.PetCreatureType);
             PetDetailsHashSet.Add(newPetDetails);
             Log.LogDebug("PetSaver: Adding new Pet to HashSet... Done.");
+
+            // Call any event listeners
+            RegisterPetEvent.Invoke();
+
+
             return newPetDetails;
         }
 
         /// <summary>
-        /// Remove pet from the Hashset
+        /// Remove pet from the Hashset - used by save and load game
         /// </summary>
         /// <param name="pet"></param>
-        public void RemovePet(Pet pet)
+        public void UnregisterPet(Pet pet)
         {
+            // Remove from HashSet
             PetDetailsHashSet.Remove(pet.PetSaverDetails);
+
+            // Call any event listeners
+            UnregisterPetEvent.Invoke();
+        }
+
+        /// <summary>
+        /// Add a new Pet to the active list - used by the UI
+        /// </summary>
+        /// <param name="pet"></param>
+        public void AddPetToList(Pet pet)
+        {
+            PetList.Add(pet);
+            PetListAddEvent.Invoke();
+        }
+
+        /// <summary>
+        /// Remove Pet from active list - used by the UI
+        /// </summary>
+        /// <param name="pet"></param>
+        public void RemovePetFromList(Pet pet)
+        {
+            PetList.Remove(pet);
+            PetListRemoveEvent.Invoke();
         }
 
         /// <summary>
@@ -152,6 +200,15 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
                 string serializedJson = File.ReadAllText(saveFile);
                 SaveData tempSave = JsonConvert.DeserializeObject<SaveData>(serializedJson);
                 PetDetailsHashSet = tempSave.PetDetailsHashSet;
+
+                // Fix old Save file
+                foreach (PetDetails currPetDetails in PetDetailsHashSet)
+                {
+                    if (int.TryParse(currPetDetails.PetName, out int nameEnum))
+                    {
+                        currPetDetails.PetName = ((PetName)nameEnum).ToString();
+                    }
+                }
             }
             else
             {
@@ -178,7 +235,7 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
         public class PetDetails
         {
             public string PrefabId { get; }
-            public PetName PetName { get; }
+            public string PetName { get; set; }
             public PetCreatureType PetType { get; set; }
 
 
@@ -188,7 +245,7 @@ namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours
             /// <param name="prefabId"></param>
             /// <param name="petName"></param>
             /// <param name="petType"></param>
-            public PetDetails(string prefabId, PetName petName, PetCreatureType petType)
+            public PetDetails(string prefabId, string petName, PetCreatureType petType)
             {
                 PrefabId = prefabId;
                 PetName = petName;

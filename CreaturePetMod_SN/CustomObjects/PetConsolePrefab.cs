@@ -1,9 +1,9 @@
 ﻿using DaftAppleGames.CreaturePetModSn.MonoBehaviours;
+using DaftAppleGames.CreaturePetModSn.Utils;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
-using Nautilus.Utility;
 using UnityEngine;
 using static CraftData;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
@@ -23,9 +23,7 @@ namespace DaftAppleGames.CreaturePetModSn.CustomObjects
             // Create our custom prefab
             CustomPrefab customConsole = new CustomPrefab("PetConsole", "Pet Console",
                 "A special console for managing and naming pet creatures.",
-                ImageUtils.LoadSpriteFromFile($"{SpritePath}\\{PetConsoleSprite}"));
-
-            //               SpriteManager.Get(TechType.PictureFrame));
+                ModUtils.GetSpriteFromAssetBundle(PetConsoleTexture));
 
             // We'll use the PictureFrame as a template
             PrefabTemplate consoleTemplate = new CloneTemplate(customConsole.Info, TechType.PictureFrame)
@@ -67,12 +65,8 @@ namespace DaftAppleGames.CreaturePetModSn.CustomObjects
 
 
             Log.LogDebug("PetConsolePrefab: Adding PetConsole component...");
-            PetConsoleUi petConsole = consoleGameObject.AddComponent<PetConsoleUi>();
+            PetConsole petConsole = consoleGameObject.AddComponent<PetConsole>();
             Log.LogDebug("PetConsolePrefab: Adding PetConsole component... Done.");
-
-            Log.LogDebug("PetConsolePrefab: Removing PictureFrame components...");
-            ModUtils.DestroyComponentsInChildren<PictureFrame>(consoleGameObject);
-            Log.LogDebug("PetConsolePrefab: Removing PictureFrame components... Done.");
         }
 
     }

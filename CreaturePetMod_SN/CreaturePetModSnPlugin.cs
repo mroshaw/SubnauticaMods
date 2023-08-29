@@ -8,9 +8,8 @@ using DaftAppleGames.CreaturePetModSn.CustomObjects;
 using HarmonyLib;
 using Nautilus.Options;
 using System;
-using System.IO;
 using UnityEngine;
-using System.Reflection;
+using DaftAppleGames.CreaturePetModSn.Utils;
 
 namespace DaftAppleGames.CreaturePetModSn
 {
@@ -30,17 +29,20 @@ namespace DaftAppleGames.CreaturePetModSn
         // Public log static so we can call logging elsewhere in the mod
         public static ManualLogSource Log = new ManualLogSource(PluginName);
 
-        // Public static location of Sprite data
-        public static string SpritePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\Sprites";
-        public static string AlienRobotSprite = "AlienRobot.png";
-        public static string BloodCrawlerSprite = "BloodCrawler.png";
-        public static string CaveCrawlerSprite = "CaveCrawler.png";
-        public static string DnaBloodCrawlerSprite = "DnaStrand_BloodCrawler.png";
-        public static string DnaCaveCrawlerSprite = "DnaStrand_CaveCrawler.png";
-        public static string DnaCrabSquidSprite = "DnaStrand_CrabSquid.png";
-        public static string DnaAlienRobotSprite = "DnaStrand_Robot.png";
-        public static string PetConsoleSprite = "PetConsole.png";
-        public static string PetWorkbenchSprite = "PetWorkbench.png";
+        // Public static names of Asset Bundle textures of Sprite data
+        public static string AlienRobotTexture = "AlienRobot";
+        public static string BloodCrawlerTexture = "BloodCrawler";
+        public static string CaveCrawlerTexture = "CaveCrawler";
+        public static string DnaBloodCrawlerTexture = "DnaStrand_BloodCrawler";
+        public static string DnaCaveCrawlerTexture = "DnaStrand_CaveCrawler";
+        public static string DnaCrabSquidTexture = "DnaStrand_CrabSquid";
+        public static string DnaAlienRobotTexture = "DnaStrand_Robot";
+        public static string PetConsoleTexture = "PetConsole";
+        public static string PetWorkbenchTexture = "PetWorkbench";
+
+        // Public static names of Asset Bundle UI objects
+        public static string ScrollViewObject = "ScrollView";
+        public static string CustomButtonTexture = "CustomButtonImage";
 
         // Keep a public static Saver for use in load and save operations
         public static PetSaver Saver;
@@ -62,6 +64,14 @@ namespace DaftAppleGames.CreaturePetModSn
         public static ConfigEntry<PetCreatureType> PetCreatureTypeConfig;
         public static ConfigEntry<PetName> PetNameConfig;
         public static ConfigEntry<bool> SkipSpawnObstacleCheckConfig;
+
+        // Keep tabs on currently selected options
+        public static PetCreatureType SelectedCreaturePetType;
+        public static string SelectedPetName;
+
+        // Check an eye out for Very Naughty Boys
+        public static bool IsANaughtyBoy = PirateCheckUtils.IsPirate();
+
         #endregion
         #region MOD_PRIVATE
         private static readonly Harmony Harmony = new Harmony(MyGuid);
@@ -77,6 +87,10 @@ namespace DaftAppleGames.CreaturePetModSn
 
             // Set up Nautilus config
             ModOptions modOptions = new PetModOptions();
+
+            // Set static values
+            SelectedPetName = PetNameConfig.Value.ToString();
+            SelectedCreaturePetType = PetCreatureTypeConfig.Value;
 
             // Apply all of our patches
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loading...");
@@ -174,7 +188,6 @@ namespace DaftAppleGames.CreaturePetModSn
 
             PetNameConfig.SettingChanged += ConfigSettingChanged;
 
-
             SkipSpawnObstacleCheckConfig = Config.Bind("Debug Settings",
                 SkipSpawnObstacleCheckKey,
                 false,
@@ -247,7 +260,7 @@ namespace DaftAppleGames.CreaturePetModSn
             {
                 PetCreatureType newPetCreatureType = (PetCreatureType)settingChangedEventArgs.ChangedSetting.BoxedValue;
                 Log.LogDebug("Updating pet type...");
-                ModUtils.UpdatePetType(newPetCreatureType);
+                SelectedCreaturePetType = newPetCreatureType;
                 return;
             }
 
@@ -256,7 +269,7 @@ namespace DaftAppleGames.CreaturePetModSn
             {
                 PetName newPetName = (PetName)settingChangedEventArgs.ChangedSetting.BoxedValue;
                 Log.LogDebug("Updating pet name...");
-                ModUtils.UpdatePetName(newPetName);
+                SelectedPetName = newPetName.ToString();
             }
 
             // Update Skip Obstacle check

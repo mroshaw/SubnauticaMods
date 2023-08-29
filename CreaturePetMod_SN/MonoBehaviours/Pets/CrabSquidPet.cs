@@ -1,4 +1,4 @@
-﻿using DaftAppleGames.CreaturePetModSn.CustomObjects;
+﻿using DaftAppleGames.CreaturePetModSn.Utils;
 using static DaftAppleGames.CreaturePetModSn.CreaturePetModSnPlugin;
 
 namespace DaftAppleGames.CreaturePetModSn.MonoBehaviours.Pets
