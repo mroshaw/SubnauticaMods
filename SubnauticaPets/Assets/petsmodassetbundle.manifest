@@ -1,0 +1,63 @@
+ManifestFileVersion: 0
+CRC: 2974759755
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 70a6c85bf28f0025c0e607de3ba1ef3e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 21aaced6b54bbb23ce0e6cab9f8f32ea
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Textures/AlienRobot.png
+- Assets/Textures/PetConsole.png
+- Assets/Textures/CustomButtonImage.png
+- Assets/Textures/PenglingAdult.png
+- Assets/Textures/DnaStrand_TrivalveYellow.png
+- Assets/Textures/PetWorkbench.png
+- Assets/Textures/DnaStrand_Robot.png
+- Assets/Textures/PenglingBaby.png
+- Assets/Textures/Pinnicarid.png
+- Assets/Textures/DnaStrand_Pinnicarid.png
+- Assets/Textures/DnaStrand_PenglingBaby.png
+- Assets/Textures/DnaStrand_orig.png
+- Assets/Textures/DnaStrand_BloodCrawler.png
+- Assets/Textures/CaveCrawler.png
+- Assets/Textures/DnaStrand_TrivalveBlue.png
+- Assets/Textures/SnowStalkerBaby.png
+- Assets/Prefabs/ScrollView.prefab
+- Assets/Textures/BloodCrawler.png
+- Assets/Textures/DnaStrand_CaveCrawler.png
+- Assets/Textures/DnaStrand_PenglingAdult.png
+- Assets/Textures/DnaStrand_CrabSquid.png
+- Assets/Textures/TrivalveBlue.png
+- Assets/Textures/DnaStrand_SnowStalkerBaby.png
+- Assets/Textures/TrivalveYellow.png
+- Assets/Textures/ButtonBackgroundImage.png
+Dependencies: []
