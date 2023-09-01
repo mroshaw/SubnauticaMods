@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2974759755
+CRC: 3317403612
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 70a6c85bf28f0025c0e607de3ba1ef3e
+    Hash: 06b878a0a741ff10d0180766cc49561b
   TypeTreeHash:
     serializedVersion: 2
     Hash: 21aaced6b54bbb23ce0e6cab9f8f32ea
@@ -35,29 +35,28 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Textures/AlienRobot.png
-- Assets/Textures/PetConsole.png
-- Assets/Textures/CustomButtonImage.png
-- Assets/Textures/PenglingAdult.png
-- Assets/Textures/DnaStrand_TrivalveYellow.png
-- Assets/Textures/PetWorkbench.png
-- Assets/Textures/DnaStrand_Robot.png
-- Assets/Textures/PenglingBaby.png
-- Assets/Textures/Pinnicarid.png
-- Assets/Textures/DnaStrand_Pinnicarid.png
-- Assets/Textures/DnaStrand_PenglingBaby.png
-- Assets/Textures/DnaStrand_orig.png
-- Assets/Textures/DnaStrand_BloodCrawler.png
-- Assets/Textures/CaveCrawler.png
-- Assets/Textures/DnaStrand_TrivalveBlue.png
-- Assets/Textures/SnowStalkerBaby.png
+- Assets/Textures/AlienRobotTexture.png
+- Assets/Textures/PetConsoleTexture.png
+- Assets/Textures/CustomButtonTexture.png
+- Assets/Textures/PenglingAdultTexture.png
+- Assets/Textures/TrivalveYellowDnaStrandTexture.png
+- Assets/Textures/PetWorkbenchTexture.png
+- Assets/Textures/AlienRobotDnaStrandTexture.png
+- Assets/Textures/PenglingBabyTexture.png
+- Assets/Textures/PinnicaridTexture.png
+- Assets/Textures/PinnicaridDnaStrandTexture.png
+- Assets/Textures/PenglingBabyDnaStrandTexture.png
+- Assets/Textures/BloodCrawlerDnaStrandTexture.png
+- Assets/Textures/CaveCrawlerTexture.png
+- Assets/Textures/TrivalveBlueDnaStrandTexture.png
+- Assets/Textures/SnowStalkerBabyTexture.png
 - Assets/Prefabs/ScrollView.prefab
-- Assets/Textures/BloodCrawler.png
-- Assets/Textures/DnaStrand_CaveCrawler.png
-- Assets/Textures/DnaStrand_PenglingAdult.png
-- Assets/Textures/DnaStrand_CrabSquid.png
-- Assets/Textures/TrivalveBlue.png
-- Assets/Textures/DnaStrand_SnowStalkerBaby.png
-- Assets/Textures/TrivalveYellow.png
-- Assets/Textures/ButtonBackgroundImage.png
+- Assets/Textures/BloodCrawlerTexture.png
+- Assets/Textures/CaveCrawlerDnaStrandTexture.png
+- Assets/Textures/PenglingAdultDnaStrandTexture.png
+- Assets/Textures/CrabSquidDnaStrandTexture.png
+- Assets/Textures/TrivalveBlueTexture.png
+- Assets/Textures/SnowStalkerBabyDnaStrandTexture.png
+- Assets/Textures/TrivalveYellowTexture.png
+- Assets/Textures/ButtonBackgroundTexture.png
 Dependencies: []

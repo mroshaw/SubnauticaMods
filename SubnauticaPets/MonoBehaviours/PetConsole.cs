@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 using Button = UnityEngine.UI.Button;
 using static DaftAppleGames.SubnauticaPets.Utils.UiUtils;
+using TMPro;
 
 namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
 {
@@ -37,6 +38,9 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
         private GameObject _uiGameObject;
         private GameObject _newScreenGameObject;
         private GameObject _scrollViewContentGameObject;
+
+        private GameObject _killAllButton;
+        private GameObject _killAllConfirmButton;
 
         private Pet _selectedPet;
         private string _petNameText;
@@ -85,8 +89,19 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
         /// </summary>
         private void KillAllButtonProxy()
         {
+            StartCoroutine(CountDownButton(_killAllConfirmButton, _killAllButton, 5));
+        }
+
+        /// <summary>
+        /// Proxy to ConfirmKillAllClickedEvent
+        /// </summary>
+        private void KillAllConfirmButtonProxy()
+        {
             Log.LogDebug("Kill All Button Clicked!");
             PetUtils.KillAllPets();
+            _killAllConfirmButton.SetActive(false);
+            _killAllButton.SetActive(true);
+            _killAllConfirmButton.GetComponentInChildren<TextMeshProUGUI>().text = "Sure?";
 
             // Call any listeners
             KillAllButtonClickedEvent.Invoke();
@@ -240,9 +255,18 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
 
 
             // Kill All button
-            GameObject killAllButton = UiUtils.CreateButton(sourceUiScreen, "Button",
+            _killAllButton = UiUtils.CreateButton(sourceUiScreen, "Button",
                 "KillAllPetsButton", "Kill All", targetUiScreen, new Vector3(160, -120, 0));
-            killAllButton.GetComponentInChildren<Button>().onClick.AddListener(KillAllButtonProxy);
+            _killAllButton.GetComponentInChildren<Button>().onClick.AddListener(KillAllButtonProxy);
+
+            // Kill All Confirm button
+            _killAllConfirmButton = UiUtils.CreateButton(sourceUiScreen, "Button",
+                "KillAllPetsConfirmButton", "Sure?", targetUiScreen, new Vector3(160, -120, 0));
+            _killAllConfirmButton.GetComponentInChildren<Button>().onClick.AddListener(KillAllConfirmButtonProxy);
+            _killAllConfirmButton.GetComponent<Image>().color = Color.red;
+            _killAllConfirmButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+            _killAllConfirmButton.SetActive(false);
+
         }
 
         /// <summary>
@@ -337,6 +361,35 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
             Color selectedBackColour = Color.blue;
             selectedBackColour.a = 128;
             selected.GetComponent<Image>().color = selectedBackColour;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="objectToHide"></param>
+        /// <param name="delayInSeconds"></param>
+        /// <param name="countDownLabel"></param>
+        /// <returns></returns>
+        private IEnumerator CountDownButton(GameObject objectToHide, GameObject objectToShow, int delayInSeconds)
+        {
+            objectToHide.SetActive(true);
+            objectToShow.SetActive(false);
+
+            TextMeshProUGUI countDownLabel = objectToHide.GetComponentInChildren<TextMeshProUGUI>();
+            string labelText = countDownLabel.text;
+
+            int counter = delayInSeconds;
+            while (counter > 0)
+            {
+                countDownLabel.text = $"{labelText} {counter}";
+                yield return new WaitForSeconds(1);
+                counter--;
+            }
+            
+            countDownLabel.text = labelText;
+            objectToHide.SetActive(false);
+            objectToShow.SetActive(true);
         }
     }
 }

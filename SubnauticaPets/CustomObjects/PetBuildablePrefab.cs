@@ -523,10 +523,10 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 CustomPrefab prefab = new CustomPrefab(Info);
 
                 // copy the model of an Alien Robot - WorldEntities/Creatures/Precursor_Droid.prefab
-                CloneTemplate babySnowStalkerClone = new CloneTemplate(Info, "4fae8fa4-0280-43bd-bcf1-f3cba97eed77");
+                CloneTemplate trivalveYellowClone = new CloneTemplate(Info, "4fae8fa4-0280-43bd-bcf1-f3cba97eed77");
 
                 // modify the cloned model:
-                babySnowStalkerClone.ModifyPrefab += obj =>
+                trivalveYellowClone.ModifyPrefab += obj =>
                 {
                     // allow it to be placed inside bases and submarines on the ground, and can be rotated:
                     ConstructableFlags constructableFlags = ConstructableFlags.Inside;
@@ -546,7 +546,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 };
 
                 // assign the created clone model to the prefab itself:
-                prefab.SetGameObject(babySnowStalkerClone);
+                prefab.SetGameObject(trivalveYellowClone);
 
 
                 // set recipe:
@@ -564,7 +564,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         public static class TrivalveBluePetBuildable
         {
             public static PrefabInfo Info { get; } = PrefabInfo
-                .WithTechType("BlueTrivalvePet", "BlueTrivalve Pet", "A pet yellow Trivalve.")
+                .WithTechType("BlueTrivalvePet", "Blue Trivalve Pet", "A pet yellow Trivalve.")
                 // set the icon to that of the vanilla locker:
                 .WithIcon(ModUtils.GetSpriteFromAssetBundle(TrivalveBlueTexture));
 
@@ -578,10 +578,10 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 CustomPrefab prefab = new CustomPrefab(Info);
 
                 // copy the model of an Alien Robot - WorldEntities/Creatures/Precursor_Droid.prefab
-                CloneTemplate babySnowStalkerClone = new CloneTemplate(Info, "4fae8fa4-0280-43bd-bcf1-f3cba97eed77");
+                CloneTemplate trivalveBlueClone = new CloneTemplate(Info, "4fae8fa4-0280-43bd-bcf1-f3cba97eed77");
 
                 // modify the cloned model:
-                babySnowStalkerClone.ModifyPrefab += obj =>
+                trivalveBlueClone.ModifyPrefab += obj =>
                 {
                     // allow it to be placed inside bases and submarines on the ground, and can be rotated:
                     ConstructableFlags constructableFlags = ConstructableFlags.Inside;
@@ -601,7 +601,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 };
 
                 // assign the created clone model to the prefab itself:
-                prefab.SetGameObject(babySnowStalkerClone);
+                prefab.SetGameObject(trivalveBlueClone);
 
 
                 // set recipe:

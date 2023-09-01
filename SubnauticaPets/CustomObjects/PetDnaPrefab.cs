@@ -41,6 +41,11 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 #endif
 #if SUBNAUTICAZERO
             InitSnowStalkerBabyDnaPrefab();
+            InitPenglingBabyDnaPrefab();
+            InitPenglingAdultDnaPrefab();
+            InitPinnicaridDnaPrefab();
+            InitTrivalveBlueDnaPrefab();
+            InitTrivalveYellowDnaPrefab();
 #endif
         }
 
@@ -139,11 +144,10 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         private static void InitSnowStalkerBabyDnaPrefab()
         {
-            PrefabInfo snowStalkerBabyDnaPrefabInfo = PrefabInfo.WithTechType("SnowStalkerBabyDna", "Snow Stalker Baby DNA", "DNA from a baby Snow Stalker.");
-            snowStalkerBabyDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaSnowStalkerBabyTexture));
-            SnowStalkerBabyDnaPrefabInfo = snowStalkerBabyDnaPrefabInfo;
-            CustomPrefab snowStalkerBabyDna = new CustomPrefab(snowStalkerBabyDnaPrefabInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(snowStalkerBabyDnaPrefabInfo, TechType.BonesharkEgg)
+            SnowStalkerBabyDnaPrefabInfo = PrefabInfo.WithTechType("SnowStalkerBabyDna", "Snow Stalker Baby DNA", "DNA from a baby Snow Stalker.");
+            SnowStalkerBabyDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaSnowStalkerBabyTexture));
+            CustomPrefab snowStalkerBabyDna = new CustomPrefab(SnowStalkerBabyDnaPrefabInfo);
+            PrefabTemplate cloneTemplate = new CloneTemplate(SnowStalkerBabyDnaPrefabInfo, TechType.ArcticRayEgg)
             {
                 // Callback to change all material colors of this clone to blue.
                 ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.magenta))
@@ -160,11 +164,11 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         private static void InitPenglingBabyDnaPrefab()
         {
-            PrefabInfo penglingBabyDnaPrefabInfo = PrefabInfo.WithTechType("PenglingBabyDna", "Pengling Baby DNA", "DNA from a baby Pengling.");
-            penglingBabyDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaPenglingBabyTexture));
-            PenglingBabyDnaPrefabInfo = penglingBabyDnaPrefabInfo;
-            CustomPrefab penglingBabyDna = new CustomPrefab(penglingBabyDnaPrefabInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(penglingBabyDnaPrefabInfo, TechType.BonesharkEgg)
+            PenglingBabyDnaPrefabInfo = PrefabInfo.WithTechType("PenglingBabyDna", "Pengling Baby DNA", "DNA from a baby Pengling.");
+            PenglingBabyDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaPenglingBabyTexture));
+
+            CustomPrefab penglingBabyDna = new CustomPrefab(PenglingBabyDnaPrefabInfo);
+            PrefabTemplate cloneTemplate = new CloneTemplate(PenglingBabyDnaPrefabInfo, TechType.BrinewingEgg)
             {
                 // Callback to change all material colors of this clone to blue.
                 ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.magenta))
@@ -181,11 +185,11 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         private static void InitPenglingAdultDnaPrefab()
         {
-            PrefabInfo penglingAdultDnaPrefabInfo = PrefabInfo.WithTechType("PenglingAdultDna", "Adult Pengling DNA", "DNA from an adult Pengling.");
-            penglingAdultDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaPenglingAdultTexture));
-            PenglingAdultDnaPrefabInfo = penglingAdultDnaPrefabInfo;
-            CustomPrefab penglingAdultDna = new CustomPrefab(penglingAdultDnaPrefabInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(penglingAdultDnaPrefabInfo, TechType.BonesharkEgg)
+            PenglingAdultDnaPrefabInfo = PrefabInfo.WithTechType("PenglingAdultDna", "Adult Pengling DNA", "DNA from an adult Pengling.");
+            PenglingAdultDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaPenglingAdultTexture));
+
+            CustomPrefab penglingAdultDna = new CustomPrefab(PenglingAdultDnaPrefabInfo);
+            PrefabTemplate cloneTemplate = new CloneTemplate(PenglingAdultDnaPrefabInfo, TechType.BruteSharkEgg)
             {
                 // Callback to change all material colors of this clone to blue.
                 ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.magenta))
@@ -202,11 +206,10 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         private static void InitPinnicaridDnaPrefab()
         {
-            PrefabInfo pinnicaridDnaPrefabInfo = PrefabInfo.WithTechType("PinnicaridDna", "Pinnicarid DNA", "DNA from a Pinnicarid.");
-            pinnicaridDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaPinnicaridTexture));
-            PinnicaridDnaPrefabInfo = pinnicaridDnaPrefabInfo;
-            CustomPrefab pinnicaridDna = new CustomPrefab(pinnicaridDnaPrefabInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(pinnicaridDnaPrefabInfo, TechType.BonesharkEgg)
+            PinnicaridDnaPrefabInfo = PrefabInfo.WithTechType("PinnicaridDna", "Pinnicarid DNA", "DNA from a Pinnicarid.");
+            PinnicaridDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaPinnicaridTexture));
+            CustomPrefab pinnicaridDna = new CustomPrefab(PinnicaridDnaPrefabInfo);
+            PrefabTemplate cloneTemplate = new CloneTemplate(PinnicaridDnaPrefabInfo, TechType.LavaZoneEgg)
             {
                 // Callback to change all material colors of this clone to blue.
                 ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.magenta))
@@ -223,11 +226,10 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         private static void InitTrivalveBlueDnaPrefab()
         {
-            PrefabInfo trivalveBlueDnaPrefabInfo = PrefabInfo.WithTechType("TrivalveBlueDna", "Blue Trivalve DNA", "DNA from a blue Trivalve.");
-            trivalveBlueDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaTrivalveBlueTexture));
-            TrivalveBlueDnaPrefabInfo = trivalveBlueDnaPrefabInfo;
-            CustomPrefab trivalveBlueDna = new CustomPrefab(trivalveBlueDnaPrefabInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(trivalveBlueDnaPrefabInfo, TechType.BonesharkEgg)
+            TrivalveBlueDnaPrefabInfo = PrefabInfo.WithTechType("TrivalveBlueDna", "Blue Trivalve DNA", "DNA from a blue Trivalve.");
+            TrivalveBlueDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaTrivalveBlueTexture));
+            CustomPrefab trivalveBlueDna = new CustomPrefab(TrivalveBlueDnaPrefabInfo);
+            PrefabTemplate cloneTemplate = new CloneTemplate(TrivalveBlueDnaPrefabInfo, TechType.TrivalveBlueEgg)
             {
                 // Callback to change all material colors of this clone to blue.
                 ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.magenta))
@@ -244,11 +246,10 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         private static void InitTrivalveYellowDnaPrefab()
         {
-            PrefabInfo trivalveYellowDnaPrefabInfo = PrefabInfo.WithTechType("TrivalveYellowDna", "Yellow Trivalve DNA", "DNA from a yellow Trivalve.");
-            trivalveYellowDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaTrivalveYellowTexture));
-            TrivalveYellowDnaPrefabInfo = trivalveYellowDnaPrefabInfo;
-            CustomPrefab trivalveYellowDna = new CustomPrefab(trivalveYellowDnaPrefabInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(trivalveYellowDnaPrefabInfo, TechType.BonesharkEgg)
+            TrivalveYellowDnaPrefabInfo = PrefabInfo.WithTechType("TrivalveYellowDna", "Yellow Trivalve DNA", "DNA from a yellow Trivalve.");
+            TrivalveYellowDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaTrivalveYellowTexture));
+            CustomPrefab trivalveYellowDna = new CustomPrefab(TrivalveYellowDnaPrefabInfo);
+            PrefabTemplate cloneTemplate = new CloneTemplate(TrivalveYellowDnaPrefabInfo, TechType.TrivalveYellowEgg)
             {
                 // Callback to change all material colors of this clone to blue.
                 ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.magenta))

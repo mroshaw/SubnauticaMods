@@ -12,36 +12,36 @@ namespace DaftAppleGames.SubnauticaPets.Utils
     {
         // Public static names of Asset Bundle textures of Sprite data
 #if SUBNAUTICA
-        public static string AlienRobotTexture = "AlienRobot";
-        public static string BloodCrawlerTexture = "BloodCrawler";
-        public static string CaveCrawlerTexture = "CaveCrawler";
-        public static string DnaBloodCrawlerTexture = "DnaStrand_BloodCrawler";
-        public static string DnaCaveCrawlerTexture = "DnaStrand_CaveCrawler";
-        public static string DnaCrabSquidTexture = "DnaStrand_CrabSquid";
-        public static string DnaAlienRobotTexture = "DnaStrand_Robot";
+        public static string AlienRobotTexture = "AlienRobotTexture";
+        public static string BloodCrawlerTexture = "BloodCrawlerTexture";
+        public static string CaveCrawlerTexture = "CaveCrawlerTexture";
+        public static string DnaBloodCrawlerTexture = "BloodCrawlerDnaStrandTexture";
+        public static string DnaCaveCrawlerTexture = "CaveCrawlerDnaStrandTexture";
+        public static string DnaCrabSquidTexture = "CrabSquidDnaStrandTexture";
+        public static string DnaAlienRobotTexture = "AlienRobotDnaStrandTexture";
 #endif
 #if SUBNAUTICAZERO
-        public static string PenglingBabyTexture = "PenglingBaby";
-        public static string PenglingAdultTexture = "PenglingAdult";
-        public static string SnowStalkerBabyTexture = "SnowStalkerBaby";
-        public static string PinnicaridTexture = "Pinnicarid";
-        public static string TrivalveBlueTexture = "TrivalveBlue";
-        public static string TrivalveYellowTexture = "TrivalveYellow";
+        public static string PenglingBabyTexture = "PenglingBabyTexture";
+        public static string PenglingAdultTexture = "PenglingAdultTexture";
+        public static string SnowStalkerBabyTexture = "SnowStalkerBabyTexture";
+        public static string PinnicaridTexture = "PinnicaridTexture";
+        public static string TrivalveBlueTexture = "TrivalveBlueTexture";
+        public static string TrivalveYellowTexture = "TrivalveYellowTexture";
 
-        public static string DnaPenglingBabyTexture = "DnaStrand_PenglingBaby";
-        public static string DnaPenglingAdultTexture = "DnaStrand_PenglingAdult";
-        public static string DnaSnowStalkerBabyTexture = "DnaStrand_SnowStalkerBaby";
-        public static string DnaPinnicaridTexture = "DnaStrand_Pinnicarid";
-        public static string DnaTrivalveBlueTexture = "DnaStrand_TrivalveBlue";
-        public static string DnaTrivalveYellowTexture = "DnaStrand_TrivalveYellow";
+        public static string DnaPenglingBabyTexture = "PenglingBabyDnaStrandTexture";
+        public static string DnaPenglingAdultTexture = "PenglingAdultDnaStrandTexture";
+        public static string DnaSnowStalkerBabyTexture = "SnowStalkerBabyDnaStrandTexture";
+        public static string DnaPinnicaridTexture = "PinnicaridDnaStrandTexture";
+        public static string DnaTrivalveBlueTexture = "TrivalveBlueDnaStrandTexture";
+        public static string DnaTrivalveYellowTexture = "TrivalveYellowDnaStrandTexture";
 #endif
 
-        public static string PetConsoleTexture = "PetConsole";
-        public static string PetWorkbenchTexture = "PetWorkbench";
+        public static string PetConsoleTexture = "PetConsoleTexture";
+        public static string PetWorkbenchTexture = "PetWorkbenchTexture";
 
         // Public static names of Asset Bundle UI objects
         public static string ScrollViewObject = "ScrollView";
-        public static string CustomButtonTexture = "CustomButtonImage";
+        public static string CustomButtonTexture = "CustomButtonTexture";
 
 
         /// <summary>
