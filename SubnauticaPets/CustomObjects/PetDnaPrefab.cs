@@ -214,7 +214,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 }
             };
             testClone.SetGameObject(cloneTemplate);
-
             testClone.SetSpawns(lootBiome);
             testClone.Register();
             Log.LogDebug($"PetDnaPrefab: Init Prefab for {classId}. Done.");

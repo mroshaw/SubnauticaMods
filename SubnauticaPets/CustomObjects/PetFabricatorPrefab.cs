@@ -46,10 +46,8 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 
             };
             customFab.SetGameObject(fabPrefab);
-            /*
-             * This is what the aforementioned json object will look like as a RecipeData object.
-             * You may use the CustomPrefab.SetRecipe() to set the recipe to a RecipeData object.
-             */
+
+            // Define the recipe
             RecipeData recipe = new RecipeData
             {
                 craftAmount = 1,
@@ -61,14 +59,10 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 }
             };
 
-            /*
-             * Set the recipe.
-             */
+            // Set the recipe
             customFab.SetRecipe(recipe);
-
             customFab.SetUnlock(TechType.Workbench)
                 .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule);
-
             customFab.Register();
         }
 
@@ -82,7 +76,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             PetSpawner newPetSpawner = fabricatorGameObject.AddComponent<PetSpawner>();
             newPetSpawner.SkipSpawnObstacleCheck = SubnauticaPetsPlugin.SkipSpawnObstacleCheckConfig.Value;
             Log.LogDebug("PetFabricatorUtils: Adding PetSpawner component... Done.");
-
         }
     }
 }

@@ -34,7 +34,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             };
             customConsole.SetGameObject(consoleTemplate);
 
-            // Set the recipe for the new Console
+            // Define the recipe for the new Console
             RecipeData recipe = new RecipeData
             {
                 craftAmount = 1,
@@ -48,10 +48,8 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 
             // Set the recipe.
             customConsole.SetRecipe(recipe);
-
             customConsole.SetUnlock(TechType.Workbench)
                 .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule);
-
             customConsole.Register();
         }
 
@@ -61,10 +59,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// <param name="consoleGameObject"></param>
         private static void ConfigureConsoleComponents(GameObject consoleGameObject)
         {
-            // We're going to take some of the content from the BaseConsoleUpgrade, mainly to
-            // re-purpose the UI
-
-
+            // Add the PetConsole component, which will provision the UI
             Log.LogDebug("PetConsolePrefab: Adding PetConsole component...");
             PetConsole petConsole = consoleGameObject.AddComponent<PetConsole>();
             Log.LogDebug("PetConsolePrefab: Adding PetConsole component... Done.");

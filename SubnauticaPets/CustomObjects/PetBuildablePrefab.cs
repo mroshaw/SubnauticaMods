@@ -32,7 +32,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         public static PrefabInfo TrivalveBluePetBuildablePefabInfo;
         public static PrefabInfo TrivalveYellowBuildablePefabInfo;
 #endif
-
         /// <summary>
         /// Initialise all Pet buildables
         /// </summary>
@@ -67,16 +66,12 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 
             public static void Register()
             {
-
                 // So this can be used by other consumers
                 CaveCrawlerPetBuildablePrefabInfo = Info;
-
-                // create prefab:
+                // Create prefab:
                 CustomPrefab prefab = new CustomPrefab(Info);
-
                 // copy the model of the Cave Crawler: WorldEntities/Creatures/CaveCrawler.prefab
                 CloneTemplate caveCrawlerClone = new CloneTemplate(Info, "3e0a11f1-e2b2-4c4f-9a8e-0b0a77dcc065");
-
                 // modify the cloned model:
                 caveCrawlerClone.ModifyPrefab += obj =>
                 {
@@ -100,13 +95,10 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 
                 // assign the created clone model to the prefab itself:
                 prefab.SetGameObject(caveCrawlerClone);
-
-
                 // set recipe:
                 prefab.SetRecipe(new RecipeData(new CraftData.Ingredient(TechType.Gold, 3),
                     new CraftData.Ingredient(PetDnaPrefab.CaveCrawlerDnaPrefabInfo.TechType, 5)));
-
-                // finally, register it into the game:
+                // Finally, register it into the game
                 prefab.Register();
             }
         }
@@ -123,22 +115,17 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 
             public static void Register()
             {
-
                 // So this can be used by other consumers
                 BloodCrawlerPetBuildablePrefabInfo = Info;
-
                 // create prefab:
                 CustomPrefab prefab = new CustomPrefab(Info);
-
                 // copy the model of the Blood Crawler. WorldEntities/Slots/BloodKelp/BloodKelp_Creature_Unique.prefab
                 CloneTemplate caveCrawlerClone = new CloneTemplate(Info, "314e0fd9-56c5-4f80-9663-15fa077abc15");
-
                 // modify the cloned model:
                 caveCrawlerClone.ModifyPrefab += obj =>
                 {
                     // allow it to be placced inside bases and submarines on the ground, and can be rotated:
                     ConstructableFlags constructableFlags = ConstructableFlags.Inside;
-
                     // find the object that holds the model:
                     GameObject model = obj.transform.Find("cave_crawler_03").gameObject;
                     if (!model)
@@ -149,15 +136,12 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                     {
                         Log.LogDebug($"PetBuildableUtils: BloodCrawlerBuildable found model on {model.name}");
                     }
-
-
                     // add all components necessary for it to be built:
                     PrefabUtils.AddConstructable(obj, Info.TechType, constructableFlags, model);
                 };
 
                 // assign the created clone model to the prefab itself:
                 prefab.SetGameObject(caveCrawlerClone);
-
 
                 // set recipe:
                 prefab.SetRecipe(new RecipeData(new CraftData.Ingredient(TechType.Gold, 3),
@@ -602,7 +586,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 // assign the created clone model to the prefab itself:
                 prefab.SetGameObject(trivalveBlueClone);
 
-
                 // set recipe:
                 prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
                     new Ingredient(PetDnaPrefab.TrivalveBlueDnaPrefabInfo.TechType, 5)));
@@ -611,8 +594,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 prefab.Register();
             }
         }
-
 #endif
     }
-
 }
