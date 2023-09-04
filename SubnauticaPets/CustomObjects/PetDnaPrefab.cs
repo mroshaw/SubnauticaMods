@@ -20,7 +20,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         // Static references for consumers
         public static string DnaModelObjectName = "DNAModel";
         public static GameObject DnaModelPrefab = null;
-
 #if SUBNAUTICA
         public static PrefabInfo CaveCrawlerDnaPrefabInfo;
         public static PrefabInfo BloodCrawlerDnaPrefabInfo;
@@ -43,7 +42,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         {
             // Get and init the DNA model prefab
             SetDnaModelObjectPrefab();
-
 #if SUBNAUTICA
             // Cave Crawler
             CaveCrawlerDnaPrefabInfo = InitPrefab("CaveCrawlerDnaSample",
@@ -57,7 +55,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 count = 10,
                 probability = 0.8f
                 });
-
             // Blood Crawler
             BloodCrawlerDnaPrefabInfo = InitPrefab("BloodCrawlerDnaSample",
                 "Blood Crawler DNA Sample", "A sample of DNA from a Blood Crawler",
@@ -69,6 +66,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                     count = 10,
                     probability = 0.8f
                 });
+            // Crab Squid
             CrabSquidDnaPrefabInfo = InitPrefab("CrabSquidDnaSample",
                 "Crab Squid DNA Sample",
                 "A sample of DNA from a Crab Squid",
@@ -80,7 +78,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                     count = 10,
                     probability = 0.8f
                 });
-
             // Alien Robot
             AlienRobotDnaPrefabInfo = InitPrefab("AlienRobotDnaSample",
                 "Alien Robot DNA Sample",
@@ -107,7 +104,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                     count = 10,
                     probability = 0.8f
                 });
-
             // Pengling Adult
             PenglingAdultDnaPrefabInfo = InitPrefab("PenglingAdultDnaSample",
                 "Pengling Adult DNA Sample",
@@ -120,7 +116,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                     count = 10,
                     probability = 0.8f
                 });
-
             // Pengling Baby
             PenglingBabyDnaPrefabInfo = InitPrefab("PenglingBabyDnaSample",
                 "Pengling Baby DNA Sample",
@@ -133,7 +128,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                     count = 10,
                     probability = 0.8f
                 });
-
             // Pinnicarid
             PinnicaridDnaPrefabInfo = InitPrefab("PinnicaridDnaSample",
                 "Pinnicarid DNA Sample",
@@ -146,7 +140,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                     count = 10,
                     probability = 0.8f
                 });
-
             // Yellow Trivalve
             TrivalveBlueDnaPrefabInfo = InitPrefab("YellowTrivalveDnaSample",
                 "Yellow Trivalve DNA Sample",
@@ -159,7 +152,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                     count = 10,
                     probability = 0.8f
                 });
-
             // Blue Trivalve
             TrivalveYellowDnaPrefabInfo = InitPrefab("BlueTrivalveDnaSample",
                 "Blue Trivalve DNA Sample",
@@ -204,23 +196,18 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 {
                     Log.LogDebug($"PetDnaPrefab: InitPrefab is setting the model for {prefab.name}... using {DnaModelPrefab.name}");
                     GameObject newModel = Object.Instantiate(DnaModelPrefab);
-
                     // Add new model
                     Log.LogDebug($"PetDnaPrefab: InitPrefab is setting the model for {prefab.name} to {newModel.name}...");
                     newModel.transform.SetParent(prefab.transform);
                     newModel.transform.localPosition = new Vector3(0, 0, 0);
                     newModel.transform.localRotation = new Quaternion(0, 0, 0, 0);
-
                     // Set model color
                     newModel.FindChild("Ends").GetComponent<MeshRenderer>().material.color = color;
-
                     // Add the rotate script to the DNA model
                     RotateModel rotateModel = newModel.FindChild("DNA").AddComponent<RotateModel>();
                     rotateModel.RotationSpeed = 0.01f;
-
                     // Resize
                     prefab.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-
                     // Disable the old model
                     prefab.FindChild("model").SetActive(false);
                     Log.LogDebug($"PetDnaPrefab: InitPrefab is setting the model for {prefab.name} to {newModel.name}. Done.");
@@ -247,20 +234,9 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 Log.LogDebug($"PetDnaPrefab: GetDnaModelObjectPrefab couldn't find {DnaModelObjectName}");
                 return;
             }
-
-            Shader marmosetShader = Shader.Find("MarmosetUBER");
-            if (marmosetShader == null)
-            {
-                Log.LogDebug("PetDnaPrefab: GetDnaModelObjectPrefab cannot find the Marmoset shader!");
-            }
-            else
-            {
-                Log.LogDebug("PetDnaPrefab: GetDnaModelObjectPrefab is updating material shader properties...");
-                MaterialUtils.ApplySNShaders(prefab);
-
-            }
+            Log.LogDebug("PetDnaPrefab: GetDnaModelObjectPrefab is updating material shader properties...");
+            MaterialUtils.ApplySNShaders(prefab);
             DnaModelPrefab = prefab;
-
             Log.LogDebug("PetDnaPrefab: GetDnaModelObjectPrefab is done.");
         }
 
@@ -273,54 +249,33 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             List<SpawnInfo> spawnInfos = new List<SpawnInfo>()
             {
 #if SUBNAUTICA
-                new SpawnInfo("CaveCrawlerDnaSample", GetTerrainPosition(new Vector3(-131.93f, -19.82f, -246.48f)),
+                new SpawnInfo("CaveCrawlerDnaSample", new Vector3(-131.93f, -19.82f, -246.48f),
                     Vector3.up * 90f),
-
-                new SpawnInfo("AlienRobotDnaSample", GetTerrainPosition(new Vector3(-132.63f, -19.82f, -246.48f)),
+                new SpawnInfo("AlienRobotDnaSample", new Vector3(-132.63f, -19.82f, -246.48f),
                 Vector3.up * 90f),
-
-                new SpawnInfo("BloodCrawlerDnaSample", GetTerrainPosition(new Vector3(-131.93f, -19.32f, -246.48f)),
+                new SpawnInfo("BloodCrawlerDnaSample", new Vector3(-131.93f, -19.32f, -246.48f),
                     Vector3.up * 90f),
-
-                new SpawnInfo("CrabSquidDnaSample", GetTerrainPosition(new Vector3(-132.63f, -19.32f, -246.48f)),
+                new SpawnInfo("CrabSquidDnaSample", new Vector3(-132.63f, -19.32f, -246.48f),
                     Vector3.up * 90f)
 
 #endif
 #if SUBNAUTICAZERO
                 new SpawnInfo("SnowStalkerBabyDnaSample", new Vector3(617.56f, -178.31f, -456.59f),
                     Vector3.up * 90f),
-
                 new SpawnInfo("PenglingAdultDnaSample", new Vector3(616.76f, -177.51f, -455.89f),
                     Vector3.up * 90f),
-
                 new SpawnInfo("PenglingBabyDnaSample", new Vector3(617.56f, -177.51f, -456.59f),
                     Vector3.up * 90f),
-
                 new SpawnInfo("PinnicaridDnaSample", new Vector3(616.76f, -177.51f, -455.89f),
                     Vector3.up * 90f),
-
                 new SpawnInfo("YellowTrivalveDnaSample", new Vector3(618.56f, -178.31f, -456.59f),
                     Vector3.up * 90f),
-
                 new SpawnInfo("BlueTrivalveDnaSample", new Vector3(618.76f, -177.51f, -455.89f),
                     Vector3.up * 90f),
 #endif
             };
             CoordinatedSpawnsHandler.RegisterCoordinatedSpawns(spawnInfos);
             Log.LogDebug("PetDnaPrefab: SetFixedSpawns adding coordinated spawns... Done.");
-        }
-
-        /// <summary>
-        /// Returns a Position on the terrain, relative to the given position
-        /// </summary>
-        /// <param name="position"></param>
-        /// <returns></returns>
-        private static Vector3 GetTerrainPosition(Vector3 position)
-        {
-            Vector3 newPosition = position;
-            // float newY = Terrain.activeTerrain.SampleHeight(position);
-            // newPosition.y = newY;
-            return newPosition;
         }
     }
 }
