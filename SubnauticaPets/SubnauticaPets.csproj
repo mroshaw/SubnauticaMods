@@ -107,6 +107,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>E:\Games\Steam\steamapps\common\$(Configuration)\$(Configuration)_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.TerrainModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\Games\Steam\steamapps\common\$(Configuration)\$(Configuration)\Managed\UnityEngine.TerrainModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>E:\Games\Steam\steamapps\common\$(Configuration)\$(Configuration)_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -116,6 +120,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MonoBehaviours\RotateModel.cs" />
     <Compile Include="MonoBehaviours\PetConsole.cs" />
     <Compile Include="MonoBehaviours\PetConsoleInput.cs" />
     <Compile Include="MonoBehaviours\Pets\BelowZero\PenglingBabyPet.cs" />
@@ -159,6 +164,7 @@
     <None Include="Assets\petsmodassetbundle.manifest">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Localization\English.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

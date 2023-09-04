@@ -1,17 +1,29 @@
 ManifestFileVersion: 0
-CRC: 3317403612
+CRC: 2962954788
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 06b878a0a741ff10d0180766cc49561b
+    Hash: 4036b7e6e9fdd15e9b03786c6a9fc08d
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 21aaced6b54bbb23ce0e6cab9f8f32ea
+    Hash: 1b0e75cc78b05ee84b89ea844e628c61
 HashAppended: 0
 ClassTypes:
 - Class: 1
   Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
 - Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
   Script: {instanceID: 0}
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -35,28 +47,29 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Textures/AlienRobotTexture.png
+- Assets/Textures/Subnautica/AlienRobotTexture.png
 - Assets/Textures/PetConsoleTexture.png
+- Assets/Prefabs/DNAModel.prefab
 - Assets/Textures/CustomButtonTexture.png
-- Assets/Textures/PenglingAdultTexture.png
-- Assets/Textures/TrivalveYellowDnaStrandTexture.png
+- Assets/Textures/Below Zero/PenglingAdultTexture.png
+- Assets/Textures/Below Zero/TrivalveYellowDnaStrandTexture.png
 - Assets/Textures/PetWorkbenchTexture.png
-- Assets/Textures/AlienRobotDnaStrandTexture.png
-- Assets/Textures/PenglingBabyTexture.png
-- Assets/Textures/PinnicaridTexture.png
-- Assets/Textures/PinnicaridDnaStrandTexture.png
-- Assets/Textures/PenglingBabyDnaStrandTexture.png
-- Assets/Textures/BloodCrawlerDnaStrandTexture.png
-- Assets/Textures/CaveCrawlerTexture.png
-- Assets/Textures/TrivalveBlueDnaStrandTexture.png
-- Assets/Textures/SnowStalkerBabyTexture.png
+- Assets/Textures/Subnautica/AlienRobotDnaStrandTexture.png
+- Assets/Textures/Below Zero/PenglingBabyTexture.png
+- Assets/Textures/Below Zero/PinnicaridTexture.png
+- Assets/Textures/Below Zero/PinnicaridDnaStrandTexture.png
+- Assets/Textures/Below Zero/PenglingBabyDnaStrandTexture.png
+- Assets/Textures/Subnautica/BloodCrawlerDnaStrandTexture.png
+- Assets/Textures/Subnautica/CaveCrawlerTexture.png
+- Assets/Textures/Below Zero/TrivalveBlueDnaStrandTexture.png
+- Assets/Textures/Below Zero/SnowStalkerBabyTexture.png
 - Assets/Prefabs/ScrollView.prefab
-- Assets/Textures/BloodCrawlerTexture.png
-- Assets/Textures/CaveCrawlerDnaStrandTexture.png
-- Assets/Textures/PenglingAdultDnaStrandTexture.png
-- Assets/Textures/CrabSquidDnaStrandTexture.png
-- Assets/Textures/TrivalveBlueTexture.png
-- Assets/Textures/SnowStalkerBabyDnaStrandTexture.png
-- Assets/Textures/TrivalveYellowTexture.png
+- Assets/Textures/Subnautica/BloodCrawlerTexture.png
+- Assets/Textures/Subnautica/CaveCrawlerDnaStrandTexture.png
+- Assets/Textures/Below Zero/PenglingAdultDnaStrandTexture.png
+- Assets/Textures/Subnautica/CrabSquidDnaStrandTexture.png
+- Assets/Textures/Below Zero/TrivalveBlueTexture.png
+- Assets/Textures/Below Zero/SnowStalkerBabyDnaStrandTexture.png
+- Assets/Textures/Below Zero/TrivalveYellowTexture.png
 - Assets/Textures/ButtonBackgroundTexture.png
 Dependencies: []

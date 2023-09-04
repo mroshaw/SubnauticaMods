@@ -1,10 +1,14 @@
-﻿using DaftAppleGames.SubnauticaPets.Utils;
+﻿using System.Collections.Generic;
+using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
 using UnityEngine;
 using Nautilus.Assets.Gadgets;
+using Nautilus.Handlers;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 using static DaftAppleGames.SubnauticaPets.Utils.UiUtils;
+using DaftAppleGames.SubnauticaPets.MonoBehaviours;
+using Nautilus.Utility;
 
 namespace DaftAppleGames.SubnauticaPets.CustomObjects
 {
@@ -14,6 +18,9 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
     internal class PetDnaPrefab
     {
         // Static references for consumers
+        public static string DnaModelObjectName = "DNAModel";
+        public static GameObject DnaModelPrefab = null;
+
 #if SUBNAUTICA
         public static PrefabInfo CaveCrawlerDnaPrefabInfo;
         public static PrefabInfo BloodCrawlerDnaPrefabInfo;
@@ -28,241 +35,292 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         public static PrefabInfo TrivalveBlueDnaPrefabInfo;
         public static PrefabInfo TrivalveYellowDnaPrefabInfo;
 #endif
+
         /// <summary>
         /// Register all prefabs
         /// </summary>
         public static void InitPetPrefabs()
         {
+            // Get and init the DNA model prefab
+            SetDnaModelObjectPrefab();
+
 #if SUBNAUTICA
-            InitCaveCrawlerDnaPrefab();
-            InitBloodCrawlerDnaPrefab();
-            InitCrabSquidDnaPrefab();
-            InitAlienRobotDnaPrefab();
+            // Cave Crawler
+            CaveCrawlerDnaPrefabInfo = InitPrefab("CaveCrawlerDnaSample",
+                "Cave Crawler DNA Sample",
+                "A sample of DNA from a Cave Crawler",
+                ModUtils.GetSpriteFromAssetBundle(DnaCaveCrawlerTexture),
+                Color.yellow,
+                new LootDistributionData.BiomeData
+                {
+                biome = BiomeType.SafeShallows_Grass,
+                count = 10,
+                probability = 0.8f
+                });
+
+            // Blood Crawler
+            BloodCrawlerDnaPrefabInfo = InitPrefab("BloodCrawlerDnaSample",
+                "Blood Crawler DNA Sample", "A sample of DNA from a Blood Crawler",
+                ModUtils.GetSpriteFromAssetBundle(DnaBloodCrawlerTexture),
+                Color.red,
+                new LootDistributionData.BiomeData
+                {
+                    biome = BiomeType.SafeShallows_SandFlat,
+                    count = 10,
+                    probability = 0.8f
+                });
+            CrabSquidDnaPrefabInfo = InitPrefab("CrabSquidDnaSample",
+                "Crab Squid DNA Sample",
+                "A sample of DNA from a Crab Squid",
+                ModUtils.GetSpriteFromAssetBundle(DnaCrabSquidTexture),
+                Color.green,
+                new LootDistributionData.BiomeData
+                {
+                    biome = BiomeType.SafeShallows_UniqueCreature,
+                    count = 10,
+                    probability = 0.8f
+                });
+
+            // Alien Robot
+            AlienRobotDnaPrefabInfo = InitPrefab("AlienRobotDnaSample",
+                "Alien Robot DNA Sample",
+                "A sample of DNA from an Alien Robot",
+                ModUtils.GetSpriteFromAssetBundle(DnaAlienRobotTexture),
+                Color.grey,
+                new LootDistributionData.BiomeData
+                {
+                    biome = BiomeType.SafeShallows_EscapePod,
+                    count = 10,
+                    probability = 0.8f
+                });
 #endif
 #if SUBNAUTICAZERO
-            InitSnowStalkerBabyDnaPrefab();
-            InitPenglingBabyDnaPrefab();
-            InitPenglingAdultDnaPrefab();
-            InitPinnicaridDnaPrefab();
-            InitTrivalveBlueDnaPrefab();
-            InitTrivalveYellowDnaPrefab();
+            // Snow Stalker Baby
+            SnowStalkerBabyDnaPrefabInfo = InitPrefab("SnowStalkerBabyDnaSample",
+                "Snow Stalker Baby DNA Sample",
+                "A sample of DNA from a Baby Snow Stalker",
+                ModUtils.GetSpriteFromAssetBundle(DnaSnowStalkerBabyTexture),
+                Color.white,
+                new LootDistributionData.BiomeData
+                {
+                    biome = BiomeType.SafeShallows_Grass,
+                    count = 10,
+                    probability = 0.8f
+                });
+
+            // Pengling Adult
+            PenglingAdultDnaPrefabInfo = InitPrefab("PenglingAdultDnaSample",
+                "Pengling Adult DNA Sample",
+                "A sample of DNA from an Adult Pengling",
+                ModUtils.GetSpriteFromAssetBundle(DnaPenglingAdultTexture),
+                Color.grey,
+                new LootDistributionData.BiomeData
+                {
+                    biome = BiomeType.SafeShallows_Grass,
+                    count = 10,
+                    probability = 0.8f
+                });
+
+            // Pengling Baby
+            PenglingBabyDnaPrefabInfo = InitPrefab("PenglingBabyDnaSample",
+                "Pengling Baby DNA Sample",
+                "A sample of DNA from a Baby Pengling",
+                ModUtils.GetSpriteFromAssetBundle(DnaPenglingBabyTexture),
+                Color.cyan,
+                new LootDistributionData.BiomeData
+                {
+                    biome = BiomeType.SafeShallows_Grass,
+                    count = 10,
+                    probability = 0.8f
+                });
+
+            // Pinnicarid
+            PinnicaridDnaPrefabInfo = InitPrefab("PinnicaridDnaSample",
+                "Pinnicarid DNA Sample",
+                "A sample of DNA from a Pinnicarid",
+                ModUtils.GetSpriteFromAssetBundle(DnaPinnicaridTexture),
+                Color.magenta,
+                new LootDistributionData.BiomeData
+                {
+                    biome = BiomeType.SafeShallows_Grass,
+                    count = 10,
+                    probability = 0.8f
+                });
+
+            // Yellow Trivalve
+            TrivalveBlueDnaPrefabInfo = InitPrefab("YellowTrivalveDnaSample",
+                "Yellow Trivalve DNA Sample",
+                "A sample of DNA from a yellow Trivalve",
+                ModUtils.GetSpriteFromAssetBundle(DnaTrivalveYellowTexture),
+                Color.yellow,
+                new LootDistributionData.BiomeData
+                {
+                    biome = BiomeType.SafeShallows_Grass,
+                    count = 10,
+                    probability = 0.8f
+                });
+
+            // Blue Trivalve
+            TrivalveYellowDnaPrefabInfo = InitPrefab("BlueTrivalveDnaSample",
+                "Blue Trivalve DNA Sample",
+                "A sample of DNA from a blue Trivalve",
+                ModUtils.GetSpriteFromAssetBundle(DnaTrivalveBlueTexture),
+                Color.blue,
+                new LootDistributionData.BiomeData
+                {
+                    biome = BiomeType.SafeShallows_Grass,
+                    count = 10,
+                    probability = 0.8f
+                });
 #endif
+            SetFixedSpawns();
         }
 
-        #region SUBNAUTICAPETMETHODS
+        /// <summary>
+        /// Generic method to set up the DNA prefabs
+        /// </summary>
+        /// <param name="classId"></param>
+        /// <param name="displayName"></param>
+        /// <param name="description"></param>
+        /// <param name="sprite"></param>
+        /// <param name="color"></param>
+        /// <param name="lootBiome"></param>
+        /// <returns></returns>
+        private static PrefabInfo InitPrefab(string classId, string displayName, string description, Sprite sprite,
+            Color color, LootDistributionData.BiomeData lootBiome)
+        {
+            Log.LogDebug($"PetDnaPrefab: Init Prefab for {classId}...");
+
+            CustomPrefab testClone = new CustomPrefab(
+               classId,
+               displayName,
+               description,
+               sprite
+            );
+
+            PrefabTemplate cloneTemplate = new CloneTemplate(testClone.Info, TechType.Titanium)
+            {
+                ModifyPrefab = prefab =>
+                {
+                    Log.LogDebug($"PetDnaPrefab: InitPrefab is setting the model for {prefab.name}... using {DnaModelPrefab.name}");
+                    GameObject newModel = Object.Instantiate(DnaModelPrefab);
+
+                    // Add new model
+                    Log.LogDebug($"PetDnaPrefab: InitPrefab is setting the model for {prefab.name} to {newModel.name}...");
+                    newModel.transform.SetParent(prefab.transform);
+                    newModel.transform.localPosition = new Vector3(0, 0, 0);
+                    newModel.transform.localRotation = new Quaternion(0, 0, 0, 0);
+
+                    // Set model color
+                    newModel.FindChild("Ends").GetComponent<MeshRenderer>().material.color = color;
+
+                    // Add the rotate script to the DNA model
+                    RotateModel rotateModel = newModel.FindChild("DNA").AddComponent<RotateModel>();
+                    rotateModel.RotationSpeed = 0.01f;
+
+                    // Resize
+                    prefab.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+
+                    // Disable the old model
+                    prefab.FindChild("model").SetActive(false);
+                    Log.LogDebug($"PetDnaPrefab: InitPrefab is setting the model for {prefab.name} to {newModel.name}. Done.");
+                }
+            };
+            testClone.SetGameObject(cloneTemplate);
+
+            testClone.SetSpawns(lootBiome);
+            testClone.Register();
+            Log.LogDebug($"PetDnaPrefab: Init Prefab for {classId}. Done.");
+            return testClone.Info;
+        }
+
+        /// <summary>
+        /// Get's and inits the DNA model object from the Asset Bundle
+        /// </summary>
+        /// <returns></returns>
+        private static void SetDnaModelObjectPrefab()
+        {
+            Log.LogDebug("PetDnaPrefab: GetDnaModelObjectPrefab is locating model in Asset Bundle...");
+            GameObject prefab = ModUtils.GetGameObjectPrefabFromAssetBundle(DnaModelObjectName);
+            if (prefab == null)
+            {
+                Log.LogDebug($"PetDnaPrefab: GetDnaModelObjectPrefab couldn't find {DnaModelObjectName}");
+                return;
+            }
+
+            Shader marmosetShader = Shader.Find("MarmosetUBER");
+            if (marmosetShader == null)
+            {
+                Log.LogDebug("PetDnaPrefab: GetDnaModelObjectPrefab cannot find the Marmoset shader!");
+            }
+            else
+            {
+                Log.LogDebug("PetDnaPrefab: GetDnaModelObjectPrefab is updating material shader properties...");
+                MaterialUtils.ApplySNShaders(prefab);
+
+            }
+            DnaModelPrefab = prefab;
+
+            Log.LogDebug("PetDnaPrefab: GetDnaModelObjectPrefab is done.");
+        }
+
+        /// <summary>
+        /// Spawns Pet DNA in some fixed locations
+        /// </summary>
+        public static void SetFixedSpawns()
+        {
+            Log.LogDebug("PetDnaPrefab: SetFixedSpawns adding coordinated spawns...");
+            List<SpawnInfo> spawnInfos = new List<SpawnInfo>()
+            {
 #if SUBNAUTICA
-        /// <summary>
-        /// Register Cave Crawler DNA prefab
-        /// </summary>
-        private static void InitCaveCrawlerDnaPrefab()
-        {
-            PrefabInfo caveCrawlerDnaInfo = PrefabInfo.WithTechType("CaveCrawlerDna", "Cave Crawler DNA", "DNA from a Cave Crawler.");
-            caveCrawlerDnaInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaCaveCrawlerTexture));
-            CaveCrawlerDnaPrefabInfo = caveCrawlerDnaInfo;
-            CustomPrefab caveCrawlerDna = new CustomPrefab(caveCrawlerDnaInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(caveCrawlerDnaInfo, TechType.BonesharkEgg)
-            {
-                // Callback to change all material colors of this clone to blue.
-                ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.magenta))
-            };
-            caveCrawlerDna.SetGameObject(cloneTemplate);
-            caveCrawlerDna.SetSpawns(new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_Grass, count = 4, probability = 0.1f },
-                new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_CaveFloor, count = 1, probability = 0.4f });
+                new SpawnInfo("CaveCrawlerDnaSample", GetTerrainPosition(new Vector3(-131.93f, -19.82f, -246.48f)),
+                    Vector3.up * 90f),
 
-            caveCrawlerDna.Register();
-        }
+                new SpawnInfo("AlienRobotDnaSample", GetTerrainPosition(new Vector3(-132.63f, -19.82f, -246.48f)),
+                Vector3.up * 90f),
 
-        /// <summary>
-        /// Register Blood Crawler DNA prefab
-        /// </summary>
-        private static void InitBloodCrawlerDnaPrefab()
-        {
-            PrefabInfo bloodCrawlerDnaInfo = PrefabInfo.WithTechType("BloodCrawlerDna", "Blood Crawler DNA", "DNA from a Blood Crawler.");
-            bloodCrawlerDnaInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaBloodCrawlerTexture));
-            BloodCrawlerDnaPrefabInfo = bloodCrawlerDnaInfo;
-            CustomPrefab bloodCrawlerDna = new CustomPrefab(bloodCrawlerDnaInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(bloodCrawlerDnaInfo, TechType.CrabsnakeEgg)
-            {
-                // Callback to change all material colors of this clone to red.
-                ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.red))
-            };
-            bloodCrawlerDna.SetGameObject(cloneTemplate);
-            bloodCrawlerDna.SetSpawns(new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_Grass, count = 4, probability = 0.1f },
-                new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_CaveFloor, count = 1, probability = 0.4f });
+                new SpawnInfo("BloodCrawlerDnaSample", GetTerrainPosition(new Vector3(-131.93f, -19.32f, -246.48f)),
+                    Vector3.up * 90f),
 
-            bloodCrawlerDna.Register();
-        }
+                new SpawnInfo("CrabSquidDnaSample", GetTerrainPosition(new Vector3(-132.63f, -19.32f, -246.48f)),
+                    Vector3.up * 90f)
 
-        /// <summary>
-        /// Register Crab Squid DNA prefab
-        /// </summary>
-        private static void InitCrabSquidDnaPrefab()
-        {
-            PrefabInfo crabSquidDnaInfo = PrefabInfo.WithTechType("CrabSquidDna", "Crab Squid DNA", "DNA from a Crab Squid.");
-            crabSquidDnaInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaCrabSquidTexture));
-            CrabSquidDnaPrefabInfo = crabSquidDnaInfo;
-            CustomPrefab crabSquidDna = new CustomPrefab(crabSquidDnaInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(crabSquidDnaInfo, TechType.CrabsquidEgg)
-            {
-                // Callback to change all material colors of this clone to blue.
-                ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.blue))
-            };
-            crabSquidDna.SetGameObject(cloneTemplate);
-            crabSquidDna.SetSpawns(new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_Grass, count = 4, probability = 0.1f },
-                new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_CaveFloor, count = 1, probability = 0.4f });
-
-            crabSquidDna.Register();
-        }
-
-        /// <summary>
-        /// Register Alien Robot DNA prefab
-        /// </summary>
-        private static void InitAlienRobotDnaPrefab()
-        {
-            PrefabInfo alienRobotDnaInfo = PrefabInfo.WithTechType("AlienRobotDna", "Alien Robot DNA", "DNA from an Alien Robot.");
-            alienRobotDnaInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaAlienRobotTexture));
-            AlienRobotDnaPrefabInfo = alienRobotDnaInfo;
-            CustomPrefab alienRobotDna = new CustomPrefab(alienRobotDnaInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(alienRobotDnaInfo, TechType.CrashEgg)
-            {
-                // Callback to change all material colors of this clone to grey.
-                ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.grey))
-            };
-            alienRobotDna.SetGameObject(cloneTemplate);
-            alienRobotDna.SetSpawns(new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_Grass, count = 4, probability = 0.1f },
-                new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_CaveFloor, count = 1, probability = 0.4f });
-
-            alienRobotDna.Register();
-        }
 #endif
-        #endregion
-
-        #region BELOW ZERO METHODS
 #if SUBNAUTICAZERO
-        /// <summary>
-        /// Register Snow Stalker Baby DNA prefab
-        /// </summary>
-        private static void InitSnowStalkerBabyDnaPrefab()
-        {
-            SnowStalkerBabyDnaPrefabInfo = PrefabInfo.WithTechType("SnowStalkerBabyDna", "Snow Stalker Baby DNA", "DNA from a baby Snow Stalker.");
-            SnowStalkerBabyDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaSnowStalkerBabyTexture));
-            CustomPrefab snowStalkerBabyDna = new CustomPrefab(SnowStalkerBabyDnaPrefabInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(SnowStalkerBabyDnaPrefabInfo, TechType.ArcticRayEgg)
-            {
-                // Callback to change all material colors of this clone to blue.
-                ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.magenta))
-            };
-            snowStalkerBabyDna.SetGameObject(cloneTemplate);
-            snowStalkerBabyDna.SetSpawns(new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_Grass, count = 4, probability = 0.1f },
-                new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_CaveFloor, count = 1, probability = 0.4f });
+                new SpawnInfo("SnowStalkerBabyDnaSample", new Vector3(617.56f, -178.31f, -456.59f),
+                    Vector3.up * 90f),
 
-            snowStalkerBabyDna.Register();
-        }
+                new SpawnInfo("PenglingAdultDnaSample", new Vector3(616.76f, -177.51f, -455.89f),
+                    Vector3.up * 90f),
 
-        /// <summary>
-        /// Register Pengling Baby DNA prefab
-        /// </summary>
-        private static void InitPenglingBabyDnaPrefab()
-        {
-            PenglingBabyDnaPrefabInfo = PrefabInfo.WithTechType("PenglingBabyDna", "Pengling Baby DNA", "DNA from a baby Pengling.");
-            PenglingBabyDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaPenglingBabyTexture));
+                new SpawnInfo("PenglingBabyDnaSample", new Vector3(617.56f, -177.51f, -456.59f),
+                    Vector3.up * 90f),
 
-            CustomPrefab penglingBabyDna = new CustomPrefab(PenglingBabyDnaPrefabInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(PenglingBabyDnaPrefabInfo, TechType.BrinewingEgg)
-            {
-                // Callback to change all material colors of this clone to blue.
-                ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.magenta))
-            };
-            penglingBabyDna.SetGameObject(cloneTemplate);
-            penglingBabyDna.SetSpawns(new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_Grass, count = 4, probability = 0.1f },
-                new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_CaveFloor, count = 1, probability = 0.4f });
+                new SpawnInfo("PinnicaridDnaSample", new Vector3(616.76f, -177.51f, -455.89f),
+                    Vector3.up * 90f),
 
-            penglingBabyDna.Register();
-        }
+                new SpawnInfo("YellowTrivalveDnaSample", new Vector3(618.56f, -178.31f, -456.59f),
+                    Vector3.up * 90f),
 
-        /// <summary>
-        /// Register Pengling Adult DNA prefab
-        /// </summary>
-        private static void InitPenglingAdultDnaPrefab()
-        {
-            PenglingAdultDnaPrefabInfo = PrefabInfo.WithTechType("PenglingAdultDna", "Adult Pengling DNA", "DNA from an adult Pengling.");
-            PenglingAdultDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaPenglingAdultTexture));
-
-            CustomPrefab penglingAdultDna = new CustomPrefab(PenglingAdultDnaPrefabInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(PenglingAdultDnaPrefabInfo, TechType.BruteSharkEgg)
-            {
-                // Callback to change all material colors of this clone to blue.
-                ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.magenta))
-            };
-            penglingAdultDna.SetGameObject(cloneTemplate);
-            penglingAdultDna.SetSpawns(new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_Grass, count = 4, probability = 0.1f },
-                new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_CaveFloor, count = 1, probability = 0.4f });
-
-            penglingAdultDna.Register();
-        }
-
-        /// <summary>
-        /// Register Pinnicarid DNA prefab
-        /// </summary>
-        private static void InitPinnicaridDnaPrefab()
-        {
-            PinnicaridDnaPrefabInfo = PrefabInfo.WithTechType("PinnicaridDna", "Pinnicarid DNA", "DNA from a Pinnicarid.");
-            PinnicaridDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaPinnicaridTexture));
-            CustomPrefab pinnicaridDna = new CustomPrefab(PinnicaridDnaPrefabInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(PinnicaridDnaPrefabInfo, TechType.LavaZoneEgg)
-            {
-                // Callback to change all material colors of this clone to blue.
-                ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.magenta))
-            };
-            pinnicaridDna.SetGameObject(cloneTemplate);
-            pinnicaridDna.SetSpawns(new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_Grass, count = 4, probability = 0.1f },
-                new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_CaveFloor, count = 1, probability = 0.4f });
-
-            pinnicaridDna.Register();
-        }
-
-        /// <summary>
-        /// Register Blue Trivalve DNA prefab
-        /// </summary>
-        private static void InitTrivalveBlueDnaPrefab()
-        {
-            TrivalveBlueDnaPrefabInfo = PrefabInfo.WithTechType("TrivalveBlueDna", "Blue Trivalve DNA", "DNA from a blue Trivalve.");
-            TrivalveBlueDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaTrivalveBlueTexture));
-            CustomPrefab trivalveBlueDna = new CustomPrefab(TrivalveBlueDnaPrefabInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(TrivalveBlueDnaPrefabInfo, TechType.TrivalveBlueEgg)
-            {
-                // Callback to change all material colors of this clone to blue.
-                ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.magenta))
-            };
-            trivalveBlueDna.SetGameObject(cloneTemplate);
-            trivalveBlueDna.SetSpawns(new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_Grass, count = 4, probability = 0.1f },
-                new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_CaveFloor, count = 1, probability = 0.4f });
-
-            trivalveBlueDna.Register();
-        }
-
-        /// <summary>
-        /// Register Yellow Trivalve DNA prefab
-        /// </summary>
-        private static void InitTrivalveYellowDnaPrefab()
-        {
-            TrivalveYellowDnaPrefabInfo = PrefabInfo.WithTechType("TrivalveYellowDna", "Yellow Trivalve DNA", "DNA from a yellow Trivalve.");
-            TrivalveYellowDnaPrefabInfo.WithIcon(ModUtils.GetSpriteFromAssetBundle(DnaTrivalveYellowTexture));
-            CustomPrefab trivalveYellowDna = new CustomPrefab(TrivalveYellowDnaPrefabInfo);
-            PrefabTemplate cloneTemplate = new CloneTemplate(TrivalveYellowDnaPrefabInfo, TechType.TrivalveYellowEgg)
-            {
-                // Callback to change all material colors of this clone to blue.
-                ModifyPrefab = prefab => prefab.GetComponentsInChildren<Renderer>().ForEach(r => r.materials.ForEach(m => m.color = Color.magenta))
-            };
-            trivalveYellowDna.SetGameObject(cloneTemplate);
-            trivalveYellowDna.SetSpawns(new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_Grass, count = 4, probability = 0.1f },
-                new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_CaveFloor, count = 1, probability = 0.4f });
-
-            trivalveYellowDna.Register();
-        }
+                new SpawnInfo("BlueTrivalveDnaSample", new Vector3(618.76f, -177.51f, -455.89f),
+                    Vector3.up * 90f),
 #endif
+            };
+            CoordinatedSpawnsHandler.RegisterCoordinatedSpawns(spawnInfos);
+            Log.LogDebug("PetDnaPrefab: SetFixedSpawns adding coordinated spawns... Done.");
+        }
 
-        #endregion
-
+        /// <summary>
+        /// Returns a Position on the terrain, relative to the given position
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        private static Vector3 GetTerrainPosition(Vector3 position)
+        {
+            Vector3 newPosition = position;
+            // float newY = Terrain.activeTerrain.SampleHeight(position);
+            // newPosition.y = newY;
+            return newPosition;
+        }
     }
 }

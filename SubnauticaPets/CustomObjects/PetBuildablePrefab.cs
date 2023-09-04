@@ -5,7 +5,6 @@ using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
 using Nautilus.Utility;
 using UnityEngine;
-using static CraftData;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 using static DaftAppleGames.SubnauticaPets.Utils.UiUtils;
 
@@ -104,8 +103,8 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 
 
                 // set recipe:
-                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
-                    new Ingredient(PetDnaPrefab.CaveCrawlerDnaPrefabInfo.TechType, 5)));
+                prefab.SetRecipe(new RecipeData(new CraftData.Ingredient(TechType.Gold, 3),
+                    new CraftData.Ingredient(PetDnaPrefab.CaveCrawlerDnaPrefabInfo.TechType, 5)));
 
                 // finally, register it into the game:
                 prefab.Register();
@@ -161,8 +160,8 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 
 
                 // set recipe:
-                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
-                    new Ingredient(PetDnaPrefab.BloodCrawlerDnaPrefabInfo.TechType, 5)));
+                prefab.SetRecipe(new RecipeData(new CraftData.Ingredient(TechType.Gold, 3),
+                    new CraftData.Ingredient(PetDnaPrefab.BloodCrawlerDnaPrefabInfo.TechType, 5)));
 
                 // finally, register it into the game:
                 prefab.Register();
@@ -217,8 +216,8 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 
 
                 // set recipe:
-                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
-                    new Ingredient(PetDnaPrefab.CrabSquidDnaPrefabInfo.TechType, 5)));
+                prefab.SetRecipe(new RecipeData(new CraftData.Ingredient(TechType.Gold, 3),
+                    new CraftData.Ingredient(PetDnaPrefab.CrabSquidDnaPrefabInfo.TechType, 5)));
 
                 // finally, register it into the game:
                 prefab.Register();
@@ -272,8 +271,8 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 
 
                 // set recipe:
-                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
-                    new Ingredient(PetDnaPrefab.AlienRobotDnaPrefabInfo.TechType, 5)));
+                prefab.SetRecipe(new RecipeData(new CraftData.Ingredient(TechType.Gold, 3),
+                    new CraftData.Ingredient(PetDnaPrefab.AlienRobotDnaPrefabInfo.TechType, 5)));
 
                 // finally, register it into the game:
                 prefab.Register();

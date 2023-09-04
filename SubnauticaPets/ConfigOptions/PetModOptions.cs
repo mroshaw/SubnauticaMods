@@ -83,7 +83,7 @@ namespace DaftAppleGames.SubnauticaPets.ConfigOptions
 
             // Recreate, in case they've changed in BepInEx Config
             AddModOptions();
-
+            
             base.BuildModOptions(panel, modsTabIndex, options);
         }
 

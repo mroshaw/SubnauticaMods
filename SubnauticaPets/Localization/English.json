@@ -1,0 +1,13 @@
+// English.json
+{
+  // UI elements
+  "Button_Rename": "Rename",
+  "Button_Kill": "Kill",
+  "Button_KillAll": "Kill All",
+  "Label_PetName": "Pet Name:",
+  "ClickToEdit": "Click to edit...",
+
+  // Prefabs - DNA
+  "CaveCrawlerDnaSample": "Cave Crawler DNA Sample",
+  "Tooltip_CaveCrawlerDna": "A sample of DNA from a Cave Crawler"
+}

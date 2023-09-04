@@ -193,6 +193,23 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         }
 
         /// <summary>
+        /// Gets a prefab from the Asset Bundle
+        /// </summary>
+        /// <param name="objectName"></param>
+        /// <returns></returns>
+        public static GameObject GetGameObjectPrefabFromAssetBundle(string objectName)
+        {
+            Object obj = GetObjectFromAssetBundle(objectName, typeof(GameObject));
+            if (obj == null)
+            {
+                Log.LogDebug($"ModUtils: Couldn't find GameObject named {objectName} in Asset Bundle.");
+                return null;
+            }
+
+            return obj as GameObject;
+        }
+
+        /// <summary>
         /// Loads a given Game Object from Asset Bundles shipped in the Mod folder
         /// </summary>
         /// <param name="assetBundleName"></param>

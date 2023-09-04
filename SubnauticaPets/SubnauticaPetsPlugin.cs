@@ -10,6 +10,7 @@ using DaftAppleGames.SubnauticaPets.CustomObjects;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
 using DaftAppleGames.SubnauticaPets.Utils;
+using Nautilus.Handlers;
 
 namespace DaftAppleGames.SubnauticaPets
 {
@@ -67,6 +68,9 @@ namespace DaftAppleGames.SubnauticaPets
         /// </summary>
         private void Awake()
         {
+            // Init Localisation
+            LanguageHandler.RegisterLocalizationFolder();
+
             // Set up BepInEx config
             SetupConfigOptions();
 
