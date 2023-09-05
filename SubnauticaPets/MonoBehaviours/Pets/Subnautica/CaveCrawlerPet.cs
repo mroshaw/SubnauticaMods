@@ -18,7 +18,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
         public static string Description = Language.main.Get("Description_CaveCrawler");
         public static string TextureName = "CaveCrawlerTexture";
         public static PrefabInfo BuildablePrefabInfo;
-        public static string PrefabGuid = "4fae8fa4-0280-43bd-bcf1-f3cba97eed77";
+        public static string PrefabGuid = "3e0a11f1-e2b2-4c4f-9a8e-0b0a77dcc065";
         public static string ModelName = "";
 
         // Pet DNA

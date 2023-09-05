@@ -20,7 +20,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
         public static string Description = Language.main.Get("Description_CrabSquid");
         public static string TextureName = "CrabSquidTexture";
         public static PrefabInfo BuildablePrefabInfo;
-        public static string PrefabGuid = "4fae8fa4-0280-43bd-bcf1-f3cba97eed77";
+        public static string PrefabGuid = "4c2808fe-e051-44d2-8e64-120ddcdc8abb";
         public static string ModelName = "";
 
         // Pet DNA

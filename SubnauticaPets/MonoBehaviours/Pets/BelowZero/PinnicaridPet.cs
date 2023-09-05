@@ -17,7 +17,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
         public static string Description = Language.main.Get("Description_Pinnicarid");
         public static string TextureName = "PinnicaridTexture";
         public static PrefabInfo BuildablePrefabInfo;
-        public static string PrefabGuid = "4fae8fa4-0280-43bd-bcf1-f3cba97eed77";
+        public static string PrefabGuid = "f9eccfe2-a06f-4c06-bc57-01c2e50ffbe8";
         public static string ModelName = "";
 
         // Pet DNA

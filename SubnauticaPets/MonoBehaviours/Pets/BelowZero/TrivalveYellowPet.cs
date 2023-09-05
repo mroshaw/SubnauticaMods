@@ -18,7 +18,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
         public static string Description = Language.main.Get("Description_YellowTrivalve");
         public static string TextureName = "TrivalveYellowTexture";
         public static PrefabInfo BuildablePrefabInfo;
-        public static string PrefabGuid = "4fae8fa4-0280-43bd-bcf1-f3cba97eed77";
+        public static string PrefabGuid = "e8f2bfd4-49c6-45d1-a029-489b492515a9";
         public static string ModelName = "";
 
         // Pet DNA

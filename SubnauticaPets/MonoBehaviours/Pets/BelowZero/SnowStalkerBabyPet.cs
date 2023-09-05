@@ -18,7 +18,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
         public static string Description = Language.main.Get("Description_SnowStalker");
         public static string TextureName = "SnowStalkerBabyTexture";
         public static PrefabInfo BuildablePrefabInfo;
-        public static string PrefabGuid = "4fae8fa4-0280-43bd-bcf1-f3cba97eed77";
+        public static string PrefabGuid = "78d3dbce-856f-4eba-951c-bd99870554e2";
         public static string ModelName = "";
 
         // Pet DNA

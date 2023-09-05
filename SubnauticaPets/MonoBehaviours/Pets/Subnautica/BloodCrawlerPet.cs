@@ -19,7 +19,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
         public static string Description = Language.main.Get("Description_BloodCrawler");
         public static string TextureName = "BloodCrawlerTexture";
         public static PrefabInfo BuildablePrefabInfo;
-        public static string PrefabGuid = "4fae8fa4-0280-43bd-bcf1-f3cba97eed77";
+        public static string PrefabGuid = "7ce2ca9d-6154-4988-9b02-38f670e741b8"; // 830a8fa0-d92d-4683-a193-7531e6968042
         public static string ModelName = "";
 
         // Pet DNA
