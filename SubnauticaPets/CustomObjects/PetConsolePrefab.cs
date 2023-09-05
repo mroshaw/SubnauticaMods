@@ -65,6 +65,5 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             PetConsole petConsole = consoleGameObject.AddComponent<PetConsole>();
             Log.LogDebug("PetConsolePrefab: Adding PetConsole component... Done.");
         }
-
     }
 }

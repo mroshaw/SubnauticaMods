@@ -23,28 +23,6 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         {
             _player = __instance;
 
-            // Add and configure the InputManager component
-            ModInputManager inputManager = __instance.gameObject.AddComponent<ModInputManager>();
-            inputManager.SpawnKeyCode = SubnauticaPetsPlugin.SpawnKeyboardShortcutConfig.Value;
-            inputManager.SpawnModifierKeyCode = SubnauticaPetsPlugin.SpawnKeyboardShortcutModifierConfig.Value;
-            inputManager.KillAllKeyCode = SubnauticaPetsPlugin.KillAllKeyboardShortcutConfig.Value;
-            inputManager.KillAllModifierKeyCode = SubnauticaPetsPlugin.KillAllKeyboardShortcutModifierConfig.Value;
-
-            // Add and configure the PetSpawner component
-            PetSpawner petSpawner =  __instance.gameObject.AddComponent<PetSpawner>();
-            petSpawner.SkipSpawnObstacleCheck = SubnauticaPetsPlugin.SkipSpawnObstacleCheckConfig.Value;
-
-            // For this use case, we'll trigger the spawner via the InputManager event
-            // We'll use the Fabriactor events in the fabricator use case
-
-            // Remove, in case the methods are already registered
-            inputManager.SpawnButtonPressedEvent.RemoveListener(SpawnPetHandler);
-            inputManager.SpawnButtonPressedEvent.RemoveListener(KillAllPetsHandler);
-
-            // Add listeners
-            inputManager.SpawnButtonPressedEvent.AddListener(SpawnPetHandler);
-            inputManager.KillAllButtonPressedEvent.AddListener(KillAllPetsHandler);
-
             // Continue with the rest of awake
             return true;
         }

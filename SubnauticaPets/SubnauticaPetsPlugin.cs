@@ -34,21 +34,9 @@ namespace DaftAppleGames.SubnauticaPets
         public static PetSaver Saver;
 
         // Config entry key strings
-        public static string SpawnKeyboardShortcutKey = "Spawn Keyboard Shortcut";
-        public static string SpawnKeyboardShortcutModifierKey = "Spawn Keyboard Shortcut Modifier";
-        public static string KillAllKeyboardShortcutKey = "Kill All Keyboard Shortcut";
-        public static string KillAllKeyboardShortcutModifierKey = "Kill All Keyboard Shortcut Modifier";
-        public static string PetCreatureTypeKey = "Pet Creature Type";
-        public static string PetNameKey = "Pet Name";
         public static string SkipSpawnObstacleCheckKey = "Skip Spawn Obstacle Check";
 
         // Configuration entries. Static, so can be accessed directly elsewhere in code
-        public static ConfigEntry<KeyCode> SpawnKeyboardShortcutConfig;
-        public static ConfigEntry<KeyCode> SpawnKeyboardShortcutModifierConfig;
-        public static ConfigEntry<KeyCode> KillAllKeyboardShortcutConfig;
-        public static ConfigEntry<KeyCode> KillAllKeyboardShortcutModifierConfig;
-        public static ConfigEntry<PetCreatureType> PetCreatureTypeConfig;
-        public static ConfigEntry<PetName> PetNameConfig;
         public static ConfigEntry<bool> SkipSpawnObstacleCheckConfig;
 
         // Keep tabs on currently selected options
@@ -78,8 +66,7 @@ namespace DaftAppleGames.SubnauticaPets
             ModOptions modOptions = new PetModOptions();
 
             // Set static values
-            SelectedPetName = PetNameConfig.Value.ToString();
-            SelectedCreaturePetType = PetCreatureTypeConfig.Value;
+            SelectedPetName = "Dave";
 
             // Apply all of our patches
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loading...");
@@ -121,49 +108,6 @@ namespace DaftAppleGames.SubnauticaPets
         /// </summary>
         private void SetupConfigOptions()
         {
-            SpawnKeyboardShortcutConfig = Config.Bind("Keyboard Settings",
-                SpawnKeyboardShortcutKey,
-                KeyCode.Keypad0, "Key to press to spawn a new pet");
-
-            SpawnKeyboardShortcutConfig.SettingChanged += ConfigSettingChanged;
-
-            SpawnKeyboardShortcutModifierConfig = Config.Bind("Keyboard Settings",
-                SpawnKeyboardShortcutModifierKey,
-                KeyCode.LeftControl, "Modifier key that must pressed to trigger a pet spawn");
-
-            SpawnKeyboardShortcutModifierConfig.SettingChanged += ConfigSettingChanged;
-
-            KillAllKeyboardShortcutConfig = Config.Bind("Keyboard Settings",
-                KillAllKeyboardShortcutKey,
-                KeyCode.K, "Key to press to kill all pets");
-
-            KillAllKeyboardShortcutConfig.SettingChanged += ConfigSettingChanged;
-
-            KillAllKeyboardShortcutModifierConfig = Config.Bind("Keyboard Settings",
-                KillAllKeyboardShortcutModifierKey,
-                KeyCode.LeftControl, "Modifier key that must be pressed to kill all spawned pets"
-            );
-
-            KillAllKeyboardShortcutModifierConfig.SettingChanged += ConfigSettingChanged;
-
-            // Creature Type enum setting
-            PetCreatureTypeConfig = Config.Bind("Pet Settings",
-                PetCreatureTypeKey,
-#if SUBNAUTICA
-                PetCreatureType.CaveCrawler, "Creature type to spawn as a pet");
-#endif
-#if SUBNAUTICAZERO
-                PetCreatureType.PenglingBaby, "Creature type to spawn as a pet");
-#endif
-            PetCreatureTypeConfig.SettingChanged += ConfigSettingChanged;
-
-            // Creature Name enum setting
-            PetNameConfig = Config.Bind("Pet Settings",
-                PetNameKey,
-                PetName.Anise, "Spawned creature's name");
-
-            PetNameConfig.SettingChanged += ConfigSettingChanged;
-
             SkipSpawnObstacleCheckConfig = Config.Bind("Debug Settings",
                 SkipSpawnObstacleCheckKey,
                 false,
@@ -185,67 +129,6 @@ namespace DaftAppleGames.SubnauticaPets
             if (settingChangedEventArgs == null)
             {
                 return;
-            }
-
-            // Update Input Managers if Spawn shortcut is changed
-            if (settingChangedEventArgs.ChangedSetting.Definition.Key == SpawnKeyboardShortcutKey)
-            {
-                KeyCode newKeyboardShortcut =
-                    (KeyCode)settingChangedEventArgs.ChangedSetting.BoxedValue;
-                Log.LogDebug("Updating keyboard shortcut...");
-                ModUtils.UpdateSpawnKeyboardShortcut(newKeyboardShortcut);
-                return;
-
-            }
-
-            // Update Input Managers if Spawn shortcut modifier is changed
-            if (settingChangedEventArgs.ChangedSetting.Definition.Key == SpawnKeyboardShortcutModifierKey)
-            {
-                KeyCode newKeyboardShortcut =
-                    (KeyCode)settingChangedEventArgs.ChangedSetting.BoxedValue;
-                Log.LogDebug("Updating Spawn keyboard modifier shortcut...");
-                ModUtils.UpdateSpawnKeyboardModifierShortcut(newKeyboardShortcut);
-                return;
-
-            }
-            
-            // Update Input Managers if Kill All shortcut is changed
-            if (settingChangedEventArgs.ChangedSetting.Definition.Key == KillAllKeyboardShortcutKey)
-            {
-                KeyCode newKeyboardShortcut =
-                    (KeyCode)settingChangedEventArgs.ChangedSetting.BoxedValue;
-                Log.LogDebug("Updating Kill All keyboard shortcut...");
-                ModUtils.UpdateKillAllKeyboardShortcut(newKeyboardShortcut);
-                return;
-
-            }
-
-            // Update Input Managers if Kill All modifier shortcut is changed
-            if (settingChangedEventArgs.ChangedSetting.Definition.Key == KillAllKeyboardShortcutModifierKey)
-            {
-                KeyCode newKeyboardShortcut =
-                    (KeyCode)settingChangedEventArgs.ChangedSetting.BoxedValue;
-                Log.LogDebug("Updating Kill All keyboard modifier shortcut...");
-                ModUtils.UpdateKillAllKeyboardModifierShortcut(newKeyboardShortcut);
-                return;
-
-            }
-
-            // Update Pet Spawner if Pet Creature Type is changed
-            if (settingChangedEventArgs.ChangedSetting.Definition.Key == PetCreatureTypeKey)
-            {
-                PetCreatureType newPetCreatureType = (PetCreatureType)settingChangedEventArgs.ChangedSetting.BoxedValue;
-                Log.LogDebug("Updating pet type...");
-                SelectedCreaturePetType = newPetCreatureType;
-                return;
-            }
-
-            // Update Pet Spawner if Pet Name is changed
-            if (settingChangedEventArgs.ChangedSetting.Definition.Key == PetNameKey)
-            {
-                PetName newPetName = (PetName)settingChangedEventArgs.ChangedSetting.BoxedValue;
-                Log.LogDebug("Updating pet name...");
-                SelectedPetName = newPetName.ToString();
             }
 
             // Update Skip Obstacle check
