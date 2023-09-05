@@ -1,4 +1,10 @@
-﻿using DaftAppleGames.SubnauticaPets.MonoBehaviours;
+﻿#if SUBNAUTICA
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica;
+#endif
+#if SUBNAUTICAZERO
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero;
+#endif
+using DaftAppleGames.SubnauticaPets.MonoBehaviours;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
@@ -20,24 +26,26 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         public static void InitPetFabricator()
         {
-            CustomPrefab customFab = new CustomPrefab("PetFabricator", "Pet Fabricator", "A special fabricator for replicating pet creatures from fragments of DNA.",
+            CustomPrefab customFab = new CustomPrefab("PetFabricator",
+                Language.main.Get("DisplayName_PetFabricator"),
+                Language.main.Get("Description_PetFabricator"),
                 ModUtils.GetSpriteFromAssetBundle(PetWorkbenchTexture));
 
             customFab.CreateFabricator(out CraftTree.Type treeType)
                 // Add our Pet Buildables
 #if SUBNAUTICA
-                .AddCraftNode(PetBuildablePrefab.CaveCrawlerPetBuildablePrefabInfo.TechType)
-                .AddCraftNode(PetBuildablePrefab.BloodCrawlerPetBuildablePrefabInfo.TechType)
-                .AddCraftNode(PetBuildablePrefab.CrabSquidPetBuildablePrefabInfo.TechType)
-                .AddCraftNode(PetBuildablePrefab.AlienRobotBuildablePefabInfo.TechType);
+                .AddCraftNode(CaveCrawlerPet.BuildablePrefabInfo.TechType)
+                .AddCraftNode(BloodCrawlerPet.BuildablePrefabInfo.TechType)
+                .AddCraftNode(CrabSquidPet.BuildablePrefabInfo.TechType)
+                .AddCraftNode(AlienRobotPet.BuildablePrefabInfo.TechType);
 #endif
 #if SUBNAUTICAZERO
-                .AddCraftNode(PetBuildablePrefab.PenglingBabyPetBuildablePrefabInfo.TechType)
-                .AddCraftNode(PetBuildablePrefab.PenglingAdultPetBuildablePrefabInfo.TechType)
-                .AddCraftNode(PetBuildablePrefab.SnowStalkerBabyPetBuildablePrefabInfo.TechType)
-                .AddCraftNode(PetBuildablePrefab.PinnicaridPetBuildablePefabInfo.TechType)
-                .AddCraftNode(PetBuildablePrefab.TrivalveBluePetBuildablePefabInfo.TechType)
-                .AddCraftNode(PetBuildablePrefab.TrivalveYellowBuildablePefabInfo.TechType);
+                .AddCraftNode(PenglingBabyPet.BuildablePrefabInfo.TechType)
+                .AddCraftNode(PenglingAdultPet.BuildablePrefabInfo.TechType)
+                .AddCraftNode(SnowStalkerBabyPet.BuildablePrefabInfo.TechType)
+                .AddCraftNode(PinnicaridPet.BuildablePrefabInfo.TechType)
+                .AddCraftNode(TrivalveYellowPet.BuildablePrefabInfo.TechType)
+                .AddCraftNode(TrivalveBluePet.BuildablePrefabInfo.TechType);
 #endif
             FabricatorTemplate fabPrefab = new FabricatorTemplate(customFab.Info, treeType)
             {

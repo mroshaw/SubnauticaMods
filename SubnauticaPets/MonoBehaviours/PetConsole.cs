@@ -245,23 +245,23 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
         {
             // Rename button
             GameObject renameButton = UiUtils.CreateButton(sourceUiScreen, "Button",
-                "RenamePetButton", "Rename", targetUiScreen, new Vector3(160, 20, 0));
+                "RenamePetButton", "Button_Rename", targetUiScreen, new Vector3(160, 20, 0));
             renameButton.GetComponentInChildren<Button>().onClick.AddListener(RenameButtonProxy);
 
             // Kill button
             GameObject killButton = UiUtils.CreateButton(sourceUiScreen, "Button",
-                "KillPetButton", "Kill", targetUiScreen, new Vector3(160, -50, 0));
+                "KillPetButton", "Button_Kill", targetUiScreen, new Vector3(160, -50, 0));
             killButton.GetComponentInChildren<Button>().onClick.AddListener(KillButtonProxy);
 
 
             // Kill All button
             _killAllButton = UiUtils.CreateButton(sourceUiScreen, "Button",
-                "KillAllPetsButton", "Kill All", targetUiScreen, new Vector3(160, -120, 0));
+                "KillAllPetsButton", "Button_KillAll", targetUiScreen, new Vector3(160, -120, 0));
             _killAllButton.GetComponentInChildren<Button>().onClick.AddListener(KillAllButtonProxy);
 
             // Kill All Confirm button
             _killAllConfirmButton = UiUtils.CreateButton(sourceUiScreen, "Button",
-                "KillAllPetsConfirmButton", "Sure?", targetUiScreen, new Vector3(160, -120, 0));
+                "KillAllPetsConfirmButton", "Button_Sure", targetUiScreen, new Vector3(160, -120, 0));
             _killAllConfirmButton.GetComponentInChildren<Button>().onClick.AddListener(KillAllConfirmButtonProxy);
             _killAllConfirmButton.GetComponent<Image>().color = Color.red;
             _killAllConfirmButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
@@ -277,11 +277,11 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
         private void CreateTextEntry(GameObject sourceUiScreen, GameObject targetUiScreen)
         {
             // Rename pet label
-            GameObject petNameLabel = UiUtils.CreateLabel(sourceUiScreen, "Name Label", "PetNameLabel", "Pet Name:",
+            GameObject petNameLabel = UiUtils.CreateLabel(sourceUiScreen, "Name Label", "PetNameLabel", "Label_PetName",
                 targetUiScreen, new Vector3(-180, 100, 0));
 
             // Rename pet field
-            GameObject nameEntryGameObject = UiUtils.CreateTextEntry(sourceUiScreen, "InputField", "PetNameField",
+            GameObject nameEntryGameObject = UiUtils.CreateTextEntry(sourceUiScreen, "InputField", "PetNameField", "Tip_ClickToEdit",
                 targetUiScreen, new Vector3(110, 100, 0));
 
             nameEntryGameObject.GetComponent<uGUI_InputField>().onValueChanged.AddListener(RenameTextChangedProxy);

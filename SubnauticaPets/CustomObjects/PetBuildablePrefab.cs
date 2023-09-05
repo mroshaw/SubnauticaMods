@@ -1,4 +1,12 @@
-﻿using DaftAppleGames.SubnauticaPets.Utils;
+﻿#if SUBNAUTICA
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica;
+#endif
+
+#if SUBNAUTICAZERO
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero;
+#endif
+
+using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
@@ -6,7 +14,7 @@ using Nautilus.Crafting;
 using Nautilus.Utility;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
-using static DaftAppleGames.SubnauticaPets.Utils.UiUtils;
+using static UWE.FreezeTime;
 
 namespace DaftAppleGames.SubnauticaPets.CustomObjects
 {
@@ -16,22 +24,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
     /// </summary>
     public static class PetBuildablePrefab
     {
-        // Public static references for use by other consumers
-#if SUBNAUTICA
-        public static PrefabInfo CaveCrawlerPetBuildablePrefabInfo;
-        public static PrefabInfo BloodCrawlerPetBuildablePrefabInfo;
-        public static PrefabInfo CrabSquidPetBuildablePrefabInfo;
-        public static PrefabInfo AlienRobotBuildablePefabInfo;
-#endif
-
-#if SUBNAUTICAZERO
-        public static PrefabInfo PenglingBabyPetBuildablePrefabInfo;
-        public static PrefabInfo PenglingAdultPetBuildablePrefabInfo;
-        public static PrefabInfo SnowStalkerBabyPetBuildablePrefabInfo;
-        public static PrefabInfo PinnicaridPetBuildablePefabInfo;
-        public static PrefabInfo TrivalveBluePetBuildablePefabInfo;
-        public static PrefabInfo TrivalveYellowBuildablePefabInfo;
-#endif
         /// <summary>
         /// Initialise all Pet buildables
         /// </summary>
@@ -53,53 +45,81 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 #endif
         }
 
+        /// <summary>
+        /// Generic method to return the PrefabInfo for a given set of pet details
+        /// </summary>
+        /// <param name="classId"></param>
+        /// <param name="displayName"></param>
+        /// <param name="description"></param>
+        /// <param name="textureName"></param>
+        /// <returns></returns>
+        public static PrefabInfo CreateBuildablePrefabInfo(string classId, string displayName, string description, string textureName)
+        {
+            Log.LogDebug($"PetBuildablePrefab: CreateBuildablePrefabInfo with classId {classId}, displayName {displayName}, description {description}, textureName {textureName}.");
+            PrefabInfo prefabInfo = PrefabInfo
+                .WithTechType(classId, displayName, description)
+                // Set the icon
+                .WithIcon(ModUtils.GetSpriteFromAssetBundle(textureName));
+
+            return prefabInfo;
+        }
+
+        /// <summary>
+        /// Generic method to register PetInfo
+        /// </summary>
+        /// <param name="prefabInfo"></param>
+        /// <param name="cloneTemplateClassGuid"></param>
+        /// <param name="modelGameObjectName"></param>
+        /// <param name="recipe"></param>
+        /// <returns></returns>
+        public static void RegisterPrefabInfo(PrefabInfo prefabInfo, string cloneTemplateClassGuid, string modelGameObjectName,
+            RecipeData recipe)
+        {
+            // Create prefab
+            CustomPrefab prefab = new CustomPrefab(prefabInfo);
+            // Copy the prefab model
+            CloneTemplate cloneTemplate = new CloneTemplate(prefabInfo, cloneTemplateClassGuid);
+            // modify the cloned model:
+            cloneTemplate.ModifyPrefab += obj =>
+            {
+                // Set constructable flags
+                ConstructableFlags constructableFlags = ConstructableFlags.Inside;
+
+                // Find the object that holds the model:
+                GameObject model = obj.transform.Find(modelGameObjectName).gameObject;
+                if (!model)
+                {
+                    Log.LogDebug($"PetBuildableUtils: RegisterPrefabInfo cannot find object model {modelGameObjectName} in prefab!");
+                }
+                else
+                {
+                    Log.LogDebug($"PetBuildableUtils: RegisterPrefabInfo {modelGameObjectName} found model on {model.name}");
+                }
+                // add all components necessary for it to be built:
+                PrefabUtils.AddConstructable(obj, prefabInfo.TechType, constructableFlags, model);
+            };
+            // Assign the created clone model to the prefab itself:
+            prefab.SetGameObject(cloneTemplate);
+            // Set recipe
+            prefab.SetRecipe(recipe);
+            // Register it into the game:
+            prefab.Register();
+        }
+
 #if SUBNAUTICA
         /// <summary>
         /// Cave Crawler Buildable
         /// </summary>
         public static class CaveCrawlerBuildable
         {
-            public static PrefabInfo Info { get; } = PrefabInfo
-                .WithTechType("CaveCrawlerPet", "Cave Crawler Pet", "A pet cave crawler.")
-                // set the icon to that of the vanilla locker:
-                .WithIcon(ModUtils.GetSpriteFromAssetBundle(CaveCrawlerTexture));
+            // Init PrefabInfo
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(CaveCrawlerPet.ClassId, CaveCrawlerPet.DisplayName, CaveCrawlerPet.Description, CaveCrawlerPet.TextureName);
 
+            // Register with the game
             public static void Register()
             {
-                // So this can be used by other consumers
-                CaveCrawlerPetBuildablePrefabInfo = Info;
-                // Create prefab:
-                CustomPrefab prefab = new CustomPrefab(Info);
-                // copy the model of the Cave Crawler: WorldEntities/Creatures/CaveCrawler.prefab
-                CloneTemplate caveCrawlerClone = new CloneTemplate(Info, "3e0a11f1-e2b2-4c4f-9a8e-0b0a77dcc065");
-                // modify the cloned model:
-                caveCrawlerClone.ModifyPrefab += obj =>
-                {
-                    // allow it to be placced inside bases and submarines on the ground, and can be rotated:
-                    ConstructableFlags constructableFlags = ConstructableFlags.Inside;
-
-                    // find the object that holds the model:
-                    GameObject model = obj.transform.Find("cave_crawler_03").gameObject;
-                    if (!model)
-                    {
-                        Log.LogDebug("PetBuildableUtils: CaveCrawlerBuildable cannot find object model in prefab!");
-                    }
-                    else
-                    {
-                        Log.LogDebug($"PetBuildableUtils: CaveCrawlerBuildable found model on {model.name}");
-                    }
-
-                    // add all components necessary for it to be built:
-                    PrefabUtils.AddConstructable(obj, Info.TechType, constructableFlags, model);
-                };
-
-                // assign the created clone model to the prefab itself:
-                prefab.SetGameObject(caveCrawlerClone);
-                // set recipe:
-                prefab.SetRecipe(new RecipeData(new CraftData.Ingredient(TechType.Gold, 3),
-                    new CraftData.Ingredient(PetDnaPrefab.CaveCrawlerDnaPrefabInfo.TechType, 5)));
-                // Finally, register it into the game
-                prefab.Register();
+                RegisterPrefabInfo(Info, CaveCrawlerPet.PrefabGuid, CaveCrawlerPet.ModelName, CaveCrawlerPet.GetRecipeData());
+                CaveCrawlerPet.BuildablePrefabInfo = Info;
             }
         }
 
@@ -108,47 +128,14 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         public static class BloodCrawlerBuildable
         {
-            public static PrefabInfo Info { get; } = PrefabInfo
-                .WithTechType("BloodCrawlerPet", "Blood Crawler Pet", "A pet blood crawler.")
-                // set the icon to that of the vanilla locker:
-                .WithIcon(ModUtils.GetSpriteFromAssetBundle(BloodCrawlerTexture));
+            // Init PrefabInfo
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(BloodCrawlerPet.ClassId, BloodCrawlerPet.DisplayName, BloodCrawlerPet.Description, BloodCrawlerPet.TextureName);
 
+            // Register with the game
             public static void Register()
             {
-                // So this can be used by other consumers
-                BloodCrawlerPetBuildablePrefabInfo = Info;
-                // create prefab:
-                CustomPrefab prefab = new CustomPrefab(Info);
-                // copy the model of the Blood Crawler. WorldEntities/Slots/BloodKelp/BloodKelp_Creature_Unique.prefab
-                CloneTemplate caveCrawlerClone = new CloneTemplate(Info, "314e0fd9-56c5-4f80-9663-15fa077abc15");
-                // modify the cloned model:
-                caveCrawlerClone.ModifyPrefab += obj =>
-                {
-                    // allow it to be placced inside bases and submarines on the ground, and can be rotated:
-                    ConstructableFlags constructableFlags = ConstructableFlags.Inside;
-                    // find the object that holds the model:
-                    GameObject model = obj.transform.Find("cave_crawler_03").gameObject;
-                    if (!model)
-                    {
-                        Log.LogDebug("PetBuildableUtils: BloodCrawlerBuildable cannot find object model in prefab!");
-                    }
-                    else
-                    {
-                        Log.LogDebug($"PetBuildableUtils: BloodCrawlerBuildable found model on {model.name}");
-                    }
-                    // add all components necessary for it to be built:
-                    PrefabUtils.AddConstructable(obj, Info.TechType, constructableFlags, model);
-                };
-
-                // assign the created clone model to the prefab itself:
-                prefab.SetGameObject(caveCrawlerClone);
-
-                // set recipe:
-                prefab.SetRecipe(new RecipeData(new CraftData.Ingredient(TechType.Gold, 3),
-                    new CraftData.Ingredient(PetDnaPrefab.BloodCrawlerDnaPrefabInfo.TechType, 5)));
-
-                // finally, register it into the game:
-                prefab.Register();
+                RegisterPrefabInfo(Info, BloodCrawlerPet.PrefabGuid, BloodCrawlerPet.ModelName, BloodCrawlerPet.GetRecipeData());
+                BloodCrawlerPet.BuildablePrefabInfo = Info;
             }
         }
 
@@ -157,54 +144,14 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         public static class CrabSquidBuildable
         {
-            public static PrefabInfo Info { get; } = PrefabInfo
-                .WithTechType("CrabSquidPet", "Crab Squid Pet", "A pet crab squid.")
-                // set the icon to that of the vanilla locker:
-                .WithIcon(SpriteManager.Get(TechType.CrabSquid));
+            // Init PrefabInfo
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(CrabSquidPet.ClassId, CrabSquidPet.DisplayName, CrabSquidPet.Description, CrabSquidPet.TextureName);
 
+            // Register with the game
             public static void Register()
             {
-
-                // So this can be used by other consumers
-                CrabSquidPetBuildablePrefabInfo = Info;
-
-                // create prefab:
-                CustomPrefab prefab = new CustomPrefab(Info);
-
-                // copy the model of a CrabSquid - WorldEntities/Creatures/CrabSquid.prefab
-                CloneTemplate caveCrawlerClone = new CloneTemplate(Info, "4c2808fe-e051-44d2-8e64-120ddcdc8abb");
-
-                // modify the cloned model:
-                caveCrawlerClone.ModifyPrefab += obj =>
-                {
-                    // allow it to be placced inside bases and submarines on the ground, and can be rotated:
-                    ConstructableFlags constructableFlags = ConstructableFlags.Inside;
-
-                    // find the object that holds the model:
-                    GameObject model = obj.transform.Find("models").gameObject;
-                    if (!model)
-                    {
-                        Log.LogDebug("PetBuildableUtils: CrabSquidBuilding cannot find object model in prefab!");
-                    }
-                    else
-                    {
-                        Log.LogDebug($"PetBuildableUtils: CrabSquidBuilding found model on {model.name}");
-                    }
-
-                    // add all components necessary for it to be built:
-                    PrefabUtils.AddConstructable(obj, Info.TechType, constructableFlags, model);
-                };
-
-                // assign the created clone model to the prefab itself:
-                prefab.SetGameObject(caveCrawlerClone);
-
-
-                // set recipe:
-                prefab.SetRecipe(new RecipeData(new CraftData.Ingredient(TechType.Gold, 3),
-                    new CraftData.Ingredient(PetDnaPrefab.CrabSquidDnaPrefabInfo.TechType, 5)));
-
-                // finally, register it into the game:
-                prefab.Register();
+                RegisterPrefabInfo(Info, CrabSquidPet.PrefabGuid, CrabSquidPet.ModelName, CrabSquidPet.GetRecipeData());
+                CrabSquidPet.BuildablePrefabInfo = Info;
             }
         }
 
@@ -213,53 +160,14 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         public static class AlienRobotBuildable
         {
-            public static PrefabInfo Info { get; } = PrefabInfo
-                .WithTechType("AlienRobotPet", "Alien Robot Pet", "A pet alien robot.")
-                // set the icon to that of the vanilla locker:
-                .WithIcon(ModUtils.GetSpriteFromAssetBundle(AlienRobotTexture));
+            // Init PrefabInfo
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(AlienRobotPet.ClassId, AlienRobotPet.DisplayName, AlienRobotPet.Description, AlienRobotPet.TextureName);
 
+            // Register with the game
             public static void Register()
             {
-
-                // So this can be used by other consumers
-                AlienRobotBuildablePefabInfo = Info;
-
-                // create prefab:
-                CustomPrefab prefab = new CustomPrefab(Info);
-
-                // copy the model of an Alien Robot - WorldEntities/Creatures/Precursor_Droid.prefab
-                CloneTemplate caveCrawlerClone = new CloneTemplate(Info, "4fae8fa4-0280-43bd-bcf1-f3cba97eed77");
-
-                // modify the cloned model:
-                caveCrawlerClone.ModifyPrefab += obj =>
-                {
-                    // allow it to be placed inside bases and submarines on the ground, and can be rotated:
-                    ConstructableFlags constructableFlags = ConstructableFlags.Inside;
-
-                    // find the object that holds the model:
-                    GameObject model = obj.transform.Find("models").gameObject;
-                    if (!model)
-                    {
-                        Log.LogDebug("PetBuildableUtils: AlienRobotBuildable - cannot find object model in prefab!");
-                    }
-                    else
-                    {
-                        Log.LogDebug($"PetBuildableUtils: AlienRobotBuildable found model on {model.name}");
-                    }
-                    // add all components necessary for it to be built:
-                    PrefabUtils.AddConstructable(obj, Info.TechType, constructableFlags, model);
-                };
-
-                // assign the created clone model to the prefab itself:
-                prefab.SetGameObject(caveCrawlerClone);
-
-
-                // set recipe:
-                prefab.SetRecipe(new RecipeData(new CraftData.Ingredient(TechType.Gold, 3),
-                    new CraftData.Ingredient(PetDnaPrefab.AlienRobotDnaPrefabInfo.TechType, 5)));
-
-                // finally, register it into the game:
-                prefab.Register();
+                RegisterPrefabInfo(Info, AlienRobotPet.PrefabGuid, AlienRobotPet.ModelName, AlienRobotPet.GetRecipeData());
+                AlienRobotPet.BuildablePrefabInfo = Info;
             }
         }
 
@@ -271,53 +179,14 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         public static class PenglingBabyBuildable
         {
-            public static PrefabInfo Info { get; } = PrefabInfo
-                .WithTechType("PenglingBabyPet", "Pengling Baby Pet", "A pet baby Pengling.")
-                // set the icon to that of the vanilla locker:
-                .WithIcon(ModUtils.GetSpriteFromAssetBundle(PenglingBabyTexture));
+            // Init PrefabInfo
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(PenglingBabyPet.ClassId, PenglingBabyPet.DisplayName, PenglingBabyPet.Description, PenglingBabyPet.TextureName);
 
+            // Register with the game
             public static void Register()
             {
-
-                // So this can be used by other consumers
-                PenglingBabyPetBuildablePrefabInfo = Info;
-
-                // create prefab:
-                CustomPrefab prefab = new CustomPrefab(Info);
-
-                // copy the model of an Alien Robot - WorldEntities/Creatures/Precursor_Droid.prefab
-                CloneTemplate babyPenglingClone = new CloneTemplate(Info, "4fae8fa4-0280-43bd-bcf1-f3cba97eed77");
-
-                // modify the cloned model:
-                babyPenglingClone.ModifyPrefab += obj =>
-                {
-                    // allow it to be placed inside bases and submarines on the ground, and can be rotated:
-                    ConstructableFlags constructableFlags = ConstructableFlags.Inside;
-
-                    // find the object that holds the model:
-                    GameObject model = obj.transform.Find("models").gameObject;
-                    if (!model)
-                    {
-                        Log.LogDebug("PetBuildableUtils: PenglingBabyBuildable - cannot find object model in prefab!");
-                    }
-                    else
-                    {
-                        Log.LogDebug($"PetBuildableUtils: PenglingBabyBuildable found model on {model.name}");
-                    }
-                    // add all components necessary for it to be built:
-                    PrefabUtils.AddConstructable(obj, Info.TechType, constructableFlags, model);
-                };
-
-                // assign the created clone model to the prefab itself:
-                prefab.SetGameObject(babyPenglingClone);
-
-
-                // set recipe:
-                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
-                    new Ingredient(PetDnaPrefab.PenglingBabyDnaPrefabInfo.TechType, 5)));
-
-                // finally, register it into the game:
-                prefab.Register();
+                RegisterPrefabInfo(Info, PenglingBabyPet.PrefabGuid, PenglingBabyPet.ModelName, PenglingBabyPet.GetRecipeData());
+                PenglingBabyPet.BuildablePrefabInfo = Info;
             }
         }
 
@@ -326,53 +195,14 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         public static class PenglingAdultBuildable
         {
-            public static PrefabInfo Info { get; } = PrefabInfo
-                .WithTechType("PenglingAdultPet", "Pengling Adult Pet", "A pet adult Pengling.")
-                // set the icon to that of the vanilla locker:
-                .WithIcon(ModUtils.GetSpriteFromAssetBundle(PenglingAdultTexture));
+            // Init PrefabInfo
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(PenglingAdultPet.ClassId, PenglingAdultPet.DisplayName, PenglingAdultPet.Description, PenglingAdultPet.TextureName);
 
+            // Register with the game
             public static void Register()
             {
-
-                // So this can be used by other consumers
-                PenglingAdultPetBuildablePrefabInfo = Info;
-
-                // create prefab:
-                CustomPrefab prefab = new CustomPrefab(Info);
-
-                // copy the model of an Alien Robot - WorldEntities/Creatures/Precursor_Droid.prefab
-                CloneTemplate adultPenglingClone = new CloneTemplate(Info, "4fae8fa4-0280-43bd-bcf1-f3cba97eed77");
-
-                // modify the cloned model:
-                adultPenglingClone.ModifyPrefab += obj =>
-                {
-                    // allow it to be placed inside bases and submarines on the ground, and can be rotated:
-                    ConstructableFlags constructableFlags = ConstructableFlags.Inside;
-
-                    // find the object that holds the model:
-                    GameObject model = obj.transform.Find("models").gameObject;
-                    if (!model)
-                    {
-                        Log.LogDebug("PetBuildableUtils: PenglingAdultBuildable - cannot find object model in prefab!");
-                    }
-                    else
-                    {
-                        Log.LogDebug($"PetBuildableUtils: PenglingAdultBuildable found model on {model.name}");
-                    }
-                    // add all components necessary for it to be built:
-                    PrefabUtils.AddConstructable(obj, Info.TechType, constructableFlags, model);
-                };
-
-                // assign the created clone model to the prefab itself:
-                prefab.SetGameObject(adultPenglingClone);
-
-
-                // set recipe:
-                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
-                    new Ingredient(PetDnaPrefab.PenglingAdultDnaPrefabInfo.TechType, 5)));
-
-                // finally, register it into the game:
-                prefab.Register();
+                RegisterPrefabInfo(Info, PenglingAdultPet.PrefabGuid, PenglingAdultPet.ModelName, PenglingAdultPet.GetRecipeData());
+                PenglingAdultPet.BuildablePrefabInfo = Info;
             }
         }
 
@@ -381,53 +211,14 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         public static class SnowStalkerBabyBuildable
         {
-            public static PrefabInfo Info { get; } = PrefabInfo
-                .WithTechType("SnowStalkerBabyPet", "Snow Stalker Baby Pet", "A pet baby Snowstalker.")
-                // set the icon to that of the vanilla locker:
-                .WithIcon(ModUtils.GetSpriteFromAssetBundle(SnowStalkerBabyTexture));
+            // Init PrefabInfo
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(SnowStalkerBabyPet.ClassId, SnowStalkerBabyPet.DisplayName, SnowStalkerBabyPet.Description, SnowStalkerBabyPet.TextureName);
 
+            // Register with the game
             public static void Register()
             {
-
-                // So this can be used by other consumers
-                SnowStalkerBabyPetBuildablePrefabInfo = Info;
-
-                // create prefab:
-                CustomPrefab prefab = new CustomPrefab(Info);
-
-                // copy the model of an Alien Robot - WorldEntities/Creatures/Precursor_Droid.prefab
-                CloneTemplate babySnowStalkerClone = new CloneTemplate(Info, "4fae8fa4-0280-43bd-bcf1-f3cba97eed77");
-
-                // modify the cloned model:
-                babySnowStalkerClone.ModifyPrefab += obj =>
-                {
-                    // allow it to be placed inside bases and submarines on the ground, and can be rotated:
-                    ConstructableFlags constructableFlags = ConstructableFlags.Inside;
-
-                    // find the object that holds the model:
-                    GameObject model = obj.transform.Find("models").gameObject;
-                    if (!model)
-                    {
-                        Log.LogDebug("PetBuildableUtils: SnowStalkerBabyBuildable - cannot find object model in prefab!");
-                    }
-                    else
-                    {
-                        Log.LogDebug($"PetBuildableUtils: SnowStalkerBabyBuildable found model on {model.name}");
-                    }
-                    // add all components necessary for it to be built:
-                    PrefabUtils.AddConstructable(obj, Info.TechType, constructableFlags, model);
-                };
-
-                // assign the created clone model to the prefab itself:
-                prefab.SetGameObject(babySnowStalkerClone);
-
-
-                // set recipe:
-                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
-                    new Ingredient(PetDnaPrefab.SnowStalkerBabyDnaPrefabInfo.TechType, 5)));
-
-                // finally, register it into the game:
-                prefab.Register();
+                RegisterPrefabInfo(Info, SnowStalkerBabyPet.PrefabGuid, SnowStalkerBabyPet.ModelName, SnowStalkerBabyPet.GetRecipeData());
+                SnowStalkerBabyPet.BuildablePrefabInfo = Info;
             }
         }
 
@@ -436,53 +227,14 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         public static class PinnicaridBuildable
         {
-            public static PrefabInfo Info { get; } = PrefabInfo
-                .WithTechType("PinnicaridPet", "Pinnicarid Pet", "A pet Pinnicarid.")
-                // set the icon to that of the vanilla locker:
-                .WithIcon(ModUtils.GetSpriteFromAssetBundle(PinnicaridTexture));
+            // Init PrefabInfo
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(PinnicaridPet.ClassId, PinnicaridPet.DisplayName, PinnicaridPet.Description, PinnicaridPet.TextureName);
 
+            // Register with the game
             public static void Register()
             {
-
-                // So this can be used by other consumers
-                PinnicaridPetBuildablePefabInfo = Info;
-
-                // create prefab:
-                CustomPrefab prefab = new CustomPrefab(Info);
-
-                // copy the model of an Alien Robot - WorldEntities/Creatures/Precursor_Droid.prefab
-                CloneTemplate pinnicaridClone = new CloneTemplate(Info, "4fae8fa4-0280-43bd-bcf1-f3cba97eed77");
-
-                // modify the cloned model:
-                pinnicaridClone.ModifyPrefab += obj =>
-                {
-                    // allow it to be placed inside bases and submarines on the ground, and can be rotated:
-                    ConstructableFlags constructableFlags = ConstructableFlags.Inside;
-
-                    // find the object that holds the model:
-                    GameObject model = obj.transform.Find("models").gameObject;
-                    if (!model)
-                    {
-                        Log.LogDebug("PetBuildableUtils: PinnicaridBuildable - cannot find object model in prefab!");
-                    }
-                    else
-                    {
-                        Log.LogDebug($"PetBuildableUtils: PinnicaridBuildable found model on {model.name}");
-                    }
-                    // add all components necessary for it to be built:
-                    PrefabUtils.AddConstructable(obj, Info.TechType, constructableFlags, model);
-                };
-
-                // assign the created clone model to the prefab itself:
-                prefab.SetGameObject(pinnicaridClone);
-
-
-                // set recipe:
-                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
-                    new Ingredient(PetDnaPrefab.PinnicaridDnaPrefabInfo.TechType, 5)));
-
-                // finally, register it into the game:
-                prefab.Register();
+                RegisterPrefabInfo(Info, PinnicaridPet.PrefabGuid, PinnicaridPet.ModelName, PinnicaridPet.GetRecipeData());
+                PinnicaridPet.BuildablePrefabInfo = Info;
             }
         }
 
@@ -491,53 +243,14 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         public static class TrivalveYellowBuildable
         {
-            public static PrefabInfo Info { get; } = PrefabInfo
-                .WithTechType("YellowTrivalvePet", "Yellow Trivalve Pet", "A pet yellow Trivalve.")
-                // set the icon to that of the vanilla locker:
-                .WithIcon(ModUtils.GetSpriteFromAssetBundle(TrivalveYellowTexture));
+            // Init PrefabInfo
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(TrivalveYellowPet.ClassId, TrivalveYellowPet.DisplayName, TrivalveYellowPet.Description, TrivalveYellowPet.TextureName);
 
+            // Register with the game
             public static void Register()
             {
-
-                // So this can be used by other consumers
-                TrivalveYellowBuildablePefabInfo = Info;
-
-                // create prefab:
-                CustomPrefab prefab = new CustomPrefab(Info);
-
-                // copy the model of an Alien Robot - WorldEntities/Creatures/Precursor_Droid.prefab
-                CloneTemplate trivalveYellowClone = new CloneTemplate(Info, "4fae8fa4-0280-43bd-bcf1-f3cba97eed77");
-
-                // modify the cloned model:
-                trivalveYellowClone.ModifyPrefab += obj =>
-                {
-                    // allow it to be placed inside bases and submarines on the ground, and can be rotated:
-                    ConstructableFlags constructableFlags = ConstructableFlags.Inside;
-
-                    // find the object that holds the model:
-                    GameObject model = obj.transform.Find("models").gameObject;
-                    if (!model)
-                    {
-                        Log.LogDebug("PetBuildableUtils: TrivalveYellowBuildable - cannot find object model in prefab!");
-                    }
-                    else
-                    {
-                        Log.LogDebug($"PetBuildableUtils: TrivalveYellowBuildable found model on {model.name}");
-                    }
-                    // add all components necessary for it to be built:
-                    PrefabUtils.AddConstructable(obj, Info.TechType, constructableFlags, model);
-                };
-
-                // assign the created clone model to the prefab itself:
-                prefab.SetGameObject(trivalveYellowClone);
-
-
-                // set recipe:
-                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
-                    new Ingredient(PetDnaPrefab.TrivalveYellowDnaPrefabInfo.TechType, 5)));
-
-                // finally, register it into the game:
-                prefab.Register();
+                RegisterPrefabInfo(Info, TrivalveYellowPet.PrefabGuid, TrivalveYellowPet.ModelName, TrivalveYellowPet.GetRecipeData());
+                TrivalveYellowPet.BuildablePrefabInfo = Info;
             }
         }
 
@@ -546,52 +259,16 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         public static class TrivalveBluePetBuildable
         {
-            public static PrefabInfo Info { get; } = PrefabInfo
-                .WithTechType("BlueTrivalvePet", "Blue Trivalve Pet", "A pet yellow Trivalve.")
-                // set the icon to that of the vanilla locker:
-                .WithIcon(ModUtils.GetSpriteFromAssetBundle(TrivalveBlueTexture));
+            // Init PrefabInfo
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(TrivalveBluePet.ClassId,
+                TrivalveBluePet.DisplayName, TrivalveBluePet.Description, TrivalveBluePet.TextureName);
 
+            // Register with the game
             public static void Register()
             {
-
-                // So this can be used by other consumers
-                TrivalveBluePetBuildablePefabInfo = Info;
-
-                // create prefab:
-                CustomPrefab prefab = new CustomPrefab(Info);
-
-                // copy the model of an Alien Robot - WorldEntities/Creatures/Precursor_Droid.prefab
-                CloneTemplate trivalveBlueClone = new CloneTemplate(Info, "4fae8fa4-0280-43bd-bcf1-f3cba97eed77");
-
-                // modify the cloned model:
-                trivalveBlueClone.ModifyPrefab += obj =>
-                {
-                    // allow it to be placed inside bases and submarines on the ground, and can be rotated:
-                    ConstructableFlags constructableFlags = ConstructableFlags.Inside;
-
-                    // find the object that holds the model:
-                    GameObject model = obj.transform.Find("models").gameObject;
-                    if (!model)
-                    {
-                        Log.LogDebug("PetBuildableUtils: BlueTrivalveBuildable - cannot find object model in prefab!");
-                    }
-                    else
-                    {
-                        Log.LogDebug($"PetBuildableUtils: BlueTrivalveBuildable found model on {model.name}");
-                    }
-                    // add all components necessary for it to be built:
-                    PrefabUtils.AddConstructable(obj, Info.TechType, constructableFlags, model);
-                };
-
-                // assign the created clone model to the prefab itself:
-                prefab.SetGameObject(trivalveBlueClone);
-
-                // set recipe:
-                prefab.SetRecipe(new RecipeData(new Ingredient(TechType.Gold, 3),
-                    new Ingredient(PetDnaPrefab.TrivalveBlueDnaPrefabInfo.TechType, 5)));
-
-                // finally, register it into the game:
-                prefab.Register();
+                RegisterPrefabInfo(Info, TrivalveBluePet.PrefabGuid,
+                    TrivalveBluePet.ModelName, TrivalveBluePet.GetRecipeData());
+                TrivalveBluePet.BuildablePrefabInfo = Info;
             }
         }
 #endif

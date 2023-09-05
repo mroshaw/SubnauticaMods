@@ -22,8 +22,9 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         public static void InitPetConsole()
         {
             // Create our custom prefab
-            CustomPrefab customConsole = new CustomPrefab("PetConsole", "Pet Console",
-                "A special console for managing and naming pet creatures.",
+            CustomPrefab customConsole = new CustomPrefab("PetConsole",
+                Language.main.Get("DisplayName_PetConsole"),
+                Language.main.Get("Description_PetConsole"),
                 ModUtils.GetSpriteFromAssetBundle(PetConsoleTexture));
 
             // We'll use the PictureFrame as a template

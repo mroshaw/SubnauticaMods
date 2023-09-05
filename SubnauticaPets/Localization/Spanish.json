@@ -1,0 +1,91 @@
+// Spanish.json
+{
+  // UI elements
+  "Button_Rename": "Rebautizar",
+  "Button_Kill": "Matar",
+  "Button_KillAll": "Mátalos a todos",
+  "Button_Sure": "¿Seguro?",
+  "Label_PetName": "Nombre de mascota:",
+  "Tip_ClickToEdit": "Haz click para editar...",
+
+  // Prefabs - Cave Crawler
+  "DisplayName_CaveCrawler": "Mascota Rastreador de Cuevas",
+  "Description_CaveCrawler": "Un Rastreador de Cuevas como mascota",
+  "DisplayName_CaveCrawlerDna": "Muestra de ADN de Rastreador de Cuevas",
+  "Description_CaveCrawlerDna": "Una muestra de ADN de un Rastreador de Cuevas",
+
+  // Prefabs - Alien Robot
+  "DisplayName_AlienRobot": "Mascota Robot Alienígena",
+  "Description_AlienRobot": "Un Robot Alienígena como mascota",
+  "DisplayName_AlienRobotDna": "Muestra de ADN de Robot Alienígena",
+  "Description_AlienRobotDna": "Una muestra de ADN de un Robot Alienígena",
+
+  // Prefabs - Blood Crawler
+  "DisplayName_BloodCrawler": "Mascota Rastreador de Sangre",
+  "Description_BloodCrawler": "Un Rastreador de Sangre como mascota",
+  "DisplayName_BloodCrawlerDna": "Muestra de ADN de Rastreador de Sangre",
+  "Description_BloodCrawlerDna": "Una muestra de ADN de un Rastreador de Sangre",
+
+  // Prefabs - Crab Squid
+  "DisplayName_CrabSquid": "Mascota Cangrejo Calamar",
+  "Description_CrabSquid": "Un Cangrejo Calamar como mascota",
+  "DisplayName_CrabSquidDna": "Muestra de ADN de Cangrejo Calamar",
+  "Description_CrabSquidDna": "Una muestra de ADN de un Cangrejo Calamar",
+
+  // Prefabs - Snow Stalker Baby
+  "DisplayName_BabySnowStalker": "Mascota de cachorro de Cazador de nieve",
+  "Description_BabySnowStalker": "Un cachorro de Cazador de nieve como mascota",
+  "DisplayName_BabySnowStalkerDna": "Muestra de ADN de cachorro de Cazador de nieve",
+  "Description_BabySnowStalkerDna": "Una muestra de ADN de un cachorro de Cazador de nieve",
+
+  // Prefabs - Pengling Adult
+  "DisplayName_AdultPengling": "Mascota de Pingüino adulto",
+  "Description_AdultPengling": "Un Pingüino adulto como mascota",
+  "DisplayName_AdultPenglingDna": "Muestra de ADN de Pingüino adulto",
+  "Description_AdultPenglingDna": "Una muestra de ADN de un Pingüino adulto",
+
+  // Prefabs - Pengling Baby
+  "DisplayName_BabyPengling": "Mascota de Baby Pengling",
+  "Description_BabyPengling": "Un agradable bebé Pengling",
+  "DisplayName_BabyPenglingDna": "Muestra de ADN de Baby Pengling",
+  "Description_BabyPenglingDna": "Una muestra de ADN de un bebé Pengling",
+
+  // Prefabs - Pinnicarid
+  "DisplayName_Pinnicarid": "Mascota de Pinnicarid",
+  "Description_Pinnicarid": "Un agradable Pinnicarid",
+  "DisplayName_PinnicaridDna": "Muestra de ADN de Pinnicarid",
+  "Description_PinnicaridDna": "Una muestra de ADN de un Pinnicarid",
+
+  // Prefabs - Yellow Trivalve
+  "DisplayName_YellowTrivalve": "Trivalvo Amarillo",
+  "Description_YellowTrivalve": "Una mascota Trivalvo amarilla",
+  "DisplayName_YellowTrivalveDna": "Muestra de ADN de Trivalvo Amarillo",
+  "Description_YellowTrivalveDna": "Una muestra de ADN de un Trivalvo amarillo",
+
+  // Prefabs - Blue Trivalve
+  "DisplayName_BlueTrivalve": "Trivalvo Azul",
+  "Description_BlueTrivalve": "Una mascota Trivalvo azul",
+  "DisplayName_BlueTrivalveDna": "Muestra de ADN de Trivalvo Azul",
+  "Description_BlueTrivalveDna": "Una muestra de ADN de un Trivalvo azul",
+
+  // Alerts
+  "Alert_PetDeadFarewell": "Goodbye,",
+  "Alert_PetDeadGoodBoy": "You've been the goodest",
+  "Alert_PetSpawned": "Welcome to your new",
+  "Alert_NaughtyBoy": "Sorry, pirates are not permitted to own a pet!",
+  "Alert_SpawnError": "You can't spawn a pet here!",
+  "Alert_PlayerMustBeInBase": "Player must be in a base to spawn a pet",
+  "Alert_ObjectBlocking": "There is something blocking the spawn location:",
+
+  // Pet Console
+  "DisplayName_PetConsole": "Pet Console",
+  "Description_PetConsole": "A special console for managing and naming pet creatures.",
+
+  // Pet Fabricator
+  "DisplayName_PetFabricator": "Pet Fabricator",
+  "Description_PetFabricator": "A special fabricator for replicating pet creatures from fragments of DNA.",
+
+  // Options
+  "Options_SkipCheck": "Skip the check for obstacles when spawning pets."
+
+}

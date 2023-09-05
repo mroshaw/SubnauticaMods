@@ -164,13 +164,20 @@
     <None Include="Assets\petsmodassetbundle.manifest">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Localization\English.json" />
+    <None Include="Localization\English.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Localization\Spanish.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "E:\Games\Steam\steamapps\common\$(ConfigurationName)\BepInEx\plugins\$(TargetName)"
 mkdir "E:\Games\Steam\steamapps\common\$(ConfigurationName)\BepInEx\plugins\$(TargetName)\Assets"
+mkdir "E:\Games\Steam\steamapps\common\$(ConfigurationName)\BepInEx\plugins\$(TargetName)\Localization"
 xcopy /q/y/i "$(TargetPath)" "E:\Games\Steam\steamapps\common\$(ConfigurationName)\BepInEx\plugins\$(TargetName)" /E /H /C
-xcopy /q/y/i "$(TargetDir)\Assets" "E:\Games\Steam\steamapps\common\$(ConfigurationName)\BepInEx\plugins\$(TargetName)\Assets\*.*" /E /H /C</PostBuildEvent>
+xcopy /q/y/i "$(TargetDir)\Assets" "E:\Games\Steam\steamapps\common\$(ConfigurationName)\BepInEx\plugins\$(TargetName)\Assets\*.*" /E /H /C
+xcopy /q/y/i "$(TargetDir)\Localization" "E:\Games\Steam\steamapps\common\$(ConfigurationName)\BepInEx\plugins\$(TargetName)\Localization\*.*" /E /H /C</PostBuildEvent>
   </PropertyGroup>
 </Project>

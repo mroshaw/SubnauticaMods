@@ -1,4 +1,7 @@
 ﻿#if SUBNAUTICAZERO
+using Nautilus.Assets;
+using Nautilus.Crafting;
+using UnityEngine;
 
 namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
 {
@@ -7,7 +10,46 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
     /// </summary>
     internal class PinnicaridPet : Pet
     {
-        // Alien Robot scale factor
+        // Configuration required to build and spawn
+        // Pet
+        public static string ClassId = "PinnicaridPet";
+        public static string DisplayName = Language.main.Get("DisplayName_Pinnicarid");
+        public static string Description = Language.main.Get("Description_Pinnicarid");
+        public static string TextureName = "PinnicaridTexture";
+        public static PrefabInfo BuildablePrefabInfo;
+        public static string PrefabGuid = "4fae8fa4-0280-43bd-bcf1-f3cba97eed77";
+        public static string ModelName = "";
+
+        // Pet DNA
+        public static string DnaClassId = "PinnicaridDnaSample";
+        public static string DnaDisplayName = Language.main.Get("DisplayName_PinnicaridDna");
+        public static string DnaDescription = Language.main.Get("Description_PinnicaridDna");
+        public static string DnaTextureName = "PinnicaridDnaStrandTexture";
+        public static PrefabInfo DnaBuildablePrefabInfo;
+
+        // Random DNA collectible distribution biome data
+        public static LootDistributionData.BiomeData LootDistributionBiomeData = new LootDistributionData.BiomeData
+        {
+            biome = BiomeType.SafeShallows_Grass,
+            count = 10,
+            probability = 0.8f
+        };
+
+        public static Color PetObjectColor = Color.blue;
+
+        /// <summary>
+        /// Defines the Recipe for fabricating the Pet
+        /// </summary>
+        /// <returns></returns>
+        public static RecipeData GetRecipeData()
+        {
+            RecipeData recipe = new RecipeData(
+                new Ingredient(TechType.Gold, 3),
+                new Ingredient(BuildablePrefabInfo.TechType, 5));
+            return recipe;
+        }
+        
+        // Pinnicard scale factor
         public override float ScaleFactor => 1.0f;
 
         /// <summary>

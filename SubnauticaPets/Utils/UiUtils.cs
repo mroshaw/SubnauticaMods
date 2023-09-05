@@ -10,32 +10,6 @@ namespace DaftAppleGames.SubnauticaPets.Utils
     /// </summary>
     internal static class UiUtils
     {
-        // Public static names of Asset Bundle textures of Sprite data
-#if SUBNAUTICA
-        public static string AlienRobotTexture = "AlienRobotTexture";
-        public static string BloodCrawlerTexture = "BloodCrawlerTexture";
-        public static string CaveCrawlerTexture = "CaveCrawlerTexture";
-        public static string DnaBloodCrawlerTexture = "BloodCrawlerDnaStrandTexture";
-        public static string DnaCaveCrawlerTexture = "CaveCrawlerDnaStrandTexture";
-        public static string DnaCrabSquidTexture = "CrabSquidDnaStrandTexture";
-        public static string DnaAlienRobotTexture = "AlienRobotDnaStrandTexture";
-#endif
-#if SUBNAUTICAZERO
-        public static string PenglingBabyTexture = "PenglingBabyTexture";
-        public static string PenglingAdultTexture = "PenglingAdultTexture";
-        public static string SnowStalkerBabyTexture = "SnowStalkerBabyTexture";
-        public static string PinnicaridTexture = "PinnicaridTexture";
-        public static string TrivalveBlueTexture = "TrivalveBlueTexture";
-        public static string TrivalveYellowTexture = "TrivalveYellowTexture";
-
-        public static string DnaPenglingBabyTexture = "PenglingBabyDnaStrandTexture";
-        public static string DnaPenglingAdultTexture = "PenglingAdultDnaStrandTexture";
-        public static string DnaSnowStalkerBabyTexture = "SnowStalkerBabyDnaStrandTexture";
-        public static string DnaPinnicaridTexture = "PinnicaridDnaStrandTexture";
-        public static string DnaTrivalveBlueTexture = "TrivalveBlueDnaStrandTexture";
-        public static string DnaTrivalveYellowTexture = "TrivalveYellowDnaStrandTexture";
-#endif
-
         public static string PetConsoleTexture = "PetConsoleTexture";
         public static string PetWorkbenchTexture = "PetWorkbenchTexture";
 
@@ -103,11 +77,11 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <param name="sourceUi"></param>
         /// <param name="sourceButtonName"></param>
         /// <param name="newButtonName"></param>
-        /// <param name="newButtonText"></param>
+        /// <param name="newButtonTextKey"></param>
         /// <param name="targetUi"></param>
         /// <param name="localPosition"></param>
         /// <returns></returns>
-        public static GameObject CreateButton(GameObject sourceUi, string sourceButtonName, string newButtonName, string newButtonText, GameObject targetUi, Vector3 localPosition)
+        public static GameObject CreateButton(GameObject sourceUi, string sourceButtonName, string newButtonName, string newButtonTextKey, GameObject targetUi, Vector3 localPosition)
         {
             GameObject origButtonGameObject = null;
 
@@ -133,11 +107,14 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             // Set new button properties
             newButtonGameObject.name = newButtonName;
 
+
+
             // Find and set the label
             TextMeshProUGUI buttonLabel = newButtonGameObject.GetComponentInChildren<TextMeshProUGUI>(true);
             if (buttonLabel)
             {
-                buttonLabel.text = newButtonText.ToUpper();
+                // Translate text
+                buttonLabel.text = Language.main.Get(newButtonTextKey);
             }
             else
             {
@@ -161,10 +138,11 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <param name="sourceUi"></param>
         /// <param name="sourceTextName"></param>
         /// <param name="newTextName"></param>
+        /// <param name="tipTextKey"></param>
         /// <param name="targetUi"></param>
         /// <param name="localPosition"></param>
         /// <returns></returns>
-        public static GameObject CreateTextEntry(GameObject sourceUi, string sourceTextName, string newTextName, GameObject targetUi, Vector3 localPosition)
+        public static GameObject CreateTextEntry(GameObject sourceUi, string sourceTextName, string newTextName, string tipTextKey, GameObject targetUi, Vector3 localPosition)
         {
             GameObject origTextGameObject = null;
 
@@ -194,22 +172,26 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             newTextGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
             newTextGameObject.transform.localScale = new Vector3(1, 1, 1);
 
+            // Add translation
+            TextMeshProUGUI label = newTextGameObject.GetComponent<TextMeshProUGUI>();
+            label.text = label.text = Language.main.Get(tipTextKey);
+
             newTextGameObject.SetActive(true);
 
             return newTextGameObject;
         }
-        
+
         /// <summary>
         /// Creates a new label game object from the source
         /// </summary>
         /// <param name="sourceUi"></param>
         /// <param name="sourceLabelName"></param>
         /// <param name="newLabelName"></param>
-        /// <param name="newLabelText"></param>
+        /// <param name="newLabelKey"></param>
         /// <param name="targetUi"></param>
         /// <param name="localPosition"></param>
         /// <returns></returns>
-        public static GameObject CreateLabel(GameObject sourceUi, string sourceLabelName, string newLabelName, string newLabelText, GameObject targetUi, Vector3 localPosition)
+        public static GameObject CreateLabel(GameObject sourceUi, string sourceLabelName, string newLabelName, string newLabelKey, GameObject targetUi, Vector3 localPosition)
         {
             GameObject origLabelGameObject = null;
 
@@ -238,7 +220,10 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             newLabelGameObject.transform.localPosition = localPosition;
             newLabelGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
             newLabelGameObject.transform.localScale = new Vector3(1, 1, 1);
-            newLabelGameObject.GetComponent<TextMeshProUGUI>().text = newLabelText;
+
+            // Add translation
+            TextMeshProUGUI label = newLabelGameObject.GetComponentInChildren<TextMeshProUGUI>();
+            label.text = label.text = Language.main.Get(newLabelKey);
 
             newLabelGameObject.SetActive(true);
 

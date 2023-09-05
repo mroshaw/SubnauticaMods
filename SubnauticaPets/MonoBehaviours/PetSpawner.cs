@@ -62,7 +62,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
             // We don't allow Pirates to look after Pets
             if (IsANaughtyBoy)
             {
-                ErrorMessage.AddError("Sorry, pirates are not permitted to own a pet!");
+                ErrorMessage.AddError(Language.main.Get("Alert_NaughtyBoy"));
                 return;
             }
 
@@ -98,7 +98,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
             // Problem encountered, so log and display a message to user
             if (!spawnSuccess)
             {
-                ErrorMessage.AddMessage($"You can't spawn a pet here! {_spawnFailReason}");
+                ErrorMessage.AddMessage($"{Language.main.Get("Alert_SpawnError")} {_spawnFailReason}");
                 Log.LogDebug($"You can't spawn a pet here! {_spawnFailReason}");
             }
         }
@@ -249,7 +249,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
         {
             if(!Player.main.IsInBase())
             {
-                _spawnFailReason = "Player must be in a base to spawn a pet.";
+                _spawnFailReason = Language.main.Get("Alert_PlayerMustBeInBase");
                 Log.LogDebug("CheckPlayerSpawnConditions: Player is not in base.");
 
                 return false;
@@ -269,7 +269,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
             if (Physics.Linecast(fromPosition, spawnPosition, out RaycastHit hit))
             {
                 Log.LogDebug($"CheckPetSpawnLocation: Linecast has hit an object: {hit.collider.gameObject.name}");
-                _spawnFailReason = $"There is something blocking the spawn location: {hit.collider.gameObject.name}";
+                _spawnFailReason = $"{Language.main.Get("Alert_ObjectBlocking")} {hit.collider.gameObject.name}";
                 return false;
             }
 

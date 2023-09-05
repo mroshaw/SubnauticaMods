@@ -167,7 +167,7 @@ namespace DaftAppleGames.SubnauticaPets
             SkipSpawnObstacleCheckConfig = Config.Bind("Debug Settings",
                 SkipSpawnObstacleCheckKey,
                 false,
-                "Skip the check for obstacles when spawning pets.");
+                Language.main.Get("Options_SkipCheck"));
 
             SkipSpawnObstacleCheckConfig.SettingChanged += ConfigSettingChanged;
         }

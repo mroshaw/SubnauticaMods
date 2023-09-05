@@ -4,10 +4,87 @@
   "Button_Rename": "Rename",
   "Button_Kill": "Kill",
   "Button_KillAll": "Kill All",
+  "Button_Sure": "Sure?",
   "Label_PetName": "Pet Name:",
-  "ClickToEdit": "Click to edit...",
+  "Tip_ClickToEdit": "Click to edit...",
 
-  // Prefabs - DNA
-  "CaveCrawlerDnaSample": "Cave Crawler DNA Sample",
-  "Tooltip_CaveCrawlerDna": "A sample of DNA from a Cave Crawler"
+  // Prefabs - Cave Crawler
+  "DisplayName_CaveCrawler": "Cave Crawler Pet",
+  "Description_CaveCrawler": "A pet Cave Crawler",
+  "DisplayName_CaveCrawlerDna": "Cave Crawler DNA Sample",
+  "Description_CaveCrawlerDna": "A sample of DNA from a Cave Crawler",
+
+  // Prefabs - Alien Robot
+  "DisplayName_AlienRobot": "Alien Robot Pet",
+  "Description_AlienRobot": "A pet Alien Robot",
+  "DisplayName_AlienRobotDna": "Alien Robot DNA Sample",
+  "Description_AlienRobotDna": "A sample of DNA from an Alien Robot",
+
+  // Prefabs - Blood Crawler
+  "DisplayName_BloodCrawler": "Blood Crawler Pet",
+  "Description_BloodCrawler": "A pet Blood Crawler",
+  "DisplayName_BloodCrawlerDna": "Blood Crawler DNA Sample",
+  "Description_BloodCrawlerDna": "A sample of DNA from a Blood Crawler",
+
+  // Prefabs - Crab Squid
+  "DisplayName_CrabSquid": "Crab Squid Pet",
+  "Description_CrabSquid": "A pet Crab Squid",
+  "DisplayName_CrabSquidDna": "Crab Squid DNA Sample",
+  "Description_CrabSquidDna": "A sample of DNA from a Crab Squid",
+
+  // Prefabs - Snow Stalker Baby
+  "DisplayName_BabySnowStalker": "Baby Snowstalker Pet",
+  "Description_BabySnowStalker": "A pet baby Snow Stalker",
+  "DisplayName_BabySnowStalkerDna": "Baby Snow Stalker DNA Sample",
+  "Description_BabySnowStalkerDna": "A sample of DNA from an baby Snow Stalker",
+
+  // Prefabs - Pengling Adult
+  "DisplayName_AdultPengling": "Adult Pengling Pet",
+  "Description_AdultPengling": "A pet adult Pengling",
+  "DisplayName_AdultPenglingDna": "Adult Pengling DNA Sample",
+  "Description_AdultPenglingDna": "A sample of DNA from an adult Pengling",
+
+  // Prefabs - Pengling Baby
+  "DisplayName_BabyPengling": "Baby Pengling Pet",
+  "Description_BabyPengling": "A pet baby Pengling",
+  "DisplayName_BabyPenglingDna": "Baby Pengling DNA Sample",
+  "Description_BabyPenglingDna": "A sample of DNA from an baby Pengling",
+
+  // Prefabs - Pinnicarid
+  "DisplayName_Pinnicarid": "Pinnicarid Pet",
+  "Description_Pinnicarid": "A pet Pinnicarid",
+  "DisplayName_PinnicaridDna": "Pinnicarid DNA Sample",
+  "Description_PinnicaridDna": "A sample of DNA from a Pinnicarid",
+
+  // Prefabs - Yellow Trivalve
+  "DisplayName_YellowTrivalve": "Yellow Trivalve",
+  "Description_YellowTrivalve": "A pet yellow Trivalve",
+  "DisplayName_YellowTrivalveDna": "Yellow Trivalve DNA Sample",
+  "Description_YellowTrivalveDna": "A sample of DNA from a yellow Trivalve",
+
+  // Prefabs - Blue Trivalve
+  "DisplayName_BlueTrivalve": "Blue Trivalve",
+  "Description_BlueTrivalve": "A pet blue Trivalve",
+  "DisplayName_BlueTrivalveDna": "Blue Trivalve DNA Sample",
+  "Description_BlueTrivalveDna": "A sample of DNA from a blue Trivalve",
+
+  // Alerts
+  "Alert_PetDeadFarewell": "Goodbye,",
+  "Alert_PetDeadGoodBoy": "You've been the goodest",
+  "Alert_PetSpawned": "Welcome to your new",
+  "Alert_NaughtyBoy": "Sorry, pirates are not permitted to own a pet!",
+  "Alert_SpawnError": "You can't spawn a pet here!",
+  "Alert_PlayerMustBeInBase": "Player must be in a base to spawn a pet",
+  "Alert_ObjectBlocking": "There is something blocking the spawn location:",
+
+  // Pet Console
+  "DisplayName_PetConsole": "Pet Console",
+  "Description_PetConsole": "A special console for managing and naming pet creatures.",
+
+  // Pet Fabricator
+  "DisplayName_PetFabricator": "Pet Fabricator",
+  "Description_PetFabricator": "A special fabricator for replicating pet creatures from fragments of DNA.",
+
+  // Options
+  "Options_SkipCheck": "Skip the check for obstacles when spawning pets."
 }

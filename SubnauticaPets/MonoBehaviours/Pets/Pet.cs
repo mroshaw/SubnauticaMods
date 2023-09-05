@@ -301,7 +301,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             if (liveMixin)
             {
                 liveMixin.Kill();
-                ErrorMessage.AddMessage($"Goodbye, {PetNameString}! You've been the goodest {PetTypeString}!");
+                ErrorMessage.AddMessage($"{Language.main.Get("Alert_PetDeadFarewell")} {PetNameString}! {Language.main.Get("Alert_PetDeadGoodBoy")} {PetTypeString}!");
             }
         }
 
@@ -310,7 +310,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         /// </summary>
         public void Born()
         {
-            ErrorMessage.AddMessage($"Welcome to your new {PetTypeString}, {PetNameString}!");
+            ErrorMessage.AddMessage($"{Language.main.Get("Alert_PetBorn")} {PetTypeString}, {PetNameString}!");
         }
     }
 }
