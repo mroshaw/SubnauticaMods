@@ -106,26 +106,25 @@ namespace DaftAppleGames.SubnauticaPets.Utils
 
             // Set new button properties
             newButtonGameObject.name = newButtonName;
-
-
-
-            // Find and set the label
-            TextMeshProUGUI buttonLabel = newButtonGameObject.GetComponentInChildren<TextMeshProUGUI>(true);
-            if (buttonLabel)
-            {
-                // Translate text
-                buttonLabel.text = Language.main.Get(newButtonTextKey);
-            }
-            else
-            {
-                Log.LogDebug($"UiUtils: CreateButton can't find a TextMeshProUGUI component in {newButtonGameObject}");
-            }
-
             newButtonGameObject.transform.SetParent(targetUi.transform);
             newButtonGameObject.transform.localPosition = localPosition;
             newButtonGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
             newButtonGameObject.transform.localScale = new Vector3(1, 1, 1);
 
+            // Add translation component on label
+            Log.LogDebug($"UiUtils: Adding translation component on {newButtonGameObject.name} using key {newButtonTextKey}");
+            newButtonGameObject.SetActive(false);
+            TextMeshProUGUI label = newButtonGameObject.GetComponentInChildren<TextMeshProUGUI>(true);
+            if (label)
+            {
+                TranslationLiveUpdate liveTranslation = label.gameObject.AddComponent<TranslationLiveUpdate>();
+                liveTranslation.textComponent = label;
+                liveTranslation.translationKey = newButtonTextKey;
+            }
+            else
+            {
+                Log.LogDebug($"UiUtils: Couldn't find TextMeshProUGUI on {newButtonGameObject.name}!");
+            }
             newButtonGameObject.SetActive(true);
 
             return newButtonGameObject;
@@ -172,10 +171,15 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             newTextGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
             newTextGameObject.transform.localScale = new Vector3(1, 1, 1);
 
-            // Add translation
-            TextMeshProUGUI label = newTextGameObject.GetComponent<TextMeshProUGUI>();
-            label.text = label.text = Language.main.Get(tipTextKey);
-
+            // Add translation component on label
+            /*
+            Log.LogDebug($"UiUtils: Adding translation component on {newTextGameObject.name} using key {tipTextKey}");
+            newTextGameObject.SetActive(false);
+            TextMeshProUGUI label = newTextGameObject.GetComponentInChildren<TextMeshProUGUI>(true);
+            TranslationLiveUpdate liveTranslation = label.gameObject.AddComponent<TranslationLiveUpdate>();
+            liveTranslation.textComponent = label;
+            liveTranslation.translationKey = tipTextKey;
+            */
             newTextGameObject.SetActive(true);
 
             return newTextGameObject;
@@ -221,10 +225,13 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             newLabelGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
             newLabelGameObject.transform.localScale = new Vector3(1, 1, 1);
 
-            // Add translation
-            TextMeshProUGUI label = newLabelGameObject.GetComponentInChildren<TextMeshProUGUI>();
-            label.text = label.text = Language.main.Get(newLabelKey);
-
+            // Add translation component on label
+            Log.LogDebug($"UiUtils: Adding translation component on {newLabelGameObject.name} using key {newLabelKey}");
+            newLabelGameObject.SetActive(false);
+            TextMeshProUGUI label = newLabelGameObject.GetComponentInChildren<TextMeshProUGUI>(true);
+            TranslationLiveUpdate liveTranslation = label.gameObject.AddComponent<TranslationLiveUpdate>();
+            liveTranslation.textComponent = label;
+            liveTranslation.translationKey = newLabelKey;
             newLabelGameObject.SetActive(true);
 
             return newLabelGameObject;

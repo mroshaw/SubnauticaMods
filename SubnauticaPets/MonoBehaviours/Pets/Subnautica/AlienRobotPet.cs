@@ -13,19 +13,16 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
     internal class AlienRobotPet : Pet
     {
         // Configuration required to build and spawn
+
         // Pet
         public static string ClassId = "AlienRobotPet";
-        public static string DisplayName = Language.main.Get("DisplayName_AlienRobot");
-        public static string Description = Language.main.Get("Description_AlienRobot");
         public static string TextureName = "AlienRobotTexture";
         public static PrefabInfo BuildablePrefabInfo;
         public static string PrefabGuid = "4fae8fa4-0280-43bd-bcf1-f3cba97eed77";
         public static string ModelName = "";
 
         // Pet DNA
-        public static string DnaClassId = "AlienRobotDnaSample";
-        public static string DnaDisplayName = Language.main.Get("DisplayName_AlienRobotDna");
-        public static string DnaDescription = Language.main.Get("Description_AlienRobotDna");
+        public static string DnaClassId = "AlienRobotPetDna";
         public static string DnaTextureName = "AlienRobotDnaStrandTexture";
         public static PrefabInfo DnaBuildablePrefabInfo;
 

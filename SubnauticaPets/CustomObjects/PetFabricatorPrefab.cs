@@ -27,8 +27,8 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         public static void InitPetFabricator()
         {
             CustomPrefab customFab = new CustomPrefab("PetFabricator",
-                Language.main.Get("DisplayName_PetFabricator"),
-                Language.main.Get("Description_PetFabricator"),
+                null,
+                null,
                 ModUtils.GetSpriteFromAssetBundle(PetWorkbenchTexture));
 
             customFab.CreateFabricator(out CraftTree.Type treeType)

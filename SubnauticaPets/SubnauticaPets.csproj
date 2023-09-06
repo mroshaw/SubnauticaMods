@@ -120,6 +120,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomObjects\DatabankEntries.cs" />
+    <Compile Include="MonoBehaviours\PetDna.cs" />
     <Compile Include="MonoBehaviours\RotateModel.cs" />
     <Compile Include="MonoBehaviours\PetConsole.cs" />
     <Compile Include="MonoBehaviours\PetConsoleInput.cs" />
@@ -146,6 +148,7 @@
     <Compile Include="MonoBehaviours\PetSpawner.cs" />
     <Compile Include="Patches\CreaturePatches.cs" />
     <Compile Include="Patches\InGameMenuPatches.cs" />
+    <Compile Include="Patches\PickupablePatches.cs" />
     <Compile Include="Patches\PlayerPatches.cs" />
     <Compile Include="SubnauticaPetsPlugin.cs" />
     <Compile Include="Patches\SaveLoadManagerPatches.cs" />
@@ -165,6 +168,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Localization\English.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Localization\Polish.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Localization\Spanish.json">

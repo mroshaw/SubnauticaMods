@@ -12,19 +12,16 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
     internal class SnowStalkerBabyPet : Pet
     {
         // Configuration required to build and spawn
+
         // Pet
         public static string ClassId = "SnowStalkerBabyPet";
-        public static string DisplayName = Language.main.Get("DisplayName_SnowStalker");
-        public static string Description = Language.main.Get("Description_SnowStalker");
         public static string TextureName = "SnowStalkerBabyTexture";
         public static PrefabInfo BuildablePrefabInfo;
         public static string PrefabGuid = "78d3dbce-856f-4eba-951c-bd99870554e2";
         public static string ModelName = "";
 
         // Pet DNA
-        public static string DnaClassId = "SnowStalkerBabyDnaSample";
-        public static string DnaDisplayName = Language.main.Get("DisplayName_SnowStalkerDna");
-        public static string DnaDescription = Language.main.Get("Description_SnowStalkerDna");
+        public static string DnaClassId = "SnowStalkerBabyPetDna";
         public static string DnaTextureName = "SnowStalkerBabyDnaStrandTexture";
         public static PrefabInfo DnaBuildablePrefabInfo;
 

@@ -11,25 +11,21 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
     /// </summary>
     internal class BloodCrawlerPet : Pet
     {
-
         // Configuration required to build and spawn
+
         // Pet
         public static string ClassId = "BloodCrawlerPet";
-        public static string DisplayName = Language.main.Get("DisplayName_BloodCrawler");
-        public static string Description = Language.main.Get("Description_BloodCrawler");
         public static string TextureName = "BloodCrawlerTexture";
         public static PrefabInfo BuildablePrefabInfo;
         public static string PrefabGuid = "7ce2ca9d-6154-4988-9b02-38f670e741b8"; // 830a8fa0-d92d-4683-a193-7531e6968042
         public static string ModelName = "";
 
         // Pet DNA
-        public static string DnaClassId = "BloodCrawlerDnaSample";
-        public static string DnaDisplayName = Language.main.Get("DisplayName_BloodCrawlerDna");
-        public static string DnaDescription = Language.main.Get("Description_BloodCrawlerDna");
+        public static string DnaClassId = "BloodCrawlerPetDna"; 
         public static string DnaTextureName = "BloodCrawlerDnaStrandTexture";
         public static PrefabInfo DnaBuildablePrefabInfo;
 
-        // Random DNA collectiable distribution biome data
+        // Random DNA collectible distribution biome data
         public static BiomeData LootDistributionBiomeData = new LootDistributionData.BiomeData
         {
             biome = BiomeType.SafeShallows_Grass,

@@ -101,7 +101,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
             PetUtils.KillAllPets();
             _killAllConfirmButton.SetActive(false);
             _killAllButton.SetActive(true);
-            _killAllConfirmButton.GetComponentInChildren<TextMeshProUGUI>().text = "Sure?";
+            _killAllConfirmButton.GetComponentInChildren<TextMeshProUGUI>().text = Language.main.Get("Button_Sure");
 
             // Call any listeners
             KillAllButtonClickedEvent.Invoke();

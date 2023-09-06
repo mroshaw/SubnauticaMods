@@ -11,19 +11,16 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
     internal class PinnicaridPet : Pet
     {
         // Configuration required to build and spawn
+
         // Pet
         public static string ClassId = "PinnicaridPet";
-        public static string DisplayName = Language.main.Get("DisplayName_Pinnicarid");
-        public static string Description = Language.main.Get("Description_Pinnicarid");
         public static string TextureName = "PinnicaridTexture";
         public static PrefabInfo BuildablePrefabInfo;
         public static string PrefabGuid = "f9eccfe2-a06f-4c06-bc57-01c2e50ffbe8";
         public static string ModelName = "";
 
         // Pet DNA
-        public static string DnaClassId = "PinnicaridDnaSample";
-        public static string DnaDisplayName = Language.main.Get("DisplayName_PinnicaridDna");
-        public static string DnaDescription = Language.main.Get("Description_PinnicaridDna");
+        public static string DnaClassId = "PinnicaridPetDna";
         public static string DnaTextureName = "PinnicaridDnaStrandTexture";
         public static PrefabInfo DnaBuildablePrefabInfo;
 

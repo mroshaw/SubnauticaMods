@@ -37,29 +37,29 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 #if SUBNAUTICA
             // Cave Crawler
             CaveCrawlerPet.DnaBuildablePrefabInfo = InitPrefab(CaveCrawlerPet.DnaClassId,
-                CaveCrawlerPet.DnaDisplayName,
-                CaveCrawlerPet.DnaDescription,
+                null,
+                null,
                 CaveCrawlerPet.DnaTextureName,
                 CaveCrawlerPet.PetObjectColor,
                 CaveCrawlerPet.LootDistributionBiomeData);
             // Blood Crawler
             BloodCrawlerPet.DnaBuildablePrefabInfo = InitPrefab(BloodCrawlerPet.DnaClassId,
-                BloodCrawlerPet.DnaDisplayName,
-                BloodCrawlerPet.DnaDescription,
+                null,
+                null,
                 BloodCrawlerPet.DnaTextureName,
                 BloodCrawlerPet.PetObjectColor,
                 BloodCrawlerPet.LootDistributionBiomeData);
             // Crab Squid
             CrabSquidPet.DnaBuildablePrefabInfo = InitPrefab(CrabSquidPet.DnaClassId,
-                CrabSquidPet.DnaDisplayName,
-                CrabSquidPet.DnaDescription,
+                null,
+                null,
                 CrabSquidPet.DnaTextureName,
                 CrabSquidPet.PetObjectColor,
                 CrabSquidPet.LootDistributionBiomeData);
             // Alien Robot
             AlienRobotPet.DnaBuildablePrefabInfo = InitPrefab(AlienRobotPet.DnaClassId,
-                AlienRobotPet.DnaDisplayName,
-                AlienRobotPet.DnaDescription,
+                null,
+                null,
                 AlienRobotPet.DnaTextureName,
                 AlienRobotPet.PetObjectColor,
                 AlienRobotPet.LootDistributionBiomeData);
@@ -67,43 +67,43 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 #if SUBNAUTICAZERO
             // Snow Stalker Baby
             SnowStalkerBabyPet.DnaBuildablePrefabInfo = InitPrefab(SnowStalkerBabyPet.DnaClassId,
-                SnowStalkerBabyPet.DnaDisplayName,
-                SnowStalkerBabyPet.DnaDescription,
+                null,
+                null,
                 SnowStalkerBabyPet.DnaTextureName,
                 SnowStalkerBabyPet.PetObjectColor,
                 SnowStalkerBabyPet.LootDistributionBiomeData);
             // Pengling Adult
             PenglingAdultPet.DnaBuildablePrefabInfo = InitPrefab(PenglingAdultPet.DnaClassId,
-                PenglingAdultPet.DnaDisplayName,
-                PenglingAdultPet.DnaDescription,
+                null,
+                null,
                 PenglingAdultPet.DnaTextureName,
                 PenglingAdultPet.PetObjectColor,
                 PenglingAdultPet.LootDistributionBiomeData);
             // Pengling Baby
             PenglingBabyPet.DnaBuildablePrefabInfo = InitPrefab(PenglingBabyPet.DnaClassId,
-                PenglingBabyPet.DnaDisplayName,
-                PenglingBabyPet.DnaDescription,
+                null,
+                null,
                 PenglingBabyPet.DnaTextureName,
                 PenglingBabyPet.PetObjectColor,
                 PenglingBabyPet.LootDistributionBiomeData);
             // Pinnicarid
             PinnicaridPet.DnaBuildablePrefabInfo = InitPrefab(PinnicaridPet.DnaClassId,
-                PinnicaridPet.DnaDisplayName,
-                PinnicaridPet.DnaDescription,
+                null,
+                null,
                 PinnicaridPet.DnaTextureName,
                 PinnicaridPet.PetObjectColor,
                 PinnicaridPet.LootDistributionBiomeData);
             // Yellow Trivalve
             TrivalveYellowPet.DnaBuildablePrefabInfo = InitPrefab(TrivalveYellowPet.DnaClassId,
-                TrivalveYellowPet.DnaDisplayName,
-                TrivalveYellowPet.DnaDescription,
+                null,
+                null,
                 TrivalveYellowPet.DnaTextureName,
                 TrivalveYellowPet.PetObjectColor,
                 TrivalveYellowPet.LootDistributionBiomeData);
             // Blue Trivalve
             TrivalveBluePet.DnaBuildablePrefabInfo = InitPrefab(TrivalveBluePet.DnaClassId,
-                TrivalveBluePet.DnaDisplayName,
-                TrivalveBluePet.DnaDescription,
+                null,
+                null,
                 TrivalveBluePet.DnaTextureName,
                 TrivalveBluePet.PetObjectColor,
                 TrivalveBluePet.LootDistributionBiomeData);
@@ -154,6 +154,10 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                     // Disable the old model
                     prefab.FindChild("model").SetActive(false);
                     Log.LogDebug($"PetDnaPrefab: InitPrefab is setting the model for {prefab.name} to {newModel.name}. Done.");
+                    // Add PetDna component
+                    Log.LogDebug($"PetDnaPrefab: InitPrefab adding PetDna component...");
+                    prefab.AddComponent<PetDna>();
+                    Log.LogDebug($"PetDnaPrefab: InitPrefab adding PetDna component... Done.");
                 }
             };
             clonePrefab.SetGameObject(cloneTemplate);

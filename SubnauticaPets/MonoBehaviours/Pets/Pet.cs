@@ -25,7 +25,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
     public abstract class Pet : MonoBehaviour, IPet
     {
         // Public properties
-
+        
         // Scale factor is set as the LocalScale of spawned gameobject
         // across all axis
         public abstract float ScaleFactor { get; }

@@ -14,19 +14,16 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
     internal class CrabSquidPet : Pet
     {
         // Configuration required to build and spawn
+
         // Pet
         public static string ClassId = "CrabSquidPet";
-        public static string DisplayName = Language.main.Get("DisplayName_CrabSquid");
-        public static string Description = Language.main.Get("Description_CrabSquid");
         public static string TextureName = "CrabSquidTexture";
         public static PrefabInfo BuildablePrefabInfo;
         public static string PrefabGuid = "4c2808fe-e051-44d2-8e64-120ddcdc8abb";
         public static string ModelName = "";
 
         // Pet DNA
-        public static string DnaClassId = "CrabSquidDnaSample";
-        public static string DnaDisplayName = Language.main.Get("DisplayName_CrabSquidDna");
-        public static string DnaDescription = Language.main.Get("Description_CrabSquidDna");
+        public static string DnaClassId = "CrabSquidPetDna";
         public static string DnaTextureName = "CrabSquidDnaStrandTexture";
         public static PrefabInfo DnaBuildablePrefabInfo;
 

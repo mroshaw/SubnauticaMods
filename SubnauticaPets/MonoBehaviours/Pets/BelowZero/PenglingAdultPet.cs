@@ -14,17 +14,15 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
         // Configuration required to build and spawn
         // Pet
         public static string ClassId = "PenglingAdultPet";
-        public static string DisplayName = Language.main.Get("DisplayName_AdultPengling");
-        public static string Description = Language.main.Get("Description_AdultPengling");
         public static string TextureName = "PenglingAdultTexture";
         public static PrefabInfo BuildablePrefabInfo;
         public static string PrefabGuid = "4fae8fa4-0280-43bd-bcf1-f3cba97eed77";
         public static string ModelName = "";
 
         // Pet DNA
-        public static string DnaClassId = "AdultPenglingDnaSample";
-        public static string DnaDisplayName = Language.main.Get("DisplayName_AdultPenglingDna");
-        public static string DnaDescription = Language.main.Get("Description_AdultPenglingDna");
+        public static string DnaClassId = "PenglingAdultPetDna";
+        
+        
         public static string DnaTextureName = "PenglingAdultDnaStrandTexture";
         public static PrefabInfo DnaBuildablePrefabInfo;
 

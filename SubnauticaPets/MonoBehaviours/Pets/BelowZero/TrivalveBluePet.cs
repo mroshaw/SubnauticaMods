@@ -12,19 +12,16 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
     internal class TrivalveBluePet : Pet
     {
         // Configuration required to build and spawn
+
         // Pet
         public static string ClassId = "TrivalveBluePet";
-        public static string DisplayName = Language.main.Get("DisplayName_BlueTrivalve");
-        public static string Description = Language.main.Get("Description_BlueTrivalve");
         public static string TextureName = "TrivalveBlueTexture";
         public static PrefabInfo BuildablePrefabInfo;
         public static string PrefabGuid = "f5a2317f-6116-4fc6-8e81-824fd8ba9684";
         public static string ModelName = "";
 
         // Pet DNA
-        public static string DnaClassId = "TrivalveBlueDnaSample";
-        public static string DnaDisplayName = Language.main.Get("DisplayName_BlueTrivalveDna");
-        public static string DnaDescription = Language.main.Get("Description_BlueTrivalveDna");
+        public static string DnaClassId = "TrivalveBluePetDna";
         public static string DnaTextureName = "TrivalveBlueDnaStrandTexture";
         public static PrefabInfo DnaBuildablePrefabInfo;
 

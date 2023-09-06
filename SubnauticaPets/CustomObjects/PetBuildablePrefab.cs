@@ -55,7 +55,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// <returns></returns>
         public static PrefabInfo CreateBuildablePrefabInfo(string classId, string displayName, string description, string textureName)
         {
-            Log.LogDebug($"PetBuildablePrefab: CreateBuildablePrefabInfo with classId {classId}, displayName {displayName}, description {description}, textureName {textureName}.");
+            Log.LogDebug($"PetBuildablePrefab: CreateBuildablePrefabInfo with classId {classId}.");
             PrefabInfo prefabInfo = PrefabInfo
                 .WithTechType(classId, displayName, description)
                 // Set the icon
@@ -113,7 +113,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         public static class CaveCrawlerBuildable
         {
             // Init PrefabInfo
-            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(CaveCrawlerPet.ClassId, CaveCrawlerPet.DisplayName, CaveCrawlerPet.Description, CaveCrawlerPet.TextureName);
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(CaveCrawlerPet.ClassId, null, null, CaveCrawlerPet.TextureName);
 
             // Register with the game
             public static void Register()
@@ -129,7 +129,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         public static class BloodCrawlerBuildable
         {
             // Init PrefabInfo
-            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(BloodCrawlerPet.ClassId, BloodCrawlerPet.DisplayName, BloodCrawlerPet.Description, BloodCrawlerPet.TextureName);
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(BloodCrawlerPet.ClassId, null, null, BloodCrawlerPet.TextureName);
 
             // Register with the game
             public static void Register()
@@ -145,7 +145,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         public static class CrabSquidBuildable
         {
             // Init PrefabInfo
-            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(CrabSquidPet.ClassId, CrabSquidPet.DisplayName, CrabSquidPet.Description, CrabSquidPet.TextureName);
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(CrabSquidPet.ClassId, null, null, CrabSquidPet.TextureName);
 
             // Register with the game
             public static void Register()
@@ -161,7 +161,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         public static class AlienRobotBuildable
         {
             // Init PrefabInfo
-            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(AlienRobotPet.ClassId, AlienRobotPet.DisplayName, AlienRobotPet.Description, AlienRobotPet.TextureName);
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(AlienRobotPet.ClassId, null, null, AlienRobotPet.TextureName);
 
             // Register with the game
             public static void Register()
@@ -180,7 +180,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         public static class PenglingBabyBuildable
         {
             // Init PrefabInfo
-            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(PenglingBabyPet.ClassId, PenglingBabyPet.DisplayName, PenglingBabyPet.Description, PenglingBabyPet.TextureName);
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(PenglingBabyPet.ClassId, null, null, PenglingBabyPet.TextureName);
 
             // Register with the game
             public static void Register()
@@ -196,7 +196,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         public static class PenglingAdultBuildable
         {
             // Init PrefabInfo
-            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(PenglingAdultPet.ClassId, PenglingAdultPet.DisplayName, PenglingAdultPet.Description, PenglingAdultPet.TextureName);
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(PenglingAdultPet.ClassId, null, null, PenglingAdultPet.TextureName);
 
             // Register with the game
             public static void Register()
@@ -212,7 +212,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         public static class SnowStalkerBabyBuildable
         {
             // Init PrefabInfo
-            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(SnowStalkerBabyPet.ClassId, SnowStalkerBabyPet.DisplayName, SnowStalkerBabyPet.Description, SnowStalkerBabyPet.TextureName);
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(SnowStalkerBabyPet.ClassId, null, null, SnowStalkerBabyPet.TextureName);
 
             // Register with the game
             public static void Register()
@@ -228,7 +228,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         public static class PinnicaridBuildable
         {
             // Init PrefabInfo
-            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(PinnicaridPet.ClassId, PinnicaridPet.DisplayName, PinnicaridPet.Description, PinnicaridPet.TextureName);
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(PinnicaridPet.ClassId, null, null, PinnicaridPet.TextureName);
 
             // Register with the game
             public static void Register()
@@ -244,7 +244,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         public static class TrivalveYellowBuildable
         {
             // Init PrefabInfo
-            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(TrivalveYellowPet.ClassId, TrivalveYellowPet.DisplayName, TrivalveYellowPet.Description, TrivalveYellowPet.TextureName);
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(TrivalveYellowPet.ClassId, null, null, TrivalveYellowPet.TextureName);
 
             // Register with the game
             public static void Register()
@@ -261,7 +261,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         {
             // Init PrefabInfo
             public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(TrivalveBluePet.ClassId,
-                TrivalveBluePet.DisplayName, TrivalveBluePet.Description, TrivalveBluePet.TextureName);
+                null, null, TrivalveBluePet.TextureName);
 
             // Register with the game
             public static void Register()

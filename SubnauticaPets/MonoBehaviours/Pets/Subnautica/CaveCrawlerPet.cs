@@ -12,19 +12,16 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
     internal class CaveCrawlerPet : Pet
     {
         // Configuration required to build and spawn
+
         // Pet
         public static string ClassId = "CaveCrawlerPet";
-        public static string DisplayName = Language.main.Get("DisplayName_CaveCrawler");
-        public static string Description = Language.main.Get("Description_CaveCrawler");
         public static string TextureName = "CaveCrawlerTexture";
         public static PrefabInfo BuildablePrefabInfo;
         public static string PrefabGuid = "3e0a11f1-e2b2-4c4f-9a8e-0b0a77dcc065";
         public static string ModelName = "";
 
         // Pet DNA
-        public static string DnaClassId = "CaveCrawlerDnaSample";
-        public static string DnaDisplayName = Language.main.Get("DisplayName_CaveCrawlerDna");
-        public static string DnaDescription = Language.main.Get("Description_CaveCrawlerDna");
+        public static string DnaClassId = "CaveCrawlerPetDna";
         public static string DnaTextureName = "CaveCrawlerDnaStrandTexture";
         public static PrefabInfo DnaBuildablePrefabInfo;
 

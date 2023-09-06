@@ -11,7 +11,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
     /// </summary>
     internal class PetConsoleInput : uGUI_InputGroup, IEventSystemHandler, uGUI_IButtonReceiver, IPointerHoverHandler
     {
-        private static string hoverTextKey = "Pet Management Console";
+        private static string hoverTextKey = "PetConsole";
         private Player player;
         private float terminationSqrDistance = 4.0f;
 
