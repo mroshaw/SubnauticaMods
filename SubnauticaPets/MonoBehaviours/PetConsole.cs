@@ -41,9 +41,13 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
 
         private GameObject _killAllButton;
         private GameObject _killAllConfirmButton;
+        private GameObject _killButton;
+        private GameObject _renameButton;
 
         private Pet _selectedPet;
         private string _petNameText;
+
+        private string _sureButtonText = "";
 
         private List<GameObject> _petList;
 
@@ -101,7 +105,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
             PetUtils.KillAllPets();
             _killAllConfirmButton.SetActive(false);
             _killAllButton.SetActive(true);
-            _killAllConfirmButton.GetComponentInChildren<TextMeshProUGUI>().text = Language.main.Get("Button_Sure");
+            _killAllConfirmButton.GetComponentInChildren<TextMeshProUGUI>().text = _sureButtonText;
 
             // Call any listeners
             KillAllButtonClickedEvent.Invoke();
@@ -117,6 +121,10 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
             {
                 _selectedPet.Kill();
                 _selectedPet = null;
+
+                // Set the button states
+                _killButton.GetComponent<Button>().interactable = false;
+                _renameButton.GetComponent<Button>().interactable = false;
             }
             
             // Call any listeners
@@ -138,6 +146,10 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
 
                 // Call any listeners
                 RenameButtonClickedEvent.Invoke();
+
+                // Set the button states
+                _killButton.GetComponent<Button>().interactable = false;
+                _renameButton.GetComponent<Button>().interactable = false;
             }
         }
 
@@ -166,6 +178,11 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
         {
             Log.LogDebug($"Selected Pet Changed: {pet.PetName}");
             _selectedPet = pet;
+
+            // Set the Kill and Rename buttons to interactable
+            _killButton.GetComponent<Button>().interactable = true;
+            _renameButton.GetComponent<Button>().interactable = true;
+
             SelectedPetChangedEvent.Invoke(pet);
         }
 
@@ -244,29 +261,32 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
         private void CreateButtons(GameObject sourceUiScreen, GameObject targetUiScreen)
         {
             // Rename button
-            GameObject renameButton = UiUtils.CreateButton(sourceUiScreen, "Button",
-                "RenamePetButton", "Button_Rename", targetUiScreen, new Vector3(160, 20, 0));
-            renameButton.GetComponentInChildren<Button>().onClick.AddListener(RenameButtonProxy);
+            _renameButton = UiUtils.CreateButton(sourceUiScreen, "Button",
+                "RenamePetButton", "Button_Rename", targetUiScreen,
+                new Vector3(160, 20, 0), false);
+            _renameButton.GetComponentInChildren<Button>().onClick.AddListener(RenameButtonProxy);
 
             // Kill button
-            GameObject killButton = UiUtils.CreateButton(sourceUiScreen, "Button",
-                "KillPetButton", "Button_Kill", targetUiScreen, new Vector3(160, -50, 0));
-            killButton.GetComponentInChildren<Button>().onClick.AddListener(KillButtonProxy);
-
+            _killButton = UiUtils.CreateButton(sourceUiScreen, "Button",
+                "KillPetButton", "Button_Kill", targetUiScreen,
+                new Vector3(160, -50, 0), false);
+            _killButton.GetComponentInChildren<Button>().onClick.AddListener(KillButtonProxy);
 
             // Kill All button
             _killAllButton = UiUtils.CreateButton(sourceUiScreen, "Button",
-                "KillAllPetsButton", "Button_KillAll", targetUiScreen, new Vector3(160, -120, 0));
+                "KillAllPetsButton", "Button_KillAll", targetUiScreen,
+                new Vector3(160, -120, 0), true);
             _killAllButton.GetComponentInChildren<Button>().onClick.AddListener(KillAllButtonProxy);
 
             // Kill All Confirm button
             _killAllConfirmButton = UiUtils.CreateButton(sourceUiScreen, "Button",
-                "KillAllPetsConfirmButton", "Button_Sure", targetUiScreen, new Vector3(160, -120, 0));
+                "KillAllPetsConfirmButton", "Button_AreYouSure", targetUiScreen,
+                new Vector3(160, -120, 0), true);
             _killAllConfirmButton.GetComponentInChildren<Button>().onClick.AddListener(KillAllConfirmButtonProxy);
             _killAllConfirmButton.GetComponent<Image>().color = Color.red;
             _killAllConfirmButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+            _sureButtonText = _killAllConfirmButton.GetComponentInChildren<TextMeshProUGUI>().text;
             _killAllConfirmButton.SetActive(false);
-
         }
 
         /// <summary>
@@ -319,7 +339,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
 
             List<Pet> sortedPetList = Saver.PetList.OrderBy(pet => pet.PetName).ToList();
 
-            Log.LogDebug($"PetConsoleUi: Sorted into {sortedPetList.Count} pets.");
+            Log.LogDebug($"PetConsoleUi: Sorted list into {sortedPetList.Count} pets.");
 
             foreach (Pet currPet in sortedPetList)
             {
@@ -327,7 +347,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
                 Log.LogDebug($"CreatePetList: Creating button for {currPet.PetName}...");
                 GameObject newButton = UiUtils.CreateButton(sourceUiScreen, "Button",
                     $"SelectPetButton{currPetIndex}", $"{currPetDetails.PetName} ({currPetDetails.PetType})",
-                    _scrollViewContentGameObject, new Vector3(-180, yBase + (yOffset * currPetIndex), 0));
+                    _scrollViewContentGameObject, new Vector3(-180, yBase + (yOffset * currPetIndex), 0), true);
                 Log.LogDebug($"CreatePetList: Creating button for {currPet.PetName}... Done.");
 
                 newButton.GetComponent<Button>().onClick.AddListener(delegate { PetSelectedProxy(currPet);});
@@ -341,6 +361,10 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
 
                 currPetIndex++;
             }
+
+            // Enable Kill All if there are any pets
+            Log.LogDebug($"PetConsole: Setting KillAllButton interactable to: {sortedPetList.Count > 0}");
+            _killAllButton.GetComponentInChildren<Button>().interactable = sortedPetList.Count > 0;
         }
 
         /// <summary>
