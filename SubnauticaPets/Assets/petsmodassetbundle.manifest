@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2447652557
+CRC: 3315859300
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 121c7d9abcab8a09e1cfcc4198ce06af
+    Hash: 54618438892c28b9481d2bfdffe1aa2f
   TypeTreeHash:
     serializedVersion: 2
     Hash: 1b0e75cc78b05ee84b89ea844e628c61
@@ -53,6 +53,7 @@ Assets:
 - Assets/Textures/CustomButtonTexture.png
 - Assets/Textures/Below Zero/PenglingAdultTexture.png
 - Assets/Textures/Below Zero/TrivalveYellowDnaStrandTexture.png
+- Assets/Textures/PetDnaDataBankPopupImageTexture .png
 - Assets/Textures/PetDnaDataBankMainImageTexture.png
 - Assets/Textures/PetWorkbenchTexture.png
 - Assets/Textures/Subnautica/AlienRobotDnaStrandTexture.png
@@ -60,7 +61,6 @@ Assets:
 - Assets/Textures/Subnautica/CrabSquidTexture.png
 - Assets/Textures/Below Zero/PinnicaridTexture.png
 - Assets/Textures/Below Zero/PinnicaridDnaStrandTexture.png
-- Assets/Textures/PetDnaDataBankPopupImageTexture.png
 - Assets/Textures/Below Zero/PenglingBabyDnaStrandTexture.png
 - Assets/Textures/Subnautica/BloodCrawlerDnaStrandTexture.png
 - Assets/Textures/Subnautica/CaveCrawlerTexture.png
