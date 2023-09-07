@@ -1,7 +1,12 @@
-﻿using DaftAppleGames.SubnauticaPets.Utils;
+﻿#if SUBNAUTICA
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica;
+#endif
+#if SUBNAUTICAZERO
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero;
+#endif
+using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Handlers;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
-using static TechStringCache;
 
 namespace DaftAppleGames.SubnauticaPets.CustomObjects
 {
@@ -36,6 +41,22 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             PDAHandler.AddEncyclopediaEntry(PetDnaKey, PdaPath, null, null,
                 ModUtils.GetTexture2DFromAssetBundle(MainImageTextureName),
                 ModUtils.GetSpriteFromAssetBundle(PopupImageTextureName));
+            Log.LogDebug("DatabankEntries: Setting up ItemGoals...");
+#if SUBNAUTICA
+            StoryGoalHandler.RegisterItemGoal(PetDnaKey, Story.GoalType.Encyclopedia, AlienRobotPet.DnaBuildablePrefabInfo.TechType);
+            StoryGoalHandler.RegisterItemGoal(PetDnaKey, Story.GoalType.Encyclopedia, BloodCrawlerPet.DnaBuildablePrefabInfo.TechType);
+            StoryGoalHandler.RegisterItemGoal(PetDnaKey, Story.GoalType.Encyclopedia, CaveCrawlerPet.DnaBuildablePrefabInfo.TechType);
+            StoryGoalHandler.RegisterItemGoal(PetDnaKey, Story.GoalType.Encyclopedia, CrabSquidPet.DnaBuildablePrefabInfo.TechType);
+#endif
+#if SUBNAUTICAZERO
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(PetDnaKey, Story.GoalType.Encyclopedia, PenglingAdultPet.DnaBuildablePrefabInfo.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(PetDnaKey, Story.GoalType.Encyclopedia, PenglingBabyPet.DnaBuildablePrefabInfo.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(PetDnaKey, Story.GoalType.Encyclopedia, PinnicaridPet.DnaBuildablePrefabInfo.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(PetDnaKey, Story.GoalType.Encyclopedia, SnowStalkerBabyPet.DnaBuildablePrefabInfo.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(PetDnaKey, Story.GoalType.Encyclopedia, TrivalveYellowPet.DnaBuildablePrefabInfo.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(PetDnaKey, Story.GoalType.Encyclopedia, TrivalveBluePet.DnaBuildablePrefabInfo.TechType);
+#endif
+            Log.LogDebug("DatabankEntries: Setting up ItemGoals... Done.");
             Log.LogDebug("DatabankEntries: Setting up PetDNA entry... Done.");
         }
 
