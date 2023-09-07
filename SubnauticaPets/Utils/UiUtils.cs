@@ -80,8 +80,10 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <param name="newButtonTextKey"></param>
         /// <param name="targetUi"></param>
         /// <param name="localPosition"></param>
+        /// <param name="isInteractable"></param>
         /// <returns></returns>
-        public static GameObject CreateButton(GameObject sourceUi, string sourceButtonName, string newButtonName, string newButtonTextKey, GameObject targetUi, Vector3 localPosition)
+        public static GameObject CreateButton(GameObject sourceUi, string sourceButtonName, string newButtonName,
+            string newButtonTextKey, GameObject targetUi, Vector3 localPosition, bool isInteractable)
         {
             GameObject origButtonGameObject = null;
 
@@ -112,7 +114,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             newButtonGameObject.transform.localScale = new Vector3(1, 1, 1);
 
             // Add translation component on label
-            Log.LogDebug($"UiUtils: Adding translation component on {newButtonGameObject.name} using key {newButtonTextKey}");
+            Log.LogDebug($"UiUtils: Adding translation component on {newButtonGameObject.name} using key {newButtonTextKey}...");
             newButtonGameObject.SetActive(false);
             TextMeshProUGUI label = newButtonGameObject.GetComponentInChildren<TextMeshProUGUI>(true);
             if (label)
@@ -125,6 +127,10 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             {
                 Log.LogDebug($"UiUtils: Couldn't find TextMeshProUGUI on {newButtonGameObject.name}!");
             }
+            Log.LogDebug($"UiUtils: Adding translation component. Done.");
+            // Set interactable default
+            newButtonGameObject.GetComponent<Button>().interactable = isInteractable;
+
             newButtonGameObject.SetActive(true);
 
             return newButtonGameObject;
