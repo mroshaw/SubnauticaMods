@@ -85,9 +85,6 @@ namespace DaftAppleGames.SubnauticaPets
         /// </summary>
         private void Start()
         {
-            // Set up Databank entries
-            DatabankEntries.ConfigureDataBank();
-
             // Add the PetSaver component
             Saver = gameObject.AddComponent<PetSaver>();
 
@@ -102,6 +99,10 @@ namespace DaftAppleGames.SubnauticaPets
 
             // Init the Pet Console
             PetConsolePrefab.InitPetConsole();
+
+            // Set up Databank entries
+            DatabankEntries.ConfigureDataBank();
+
         }
         #endregion
 
