@@ -14,7 +14,6 @@ using Nautilus.Crafting;
 using Nautilus.Utility;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
-using static UWE.FreezeTime;
 
 namespace DaftAppleGames.SubnauticaPets.CustomObjects
 {
