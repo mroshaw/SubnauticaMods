@@ -26,11 +26,11 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
         public static PrefabInfo DnaBuildablePrefabInfo;
 
         // Random DNA collectible distribution biome data
-        public static BiomeData LootDistributionBiomeData = new LootDistributionData.BiomeData
-        {
-            biome = BiomeType.SafeShallows_Grass,
-            count = 10,
-            probability = 0.8f
+        public static BiomeData[] LootDistributionBiomeData = new LootDistributionData.BiomeData[] {
+            new LootDistributionData.BiomeData { biome = BiomeType.Kelp_TechSite, count = 4, probability = 0.6f},
+            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Sand, count = 5, probability = 0.8f},
+            new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_TechSite, count = 5, probability = 0.4f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_TechSite, count = 8, probability = 0.5f},
         };
 
         public static Color PetObjectColor = Color.cyan;
@@ -43,7 +43,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
         {
             RecipeData recipe = new RecipeData(
                 new CraftData.Ingredient(TechType.Gold, 3),
-                new CraftData.Ingredient(BuildablePrefabInfo.TechType, 5));
+                new CraftData.Ingredient(DnaBuildablePrefabInfo.TechType, 5));
             return recipe;
         }
 

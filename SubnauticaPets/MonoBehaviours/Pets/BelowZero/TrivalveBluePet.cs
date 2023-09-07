@@ -3,6 +3,7 @@
 using Nautilus.Assets;
 using Nautilus.Crafting;
 using UnityEngine;
+using static LootDistributionData;
 
 namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
 {
@@ -26,11 +27,11 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
         public static PrefabInfo DnaBuildablePrefabInfo;
 
         // Random DNA collectible distribution biome data
-        public static LootDistributionData.BiomeData LootDistributionBiomeData = new LootDistributionData.BiomeData
-        {
-            biome = BiomeType.SafeShallows_Grass,
-            count = 10,
-            probability = 0.8f
+        public static BiomeData[] LootDistributionBiomeData = new LootDistributionData.BiomeData[] {
+            new LootDistributionData.BiomeData { biome = BiomeType.Kelp_TechSite, count = 4, probability = 0.6f},
+            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Sand, count = 5, probability = 0.8f},
+            new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_TechSite, count = 5, probability = 0.4f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_TechSite, count = 8, probability = 0.5f},
         };
 
         public static Color PetObjectColor = Color.blue;
