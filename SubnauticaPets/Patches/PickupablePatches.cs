@@ -1,4 +1,5 @@
-﻿using DaftAppleGames.SubnauticaPets.MonoBehaviours;
+﻿/*
+ using DaftAppleGames.SubnauticaPets.MonoBehaviours;
 using HarmonyLib;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 namespace DaftAppleGames.SubnauticaPets.Patches
@@ -30,3 +31,4 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         }
     }
 }
+*/
