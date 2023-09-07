@@ -117,12 +117,11 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// <param name="classId"></param>
         /// <param name="displayName"></param>
         /// <param name="description"></param>
-        /// <param name="sprite"></param>
         /// <param name="color"></param>
         /// <param name="lootBiome"></param>
         /// <returns></returns>
         private static PrefabInfo InitPrefab(string classId, string displayName, string description, string textureName,
-            Color color, LootDistributionData.BiomeData lootBiome)
+            Color color, LootDistributionData.BiomeData[] lootBiome)
         {
             Log.LogDebug($"PetDnaPrefab: Init Prefab for {classId}...");
 
