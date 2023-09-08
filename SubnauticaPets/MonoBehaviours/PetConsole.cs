@@ -19,6 +19,8 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
     /// </summary>
     internal class PetConsole : MonoBehaviour
     {
+        public Color MeshColour = Color.yellow;
+
         // Overrides for PetChanged and PetNameChanged events
         public class PetEvent : UnityEvent<Pet>
         {
@@ -50,6 +52,14 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
         private string _sureButtonText = "";
 
         private List<GameObject> _petList;
+
+        /// <summary>
+        /// Apply some changes before we render
+        /// </summary>
+        public void Awake()
+        {
+            RecolourMeshes();
+        }
 
         /// <summary>
         /// Unity Start method
@@ -414,6 +424,18 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
             countDownLabel.text = labelText;
             objectToHide.SetActive(false);
             objectToShow.SetActive(true);
+        }
+
+        /// <summary>
+        /// Applies a new colour to all meshes
+        /// </summary>
+        private void RecolourMeshes()
+        {
+            MeshRenderer[] allMeshes = GetComponentsInChildren<MeshRenderer>();
+            foreach (MeshRenderer meshRenderer in allMeshes)
+            {
+                meshRenderer.material.color = MeshColour;
+            }
         }
     }
 }
