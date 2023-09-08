@@ -17,8 +17,11 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
         public static string ClassId = "PenglingBabyPet";
         public static string TextureName = "PenglingBabyTexture";
         public static PrefabInfo BuildablePrefabInfo;
-        public static string PrefabGuid = "807fbbb3-aced-45cd-aba8-db3fb1188f1f";
+        public static string PrefabGuid = "807fbbb3-aced-45cd-aba8-db3fb1188f1f"; // https://github.com/LeeTwentyThree/Nautilus/blob/master/Nautilus/Documentation/resources/BZ-PrefabPaths.json
         public static string ModelName = "";
+        public static Vector3 ModelScale = new Vector3(1, 1, 1);
+        public static float VfxMinOffset = -0.2f;
+        public static float VfxMaxOffset = 0.5f;
 
         // Pet DNA
         public static string DnaClassId = "PenglingBabyPetDna";
@@ -43,7 +46,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
         {
             RecipeData recipe = new RecipeData(
                 new Ingredient(TechType.Gold, 3),
-                new Ingredient(BuildablePrefabInfo.TechType, 5));
+                new Ingredient(DnaBuildablePrefabInfo.TechType, 5));
             return recipe;
         }
 

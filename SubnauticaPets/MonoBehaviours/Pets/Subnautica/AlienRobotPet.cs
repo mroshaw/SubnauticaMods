@@ -18,8 +18,11 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
         public static string ClassId = "AlienRobotPet";
         public static string TextureName = "AlienRobotTexture";
         public static PrefabInfo BuildablePrefabInfo;
-        public static string PrefabGuid = "4fae8fa4-0280-43bd-bcf1-f3cba97eed77";
-        public static string ModelName = "";
+        public static string PrefabGuid = "4fae8fa4-0280-43bd-bcf1-f3cba97eed77"; // https://github.com/LeeTwentyThree/Nautilus/blob/master/Nautilus/Documentation/resources/SN1-PrefabPaths.json
+        public static string ModelName = "Precursor_Droid"; // "Precursor_Droid_horn_geo" is mode, Anim on "Precursor_Droid"
+        public static Vector3 ModelScale = new Vector3(1, 1, 1);
+        public static float VfxMinOffset = -0.2f;
+        public static float VfxMaxOffset = 1.2f;
 
         // Pet DNA
         public static string DnaClassId = "AlienRobotPetDna";

@@ -17,8 +17,11 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
         public static string ClassId = "PinnicaridPet";
         public static string TextureName = "PinnicaridTexture";
         public static PrefabInfo BuildablePrefabInfo;
-        public static string PrefabGuid = "f9eccfe2-a06f-4c06-bc57-01c2e50ffbe8";
+        public static string PrefabGuid = "f9eccfe2-a06f-4c06-bc57-01c2e50ffbe8"; // https://github.com/LeeTwentyThree/Nautilus/blob/master/Nautilus/Documentation/resources/BZ-PrefabPaths.json
         public static string ModelName = "";
+        public static Vector3 ModelScale = new Vector3(1, 1, 1);
+        public static float VfxMinOffset = -0.2f;
+        public static float VfxMaxOffset = 0.5f;
 
         // Pet DNA
         public static string DnaClassId = "PinnicaridPetDna";
@@ -43,7 +46,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
         {
             RecipeData recipe = new RecipeData(
                 new Ingredient(TechType.Gold, 3),
-                new Ingredient(BuildablePrefabInfo.TechType, 5));
+                new Ingredient(DnaBuildablePrefabInfo.TechType, 5));
             return recipe;
         }
         

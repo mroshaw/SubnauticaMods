@@ -18,8 +18,11 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
         public static string ClassId = "TrivalveYellowPet";
         public static string TextureName = "TrivalveYellowTexture";
         public static PrefabInfo BuildablePrefabInfo;
-        public static string PrefabGuid = "e8f2bfd4-49c6-45d1-a029-489b492515a9";
+        public static string PrefabGuid = "e8f2bfd4-49c6-45d1-a029-489b492515a9"; // https://github.com/LeeTwentyThree/Nautilus/blob/master/Nautilus/Documentation/resources/BZ-PrefabPaths.json
         public static string ModelName = "";
+        public static Vector3 ModelScale = new Vector3(1, 1, 1);
+        public static float VfxMinOffset = -0.2f;
+        public static float VfxMaxOffset = 0.5f;
 
         // Pet DNA
         public static string DnaClassId = "TrivalveYellowPetDna";
@@ -43,7 +46,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
         {
             RecipeData recipe = new RecipeData(
                 new Ingredient(TechType.Gold, 3),
-                new Ingredient(BuildablePrefabInfo.TechType, 5));
+                new Ingredient(DnaBuildablePrefabInfo.TechType, 5));
             return recipe;
         }
 

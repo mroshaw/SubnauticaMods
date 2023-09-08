@@ -15,14 +15,17 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
         // Configuration required to build and spawn
 
         // Pet
-        public static string ClassId = "SnowStalkerBabyPet";
+        public static string ClassId = "BabySnowStalkerPet";
         public static string TextureName = "SnowStalkerBabyTexture";
         public static PrefabInfo BuildablePrefabInfo;
-        public static string PrefabGuid = "78d3dbce-856f-4eba-951c-bd99870554e2";
+        public static string PrefabGuid = "78d3dbce-856f-4eba-951c-bd99870554e2"; // https://github.com/LeeTwentyThree/Nautilus/blob/master/Nautilus/Documentation/resources/BZ-PrefabPaths.json
         public static string ModelName = "";
+        public static Vector3 ModelScale = new Vector3(1, 1, 1);
+        public static float VfxMinOffset = -0.2f;
+        public static float VfxMaxOffset = 0.5f;
 
         // Pet DNA
-        public static string DnaClassId = "SnowStalkerBabyPetDna";
+        public static string DnaClassId = "BabySnowStalkerPetDna";
         public static string DnaTextureName = "SnowStalkerBabyDnaStrandTexture";
         public static PrefabInfo DnaBuildablePrefabInfo;
 
@@ -44,7 +47,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero
         {
             RecipeData recipe = new RecipeData(
                 new Ingredient(TechType.Gold, 3),
-                new Ingredient(BuildablePrefabInfo.TechType, 5));
+                new Ingredient(DnaBuildablePrefabInfo.TechType, 5));
             return recipe;
         }
 

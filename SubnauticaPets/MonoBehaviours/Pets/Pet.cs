@@ -208,6 +208,11 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             Log.LogDebug("Pet: Configuring Sky and SkyApplier...");
             ConfigureSkyApplier();
             Log.LogDebug("Pet: Configuring Sky and SkyApplier... Done.");
+            Log.LogDebug("Pet: Enabling Animator...");
+            this.GetComponentInChildren<Animator>().enabled = true;
+
+            Log.LogDebug("Pet: Enabling Animator... Done.");
+
         }
 
         /// <summary>

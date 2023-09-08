@@ -1,6 +1,7 @@
 ﻿#if SUBNAUTICA
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
+using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Crafting;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
@@ -19,8 +20,11 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
         public static string ClassId = "CrabSquidPet";
         public static string TextureName = "CrabSquidTexture";
         public static PrefabInfo BuildablePrefabInfo;
-        public static string PrefabGuid = "4c2808fe-e051-44d2-8e64-120ddcdc8abb";
-        public static string ModelName = "";
+        public static string PrefabGuid = "4c2808fe-e051-44d2-8e64-120ddcdc8abb"; // https://github.com/LeeTwentyThree/Nautilus/blob/master/Nautilus/Documentation/resources/SN1-PrefabPaths.json
+        public static string ModelName = "Crab_Squid"; // Anim on "Crab_Squid"
+        public static Vector3 ModelScale = new Vector3(0.07f, 0.07f, 0.07f);
+        public static float VfxMinOffset = -0.2f;
+        public static float VfxMaxOffset = 1.2f;
 
         // Pet DNA
         public static string DnaClassId = "CrabSquidPetDna";

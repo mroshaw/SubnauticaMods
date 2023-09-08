@@ -17,8 +17,11 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
         public static string ClassId = "BloodCrawlerPet";
         public static string TextureName = "BloodCrawlerTexture";
         public static PrefabInfo BuildablePrefabInfo;
-        public static string PrefabGuid = "7ce2ca9d-6154-4988-9b02-38f670e741b8"; // 830a8fa0-d92d-4683-a193-7531e6968042
-        public static string ModelName = "";
+        public static string PrefabGuid = "830a8fa0-d92d-4683-a193-7531e6968042"; // https://github.com/LeeTwentyThree/Nautilus/blob/master/Nautilus/Documentation/resources/SN1-PrefabPaths.json
+        public static string ModelName = "Cave_Crawler_blood_01"; // Animator on "Cave_Crawler_03"
+        public static Vector3 ModelScale = new Vector3(0.3f, 0.3f, 0.3f);
+        public static float VfxMinOffset = -0.2f;
+        public static float VfxMaxOffset = 1.2f;
 
         // Pet DNA
         public static string DnaClassId = "BloodCrawlerPetDna"; 
