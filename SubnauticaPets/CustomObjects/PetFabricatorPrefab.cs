@@ -82,8 +82,11 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         {
             Log.LogDebug("PetFabricatorUtils: Adding PetSpawner component...");
             PetSpawner newPetSpawner = fabricatorGameObject.AddComponent<PetSpawner>();
-            newPetSpawner.SkipSpawnObstacleCheck = SubnauticaPetsPlugin.SkipSpawnObstacleCheckConfig.Value;
             Log.LogDebug("PetFabricatorUtils: Adding PetSpawner component... Done.");
+
+            Log.LogDebug("PetFabricatorUtils: Adding PetFabricator component...");
+            PetFabricator newPetFabricator = fabricatorGameObject.AddComponent<PetFabricator>();
+            Log.LogDebug("PetFabricatorUtils: Adding PetFabricator component... Done.");
         }
     }
 }
