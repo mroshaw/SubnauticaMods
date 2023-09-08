@@ -89,7 +89,10 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
             else
             {
                 Log.LogDebug("PetSpawner: Player is not spawner. Assume Fabricator.");
-                desiredSpawnLocation = gameObject.transform.position + (Vector3.up * fabricatorSpawnYAdjustment);
+                CrafterGhostModel ghostModel = GetComponentInChildren<CrafterGhostModel>();
+                desiredSpawnLocation = ghostModel.itemSpawnPoint.position;
+
+                // desiredSpawnLocation = gameObject.transform.position + (Vector3.up * fabricatorSpawnYAdjustment);
                 Log.LogDebug("Preparing to Spawn from Fabricator location!");
                 InstantiatePet(desiredSpawnLocation, petType, petName);
                 spawnSuccess = true;
