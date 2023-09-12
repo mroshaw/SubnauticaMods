@@ -11,16 +11,6 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
     {
         private void Start()
         {
-            // Subscribe to the pickupable event, and show the DataBank entry on pickup
-            Pickupable pickupable = GetComponent<Pickupable>();
-        }
-
-        /// <summary>
-        /// Adds the Pet DNA databank entry to players PDA
-        /// </summary>
-        public void OnPickupDna()
-        {
-            DatabankEntries.AddPetDnaDataBankEntry();
         }
     }
 }

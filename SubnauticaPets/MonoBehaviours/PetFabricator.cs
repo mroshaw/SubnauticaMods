@@ -1,4 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
+using DaftAppleGames.SubnauticaPets.Utils;
+using Nautilus.Assets;
 using UnityEngine;
 
 namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
@@ -9,26 +11,30 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
     /// </summary>
     internal class PetFabricator : MonoBehaviour
     {
-        public Color MeshColour = Color.yellow;
+        public static PrefabInfo PrefabInfo;
+
+        // Asset bundle texture names
+        public static string PetFabricatorTexture = "PetFabricatorTexture";
+        public static string PetFabricatorIconTexture = "PetFabricatorIconTexture";
+        public static string PetFabricatorTextureGameObject = "workbench_geo";
+        
+        // public Color MeshColour = Color.yellow;
 
         /// <summary>
         /// We want to modify some stuff when a new Pet Fabricator is created
         /// </summary>
         public void Awake()
         {
-            RecolourMeshes();
+            // Apply custom mesh texture
+            ApplyNewMeshTexture();
         }
 
         /// <summary>
-        /// Applies a new colour to all meshes
+        /// Apply the custom mesh texture
         /// </summary>
-        private void RecolourMeshes()
+        private void ApplyNewMeshTexture()
         {
-            SkinnedMeshRenderer[] allMeshes = GetComponentsInChildren<SkinnedMeshRenderer>();
-            foreach (SkinnedMeshRenderer meshRenderer in allMeshes)
-            {
-                meshRenderer.material.color = MeshColour;
-            }
+            ModUtils.ApplyNewMeshTexture(this.gameObject, PetFabricatorTexture, "");
         }
     }
 }

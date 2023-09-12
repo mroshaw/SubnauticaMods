@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
 using DaftAppleGames.SubnauticaPets.Utils;
+using Nautilus.Assets;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -19,7 +20,13 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
     /// </summary>
     internal class PetConsole : MonoBehaviour
     {
-        public Color MeshColour = Color.yellow;
+        public static PrefabInfo PrefabInfo;
+
+        // Asset bundle texture names
+        public static string PetConsoleTexture = "PetConsoleTexture";
+        public static string PetConsoleIconTexture = "PetConsoleIconTexture";
+        public static string PetConsoleTextureGameObject = "submarine_Picture_Frame";
+        public static string PetConsoleRotatingIconTexture = "PetConsoleRotatingIconTexture";
 
         // Overrides for PetChanged and PetNameChanged events
         public class PetEvent : UnityEvent<Pet>
@@ -58,7 +65,8 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
         /// </summary>
         public void Awake()
         {
-            RecolourMeshes();
+            // Apply custom mesh texture
+            ApplyNewMeshTexture();
         }
 
         /// <summary>
@@ -250,6 +258,9 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
             Log.LogDebug("PetConsoleUi: Add PetConsoleInput...");
             PetConsoleInput petConsoleInput = _uiGameObject.AddComponent<PetConsoleInput>();
             Log.LogDebug("PetConsoleUi: Add PetConsoleInput... Done.");
+            Log.LogDebug("PetConsoleUi: Add RotatingIcon...");
+            AddRotatingIcon(_uiGameObject);
+            Log.LogDebug("PetConsoleUi: Add RotatingIcon... Done.");
         }
 
         /// <summary>
@@ -427,15 +438,29 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
         }
 
         /// <summary>
-        /// Applies a new colour to all meshes
+        /// Adds a little rotating icon to the top left of the console
         /// </summary>
-        private void RecolourMeshes()
+        private void AddRotatingIcon(GameObject targetGameObject)
         {
-            MeshRenderer[] allMeshes = GetComponentsInChildren<MeshRenderer>();
-            foreach (MeshRenderer meshRenderer in allMeshes)
-            {
-                meshRenderer.material.color = MeshColour;
-            }
+            GameObject iconGameObject = new GameObject("ConsoleIcon");
+            iconGameObject.transform.parent = targetGameObject.transform;
+            iconGameObject.transform.localPosition = new Vector3(-50, 25, 0);
+            iconGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
+            iconGameObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+            Image iconImage = iconGameObject.AddComponent<Image>();
+            iconImage.sprite = ModUtils.GetSpriteFromAssetBundle(PetConsoleRotatingIconTexture);
+            RotateIcon iconRotate = iconGameObject.AddComponent<RotateIcon>();
+
+        }
+
+        /// <summary>
+        /// Applies a custom texture to the main mesh
+        /// </summary>
+        private void ApplyNewMeshTexture()
+        {
+            Log.LogDebug("PetConsole: Applying new mesh texture...");
+            ModUtils.ApplyNewMeshTexture(this.gameObject, PetConsoleTexture, PetConsoleTextureGameObject);
         }
     }
 }
