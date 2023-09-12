@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3074748971
+CRC: 86915254
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5df5af4aa2b62045daa60b7e47e3d68d
+    Hash: c49c23bf2157e8e4079bd662f7adf640
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 1b0e75cc78b05ee84b89ea844e628c61
+    Hash: 079a171239f008e6794787b3119a12d6
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -24,6 +24,10 @@ ClassTypes:
 - Class: 43
   Script: {instanceID: 0}
 - Class: 48
+  Script: {instanceID: 0}
+- Class: 54
+  Script: {instanceID: 0}
+- Class: 108
   Script: {instanceID: 0}
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -47,32 +51,41 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Textures/Subnautica/AlienRobotTexture.png
-- Assets/Textures/PetConsoleTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Subnautica/AlienRobotTexture.png
+- Assets/Textures/Pet Fabriactor/Databank Textures/PetFabricatorDataBankMainImageTexture.png
+- Assets/Textures/Pet DNA/Databank Textures/PetDnaDataBankPopupImageTexture .png
+- Assets/Textures/Pet Console/Mesh Texture/PetConsoleTexture.png
 - Assets/Prefabs/DNAModel.prefab
-- Assets/Textures/CustomButtonTexture.png
-- Assets/Textures/Below Zero/PenglingAdultTexture.png
-- Assets/Textures/Below Zero/TrivalveYellowDnaStrandTexture.png
-- Assets/Textures/PetDnaDataBankPopupImageTexture .png
-- Assets/Textures/PetDnaDataBankMainImageTexture.png
-- Assets/Textures/PetWorkbenchTexture.png
-- Assets/Textures/Subnautica/AlienRobotDnaStrandTexture.png
-- Assets/Textures/Below Zero/PenglingBabyTexture.png
-- Assets/Textures/Subnautica/CrabSquidTexture.png
-- Assets/Textures/Below Zero/PinnicaridTexture.png
-- Assets/Textures/Below Zero/PinnicaridDnaStrandTexture.png
-- Assets/Textures/Below Zero/PenglingBabyDnaStrandTexture.png
-- Assets/Textures/Subnautica/BloodCrawlerDnaStrandTexture.png
-- Assets/Textures/Subnautica/CaveCrawlerTexture.png
-- Assets/Textures/Below Zero/TrivalveBlueDnaStrandTexture.png
-- Assets/Textures/Below Zero/SnowStalkerBabyTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Below Zero/PenglingAdultTexture.png
+- Assets/Prefabs/PetConsoleDamaged.prefab
+- Assets/Textures/Pet DNA/Icon/Icons Below Zero/TrivalveYellowDnaStrandTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Subnautica/AlienRobotDnaStrandTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Below Zero/PenglingBabyTexture.png
+- Assets/Textures/Pet Fabriactor/Databank Textures/PetFabricatorDataBankPopupImageTexture.png
+- Assets/Textures/Pet Console/Databank Textures/PetConsoleDataBankPopupImageTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Subnautica/CrabSquidTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Below Zero/PinnicaridTexture.png
+- Assets/Prefabs/PetFabricatorDamaged.prefab
+- Assets/Textures/Pet DNA/Icon/Icons Below Zero/PinnicaridDnaStrandTexture.png
+- Assets/Textures/Pet Fabriactor/Icon/PetFabricatorIconTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Below Zero/PenglingBabyDnaStrandTexture.png
+- Assets/Textures/UI/ButtonBackgroundTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Subnautica/BloodCrawlerDnaStrandTexture.png
+- Assets/Textures/Pet Fabriactor/Mesh Texture/PetFabricatorTexture.png
+- Assets/Textures/Pet Console/Icon/PetConsoleIconTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Subnautica/CaveCrawlerTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Below Zero/TrivalveBlueDnaStrandTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Below Zero/SnowStalkerBabyTexture.png
 - Assets/Prefabs/ScrollView.prefab
-- Assets/Textures/Subnautica/BloodCrawlerTexture.png
-- Assets/Textures/Subnautica/CaveCrawlerDnaStrandTexture.png
-- Assets/Textures/Below Zero/PenglingAdultDnaStrandTexture.png
-- Assets/Textures/Subnautica/CrabSquidDnaStrandTexture.png
-- Assets/Textures/Below Zero/TrivalveBlueTexture.png
-- Assets/Textures/Below Zero/SnowStalkerBabyDnaStrandTexture.png
-- Assets/Textures/Below Zero/TrivalveYellowTexture.png
-- Assets/Textures/ButtonBackgroundTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Subnautica/BloodCrawlerTexture.png
+- Assets/Textures/Pet DNA/Databank Textures/PetDnaDataBankMainImageTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Subnautica/CaveCrawlerDnaStrandTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Below Zero/PenglingAdultDnaStrandTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Subnautica/CrabSquidDnaStrandTexture.png
+- Assets/Textures/Pet Console/Sources/PetConsoleRotatingIconTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Below Zero/TrivalveBlueTexture.png
+- Assets/Textures/UI/CustomButtonTexture.png
+- Assets/Textures/Pet Console/Databank Textures/PetConsoleDataBankMainImageTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Below Zero/SnowStalkerBabyDnaStrandTexture.png
+- Assets/Textures/Pet DNA/Icon/Icons Below Zero/TrivalveYellowTexture.png
 Dependencies: []
