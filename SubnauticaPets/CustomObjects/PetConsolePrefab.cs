@@ -25,7 +25,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             CustomPrefab customConsole = new CustomPrefab("PetConsole",
                 null,
                 null,
-                ModUtils.GetSpriteFromAssetBundle(PetConsoleTexture));
+                ModUtils.GetSpriteFromAssetBundle(PetConsole.PetConsoleIconTexture));
 
             // We'll use the PictureFrame as a template
             PrefabTemplate consoleTemplate = new CloneTemplate(customConsole.Info, TechType.PictureFrame)
@@ -49,9 +49,11 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 
             // Set the recipe.
             customConsole.SetRecipe(recipe);
-            customConsole.SetUnlock(TechType.Workbench)
-                .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule);
+            customConsole.SetUnlock(PetConsoleFragmentPrefab.PrefabInfo.TechType, 1);
+            customConsole.SetPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule);
             customConsole.Register();
+
+            PetConsole.PrefabInfo = customConsole.Info;
         }
 
         /// <summary>

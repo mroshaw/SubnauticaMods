@@ -29,7 +29,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             CustomPrefab customFab = new CustomPrefab("PetFabricator",
                 null,
                 null,
-                ModUtils.GetSpriteFromAssetBundle(PetWorkbenchTexture));
+                ModUtils.GetSpriteFromAssetBundle(PetFabricator.PetFabricatorIconTexture));
 
             customFab.CreateFabricator(out CraftTree.Type treeType)
                 // Add our Pet Buildables
@@ -69,9 +69,11 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 
             // Set the recipe
             customFab.SetRecipe(recipe);
-            customFab.SetUnlock(TechType.Workbench)
-                .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule);
+            customFab.SetUnlock(PetFabricatorFragmentPrefab.PrefabInfo.TechType, 1);
+            customFab.SetPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule);
             customFab.Register();
+            
+            PetFabricator.PrefabInfo = customFab.Info;
         }
 
         /// <summary>
