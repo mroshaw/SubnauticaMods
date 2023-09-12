@@ -10,9 +10,6 @@ namespace DaftAppleGames.SubnauticaPets.Utils
     /// </summary>
     internal static class UiUtils
     {
-        public static string PetConsoleTexture = "PetConsoleTexture";
-        public static string PetWorkbenchTexture = "PetWorkbenchTexture";
-
         // Public static names of Asset Bundle UI objects
         public static string ScrollViewObject = "ScrollView";
         public static string CustomButtonTexture = "CustomButtonTexture";
