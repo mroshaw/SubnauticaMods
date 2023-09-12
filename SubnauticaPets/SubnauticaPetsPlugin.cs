@@ -4,6 +4,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using Nautilus.Options;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using DaftAppleGames.SubnauticaPets.ConfigOptions;
 using DaftAppleGames.SubnauticaPets.CustomObjects;
@@ -94,6 +95,10 @@ namespace DaftAppleGames.SubnauticaPets
             // Initialise the Pet Buildables
             PetBuildablePrefab.InitPetBuildables();
 
+            // Init Console and Fabricator Fragments
+            PetConsoleFragmentPrefab.InitPrefab();
+            PetFabricatorFragmentPrefab.InitPrefab();
+
             // Init the Pet Fabricator
             PetFabricatorPrefab.InitPetFabricator();
 
@@ -102,7 +107,6 @@ namespace DaftAppleGames.SubnauticaPets
 
             // Set up Databank entries
             DatabankEntries.ConfigureDataBank();
-
         }
         #endregion
 
