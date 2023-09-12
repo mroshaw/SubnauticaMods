@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours;
+using Nautilus.Handlers;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 using Object = UnityEngine.Object;
@@ -26,6 +28,28 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         internal static Transform GetPlayerTransform()
         {
             return Player.main.transform;
+        }
+
+        /// <summary>
+        /// Sets up coordinated spawns at all listed positions for given TechType
+        /// </summary>
+        /// <param name="techType"></param>
+        /// <param name="spawnPositions"></param>
+        internal static void SetupCoordinatedSpawn(TechType  techType, List<Vector3> spawnPositions)
+        {
+            Log.LogDebug($"ModUtils: CoordinatedSpawns spawning {techType} in {spawnPositions.Count} positions...");
+            List<SpawnInfo> spawnInfos = new List<SpawnInfo>();
+
+            foreach (Vector3 position in spawnPositions)
+            {
+                Log.LogDebug($"ModUtils: CoordinatedSpawns adding {techType} in {position.x},{position.y}, {position.z}...");
+                {
+                    spawnInfos.Add(new SpawnInfo(techType, position));
+                }
+            }
+            Log.LogDebug($"ModUtils: CoordinatedSpawns registering SpawnInfo...");
+            CoordinatedSpawnsHandler.RegisterCoordinatedSpawns(spawnInfos);
+            Log.LogDebug($"ModUtils: CoordinatedSpawns spawning {techType}. Done.");
         }
 
         /// <summary>
@@ -251,6 +275,37 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             }
             Log.LogDebug($"ModUiUtils: Couldn't find object named {objectName}!");
             return null;
+        }
+
+        /// <summary>
+        /// Applies a texture to the material on a GameObject
+        /// </summary>
+        /// <param name="targetGameObject"></param>
+        /// <param name="textureName"></param>
+        /// <param name="gameObjectNameHint"></param>
+        public static void ApplyNewMeshTexture(GameObject targetGameObject, string textureName, string gameObjectNameHint)
+        {
+            Log.LogDebug("ModUtils: In ApplyNewMeshTexture...");
+            Renderer[] renderers = targetGameObject.GetComponentsInChildren<Renderer>();
+
+            if (gameObjectNameHint == "")
+            {
+                Log.LogDebug($"ModUtils: ApplyNewMeshTexture is applying {textureName} to {renderers[0].gameObject.name} ...");
+                renderers[0].material.mainTexture = ModUtils.GetTexture2DFromAssetBundle(textureName);
+            }
+            else
+            {
+                Log.LogDebug($"ModUtils: In ApplyNewMeshTexture searching across {renderers.Length}...");
+                foreach (Renderer renderer in renderers)
+                {
+                    Log.LogDebug($"ModUtils: ApplyNewMeshTexture comparing at {renderer.gameObject.name} to {gameObjectNameHint}...");
+                    if (renderer.gameObject.name == gameObjectNameHint)
+                    {
+                        Log.LogDebug($"ModUtils: ApplyNewMeshTexture is applying {textureName} to {renderer.gameObject.name} ...");
+                        renderer.material.mainTexture = ModUtils.GetTexture2DFromAssetBundle(textureName);
+                    }
+                }
+            }
         }
     }
 }
