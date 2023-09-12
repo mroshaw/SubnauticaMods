@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Utils;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
 using UnityEngine;
@@ -12,7 +13,7 @@ using Button = UnityEngine.UI.Button;
 using static DaftAppleGames.SubnauticaPets.Utils.UiUtils;
 using TMPro;
 
-namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
+namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Console
 {
     /// <summary>
     /// Component to manage the Pet Console UI functionality

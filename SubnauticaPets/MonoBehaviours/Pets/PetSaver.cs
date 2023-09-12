@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
-namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
+namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
 {
     /// <summary>
     /// Load and Save pet details alongside save games

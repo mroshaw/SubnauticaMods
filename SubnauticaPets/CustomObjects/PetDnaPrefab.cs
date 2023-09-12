@@ -13,7 +13,8 @@ using Nautilus.Assets.Gadgets;
 using Nautilus.Handlers;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
-using DaftAppleGames.SubnauticaPets.MonoBehaviours;
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Utils;
 using Nautilus.Utility;
 
 namespace DaftAppleGames.SubnauticaPets.CustomObjects

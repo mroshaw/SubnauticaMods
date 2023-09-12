@@ -4,7 +4,8 @@ using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica;
 #if SUBNAUTICAZERO
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero;
 #endif
-using DaftAppleGames.SubnauticaPets.MonoBehaviours;
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Fabricator;
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;

@@ -4,7 +4,6 @@ using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica;
 #if SUBNAUTICAZERO
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero;
 #endif
-using DaftAppleGames.SubnauticaPets.MonoBehaviours;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
 using DaftAppleGames.SubnauticaPets.CustomObjects;
 using HarmonyLib;

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
+namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Utils
 {
 
     /// <summary>

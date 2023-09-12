@@ -2,10 +2,9 @@
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
 using UnityEngine;
-using DaftAppleGames.SubnauticaPets.MonoBehaviours;
-using Nautilus.Assets.Gadgets;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 using System.Collections.Generic;
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Fabricator;
 using Nautilus.Utility;
 
 namespace DaftAppleGames.SubnauticaPets.CustomObjects

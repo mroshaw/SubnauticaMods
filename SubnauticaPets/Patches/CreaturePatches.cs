@@ -1,5 +1,4 @@
-﻿using DaftAppleGames.SubnauticaPets.MonoBehaviours;
-using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
+﻿using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
 using DaftAppleGames.SubnauticaPets.Utils;
 using HarmonyLib;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;

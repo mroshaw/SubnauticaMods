@@ -1,7 +1,7 @@
 ﻿using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
-namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
+namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
 {
     /// <summary>
     /// Template MonoBehaviour class. Use this to add new functionality and behaviours to

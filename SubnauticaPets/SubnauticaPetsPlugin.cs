@@ -4,11 +4,8 @@ using BepInEx.Logging;
 using HarmonyLib;
 using Nautilus.Options;
 using System;
-using System.Collections.Generic;
-using UnityEngine;
 using DaftAppleGames.SubnauticaPets.ConfigOptions;
 using DaftAppleGames.SubnauticaPets.CustomObjects;
-using DaftAppleGames.SubnauticaPets.MonoBehaviours;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Handlers;
@@ -109,7 +106,6 @@ namespace DaftAppleGames.SubnauticaPets
             DatabankEntries.ConfigureDataBank();
         }
         #endregion
-
         #region CONFIG_SETUP
         /// <summary>
         /// Set up the BepInEx config options

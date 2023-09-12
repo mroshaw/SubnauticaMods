@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours;
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
 using Nautilus.Handlers;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;

@@ -3,7 +3,7 @@ using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
 using UnityEngine;
 
-namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
+namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Fabricator
 {
 
     /// <summary>

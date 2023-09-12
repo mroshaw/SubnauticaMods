@@ -4,7 +4,7 @@ using DaftAppleGames.SubnauticaPets.Utils;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
-namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
+namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
 {
     /// <summary>
     /// PetSpawner MonoBehaviour. Allows the spawning of a pet. Can be attached

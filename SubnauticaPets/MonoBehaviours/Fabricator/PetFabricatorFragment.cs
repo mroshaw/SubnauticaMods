@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
+namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Fabricator
 {
     /// <summary>
     /// MonoBehaviour class to support the Pet Fabricator Fragment

@@ -2,7 +2,7 @@
 using UnityEngine.EventSystems;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
-namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
+namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Console
 {
     // TODO Review this file and update to your own requirements, or remove it altogether if not required
     /// <summary>

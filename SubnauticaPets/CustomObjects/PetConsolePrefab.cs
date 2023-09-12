@@ -1,4 +1,4 @@
-﻿using DaftAppleGames.SubnauticaPets.MonoBehaviours;
+﻿using DaftAppleGames.SubnauticaPets.MonoBehaviours.Console;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
