@@ -143,7 +143,6 @@
     <Compile Include="CustomObjects\PetConsolePrefab.cs" />
     <Compile Include="CustomObjects\PetFabricatorPrefab.cs" />
     <Compile Include="CustomObjects\PetBuildablePrefab.cs" />
-    <Compile Include="ConfigOptions\PetModOptions.cs" />
     <Compile Include="MonoBehaviours\Pets\Subnautica\AlienRobotPet.cs" />
     <Compile Include="MonoBehaviours\Pets\Subnautica\BloodCrawlerPet.cs" />
     <Compile Include="MonoBehaviours\Pets\Subnautica\CaveCrawlerPet.cs" />

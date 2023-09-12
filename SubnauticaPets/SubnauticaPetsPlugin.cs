@@ -2,12 +2,8 @@
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
-using Nautilus.Options;
-using System;
-using DaftAppleGames.SubnauticaPets.ConfigOptions;
 using DaftAppleGames.SubnauticaPets.CustomObjects;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
-using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Handlers;
 
 namespace DaftAppleGames.SubnauticaPets
@@ -57,12 +53,6 @@ namespace DaftAppleGames.SubnauticaPets
             // Init Localisation
             LanguageHandler.RegisterLocalizationFolder();
 
-            // Set up BepInEx config
-            SetupConfigOptions();
-
-            // Set up Nautilus config
-            ModOptions modOptions = new PetModOptions();
-
             // Set static values
             SelectedPetName = "Dave";
 
@@ -106,43 +96,5 @@ namespace DaftAppleGames.SubnauticaPets
             DatabankEntries.ConfigureDataBank();
         }
         #endregion
-        #region CONFIG_SETUP
-        /// <summary>
-        /// Set up the BepInEx config options
-        /// </summary>
-        private void SetupConfigOptions()
-        {
-            SkipSpawnObstacleCheckConfig = Config.Bind("Debug Settings",
-                SkipSpawnObstacleCheckKey,
-                false,
-                Language.main.Get("Options_SkipCheck"));
-
-            SkipSpawnObstacleCheckConfig.SettingChanged += ConfigSettingChanged;
-        }
-
-        /// <summary>
-        /// Method to handle changes to BepInEx configuration made by the player
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ConfigSettingChanged(object sender, EventArgs e)
-        {
-            SettingChangedEventArgs settingChangedEventArgs = e as SettingChangedEventArgs;
-
-            // Check if null and return
-            if (settingChangedEventArgs == null)
-            {
-                return;
-            }
-
-            // Update Skip Obstacle check
-            if (settingChangedEventArgs.ChangedSetting.Definition.Key == SkipSpawnObstacleCheckKey)
-            {
-                bool newValue = (bool)settingChangedEventArgs.ChangedSetting.BoxedValue;
-                Log.LogDebug("Updating skip obstacle check...");
-                ModUtils.UpdateSkipObstacleCheck(newValue);
-            }
-        }
-#endregion
     }
 }
