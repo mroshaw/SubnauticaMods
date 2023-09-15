@@ -20,7 +20,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         public static Object[] ModAssetBundleObjects;
 
         // The name of the mods Asset Bundle
-        private const string AssetBundleName = "petsmodassetbundle";
+        private const string AssetBundleName = "subnauticapets2assetbundle";
 
         /// <summary>
         /// Example static method to return Players current location / transform
