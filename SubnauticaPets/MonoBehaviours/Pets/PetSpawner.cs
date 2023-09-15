@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Custom;
 using DaftAppleGames.SubnauticaPets.Utils;
+using Nautilus.Utility;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
@@ -134,10 +136,28 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
                 yield break;
             }
             Log.LogDebug("Instantiating Pet...");
-            CoroutineTask<GameObject> task = CraftData.GetPrefabForTechTypeAsync(techType);
-            yield return task;
-            GameObject newCreaturePrefab = task.GetResult();
-            GameObject newCreatureGameObject = Instantiate(newCreaturePrefab);
+            GameObject newCreatureGameObject;
+
+            // Custom Types
+            if (petType == PetCreatureType.Cat)
+            {
+                // Get instance from asset bundle
+                newCreatureGameObject =
+                    ModUtils.GetGameObjectInstanceFromAssetBundle(CatPet.CustomPrefabName);
+                // Apply SN shaders to model
+                MaterialUtils.ApplySNShaders(newCreatureGameObject);
+
+                // Add PrefabIdentifer
+                newCreatureGameObject.AddComponent<PrefabIdentifier>();
+            }
+            // Built in types
+            else
+            {
+                CoroutineTask<GameObject> task = CraftData.GetPrefabForTechTypeAsync(techType);
+                yield return task;
+                GameObject newCreaturePrefab = task.GetResult();
+                newCreatureGameObject = Instantiate(newCreaturePrefab);
+            }
 
             // Add the Pet component and configure name and type
             Log.LogDebug("Adding Pet component...");
@@ -145,7 +165,13 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             newPet.PetCreatureType = petType;
             newPet.PetName = petName;
 
-            // Set the position and rotation
+            // Parent the spawn to the current Base interior and set the position and rotation
+            GameObject baseGameObject = gameObject.transform.parent.gameObject;
+            if (!baseGameObject.GetComponent<Base>())
+            {
+                Log.LogError("PetSpawner: Pet Fabricator not in a base!!");
+            }
+            newCreatureGameObject.transform.SetParent(baseGameObject.transform);
             newCreatureGameObject.transform.position = spawnLocation;
             newCreatureGameObject.transform.LookAt(Player.main.transform);
             newCreatureGameObject.name = $"{newCreatureGameObject.name}_Pet";
@@ -170,6 +196,9 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         {
             switch (creatureType)
             {
+                // Custom pets
+                case PetCreatureType.Cat:
+                    return CatPet.BuildablePrefabInfo.TechType;
 #if SUBNAUTICA
                 case PetCreatureType.CaveCrawler:
                     return TechType.CaveCrawler;
@@ -210,6 +239,13 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         /// <returns></returns>
         private PetCreatureType GetPetCreatureType(TechType techType)
         {
+            // Custom types
+            if (techType == CatPet.BuildablePrefabInfo.TechType)
+            {
+                return PetCreatureType.Cat;
+            }
+
+            // Build in types
             switch (techType)
             {
 #if SUBNAUTICA

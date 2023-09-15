@@ -199,15 +199,6 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
                 string serializedJson = File.ReadAllText(saveFile);
                 SaveData tempSave = JsonConvert.DeserializeObject<SaveData>(serializedJson);
                 PetDetailsHashSet = tempSave.PetDetailsHashSet;
-
-                // Fix old Save file
-                foreach (PetDetails currPetDetails in PetDetailsHashSet)
-                {
-                    if (int.TryParse(currPetDetails.PetName, out int nameEnum))
-                    {
-                        currPetDetails.PetName = ((PetName)nameEnum).ToString();
-                    }
-                }
             }
             else
             {

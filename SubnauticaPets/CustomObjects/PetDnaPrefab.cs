@@ -14,6 +14,7 @@ using Nautilus.Handlers;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Custom;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Utils;
 using Nautilus.Utility;
 
@@ -25,7 +26,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
     internal class PetDnaPrefab
     {
         // Static references for consumers
-        public static string DnaModelObjectName = "DNAModel";
+        public static string DnaModelObjectName = "DNASampleTube";
         public static GameObject DnaModelPrefab = null;
 
         /// <summary>
@@ -35,6 +36,15 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         {
             // Get and init the DNA model prefab
             SetDnaModelObjectPrefab();
+
+            // Custom types
+            // Cat
+            CatPet.DnaBuildablePrefabInfo = InitPrefab(CatPet.DnaClassId,
+                null,
+                null,
+                CatPet.DnaTextureName,
+                CatPet.PetObjectColor,
+                CatPet.LootDistributionBiomeData);
 #if SUBNAUTICA
             // Cave Crawler
             CaveCrawlerPet.DnaBuildablePrefabInfo = InitPrefab(CaveCrawlerPet.DnaClassId,
@@ -144,6 +154,8 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                     newModel.transform.SetParent(prefab.transform);
                     newModel.transform.localPosition = new Vector3(0, 0, 0);
                     newModel.transform.localRotation = new Quaternion(0, 0, 0, 0);
+
+                    MaterialUtils.ApplySNShaders(newModel);
                     // Set model color
                     newModel.FindChild("Ends").GetComponent<MeshRenderer>().material.color = color;
                     // Add the rotate script to the DNA model
