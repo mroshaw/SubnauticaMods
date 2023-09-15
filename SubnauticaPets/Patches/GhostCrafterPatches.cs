@@ -6,6 +6,7 @@ using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero;
 #endif
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
 using DaftAppleGames.SubnauticaPets.CustomObjects;
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Custom;
 using HarmonyLib;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
@@ -60,6 +61,11 @@ namespace CreaturePetMod_SN.Patches
             {
                 Log.LogDebug($"GhostCrafterPatches: Setting PetCreatureType, ready for spawning {techType}");
 
+                // Custom types
+                if(techType == CatPet.BuildablePrefabInfo.TechType)
+                {
+                    SelectedCreaturePetType = PetCreatureType.Cat;
+                }
 #if SUBNAUTICA
                 if (techType == CaveCrawlerPet.BuildablePrefabInfo.TechType)
                 {

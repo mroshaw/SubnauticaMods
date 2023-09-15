@@ -7,16 +7,12 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
 
     // Define available Pet types, depending on which game the mod is compiled for
 #if SUBNAUTICA
-    public enum PetCreatureType { CaveCrawler, BloodCrawler, CrabSquid, AlienRobot }
+    public enum PetCreatureType { CaveCrawler, BloodCrawler, CrabSquid, AlienRobot, Cat }
 #endif
 
 #if SUBNAUTICAZERO
-    public enum PetCreatureType { SnowstalkerBaby, PenglingBaby, PenglingAdult, Pinnicarid, BlueTrivalve, YellowTrivalve }
+    public enum PetCreatureType { SnowstalkerBaby, PenglingBaby, PenglingAdult, Pinnicarid, BlueTrivalve, YellowTrivalve, Cat }
 #endif
-
-    public enum PetName { Anise, Beethoven, Bitey, Buddy, Cheerio, Clifford, Denali, Fuzzy, Gandalf,
-        Grob, Hera, Jasper, Juju, Kovu, Lassie, Lois, Meera, Mochi, Oscar, Picasso, Ranger, Sampson, 
-        Shadow, Sprinkles, Stinky, Tobin, Wendy, Zola }
 
     /// <summary>
     /// MonoBehaviour component providing Pet behaviours and properties.
@@ -35,6 +31,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         private string _petName;
         private MoveOnSurface _moveOnSurface;
         private MoveOnGround _moveOnGround;
+        private SimpleMovement _simpleMovement;
         private Animator _animator;
         private Creature _creature;
 
@@ -88,32 +85,17 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             get => _petSaverDetails;
         }
 
+        public virtual void Awake()
+        {
+
+        }
+
         /// <summary>
         /// Unity Start method
         /// </summary>
         public virtual void Start()
         {
             Log.LogDebug($"Pet: In Pet.Start on parent Game Object: {gameObject.name}");
-
-            _moveOnSurface = GetComponent<MoveOnSurface>();
-            if (!_moveOnSurface)
-            {
-                Log.LogDebug("Pet: No MoveOnSurface component found.");
-            }
-
-            _moveOnGround = GetComponent<MoveOnGround>();
-            if (!_moveOnGround)
-            {
-                Log.LogDebug("Pet: No MoveOnGround component found.");
-            }
-
-            _canMove = _moveOnGround || _moveOnSurface;
-
-            if (!_canMove)
-            {
-                Log.LogDebug("Pet: No ground movement behaviour found. Cannot move to player!");
-            }
-
             _creature = gameObject.GetComponent<Creature>();
             if (_creature)
             {
@@ -152,6 +134,41 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             Log.LogDebug("Pet: Adding Pet to Global List...");
             Saver.AddPetToList(this);
             Log.LogDebug("Pet: Adding Pet to Global List... Done.");
+
+            Log.LogDebug("Pet: Set MoveMethod...");
+            SetMoveMethod();
+            Log.LogDebug("Pet: Set MoveMethod... Done.");
+        }
+
+        /// <summary>
+        /// Sets the method of movement based on what components are preset
+        /// </summary>
+        private void SetMoveMethod()
+        {
+            _moveOnSurface = GetComponent<MoveOnSurface>();
+            if (!_moveOnSurface)
+            {
+                Log.LogDebug("Pet: No MoveOnSurface component found.");
+            }
+
+            _moveOnGround = GetComponent<MoveOnGround>();
+            if (!_moveOnGround)
+            {
+                Log.LogDebug("Pet: No MoveOnGround component found.");
+            }
+
+            _simpleMovement = GetComponent<SimpleMovement>();
+            if (!_simpleMovement)
+            {
+                Log.LogDebug("Pet: No SimpleMovement component found.");
+            }
+
+            _canMove = _moveOnGround || _moveOnSurface || _simpleMovement;
+
+            if (!_canMove)
+            {
+                Log.LogDebug("Pet: No ground movement behaviour found. Cannot move to player!");
+            }
         }
 
         /// <summary>
@@ -198,6 +215,10 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             Log.LogDebug("Pet: Adding PetHandTarget component...");
             gameObject.AddComponent<PetHandTarget>();
             Log.LogDebug("Pet: Adding PetHandTarget component... Done.");
+
+            Log.LogDebug("Pet: Adding RigidBody component...");
+            AddRigidBody();
+            Log.LogDebug("Pet: Adding RigidBody component... Done.");
         }
 
         /// <summary>
@@ -210,7 +231,6 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             Log.LogDebug("Pet: Configuring Sky and SkyApplier... Done.");
             Log.LogDebug("Pet: Enabling Animator...");
             this.GetComponentInChildren<Animator>().enabled = true;
-
             Log.LogDebug("Pet: Enabling Animator... Done.");
 
         }
@@ -229,7 +249,26 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         /// </summary>
         private void UpdateActions()
         {
-            _creature.ScanCreatureActions();
+            if (_creature)
+            {
+                _creature.ScanCreatureActions();
+            }
+        }
+
+        /// <summary>
+        /// Adds a RigidBody, if not one already
+        /// </summary>
+        private void AddRigidBody()
+        {
+            Rigidbody rigidbody = gameObject.GetComponent<Rigidbody>();
+            if (rigidbody == null)
+            {
+                rigidbody = gameObject.AddComponent<Rigidbody>();
+                rigidbody.mass = 0.5f;
+                rigidbody.useGravity = true;
+                rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+                rigidbody.isKinematic = false;
+            }
         }
 
         /// <summary>
@@ -245,15 +284,29 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
                 skyApplier = gameObject.AddComponent<SkyApplier>();
             }
 
-            Log.LogError("Pet: ConfigureSkyApplier setting SkyApplier Sky.");
-            skyApplier.SetSky(Skies.BaseInterior);
+            // Log.LogError("Pet: ConfigureSkyApplier setting SkyApplier Sky.");
+            // skyApplier.SetSky(Skies.BaseInterior);
 
-            Log.LogError("Pet: ConfigureSkyApplier updating renderers.");
-            Renderer[] creatureRenderers = gameObject.GetComponentsInChildren<Renderer>();
+            Log.LogDebug("Pet: ConfigureSkyApplier updating renderers...");
+            Renderer[] creatureRenderers = gameObject.GetComponentsInChildren<Renderer>(true);
+            Log.LogDebug($"Pet: ConfigureSkyApplier found {creatureRenderers.Length} renderers...");
             if (creatureRenderers.Length > 0)
             {
                 skyApplier.renderers = creatureRenderers;
             }
+            Log.LogDebug("Pet: ConfigureSkyApplier updating renderers... Done.");
+
+            skyApplier.anchorSky = Skies.BaseInterior;
+            GameObject environment = SkyApplier.GetEnvironment(gameObject, skyApplier.anchorSky);
+            if (environment == null)
+            {
+                Log.LogDebug($"Pet: ConfigureSkyApplier got null back from SkyApplier.GetEnvironment!");
+            }
+            else
+            {
+                skyApplier.GetAndApplySkybox(environment);
+            }
+
         }
 
         /// <summary>
@@ -294,7 +347,12 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
                 Log.LogDebug("Pet: Moving via MoveOnGround");
                 _moveOnGround.swimBehaviour.GoToInternal(Player.main.transform.position, (Player.main.transform.position - transform.position).normalized, _moveOnGround.swimVelocity);
             }
-            
+
+            if (_simpleMovement)
+            {
+                Log.LogDebug("Pet: Moving via SimpleMovement");
+                _simpleMovement.SetDestination(Player.main.transform.position);
+            }
         }
 
         /// <summary>

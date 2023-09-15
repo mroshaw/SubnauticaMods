@@ -1,4 +1,5 @@
 ﻿using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Custom;
 #if SUBNAUTICA
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica;
 #endif
@@ -30,6 +31,10 @@ namespace DaftAppleGames.SubnauticaPets.Utils
 
             switch (petCreatureType)
             {
+                // Custom Types
+                case PetCreatureType.Cat:
+                    newPet = creatureGameObject.AddComponent<CatPet>();
+                    break;
 #if SUBNAUTICA
                 case PetCreatureType.CaveCrawler:
                     newPet = creatureGameObject.AddComponent<CaveCrawlerPet>();
