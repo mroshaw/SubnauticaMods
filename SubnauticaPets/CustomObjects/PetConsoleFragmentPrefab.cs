@@ -17,7 +17,8 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
     {
         private static readonly string _prefabId = "PetConsoleFragment";
         private static readonly string _petConsolePrefabName = "PetConsoleDamaged";
-        private static readonly string _modelName = "model";
+        private static readonly string _newModelName = "newmodel";
+        public static readonly string OldModelName = "model";
 #if SUBNAUTICA
         private static readonly List<Vector3> _coordinatedSpawns = new List<Vector3>
         {
@@ -42,8 +43,20 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             {
                 ModifyPrefab = prefab =>
                 {
+                    // Replace model
+                    GameObject damagedConsoleGameObject =
+                        ModUtils.GetGameObjectInstanceFromAssetBundle(_petConsolePrefabName);
+
+                    GameObject modelGameObject = damagedConsoleGameObject.FindChild(_newModelName);
+
+                    // Add new model
+                    Log.LogDebug($"PetConsoleFragmentPrefab: InitPrefab is setting the model for {prefab.name} to {modelGameObject.name}...");
+                    modelGameObject.transform.SetParent(prefab.transform);
+                    modelGameObject.transform.localPosition = new Vector3(0, 0, 0);
+                    modelGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
+
                     // Remove old model
-                    GameObject oldModelGameObject = prefab.FindChild(_modelName);
+                    GameObject oldModelGameObject = prefab.FindChild(OldModelName);
                     if (oldModelGameObject != null)
                     {
                         Log.LogDebug($"PetConsoleFragmentPrefab: Destroying old model.");
@@ -53,17 +66,6 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                     {
                         Log.LogDebug($"PetConsoleFragmentPrefab: Old model not found.");
                     }
-                    // Replace model
-                    GameObject damagedConsoleGameObject =
-                        ModUtils.GetGameObjectInstanceFromAssetBundle(_petConsolePrefabName);
-
-                    GameObject modelGameObject = damagedConsoleGameObject.FindChild(_modelName);
-
-                    // Add new model
-                    Log.LogDebug($"PetConsoleFragmentPrefab: InitPrefab is setting the model for {prefab.name} to {modelGameObject.name}...");
-                    modelGameObject.transform.SetParent(prefab.transform);
-                    modelGameObject.transform.localPosition = new Vector3(0, 0, 0);
-                    modelGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
 
                     MaterialUtils.ApplySNShaders(modelGameObject);
 

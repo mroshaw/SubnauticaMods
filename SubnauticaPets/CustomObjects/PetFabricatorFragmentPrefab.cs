@@ -16,7 +16,8 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
     {
         private static string _prefabId = "PetFabricatorFragment";
         private static string _petFabricatorModelName = "PetFabricatorDamaged";
-        private static readonly string _modelName = "model";
+        public static readonly string NewModelName = "newmodel";
+        private static readonly string _oldModelName = "model";
 
 #if SUBNAUTICA
         private static readonly List<Vector3> _coordinatedSpawns = new List<Vector3>
@@ -36,37 +37,10 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         {
             CustomPrefab clonePrefab = new CustomPrefab(_prefabId, null, null);
 
-            PrefabTemplate cloneTemplate = new CloneTemplate(clonePrefab.Info, TechType.GravSphereFragment)
+            PrefabTemplate cloneTemplate = new CloneTemplate(clonePrefab.Info, "8029a9ce-ab75-46d0-a8ab-63138f6f83e4") //TechType.GravSphereFragment)
             {
                 ModifyPrefab = prefab =>
                 {
-                    // Remove old model
-                    GameObject oldModelGameObject = prefab.FindChild(_modelName);
-                    if (oldModelGameObject != null)
-                    {
-                        Log.LogDebug($"PetFabricatorFragmentPrefab: Destroying old model...");
-                       Object.Destroy(oldModelGameObject);
-                    }
-                    else
-                    {
-                        Log.LogDebug($"PetFabricatorFragmentPrefab: Old model not found.");
-                    }
-
-                    // Replace model
-                    GameObject damagedConsoleGameObject =
-                        ModUtils.GetGameObjectInstanceFromAssetBundle(_petFabricatorModelName);
-
-                    GameObject modelGameObject = damagedConsoleGameObject.FindChild(_modelName);
-
-                    // Add new model
-                    Log.LogDebug($"PetFabricatorFragmentPrefab: InitPrefab is setting the model for {prefab.name} to {
-                        modelGameObject.name}...");
-                    modelGameObject.transform.SetParent(prefab.transform);
-                    modelGameObject.transform.localPosition = new Vector3(0, 0, 0);
-                    modelGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
-
-                    MaterialUtils.ApplySNShaders(modelGameObject);
-
                     // Add component
                     Log.LogDebug($"PetFabricatorFragmentPrefab: InitPrefab adding PetFabricatorFragment component...");
                     prefab.AddComponent<PetFabricatorFragment>();

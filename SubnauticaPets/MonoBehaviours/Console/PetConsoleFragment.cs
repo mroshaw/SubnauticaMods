@@ -8,7 +8,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Console
     internal class PetConsoleFragment : BaseFragment
     {
         // Fragment specific collider dimensions
-        public override Vector3 ColliderCenter => new Vector3(-0.31f, 0.0f, 0.0f);
-        public override Vector3 ColliderSize => new Vector3(1.18f, 1.0f, 0.1f);
+        public override Vector3 ColliderCenter => new Vector3(-0.38f, 0.0f, 0.0f);
+        public override Vector3 ColliderSize => new Vector3(1.2f, 1.0f, 0.1f);
     }
 }
