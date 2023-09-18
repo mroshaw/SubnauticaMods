@@ -3,6 +3,14 @@ using Nautilus.Crafting;
 using UnityEngine;
 using static LootDistributionData;
 
+#if SUBNAUTICA
+using static CraftData;
+#endif
+
+#if SUBNAUTICAZERO
+using static Ingredient;
+#endif
+
 namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Custom
 {
     // TODO Review this file and update to your own requirements, or remove it altogether if not required
@@ -27,7 +35,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Custom
         public static string DnaTextureName = "CatDnaStrandTexture";
         public static PrefabInfo DnaBuildablePrefabInfo;
 
-        // Random DNA collectible distribution biome data
+        // DNA collectible distribution biome data
         public static BiomeData[] LootDistributionBiomeData = new LootDistributionData.BiomeData[] {
             new LootDistributionData.BiomeData { biome = BiomeType.Kelp_TechSite, count = 4, probability = 0.6f},
             new LootDistributionData.BiomeData { biome = BiomeType.GrandReef_TechSite, count = 5, probability = 0.8f},
@@ -43,8 +51,8 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Custom
         public static RecipeData GetRecipeData()
         {
             RecipeData recipe = new RecipeData(
-                new CraftData.Ingredient(TechType.Gold, 3),
-                new CraftData.Ingredient(DnaBuildablePrefabInfo.TechType, 5));
+                new Ingredient(TechType.Gold, 3),
+                new Ingredient(DnaBuildablePrefabInfo.TechType, 5));
             return recipe;
         }
 

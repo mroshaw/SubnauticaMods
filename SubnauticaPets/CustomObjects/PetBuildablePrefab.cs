@@ -338,7 +338,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             // Register with the game
             public static void Register()
             {
-                RegisterPrefabInfo(Info, PenglingBabyPet.PrefabGuid, PenglingBabyPet.ModelName, PenglingBabyPet.GetRecipeData(),
+                RegisterPrefabInfoWithGuid(Info, PenglingBabyPet.PrefabGuid, PenglingBabyPet.ModelName, PenglingBabyPet.GetRecipeData(),
                     PenglingBabyPet.ModelScale, PenglingBabyPet.VfxMinOffset, PenglingBabyPet.VfxMaxOffset);
                 PenglingBabyPet.BuildablePrefabInfo = Info;
             }
@@ -355,7 +355,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             // Register with the game
             public static void Register()
             {
-                RegisterPrefabInfo(Info, PenglingAdultPet.PrefabGuid, PenglingAdultPet.ModelName, PenglingAdultPet.GetRecipeData(),
+                RegisterPrefabInfoWithGuid(Info, PenglingAdultPet.PrefabGuid, PenglingAdultPet.ModelName, PenglingAdultPet.GetRecipeData(),
                     PenglingAdultPet.ModelScale, PenglingAdultPet.VfxMinOffset, PenglingAdultPet.VfxMaxOffset);
                 PenglingAdultPet.BuildablePrefabInfo = Info;
             }
@@ -372,7 +372,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             // Register with the game
             public static void Register()
             {
-                RegisterPrefabInfo(Info, SnowStalkerBabyPet.PrefabGuid, SnowStalkerBabyPet.ModelName, SnowStalkerBabyPet.GetRecipeData(),
+                RegisterPrefabInfoWithGuid(Info, SnowStalkerBabyPet.PrefabGuid, SnowStalkerBabyPet.ModelName, SnowStalkerBabyPet.GetRecipeData(),
                     SnowStalkerBabyPet.ModelScale, SnowStalkerBabyPet.VfxMinOffset, SnowStalkerBabyPet.VfxMaxOffset);
                 SnowStalkerBabyPet.BuildablePrefabInfo = Info;
             }
@@ -389,7 +389,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             // Register with the game
             public static void Register()
             {
-                RegisterPrefabInfo(Info, PinnicaridPet.PrefabGuid, PinnicaridPet.ModelName, PinnicaridPet.GetRecipeData(),
+                RegisterPrefabInfoWithGuid(Info, PinnicaridPet.PrefabGuid, PinnicaridPet.ModelName, PinnicaridPet.GetRecipeData(),
                     PinnicaridPet.ModelScale, PinnicaridPet.VfxMinOffset, PinnicaridPet.VfxMaxOffset);
                 PinnicaridPet.BuildablePrefabInfo = Info;
             }
@@ -406,7 +406,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             // Register with the game
             public static void Register()
             {
-                RegisterPrefabInfo(Info, TrivalveYellowPet.PrefabGuid, TrivalveYellowPet.ModelName, TrivalveYellowPet.GetRecipeData(),
+                RegisterPrefabInfoWithGuid(Info, TrivalveYellowPet.PrefabGuid, TrivalveYellowPet.ModelName, TrivalveYellowPet.GetRecipeData(),
                     TrivalveYellowPet.ModelScale, TrivalveYellowPet.VfxMinOffset, TrivalveYellowPet.VfxMaxOffset);
                 TrivalveYellowPet.BuildablePrefabInfo = Info;
             }
@@ -424,7 +424,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             // Register with the game
             public static void Register()
             {
-                RegisterPrefabInfo(Info, TrivalveBluePet.PrefabGuid,
+                RegisterPrefabInfoWithGuid(Info, TrivalveBluePet.PrefabGuid,
                     TrivalveBluePet.ModelName, TrivalveBluePet.GetRecipeData(), TrivalveBluePet.ModelScale,
                     TrivalveBluePet.VfxMinOffset, TrivalveBluePet.VfxMaxOffset);
                 TrivalveBluePet.BuildablePrefabInfo = Info;

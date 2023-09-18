@@ -222,7 +222,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         public class PetDetails
         {
             public string PrefabId { get; }
-            public string PetName { get; }
+            public string PetName { get; set; }
             public PetCreatureType PetType { get; set; }
 
 

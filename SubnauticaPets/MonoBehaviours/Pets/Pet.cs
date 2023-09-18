@@ -297,16 +297,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             Log.LogDebug("Pet: ConfigureSkyApplier updating renderers... Done.");
 
             skyApplier.anchorSky = Skies.BaseInterior;
-            GameObject environment = SkyApplier.GetEnvironment(gameObject, skyApplier.anchorSky);
-            if (environment == null)
-            {
-                Log.LogDebug("Pet: ConfigureSkyApplier got null back from SkyApplier.GetEnvironment!");
-            }
-            else
-            {
-                skyApplier.GetAndApplySkybox(environment);
-            }
-
+            skyApplier.ApplySkybox();
         }
 
         /// <summary>

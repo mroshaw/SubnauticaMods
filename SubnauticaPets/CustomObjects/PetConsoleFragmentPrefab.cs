@@ -27,7 +27,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         };
 #endif
 #if SUBNAUTICAZERO
-        private static List<Vector3> _coordinatedSpawns = new List<Vector3>
+        private static readonly List<Vector3> CoordinatedSpawns = new List<Vector3>
         {
             new Vector3(-171.25f,-41.34f, -234.25f)
         };
