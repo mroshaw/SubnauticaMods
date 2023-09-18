@@ -1,5 +1,4 @@
-﻿using DaftAppleGames.SubnauticaPets.CustomObjects;
-using DaftAppleGames.SubnauticaPets.MonoBehaviours.Utils;
+﻿using DaftAppleGames.SubnauticaPets.MonoBehaviours.Utils;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
@@ -24,8 +23,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         /// </summary>
         private void AddComponents()
         {
-            Rigidbody rigidbody;
-            rigidbody = gameObject.GetComponent<Rigidbody>();
+            Rigidbody rigidbody = gameObject.GetComponent<Rigidbody>();
             if (rigidbody == null)
             {
                 rigidbody = gameObject.AddComponent<Rigidbody>();
@@ -40,12 +38,15 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
                 freeze = gameObject.AddComponent<FreezeOnSettle>();
             }
         }
-
+        
         /// <summary>
         /// Reconfigure existing components
         /// </summary>
         private void ConfigureComponents()
         {
+            // Resize
+            gameObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+
             Collider collider = gameObject.GetComponentInChildren<Collider>(true);
             if (collider)
             {

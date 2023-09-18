@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Custom;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Utility;
@@ -15,7 +14,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
     internal class PetSpawner : MonoBehaviour
     {
         // Distance above the Fabricator position that pet will be spawned
-        public float fabricatorSpawnYAdjustment = 0.8f;
+        public float FabricatorSpawnYAdjustment = 0.8f;
 
         private bool _skipSpawnObstacleCheck;
 
@@ -112,6 +111,8 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         /// Instantiate prefab instance and configure
         /// </summary>
         /// <param name="spawnLocation"></param>
+        /// <param name="petType"></param>
+        /// <param name="petName"></param>
         private void InstantiatePet(Vector3 spawnLocation, PetCreatureType petType, string petName)
         {
             StartCoroutine(InstantiatePetAsync(spawnLocation, petType, petName));
@@ -122,6 +123,8 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         /// Adding the Pet component will enable pet behaviours via that component.
         /// </summary>
         /// <param name="spawnLocation"></param>
+        /// <param name="petType"></param>
+        /// <param name="petName"></param>
         /// <returns></returns>
         private IEnumerator InstantiatePetAsync(Vector3 spawnLocation, PetCreatureType petType, string petName)
         {

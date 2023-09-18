@@ -6,7 +6,6 @@ using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero;
 #endif
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Handlers;
-using Newtonsoft.Json.Linq;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.CustomObjects
@@ -19,27 +18,27 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
     {
         // Pet DNA
         // Ency keys
-        private static string PetDnaEncyPath = "Lifeforms/Fauna";
-        private static string PetDnaEncyKey = "PetDna";
+        private static readonly string PetDnaEncyPath = "Lifeforms/Fauna";
+        private static readonly string PetDnaEncyKey = "PetDna";
         // Asset Bundle refs
-        private static string PetDnaMainImageTexture = "PetDnaDataBankMainImageTexture";
-        private static string PetDnaPopupImageTexture = "PetDnaDataBankPopupImageTexture";
+        private static readonly string PetDnaMainImageTexture = "PetDnaDataBankMainImageTexture";
+        private static readonly string PetDnaPopupImageTexture = "PetDnaDataBankPopupImageTexture";
 
         // Pet Fabricator
         // Ency keys
-        private static string PetFabricatorEncyKey = "PetFabricator";
-        private static string PetFabricatorEncyPath = "Tech/Habitats";
+        private static readonly string PetFabricatorEncyKey = "PetFabricator";
+        private static readonly string PetFabricatorEncyPath = "Tech/Habitats";
         // Asset Bundle refs
-        private static string PetFabricatorMainImageTexture = "PetFabricatorDataBankMainImageTexture";
-        private static string PetFabriactorPopupImageTexture = "PetFabricatorDataBankPopupImageTexture";
+        private static readonly string PetFabricatorMainImageTexture = "PetFabricatorDataBankMainImageTexture";
+        private static readonly string PetFabriactorPopupImageTexture = "PetFabricatorDataBankPopupImageTexture";
 
         // Pet Console
         // Ency keys
-        private static string PetConsoleEncyPath = "Tech/Habitats";
-        private static string PetConsoleEncyKey = "PetConsole";
+        private static readonly string PetConsoleEncyPath = "Tech/Habitats";
+        private static readonly string PetConsoleEncyKey = "PetConsole";
         // Asset Bundle refs
-        private static string PetConsoleMainImageTexture = "PetConsoleDataBankMainImageTexture";
-        private static string PetConsolePopupImageTexture = "PetConsoleDataBankPopupImageTexture";
+        private static readonly string PetConsoleMainImageTexture = "PetConsoleDataBankMainImageTexture";
+        private static readonly string PetConsolePopupImageTexture = "PetConsoleDataBankPopupImageTexture";
 
         /// <summary>
         /// Adds all DataBank entries

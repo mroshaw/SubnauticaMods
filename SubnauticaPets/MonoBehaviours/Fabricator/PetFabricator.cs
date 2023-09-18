@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using DaftAppleGames.SubnauticaPets.Utils;
+﻿using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
 using UnityEngine;
 

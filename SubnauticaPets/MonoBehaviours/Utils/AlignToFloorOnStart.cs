@@ -24,8 +24,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Utils
         /// <returns></returns>
         private Vector3 GetFloorPosition()
         {
-            RaycastHit hit;
-            bool isHit = Physics.Raycast(transform.position, Vector3.down, out hit, 5.0f);
+            bool isHit = Physics.Raycast(transform.position, Vector3.down, out var hit, 5.0f);
             if (isHit)
             {
                 Log.LogDebug($"AlignToFloorOnStart: Aligning object {gameObject.name} to floor.");

@@ -6,7 +6,7 @@ using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero;
 #endif
 
-using DaftAppleGames.SubnauticaPets.MonoBehaviours.Console;
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Custom;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Utils;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets.PrefabTemplates;
@@ -14,9 +14,9 @@ using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
 using Nautilus.Utility;
-using rail;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
+using Object = UnityEngine.Object;
 
 namespace DaftAppleGames.SubnauticaPets.CustomObjects
 {
@@ -31,6 +31,9 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// </summary>
         public static void InitPetBuildables()
         {
+            // Custom pets
+            CatBuildable.Register();
+
 #if SUBNAUTICA
             CaveCrawlerBuildable.Register();
             BloodCrawlerBuildable.Register();
@@ -67,6 +70,84 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         }
 
         /// <summary>
+        /// Register with Fabricator, using a custom object model
+        /// </summary>
+        /// <param name="prefabInfo"></param>
+        /// <param name="cloneTemplateClassGuid"></param>
+        /// <param name="cloneModelPrefabName"></param>
+        /// <param name="modelGameObjectName"></param>
+        /// <param name="recipe"></param>
+        /// <param name="modelScale"></param>
+        /// <param name="vfxMinOffset"></param>
+        /// <param name="vfxMaxOffset"></param>
+        public static void RegisterPrefabInfoWithPrefab(PrefabInfo prefabInfo, string cloneTemplateClassGuid, string cloneModelPrefabName,
+            string modelGameObjectName,
+            RecipeData recipe, Vector3 modelScale,
+            float vfxMinOffset, float vfxMaxOffset)
+        {
+            // Create prefab
+            CustomPrefab prefab = new CustomPrefab(prefabInfo);
+
+            CloneTemplate cloneTemplate = new CloneTemplate(prefabInfo, cloneTemplateClassGuid);
+            // modify the cloned model:
+            cloneTemplate.ModifyPrefab += obj =>
+            {
+                // Set constructable flags
+                ConstructableFlags constructableFlags = ConstructableFlags.Inside;
+
+                // Get instance for new model
+                GameObject customPrefabInstance = ModUtils.GetGameObjectInstanceFromAssetBundle(cloneModelPrefabName);
+                Log.LogDebug($"Created prefab instance from {cloneModelPrefabName}");
+                MaterialUtils.ApplySNShaders(customPrefabInstance);
+
+                // Find the object that holds the model for the fabricator
+                GameObject modelGameObject = null;
+
+                Log.LogDebug($"PetBuildablePrefab: RegisterPrefabInfo looking for prefab model for {obj.name}...");
+                // First, find the Animator
+                Animator animator = obj.GetComponentInChildren<Animator>(true);
+                if (animator == null)
+                {
+                    Log.LogError($"PetBuildableInfo: RegisterPrefabInfo can't find Animator in {obj.name}"!);
+                }
+                else
+                {
+                    Log.LogDebug("PetBuildableInfo: Swapping model game objects...");
+                    GameObject animatorGameObject = animator.gameObject;
+                    Log.LogDebug($"PetBuildableInfo: Using parent {animatorGameObject.transform.parent.gameObject.name} of {animatorGameObject.name}...");
+                    customPrefabInstance.transform.SetParent(animatorGameObject.transform.parent);
+                    customPrefabInstance.transform.localPosition = new Vector3(0, 0, 0);
+                    customPrefabInstance.transform.localRotation = new Quaternion(0, 0, 0, 0);
+                    Log.LogDebug($"PetBuildableInfo: {customPrefabInstance.name} has been re-parented.");
+
+                    modelGameObject = animatorGameObject.transform.parent.gameObject;
+                    Object.Destroy(animatorGameObject);
+                    // Set the model scale when it's used by the fabricator
+                    ScaleOnStart scaleOnStart = modelGameObject.AddComponent<ScaleOnStart>();
+                    scaleOnStart.Scale = modelScale;
+
+                    // Add Fabricator VFX
+                    VFXFabricating fabVfx = modelGameObject.AddComponent<VFXFabricating>();
+                    fabVfx.localMinY = vfxMinOffset; // -0.2f
+                    fabVfx.localMaxY = vfxMaxOffset; // 0.5f
+                    fabVfx.posOffset = new Vector3(0.0f, 0.0f, 0.0f);
+                    fabVfx.eulerOffset = new Vector3(0.0f, 0.0f, 0.0f);
+                    fabVfx.scaleFactor = 1.0f;
+                    // We'll take this opportunity to disable this for the ghost. We'll re-enable when spawned
+                    animator.enabled = false;
+                }
+
+                // Add all components necessary for it to be built:
+                PrefabUtils.AddConstructable(obj, prefabInfo.TechType, constructableFlags, modelGameObject);
+            };
+            // Assign the created clone model to the prefab itself:
+            prefab.SetGameObject(cloneTemplate);
+            // Set recipe
+            prefab.SetRecipe(recipe);
+            // Register it into the game:
+            prefab.Register();
+        }
+        /// <summary>
         /// Generic method to register PetInfo
         /// </summary>
         /// <param name="prefabInfo"></param>
@@ -77,14 +158,14 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// <param name="vfxMinOffset"></param>
         /// <param name="vfxMaxOffset"></param>
         /// <returns></returns>
-        public static void RegisterPrefabInfo(PrefabInfo prefabInfo, string cloneTemplateClassGuid,
+        public static void RegisterPrefabInfoWithGuid(PrefabInfo prefabInfo, string cloneTemplateClassGuid,
             string modelGameObjectName,
             RecipeData recipe, Vector3 modelScale,
             float vfxMinOffset, float vfxMaxOffset)
         {
             // Create prefab
             CustomPrefab prefab = new CustomPrefab(prefabInfo);
-            // Copy the prefab model
+
             CloneTemplate cloneTemplate = new CloneTemplate(prefabInfo, cloneTemplateClassGuid);
             // modify the cloned model:
             cloneTemplate.ModifyPrefab += obj =>
@@ -159,6 +240,21 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             prefab.Register();
         }
 
+        // Custom Pets
+        public static class CatBuildable
+        {
+            // Init PrefabInfo
+            public static PrefabInfo Info { get; } = CreateBuildablePrefabInfo(CatPet.ClassId, null, null, CatPet.IconTextureName);
+
+            // Register with the game
+            public static void Register()
+            {
+                RegisterPrefabInfoWithPrefab(Info, CatPet.PrefabGuid, CatPet.CustomPrefabName ,CatPet.ModelName, CatPet.GetRecipeData(),
+                    CatPet.ModelScale, CatPet.VfxMinOffset, CatPet.VfxMaxOffset);
+                CatPet.BuildablePrefabInfo = Info;
+            }
+        }
+
 #if SUBNAUTICA
         /// <summary>
         /// Cave Crawler Buildable
@@ -171,7 +267,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             // Register with the game
             public static void Register()
             {
-                RegisterPrefabInfo(Info, CaveCrawlerPet.PrefabGuid, CaveCrawlerPet.ModelName, CaveCrawlerPet.GetRecipeData(),
+                RegisterPrefabInfoWithGuid(Info, CaveCrawlerPet.PrefabGuid, CaveCrawlerPet.ModelName, CaveCrawlerPet.GetRecipeData(),
                     CaveCrawlerPet.ModelScale, CaveCrawlerPet.VfxMinOffset, CaveCrawlerPet.VfxMaxOffset);
                 CaveCrawlerPet.BuildablePrefabInfo = Info;
             }
@@ -188,7 +284,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             // Register with the game
             public static void Register()
             {
-                RegisterPrefabInfo(Info, BloodCrawlerPet.PrefabGuid, BloodCrawlerPet.ModelName, BloodCrawlerPet.GetRecipeData(),
+                RegisterPrefabInfoWithGuid(Info, BloodCrawlerPet.PrefabGuid, BloodCrawlerPet.ModelName, BloodCrawlerPet.GetRecipeData(),
                     BloodCrawlerPet.ModelScale, BloodCrawlerPet.VfxMinOffset, BloodCrawlerPet.VfxMaxOffset);
                 BloodCrawlerPet.BuildablePrefabInfo = Info;
             }
@@ -205,7 +301,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             // Register with the game
             public static void Register()
             {
-                RegisterPrefabInfo(Info, CrabSquidPet.PrefabGuid, CrabSquidPet.ModelName, CrabSquidPet.GetRecipeData(),
+                RegisterPrefabInfoWithGuid(Info, CrabSquidPet.PrefabGuid, CrabSquidPet.ModelName, CrabSquidPet.GetRecipeData(),
                     CrabSquidPet.ModelScale, CrabSquidPet.VfxMinOffset, CrabSquidPet.VfxMaxOffset);
                 CrabSquidPet.BuildablePrefabInfo = Info;
             }
@@ -222,7 +318,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
             // Register with the game
             public static void Register()
             {
-                RegisterPrefabInfo(Info, AlienRobotPet.PrefabGuid, AlienRobotPet.ModelName, AlienRobotPet.GetRecipeData(),
+                RegisterPrefabInfoWithGuid(Info, AlienRobotPet.PrefabGuid, AlienRobotPet.ModelName, AlienRobotPet.GetRecipeData(),
                     AlienRobotPet.ModelScale, AlienRobotPet.VfxMinOffset, AlienRobotPet.VfxMaxOffset);
                 AlienRobotPet.BuildablePrefabInfo = Info;
             }

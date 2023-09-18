@@ -21,6 +21,8 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// </summary>
         /// <param name="sourceUi"></param>
         /// <param name="newScreenName"></param>
+        /// <param name="activeScreenName"></param>
+        /// <param name="inactiveScreenName"></param>
         public static GameObject InitUi(GameObject sourceUi, string newScreenName, 
             string activeScreenName = "Active", string inactiveScreenName = "Inactive")
         {
@@ -30,15 +32,15 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             Log.LogDebug($"ModUiUtils: InitUi looking for inactive screen {inactiveScreenName}...");
             GameObject inactiveScreen = sourceUi.transform.Find(inactiveScreenName).gameObject;
 
-            Log.LogDebug($"ModUiUtils: InitUi disabling active and inactive screens...");
+            Log.LogDebug("ModUiUtils: InitUi disabling active and inactive screens...");
             activeScreen.SetActive(false);
             inactiveScreen.SetActive(false);
 
-            Log.LogDebug($"ModUiUtils: InitUi cleaning up...");
+            Log.LogDebug("ModUiUtils: InitUi cleaning up...");
             SubNameInput subNameInput = sourceUi.GetComponent<SubNameInput>();
             Object.Destroy(subNameInput);
 
-            Log.LogDebug($"ModUiUtils: InitUi creating new screen...");
+            Log.LogDebug("ModUiUtils: InitUi creating new screen...");
             GameObject newScreen = Object.Instantiate(activeScreen);
             newScreen.name = newScreenName;
             newScreen.transform.SetParent(sourceUi.transform);
@@ -63,7 +65,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
 
             newScreen.SetActive(true);
 
-            Log.LogDebug($"ModUiUtils: InitUi done.");
+            Log.LogDebug("ModUiUtils: InitUi done.");
 
             return newScreen;
         }
@@ -124,7 +126,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             {
                 Log.LogDebug($"UiUtils: Couldn't find TextMeshProUGUI on {newButtonGameObject.name}!");
             }
-            Log.LogDebug($"UiUtils: Adding translation component. Done.");
+            Log.LogDebug("UiUtils: Adding translation component. Done.");
             // Set interactable default
             newButtonGameObject.GetComponent<Button>().interactable = isInteractable;
 

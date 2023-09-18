@@ -64,7 +64,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         /// </summary>
         public string PetNameString
         {
-            get => ModUtils.AddSpacesInCamelCase(_petName.ToString());
+            get => ModUtils.AddSpacesInCamelCase(_petName);
         }
 
         /// <summary>
@@ -300,7 +300,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             GameObject environment = SkyApplier.GetEnvironment(gameObject, skyApplier.anchorSky);
             if (environment == null)
             {
-                Log.LogDebug($"Pet: ConfigureSkyApplier got null back from SkyApplier.GetEnvironment!");
+                Log.LogDebug("Pet: ConfigureSkyApplier got null back from SkyApplier.GetEnvironment!");
             }
             else
             {

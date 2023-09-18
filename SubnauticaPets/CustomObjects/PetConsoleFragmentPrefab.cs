@@ -3,7 +3,6 @@ using DaftAppleGames.SubnauticaPets.MonoBehaviours.Console;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
-using Nautilus.Assets.Gadgets;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 using Nautilus.Utility;
@@ -15,12 +14,12 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
     /// </summary>
     internal static class PetConsoleFragmentPrefab
     {
-        private static readonly string _prefabId = "PetConsoleFragment";
-        private static readonly string _petConsolePrefabName = "PetConsoleDamaged";
-        private static readonly string _newModelName = "newmodel";
+        private static readonly string PrefabId = "PetConsoleFragment";
+        private static readonly string PetConsolePrefabName = "PetConsoleDamaged";
+        private static readonly string NewModelName = "newmodel";
         public static readonly string OldModelName = "model";
 #if SUBNAUTICA
-        private static readonly List<Vector3> _coordinatedSpawns = new List<Vector3>
+        private static readonly List<Vector3> CoordinatedSpawns = new List<Vector3>
         {
             new Vector3(-171.25f,-41.34f, -234.25f),
             new Vector3(-47.14f, -29.15f, -409.04f),
@@ -37,7 +36,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 
         public static void InitPrefab()
         {
-            CustomPrefab clonePrefab = new CustomPrefab(_prefabId, null, null);
+            CustomPrefab clonePrefab = new CustomPrefab(PrefabId, null, null);
 
             PrefabTemplate cloneTemplate = new CloneTemplate(clonePrefab.Info, TechType.GravSphereFragment)
             {
@@ -45,9 +44,9 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 {
                     // Replace model
                     GameObject damagedConsoleGameObject =
-                        ModUtils.GetGameObjectInstanceFromAssetBundle(_petConsolePrefabName);
+                        ModUtils.GetGameObjectInstanceFromAssetBundle(PetConsolePrefabName);
 
-                    GameObject modelGameObject = damagedConsoleGameObject.FindChild(_newModelName);
+                    GameObject modelGameObject = damagedConsoleGameObject.FindChild(NewModelName);
 
                     // Add new model
                     Log.LogDebug($"PetConsoleFragmentPrefab: InitPrefab is setting the model for {prefab.name} to {modelGameObject.name}...");
@@ -59,28 +58,28 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                     GameObject oldModelGameObject = prefab.FindChild(OldModelName);
                     if (oldModelGameObject != null)
                     {
-                        Log.LogDebug($"PetConsoleFragmentPrefab: Destroying old model.");
+                        Log.LogDebug("PetConsoleFragmentPrefab: Destroying old model.");
                         Object.Destroy(oldModelGameObject);
                     }
                     else
                     {
-                        Log.LogDebug($"PetConsoleFragmentPrefab: Old model not found.");
+                        Log.LogDebug("PetConsoleFragmentPrefab: Old model not found.");
                     }
 
                     MaterialUtils.ApplySNShaders(modelGameObject);
 
                     // Add component
-                    Log.LogDebug($"PetConsoleFragmentPrefab: InitPrefab adding PetConsoleFragment component...");
+                    Log.LogDebug("PetConsoleFragmentPrefab: InitPrefab adding PetConsoleFragment component...");
                     prefab.AddComponent<PetConsoleFragment>();
                     Log.LogDebug(
-                        $"PetConsoleFragmentPrefab: InitPrefab adding PetConsoleFragment component... Done.");
+                        "PetConsoleFragmentPrefab: InitPrefab adding PetConsoleFragment component... Done.");
                 }
             };
             clonePrefab.SetGameObject(cloneTemplate);
-            ModUtils.SetupCoordinatedSpawn(clonePrefab.Info.TechType, _coordinatedSpawns);
-            Log.LogDebug($"PetConsoleFragmentPrefab: Registering {_prefabId}...");
+            ModUtils.SetupCoordinatedSpawn(clonePrefab.Info.TechType, CoordinatedSpawns);
+            Log.LogDebug($"PetConsoleFragmentPrefab: Registering {PrefabId}...");
             clonePrefab.Register();
-            Log.LogDebug($"PetConsoleFragmentPrefab: Init Prefab for {_prefabId}. Done.");
+            Log.LogDebug($"PetConsoleFragmentPrefab: Init Prefab for {PrefabId}. Done.");
             PrefabInfo = clonePrefab.Info;
         }
     }

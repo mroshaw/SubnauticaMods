@@ -1,5 +1,4 @@
-﻿using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
+﻿using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
 {

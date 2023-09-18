@@ -48,7 +48,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
                     spawnInfos.Add(new SpawnInfo(techType, position));
                 }
             }
-            Log.LogDebug($"ModUtils: CoordinatedSpawns registering SpawnInfo...");
+            Log.LogDebug("ModUtils: CoordinatedSpawns registering SpawnInfo...");
             CoordinatedSpawnsHandler.RegisterCoordinatedSpawns(spawnInfos);
             Log.LogDebug($"ModUtils: CoordinatedSpawns spawning {techType}. Done.");
         }
@@ -237,43 +237,48 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <summary>
         /// Loads a given Game Object from Asset Bundles shipped in the Mod folder
         /// </summary>
-        /// <param name="assetBundleName"></param>
         /// <param name="objectName"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
         public static Object GetObjectFromAssetBundle(string objectName, System.Type type)
         {
-            Log.LogDebug($"ModUiUtils: Loading AssetBundle {AssetBundleName}, looking for {objectName} of type {type.ToString()}");
+            Log.LogDebug($"ModUiUtils: Loading AssetBundle {AssetBundleName}, looking for {objectName} of type {type}");
 
             string modPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             // Load the Asset Bundle, if it hasn't been loaded already
             if (ModAssetBundleObjects == null)
             {
-                AssetBundle modAssetBundle = AssetBundle.LoadFromFile(Path.Combine(modPath, $"Assets/{AssetBundleName}"));
-
-                // Check we've loaded the Asset Bundle
-                if (modAssetBundle == null)
+                if (modPath != null)
                 {
-                    Log.LogDebug("Failed to load AssetBundle!");
-                    return null;
+                    AssetBundle modAssetBundle = AssetBundle.LoadFromFile(Path.Combine(modPath, $"Assets/{AssetBundleName}"));
+
+                    // Check we've loaded the Asset Bundle
+                    if (modAssetBundle == null)
+                    {
+                        Log.LogDebug("Failed to load AssetBundle!");
+                        return null;
+                    }
+                    ModAssetBundleObjects = modAssetBundle.LoadAllAssets();
                 }
-                ModAssetBundleObjects = modAssetBundle.LoadAllAssets();
             }
 
-            Log.LogDebug($"ModUiUtils:  Found AssetBundle. Looking for object...");
+            Log.LogDebug("ModUiUtils:  Found AssetBundle. Looking for object...");
 
             // Iterate over loaded objects to find what we want
-            foreach (Object currObject in ModAssetBundleObjects)
-            {
-                // Log.LogDebug($"ModUiUtils: Comparing {currObject.ToString()} with {objectName}...");
-
-                // Check if this is what we're looking for
-                if (currObject.ToString().Contains(objectName) && currObject.GetType() == type)
+            if (ModAssetBundleObjects != null)
+                foreach (Object currObject in ModAssetBundleObjects)
                 {
-                    Log.LogDebug($"ModUiUtils: Found object {currObject}");
-                    return currObject;
+                    // Log.LogDebug($"ModUiUtils: Comparing {currObject.ToString()} with {objectName}...");
+
+                    // Check if this is what we're looking for
+                    if (currObject.ToString().Contains(objectName) && currObject.GetType() == type)
+                    {
+                        Log.LogDebug($"ModUiUtils: Found object {currObject}");
+                        return currObject;
+                    }
                 }
-            }
+
             Log.LogDebug($"ModUiUtils: Couldn't find object named {objectName}!");
             return null;
         }

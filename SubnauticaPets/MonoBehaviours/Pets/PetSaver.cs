@@ -36,10 +36,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         /// <param name="pet"></param>
         public PetDetails RegisterPet(Pet pet)
         {
-            if (PetDetailsHashSet == null)
-            {
-                PetDetailsHashSet = new();
-            }
+            PetDetailsHashSet ??= new();
 
             string prefabId = GetPrefabId(pet);
             if (string.IsNullOrEmpty(prefabId))
@@ -225,7 +222,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         public class PetDetails
         {
             public string PrefabId { get; }
-            public string PetName { get; set; }
+            public string PetName { get; }
             public PetCreatureType PetType { get; set; }
 
 

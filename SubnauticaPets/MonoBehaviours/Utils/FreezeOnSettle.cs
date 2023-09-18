@@ -58,8 +58,9 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Utils
         /// <returns></returns>
         private bool IsOnFloor()
         {
-            RaycastHit hit;
-            return Physics.Raycast(transform.position, Vector3.down, out hit, 0.2f);
+            Physics.Raycast(transform.position, -transform.up, out var hit, 0.5f);
+            float distance = Vector3.Distance(transform.position, hit.point);
+            return distance < 0.01;
         }
     }
 }

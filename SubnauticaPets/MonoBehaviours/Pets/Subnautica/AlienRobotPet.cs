@@ -1,5 +1,4 @@
-﻿using DaftAppleGames.SubnauticaPets.CustomObjects;
-using Nautilus.Assets;
+﻿using Nautilus.Assets;
 using Nautilus.Crafting;
 using UnityEngine;
 using static LootDistributionData;

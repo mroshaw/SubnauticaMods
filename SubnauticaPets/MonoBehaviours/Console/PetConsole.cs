@@ -414,8 +414,8 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Console
         /// 
         /// </summary>
         /// <param name="objectToHide"></param>
+        /// <param name="objectToShow"></param>
         /// <param name="delayInSeconds"></param>
-        /// <param name="countDownLabel"></param>
         /// <returns></returns>
         private IEnumerator CountDownButton(GameObject objectToHide, GameObject objectToShow, int delayInSeconds)
         {
@@ -443,11 +443,16 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Console
         /// </summary>
         private void AddRotatingIcon(GameObject targetGameObject)
         {
-            GameObject iconGameObject = new GameObject("ConsoleIcon");
-            iconGameObject.transform.parent = targetGameObject.transform;
-            iconGameObject.transform.localPosition = new Vector3(-50, 25, 0);
-            iconGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
-            iconGameObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            GameObject iconGameObject = new GameObject("ConsoleIcon")
+            {
+                transform =
+                {
+                    parent = targetGameObject.transform,
+                    localPosition = new Vector3(-50, 25, 0),
+                    localRotation = new Quaternion(0, 0, 0, 0),
+                    localScale = new Vector3(0.1f, 0.1f, 0.1f)
+                }
+            };
 
             Image iconImage = iconGameObject.AddComponent<Image>();
             iconImage.sprite = ModUtils.GetSpriteFromAssetBundle(PetConsoleRotatingIconTexture);

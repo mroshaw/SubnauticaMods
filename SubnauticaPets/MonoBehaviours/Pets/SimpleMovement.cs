@@ -1,5 +1,4 @@
-﻿using FMOD;
-using UnityEngine;
+﻿using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
@@ -15,13 +14,12 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         public float MoveRadius = 5.0f;
         public float MoveSpeed = 0.5f;
         public float MoveSmoothTime = 0.5f;
-        public int MoveProbabilty = 20;
+        public int MoveProbability = 20;
         public float IdleTimer = 0.0f;
         public float ObstacleDetectionRange = 0.5f;
         public float ObstacleDetectionThreshold = 0.4f;
-        public Transform eyes;
+        public Transform Eyes;
 
-        private Vector3 _moveStart;
         private Vector3 _moveTarget;
         private bool _isMoving = false;
 
@@ -38,11 +36,11 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             set
             {
                 _isMoving = value;
-                _animator.SetBool(_isMovingAnimParameter, value);
+                _animator.SetBool(IsMovingAnimParameter, value);
             }
         }
 
-        private static int _isMovingAnimParameter = Animator.StringToHash("IsMoving");
+        private static readonly int IsMovingAnimParameter = Animator.StringToHash("IsMoving");
 
         // Start is called before the first frame update
         private void Start()
@@ -52,9 +50,9 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             _animator = GetComponent<Animator>();
 
             // Set the eyes, if not set already
-            if (!eyes)
+            if (!Eyes)
             {
-                eyes = transform.Find("Eyes").transform;
+                Eyes = transform.Find("Eyes").transform;
             }
 
             // Start off idle
@@ -80,7 +78,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             if (CanMove())
             {
                 // Decide if we want to move
-                if (MakeDecision(MoveProbabilty))
+                if (MakeDecision(MoveProbability))
                 {
                     ToMoving();
                 }
@@ -142,10 +140,10 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             float distanceToTarget = Vector3.Distance(transform.position, adjustedMoveTarget);
 
             // See if there's anything blocking our way
-            bool isHit = Physics.Raycast(eyes.position, eyes.forward, out var hit, 1.0f);
+            bool isHit = Physics.Raycast(Eyes.position, Eyes.forward, out var hit, 1.0f);
             if (isHit)
             {
-                float obstacleDistance = Vector3.Distance(eyes.position, hit.point);
+                float obstacleDistance = Vector3.Distance(Eyes.position, hit.point);
                 if (obstacleDistance <= ObstacleDetectionThreshold)
                 {
                     Log.LogDebug($"We've hit an object: {hit.collider.gameObject}");
@@ -174,9 +172,6 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         /// </summary>
         private void ToMoving()
         {
-            // Current position
-            _moveStart = transform.position;
-
             // Get target in range
             Vector2 randomTarget = Random.insideUnitCircle * MoveRadius;
             Vector3 newTarget = new Vector3(randomTarget.x + _moveAnchor.x, transform.position.y, randomTarget.y + _moveAnchor.z);

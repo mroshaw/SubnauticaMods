@@ -5,18 +5,17 @@ using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero;
 #endif
 using System.Collections.Generic;
-using DaftAppleGames.SubnauticaPets.Utils;
-using Nautilus.Assets.PrefabTemplates;
-using Nautilus.Assets;
-using UnityEngine;
-using Nautilus.Assets.Gadgets;
-using Nautilus.Handlers;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
-
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Custom;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Utils;
+using DaftAppleGames.SubnauticaPets.Utils;
+using Nautilus.Assets;
+using Nautilus.Assets.Gadgets;
+using Nautilus.Assets.PrefabTemplates;
+using Nautilus.Handlers;
 using Nautilus.Utility;
+using UnityEngine;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.CustomObjects
 {
@@ -27,7 +26,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
     {
         // Static references for consumers
         public static string DnaModelObjectName = "DNASampleTube";
-        public static GameObject DnaModelPrefab = null;
+        public static GameObject DnaModelPrefab;
 
         /// <summary>
         /// Register all prefabs
@@ -128,6 +127,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// <param name="classId"></param>
         /// <param name="displayName"></param>
         /// <param name="description"></param>
+        /// <param name="textureName"></param>
         /// <param name="color"></param>
         /// <param name="lootBiome"></param>
         /// <returns></returns>
@@ -149,6 +149,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 {
                     Log.LogDebug($"PetDnaPrefab: InitPrefab is setting the model for {clonePrefab.Info.ClassID}... using {DnaModelPrefab.name}");
                     GameObject newModel = Object.Instantiate(DnaModelPrefab);
+                    newModel.name = "newmodel";
                     // Add new model
                     Log.LogDebug($"PetDnaPrefab: InitPrefab is setting the model for {prefab.name} to {newModel.name}...");
                     newModel.transform.SetParent(prefab.transform);
@@ -158,18 +159,18 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                     MaterialUtils.ApplySNShaders(newModel);
                     // Set model color
                     newModel.FindChild("Ends").GetComponent<MeshRenderer>().material.color = color;
-                    // Add the rotate script to the DNA model
-                    RotateModel rotateModel = newModel.FindChild("DNA").AddComponent<RotateModel>();
-                    rotateModel.RotationSpeed = 0.01f;
-                    // Resize
-                    prefab.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+
+                    GameObject dnaGameObject = newModel.transform.Find("DNA").gameObject;
+                    RotateModel rotateModel = dnaGameObject.AddComponent<RotateModel>();
+                    rotateModel.RotationSpeed = 0.1f;
+
                     // Disable the old model
                     prefab.FindChild("model").SetActive(false);
                     Log.LogDebug($"PetDnaPrefab: InitPrefab is setting the model for {prefab.name} to {newModel.name}. Done.");
                     // Add PetDna component
-                    Log.LogDebug($"PetDnaPrefab: InitPrefab adding PetDna component...");
+                    Log.LogDebug("PetDnaPrefab: InitPrefab adding PetDna component...");
                     prefab.AddComponent<PetDna>();
-                    Log.LogDebug($"PetDnaPrefab: InitPrefab adding PetDna component... Done.");
+                    Log.LogDebug("PetDnaPrefab: InitPrefab adding PetDna component... Done.");
                 }
             };
             clonePrefab.SetGameObject(cloneTemplate);
@@ -205,7 +206,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         public static void SetFixedSpawns()
         {
             Log.LogDebug("PetDnaPrefab: SetFixedSpawns adding coordinated spawns...");
-            List<SpawnInfo> spawnInfos = new List<SpawnInfo>()
+            List<SpawnInfo> spawnInfos = new List<SpawnInfo>
             {
 #if SUBNAUTICA
                 new SpawnInfo(CaveCrawlerPet.DnaClassId, new Vector3(-131.93f, -19.82f, -246.48f),

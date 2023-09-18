@@ -1,10 +1,12 @@
-﻿using BepInEx;
+﻿using System.Collections;
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using DaftAppleGames.SubnauticaPets.CustomObjects;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
 using Nautilus.Handlers;
+using Nautilus.Utility;
 
 namespace DaftAppleGames.SubnauticaPets
 {
@@ -73,6 +75,29 @@ namespace DaftAppleGames.SubnauticaPets
         /// </summary>
         private void Start()
         {
+            StartCoroutine(InitWhenReadyAsync());
+        }
+        #endregion
+
+        /// <summary>
+        /// Wait for any dependent systems to initialise, then init our mod
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator InitWhenReadyAsync()
+        {
+            while (!MaterialUtils.IsReady)
+            {
+                yield return null;
+            }
+
+            InitMod();
+        }
+
+        /// <summary>
+        /// Initialise the mod
+        /// </summary>
+        private void InitMod()
+        {
             // Add the PetSaver component
             Saver = gameObject.AddComponent<PetSaver>();
 
@@ -95,6 +120,5 @@ namespace DaftAppleGames.SubnauticaPets
             // Set up Databank entries
             DatabankEntries.ConfigureDataBank();
         }
-        #endregion
     }
 }

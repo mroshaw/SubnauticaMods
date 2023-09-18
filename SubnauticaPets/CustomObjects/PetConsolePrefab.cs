@@ -7,7 +7,6 @@ using Nautilus.Crafting;
 using UnityEngine;
 using static CraftData;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
-using static DaftAppleGames.SubnauticaPets.Utils.UiUtils;
 
 namespace DaftAppleGames.SubnauticaPets.CustomObjects
 {

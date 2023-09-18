@@ -1,7 +1,6 @@
 ﻿#if SUBNAUTICA
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
-using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Crafting;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;

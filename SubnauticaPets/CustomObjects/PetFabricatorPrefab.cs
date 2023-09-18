@@ -6,6 +6,7 @@ using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.BelowZero;
 #endif
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Fabricator;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
+using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Custom;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
@@ -14,7 +15,6 @@ using Nautilus.Crafting;
 using UnityEngine;
 using static CraftData;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
-using static DaftAppleGames.SubnauticaPets.Utils.UiUtils;
 namespace DaftAppleGames.SubnauticaPets.CustomObjects
 {
     /// <summary>
@@ -34,6 +34,9 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
 
             customFab.CreateFabricator(out CraftTree.Type treeType)
                 // Add our Pet Buildables
+
+                // Custom types
+                .AddCraftNode(CatPet.BuildablePrefabInfo.TechType)
 #if SUBNAUTICA
                 .AddCraftNode(CaveCrawlerPet.BuildablePrefabInfo.TechType)
                 .AddCraftNode(BloodCrawlerPet.BuildablePrefabInfo.TechType)

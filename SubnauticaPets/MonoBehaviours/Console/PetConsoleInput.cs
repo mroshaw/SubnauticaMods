@@ -11,12 +11,12 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Console
     /// </summary>
     internal class PetConsoleInput : uGUI_InputGroup, IEventSystemHandler, uGUI_IButtonReceiver, IPointerHoverHandler
     {
-        private static string hoverTextKey = "PetConsole";
-        private Player player;
-        private float terminationSqrDistance = 4.0f;
+        private static readonly string HoverTextKey = "PetConsole";
+        private Player _player;
+        private float _terminationSqrDistance = 4.0f;
 
-        private uGUI_NavigableControlGrid panel;
-        private RectTransform rt;
+        private uGUI_NavigableControlGrid _panel;
+        private RectTransform _rt;
 
         /// <summary>
         /// Unity Awake method.
@@ -24,7 +24,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Console
         public override void Awake()
         {
             base.Awake();
-            terminationSqrDistance = Mathf.Pow(3f, 2f);
+            _terminationSqrDistance = Mathf.Pow(3f, 2f);
         }
 
         /// <summary>
@@ -32,8 +32,8 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Console
         /// </summary>
         public void Start()
         {
-            panel = GetComponent<uGUI_NavigableControlGrid>();
-            rt = panel.GetComponent<RectTransform>();
+            _panel = GetComponent<uGUI_NavigableControlGrid>();
+            _rt = _panel.GetComponent<RectTransform>();
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Console
         public override void Update()
         {
             base.Update();
-            if (focused && player != null && (player.transform.position - rt.position).sqrMagnitude >= terminationSqrDistance)
+            if (focused && _player != null && (_player.transform.position - _rt.position).sqrMagnitude >= _terminationSqrDistance)
             {
                 Deselect();
             }
@@ -57,8 +57,8 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Console
             // base.OnSelect(lockMovement);
             Log.LogDebug($"PetConsoleInput: OnSelect called with lockMovement: {lockMovement}");
             base.OnSelect(true);
-            player = Player.main;
-            GamepadInputModule.current.SetCurrentGrid(panel);
+            _player = Player.main;
+            GamepadInputModule.current.SetCurrentGrid(_panel);
         }
 
         /// <summary>
@@ -66,10 +66,10 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Console
         /// </summary>
         public override void OnDeselect()
         {
-            Log.LogDebug($"PetConsoleInput: DeSelect called");
+            Log.LogDebug("PetConsoleInput: DeSelect called");
 
             base.OnDeselect();
-            player = null;
+            _player = null;
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Console
         {
             if (enabled && !selected)
             {
-                HandReticle.main.SetText(HandReticle.TextType.Hand, hoverTextKey, true, uGUI.button0);
+                HandReticle.main.SetText(HandReticle.TextType.Hand, HoverTextKey, true, uGUI.button0);
                 HandReticle.main.SetText(HandReticle.TextType.HandSubscript, string.Empty, false, GameInput.Button.None);
                 HandReticle.main.SetIcon(HandReticle.IconType.Interact, 1f);
             }

@@ -11,15 +11,12 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
     {
         public abstract Vector3 ColliderSize { get; }
         public abstract Vector3 ColliderCenter { get; }
-
-        private int _numCalls = 0;
-
+        
         /// <summary>
         /// Add new components
         /// </summary>
         public virtual void Awake()
         {
-            _numCalls++;
             AddComponents();
             RemoveOldModel();
         }
@@ -41,8 +38,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
             Log.LogDebug($"Adding Components to {gameObject.name}");
 
             // Sky Applier
-            SkyApplier skyApplier;
-            skyApplier = gameObject.GetComponent<SkyApplier>();
+            SkyApplier skyApplier = gameObject.GetComponent<SkyApplier>();
             if (skyApplier == null)
             {
                 skyApplier = gameObject.AddComponent<SkyApplier>();
@@ -51,16 +47,14 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
             skyApplier.renderers = renderers;
 
             // AlignToFloor
-            AlignToFloorOnStart alignToFloor;
-            alignToFloor = gameObject.GetComponent<AlignToFloorOnStart>();
+            AlignToFloorOnStart alignToFloor = gameObject.GetComponent<AlignToFloorOnStart>();
             if (alignToFloor == null)
             {
                 // alignToFloor = gameObject.AddComponent<AlignToFloorOnStart>();
             }
 
             // FreezeOnSettle
-            FreezeOnSettle freeze;
-            freeze = gameObject.GetComponent<FreezeOnSettle>();
+            FreezeOnSettle freeze = gameObject.GetComponent<FreezeOnSettle>();
             if (freeze == null)
             {
                 freeze = gameObject.AddComponent<FreezeOnSettle>();
@@ -109,7 +103,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
             GameObject oldModelGameObject = gameObject.FindChild("model");
             if (oldModelGameObject != null)
             {
-                Log.LogDebug($"BaseFragment: Destroying old model...");
+                Log.LogDebug("BaseFragment: Destroying old model...");
                 Object.Destroy(oldModelGameObject);
             }
         }
