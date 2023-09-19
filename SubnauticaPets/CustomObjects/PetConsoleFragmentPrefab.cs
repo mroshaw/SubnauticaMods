@@ -23,7 +23,15 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         {
             new Vector3(-171.25f,-41.34f, -234.25f),
             new Vector3(-47.14f, -29.15f, -409.04f),
-            new Vector3(-163.87f, -40.96f, -250.69f )
+            new Vector3(-163.87f, -40.96f, -250.69f ),
+            new Vector3(390.811f,-21.42437f, -175.1048f),
+            new Vector3(288.8913f,-91.88315f, 413.5513f),
+            new Vector3(75.05555f,-34.76138f, 124.0958f),
+            new Vector3(74.77833f,-44.48608f, 387.945f),
+            new Vector3(-398.011f,-134.0287f, 664.6798f),
+            new Vector3(-1632.773f,-349.8546f, 75.00484f),
+            new Vector3(-506.9559f,-94.37725f, -55.21287f),
+            new Vector3(-1452.52f, -349.30f, 757.0f)
         };
 #endif
 #if SUBNAUTICAZERO

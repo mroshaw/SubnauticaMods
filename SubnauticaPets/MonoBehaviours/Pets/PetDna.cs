@@ -36,6 +36,11 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             if (freeze == null)
             {
                 freeze = gameObject.AddComponent<FreezeOnSettle>();
+                freeze.CheckType = FreezeCheckType.Both;
+                freeze.FloorOffset = 0.25f;
+                freeze.VelocityThreshold = 0.035f;
+                freeze.StartDelay = 2.0f;
+                freeze.RayCastDistance = 5.0f;
             }
         }
         

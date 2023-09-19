@@ -33,7 +33,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
         /// <summary>
         /// Add and configure components
         /// </summary>
-        private void AddComponents()
+        public void AddComponents()
         {
             Log.LogDebug($"Adding Components to {gameObject.name}");
 
@@ -58,6 +58,17 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
             if (freeze == null)
             {
                 freeze = gameObject.AddComponent<FreezeOnSettle>();
+                freeze.CheckType = FreezeCheckType.Velocity;
+                freeze.VelocityThreshold = 0.001f;
+                freeze.RayCastDistance = 5f;
+                freeze.StartDelay = 2.0f;
+            }
+
+            // Disable WorldForces
+            WorldForces worldForces = gameObject.GetComponent<WorldForces>();
+            if (worldForces != null)
+            {
+                worldForces.enabled = false;
             }
         }
 

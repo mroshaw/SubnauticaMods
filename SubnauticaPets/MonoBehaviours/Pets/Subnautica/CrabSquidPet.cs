@@ -32,11 +32,19 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
 
         // Random DNA collectible distribution biome data
         public static BiomeData[] LootDistributionBiomeData = new LootDistributionData.BiomeData[] {
-            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Sand, count = 4, probability = 0.6f},
-            new LootDistributionData.BiomeData { biome = BiomeType.KooshZone_TechSite, count = 5, probability = 0.8f},
-            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite, count = 5, probability = 0.4f},
-            new LootDistributionData.BiomeData { biome = BiomeType.SparseReef_Techsite, count = 8, probability = 0.5f},
-            new LootDistributionData.BiomeData { biome = BiomeType.UnderwaterIslands_TechSite, count = 6, probability = 0.8f},
+            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Sand, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.KooshZone_TechSite, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.KooshZone_TechSite_Barrier, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.KooshZone_TechSite_Scatter, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite_Scatter, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite_Barrier, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SparseReef_Techsite, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SparseReef_Techsite_Scatter, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SparseReef_Techsite_Barrier, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.UnderwaterIslands_TechSite, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.UnderwaterIslands_TechSite_Scatter, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.UnderwaterIslands_TechSite_Barrier, count = 1, probability = 0.9f},
         };
 
         public static Color PetObjectColor = Color.blue;
@@ -57,33 +65,33 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
         public override float ScaleFactor => 0.07f;
 
         /// <summary>
-        /// Add Creature specific components
+        /// Override the Pet awake
         /// </summary>
-        public override void AddComponents()
+        public override void Awake()
         {
-
-            base.AddComponents();
+            base.Awake();
+            DestroyEmpAttack();
+            DestroyAttackLastTarget();
         }
 
         /// <summary>
-        /// Remove Creature specific components
+        /// Destroy the EmpAttack component
         /// </summary>
-        public override void RemoveComponents()
+        private void DestroyEmpAttack()
         {
-            Log.LogDebug("CrabSquidPet: Destroying components...");
+            Log.LogDebug("CrabSquidPet: Destroying EMPAttack...");
             ModUtils.DestroyComponentsInChildren<EMPAttack>(gameObject);
-            ModUtils.DestroyComponentsInChildren<AttackLastTarget>(gameObject);
-            // ModUtils.DestroyComponentsInChildren<SwimBehaviour>(gameObject);
-            Log.LogDebug("CrabSquidPet: Destroying components... Done."); 
-            base.RemoveComponents();
+            Log.LogDebug("CrabSquidPet: Destroying EMPAttack... Done.");
         }
 
         /// <summary>
-        /// Update Creature specific components
+        /// Destroy the AttackLastTarget component
         /// </summary>
-        public override void UpdateComponents()
+        private void DestroyAttackLastTarget()
         {
-            base.UpdateComponents();
+            Log.LogDebug("CrabSquidPet: Destroying AttackLastTarget...");
+            ModUtils.DestroyComponentsInChildren<AttackLastTarget>(gameObject);
+            Log.LogDebug("CrabSquidPet: Destroying AttackLastTarget... Done.");
         }
     }
 }

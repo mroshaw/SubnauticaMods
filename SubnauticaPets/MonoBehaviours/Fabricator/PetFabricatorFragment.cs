@@ -21,6 +21,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Fabricator
         public override void Awake()
         {
             MatUtils.SetMaterialTexture(gameObject, MeshTextureName, DamagedTexture);
+            base.AddComponents();
         }
 
         /// <summary>

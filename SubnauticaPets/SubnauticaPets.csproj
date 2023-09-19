@@ -55,7 +55,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>E:\Games\Steam\steamapps\common\Subnautica\BepInEx\core\0Harmony.dll</HintPath>
+      <HintPath>E:\Games\Steam\steamapps\common\$(Configuration)\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass_publicized">
       <HintPath>E:\Games\Steam\steamapps\common\$(Configuration)\$(Configuration)_Data\Managed\publicized_assemblies\Assembly-CSharp-firstpass_publicized.dll</HintPath>
@@ -123,6 +123,7 @@
     <Compile Include="CustomObjects\DatabankEntries.cs" />
     <Compile Include="CustomObjects\PetConsoleFragmentPrefab.cs" />
     <Compile Include="CustomObjects\PetFabricatorFragmentPrefab.cs" />
+    <Compile Include="ModConfigFile.cs" />
     <Compile Include="MonoBehaviours\BaseFragment.cs" />
     <Compile Include="MonoBehaviours\Console\PetConsoleFragment.cs" />
     <Compile Include="MonoBehaviours\Pets\Custom\CatPet.cs" />

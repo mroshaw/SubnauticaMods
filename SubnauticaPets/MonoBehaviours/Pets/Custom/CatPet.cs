@@ -56,21 +56,16 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Custom
             return recipe;
         }
 
-        // Alien Robot scale factor
+        // Cat pet scale factor
         public override float ScaleFactor => 0.5f;
 
-        public override void AddComponents()
+        /// <summary>
+        /// Override the base Pet awake method
+        /// </summary>
+        public override void Awake()
         {
-            base.AddComponents();
-
-            // Add simple movement component
-            SimpleMovement movement = gameObject.GetComponent<SimpleMovement>();
-            if (movement == null)
-            {
-                movement = gameObject.AddComponent<SimpleMovement>();
-                movement.MoveSpeed = 1.0f;
-            }
-
+            base.Awake();
+            base.AddSimpleMovement();
         }
     }
 }

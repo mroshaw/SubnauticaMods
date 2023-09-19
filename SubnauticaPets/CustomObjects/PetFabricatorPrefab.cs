@@ -32,11 +32,8 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 null,
                 ModUtils.GetSpriteFromAssetBundle(PetFabricator.PetFabricatorIconTexture));
 
-            customFab.CreateFabricator(out CraftTree.Type treeType)
+            FabricatorGadget fabGadget = customFab.CreateFabricator(out CraftTree.Type treeType)
                 // Add our Pet Buildables
-
-                // Custom types
-                .AddCraftNode(CatPet.BuildablePrefabInfo.TechType)
 #if SUBNAUTICA
                 .AddCraftNode(CaveCrawlerPet.BuildablePrefabInfo.TechType)
                 .AddCraftNode(BloodCrawlerPet.BuildablePrefabInfo.TechType)
@@ -51,6 +48,13 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 .AddCraftNode(TrivalveYellowPet.BuildablePrefabInfo.TechType)
                 .AddCraftNode(TrivalveBluePet.BuildablePrefabInfo.TechType);
 #endif
+            // Add Cat pet, if it's been enabled.
+            if (ModConfig.EnableCat)
+            {
+                Log.LogDebug("PetFabricatorPrefab: Cat enabled, adding to Fabricator...");
+                fabGadget.AddCraftNode(CatPet.BuildablePrefabInfo.TechType);
+            }
+
             FabricatorTemplate fabPrefab = new FabricatorTemplate(customFab.Info, treeType)
             {
                 FabricatorModel = FabricatorTemplate.Model.Workbench,

@@ -30,10 +30,16 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
 
         // Random DNA collectible distribution biome data
         public static BiomeData[] LootDistributionBiomeData = new LootDistributionData.BiomeData[] {
-            new LootDistributionData.BiomeData { biome = BiomeType.Kelp_TechSite, count = 4, probability = 0.6f},
-            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Sand, count = 5, probability = 0.8f},
-            new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_TechSite, count = 5, probability = 0.4f},
-            new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_TechSite, count = 8, probability = 0.5f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Kelp_TechSite, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Kelp_TechSite_Barrier, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Kelp_TechSite_Scattered, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Sand, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_TechSite, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_TechSite_Barrier, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_TechSite_Scattered, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_TechSite, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_TechSite_Barrier, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_TechSite_Scattered, count = 1, probability = 0.9f},
         };
 
         public static Color PetObjectColor = Color.cyan;
@@ -52,29 +58,6 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
 
         // Cave Crawler scale factor
         public override float ScaleFactor => 1.0f;
-        /// <summary>
-        /// Add Creature specific components
-        /// </summary>
-        public override void AddComponents()
-        {
-            base.AddComponents();
-        }
-
-        /// <summary>
-        /// Remove Creature specific components
-        /// </summary>
-        public override void RemoveComponents()
-        {
-            base.RemoveComponents();
-        }
-
-        /// <summary>
-        /// Update Creature specific components
-        /// </summary>
-        public override void UpdateComponents()
-        {
-            base.UpdateComponents();
-        }
     }
 }
 #endif

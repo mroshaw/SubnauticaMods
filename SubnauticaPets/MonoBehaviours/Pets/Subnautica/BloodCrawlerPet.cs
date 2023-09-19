@@ -30,10 +30,15 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
 
         // Random DNA collectible distribution biome data
         public static BiomeData[] LootDistributionBiomeData = new LootDistributionData.BiomeData[] {
-            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Sand, count = 4, probability = 0.6f},
-            new LootDistributionData.BiomeData { biome = BiomeType.Dunes_TechSite, count = 5, probability = 0.8f},
-            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite, count = 5, probability = 0.4f},
-            new LootDistributionData.BiomeData { biome = BiomeType.SeaTreaderPath_TechSite, count = 8, probability = 0.5f},
+            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Sand, count = 1, probability = 1.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Rock, count = 1, probability = 1.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Dunes_TechSite, count = 1, probability = 1.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Dunes_TechSite_Scatter, count = 1, probability = 1.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Dunes_TechSite_Barrier, count = 1, probability = 1.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite, count = 1, probability = 1.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite_Scatter, count = 1, probability = 1.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SeaTreaderPath_TechSite, count = 1, probability = 1.0f},
+
         };
 
         public static Color PetObjectColor = Color.red;
@@ -52,30 +57,6 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
 
         // Blood Crawler scale factor
         public override float ScaleFactor => 0.3f;
-
-        /// <summary>
-        /// Add Creature specific components
-        /// </summary>
-        public override void AddComponents()
-        {
-            base.AddComponents();
-        }
-
-        /// <summary>
-        /// Remove Creature specific components
-        /// </summary>
-        public override void RemoveComponents()
-        {
-            base.RemoveComponents();
-        }
-
-        /// <summary>
-        /// Update Creature specific components
-        /// </summary>
-        public override void UpdateComponents()
-        {
-            base.UpdateComponents();
-        }
     }
 }
 #endif

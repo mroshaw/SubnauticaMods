@@ -14,18 +14,6 @@
         /// <summary>
         /// Adds and configures Pet specific components
         /// </summary>
-        void AddComponents();
-
-        /// <summary>
-        /// Removes Pet specific components
-        /// </summary>
-        void RemoveComponents();
-
-        /// <summary>
-        /// Updates existing Pet specific components
-        /// </summary>
-        void UpdateComponents();
-
 
         /// <summary>
         /// Play a random animation

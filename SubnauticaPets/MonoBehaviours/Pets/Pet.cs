@@ -1,4 +1,5 @@
 ﻿using DaftAppleGames.SubnauticaPets.Utils;
+using FMOD;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
@@ -85,9 +86,19 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             get => _petSaverDetails;
         }
 
+        /// <summary>
+        /// Set up new components
+        /// </summary>
         public virtual void Awake()
         {
+            // Add new components
+            AddRigidBody();
+            AddWorldForces();
 
+            // Reconfigure existing components
+            ConfigureSkyApplier();
+            DestroyPickupable();
+            ConfigureAnimator();
         }
 
         /// <summary>
@@ -96,37 +107,11 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         public virtual void Start()
         {
             Log.LogDebug($"Pet: In Pet.Start on parent Game Object: {gameObject.name}");
-            _creature = gameObject.GetComponent<Creature>();
-            if (_creature)
-            {
-                _animator = _creature.GetAnimator();
-            }
-            else
-            {
-                Log.LogDebug("PetHandTarget: Couldn't find Creature component. Unable to find Animator.");
-            }
-
-            if (!_animator)
-            {
-                Log.LogDebug("PetHandTarget: No animator found, so no pet animations will play");
-            }
-
+ 
             Log.LogDebug($"Pet: Setting Pet Scale to {ScaleFactor}...");
             SetScale();
             Log.LogDebug($"Pet: Setting Pet Scale to {ScaleFactor}...");
-
-            Log.LogDebug("Pet: Cleaning up components...");
-            RemoveComponents();
-            Log.LogDebug("Pet: Cleaning up components... Done.");
-
-            Log.LogDebug("Pet: Adding new Pet components...");
-            AddComponents();
-            Log.LogDebug("Pet: Adding new Pet components... Done.");
-
-            Log.LogDebug("Pet: Configure components...");
-            UpdateComponents();
-            Log.LogDebug("Pet: Configure components... Done.");
-
+            
             Log.LogDebug("Pet: Refreshing creature actions...");
             UpdateActions();
             Log.LogDebug("Pet: Refreshing creature actions... Done.");
@@ -138,6 +123,33 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             Log.LogDebug("Pet: Set MoveMethod...");
             SetMoveMethod();
             Log.LogDebug("Pet: Set MoveMethod... Done.");
+        }
+
+        /// <summary>
+        /// Configure the animator component
+        /// </summary>
+        private void ConfigureAnimator()
+        {
+            Log.LogError("Pet: Configuring animator...");
+            _creature = gameObject.GetComponent<Creature>();
+            if (_creature)
+            {
+                _animator = _creature.GetAnimator();
+            }
+            else
+            {
+                Log.LogDebug("Pet: Couldn't find Creature component. Unable to find Animator.");
+            }
+
+            if (!_animator)
+            {
+                Log.LogDebug("Pet: No animator found, so no pet animations will play");
+            }
+            else
+            {
+                _animator.enabled = true;
+            }
+            Log.LogError("Pet: Configuring animator... Done.");
         }
 
         /// <summary>
@@ -199,40 +211,49 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         }
 
         /// <summary>
-        /// Removes unwanted components
+        /// Destroy the Pickupable component
         /// </summary>
-        public virtual void RemoveComponents()
+        public void DestroyPickupable()
         {
+            Log.LogDebug("Pet: Destroying components...");
             ModUtils.DestroyComponentsInChildren<Pickupable>(gameObject);
             Log.LogDebug("Pet: Destroying components... Done.");
         }
 
         /// <summary>
-        /// Add new pet specific components
+        /// Adds the SimpleMovement component
         /// </summary>
-        public virtual void AddComponents()
+        public void AddSimpleMovement()
+        {
+            // Add simple movement component
+            SimpleMovement movement = gameObject.GetComponent<SimpleMovement>();
+            if (movement == null)
+            {
+                movement = gameObject.AddComponent<SimpleMovement>();
+                movement.MoveSpeed = 1.0f;
+            }
+        }
+
+        /// <summary>
+        /// Add the WorldForces component
+        /// </summary>
+        public void AddWorldForces()
+        {
+            WorldForces worldForces = gameObject.GetComponent<WorldForces>();
+            if (worldForces == null)
+            {
+                worldForces = gameObject.AddComponent<WorldForces>();
+            }
+        }
+
+        /// <summary>
+        /// Add the PetHandTarget component
+        /// </summary>
+        public void AddPetHandTarget()
         {
             Log.LogDebug("Pet: Adding PetHandTarget component...");
             gameObject.AddComponent<PetHandTarget>();
             Log.LogDebug("Pet: Adding PetHandTarget component... Done.");
-
-            Log.LogDebug("Pet: Adding RigidBody component...");
-            AddRigidBody();
-            Log.LogDebug("Pet: Adding RigidBody component... Done.");
-        }
-
-        /// <summary>
-        /// Updates pet specific components
-        /// </summary>
-        public virtual void UpdateComponents()
-        {
-            Log.LogDebug("Pet: Configuring Sky and SkyApplier...");
-            ConfigureSkyApplier();
-            Log.LogDebug("Pet: Configuring Sky and SkyApplier... Done.");
-            Log.LogDebug("Pet: Enabling Animator...");
-            this.GetComponentInChildren<Animator>().enabled = true;
-            Log.LogDebug("Pet: Enabling Animator... Done.");
-
         }
 
         /// <summary>
@@ -258,8 +279,9 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         /// <summary>
         /// Adds a RigidBody, if not one already
         /// </summary>
-        private void AddRigidBody()
+        public void AddRigidBody()
         {
+            Log.LogDebug("Pet: Adding RigidBody component...");
             Rigidbody rigidbody = gameObject.GetComponent<Rigidbody>();
             if (rigidbody == null)
             {
@@ -269,6 +291,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
                 rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
                 rigidbody.isKinematic = false;
             }
+            Log.LogDebug("Pet: Adding RigidBody component... Done.");
         }
 
         /// <summary>
@@ -277,6 +300,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         /// </summary>
         private void ConfigureSkyApplier()
         {
+            Log.LogDebug("Pet: Configuring Sky and SkyApplier...");
             SkyApplier skyApplier = gameObject.GetComponent<SkyApplier>();
             if (!skyApplier)
             {
@@ -298,6 +322,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
 
             skyApplier.anchorSky = Skies.BaseInterior;
             skyApplier.ApplySkybox();
+            Log.LogDebug("Pet: Configuring Sky and SkyApplier... Done.");
         }
 
         /// <summary>

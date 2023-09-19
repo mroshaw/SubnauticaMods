@@ -7,12 +7,14 @@ using DaftAppleGames.SubnauticaPets.CustomObjects;
 using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
 using Nautilus.Handlers;
 using Nautilus.Utility;
+using static OVRHaptics;
 
 namespace DaftAppleGames.SubnauticaPets
 {
     /// <summary>
     /// BepInEx Pet mod class
     /// </summary>
+    [BepInDependency("com.snmodding.nautilus")]
     [BepInPlugin(MyGuid, PluginName, VersionString)]
     public class SubnauticaPetsPlugin : BaseUnityPlugin
     {
@@ -42,6 +44,9 @@ namespace DaftAppleGames.SubnauticaPets
         // Check an eye out for Very Naughty Boys
         public static bool IsANaughtyBoy = PirateCheckUtils.IsPirate();
 
+        // Mod Config
+        public static ModConfigFile ModConfig;
+
 #endregion
         #region MOD_PRIVATE
         private static readonly Harmony Harmony = new Harmony(MyGuid);
@@ -54,6 +59,9 @@ namespace DaftAppleGames.SubnauticaPets
         {
             // Init Localisation
             LanguageHandler.RegisterLocalizationFolder();
+
+            // Setup mod options
+            ModConfig = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();
 
             // Set static values
             SelectedPetName = "Dave";
