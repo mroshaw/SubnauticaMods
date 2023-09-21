@@ -14,15 +14,17 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
         /// </summary>
         private void Awake()
         {
-            AddComponents();
-            ConfigureComponents();
+            AddRigidBody();
+            AddFreezeOnSettle();
+            AddCollider();
         }
 
         /// <summary>
-        /// Add required components
+        /// Adds a RigidBody component
         /// </summary>
-        private void AddComponents()
+        private void AddRigidBody()
         {
+            // Log.LogDebug("PetDna: Adding rigidbody....");
             Rigidbody rigidbody = gameObject.GetComponent<Rigidbody>();
             if (rigidbody == null)
             {
@@ -31,7 +33,15 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
             rigidbody.mass = 0.1f;
             rigidbody.isKinematic = false;
             rigidbody.useGravity = true;
+            // Log.LogDebug("PetDna: Adding rigidbody....Done.");
+        }
 
+        /// <summary>
+        /// Adds the FreezeOnSettle component
+        /// </summary>
+        private void AddFreezeOnSettle()
+        {
+            // Log.LogDebug("PetDna: Adding FreezeOnSettle....");
             FreezeOnSettle freeze = gameObject.GetComponent<FreezeOnSettle>();
             if (freeze == null)
             {
@@ -42,13 +52,15 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
                 freeze.StartDelay = 2.0f;
                 freeze.RayCastDistance = 5.0f;
             }
+            // Log.LogDebug("PetDna: Adding FreezeOnSettle.... Done.");
         }
-        
+
         /// <summary>
-        /// Reconfigure existing components
+        /// Add a Collider component
         /// </summary>
-        private void ConfigureComponents()
+        private void AddCollider()
         {
+            // Log.LogDebug("PetDna: Adding Collider....");
             // Resize
             gameObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
 
@@ -62,6 +74,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets
                 newCollider.height = 0.73f;
                 newCollider.direction = 1;
             }
+            // Log.LogDebug("PetDna: Adding Collider.... Done.");
         }
     }
 }
