@@ -25,6 +25,13 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         // Static references for consumers
         public static string DnaModelObjectName = "DNASampleTube";
         public static GameObject DnaModelPrefab;
+        
+        // Ency keys
+        private static readonly string PetDnaEncyPath = "Lifeforms/Fauna";
+        private static readonly string PetDnaEncyKey = "PetDna";
+        // Asset Bundle refs
+        private static readonly string PetDnaMainImageTexture = "PetDnaDataBankMainImageTexture";
+        private static readonly string PetDnaPopupImageTexture = "PetDnaDataBankPopupImageTexture";
 
         /// <summary>
         /// Register all prefabs
@@ -117,6 +124,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 TrivalveBluePet.LootDistributionBiomeData);
 #endif
             SetFixedSpawns();
+            ConfigureDataBank();
         }
 
         /// <summary>
@@ -235,5 +243,43 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             CoordinatedSpawnsHandler.RegisterCoordinatedSpawns(spawnInfos);
             Log.LogDebug("PetDnaPrefab: SetFixedSpawns adding coordinated spawns... Done.");
         }
+
+
+        /// <summary>
+        /// Adds all DataBank entries
+        /// </summary>
+        public static void ConfigureDataBank()
+        {
+            Log.LogDebug("PetDatabankEntries: Setting up Databank...");
+            // Pet DNA
+            ModUtils.ConfigureDatabankEntry(PetDnaEncyKey, PetDnaEncyPath, PetDnaMainImageTexture, PetDnaPopupImageTexture);
+            SetDnaPickupGoals(PetDnaEncyKey);
+            Log.LogDebug("PetDatabankEntries: Setting up Databank... Done.");
+        }
+
+        /// <summary>
+        /// Sets up goals based on collection of DNA samples
+        /// </summary>
+        /// <param name="encyKey"></param>
+        private static void SetDnaPickupGoals(string encyKey)
+        {
+            Log.LogDebug("DatabankEntries: Setting up ItemGoals...");
+#if SUBNAUTICA
+            StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, AlienRobotPet.DnaBuildablePrefabInfo.TechType);
+            StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, BloodCrawlerPet.DnaBuildablePrefabInfo.TechType);
+            StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, CaveCrawlerPet.DnaBuildablePrefabInfo.TechType);
+            StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, CrabSquidPet.DnaBuildablePrefabInfo.TechType);
+#endif
+#if SUBNAUTICAZERO
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, PenglingAdultPet.DnaBuildablePrefabInfo.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, PenglingBabyPet.DnaBuildablePrefabInfo.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, PinnicaridPet.DnaBuildablePrefabInfo.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, SnowStalkerBabyPet.DnaBuildablePrefabInfo.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, TrivalveYellowPet.DnaBuildablePrefabInfo.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, TrivalveBluePet.DnaBuildablePrefabInfo.TechType);
+#endif
+            Log.LogDebug("DatabankEntries: Setting up ItemGoals... Done.");
+        }
+
     }
 }

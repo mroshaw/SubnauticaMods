@@ -70,7 +70,21 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
                 {
                     new Ingredient(TechType.Titanium, 1),
                     new Ingredient(TechType.Nickel, 1),
-                    new Ingredient(TechType.Copper, 1)
+                    new Ingredient(TechType.Copper, 1),
+#if SUBNAUTICA
+                    new Ingredient(CrabSquidPet.DnaBuildablePrefabInfo.TechType, 1),
+                    new Ingredient(AlienRobotPet.DnaBuildablePrefabInfo.TechType, 1),
+                    new Ingredient(BloodCrawlerPet.DnaBuildablePrefabInfo.TechType, 1),
+                    new Ingredient(CaveCrawlerPet.DnaBuildablePrefabInfo.TechType, 1)
+#endif
+#if SUBNAUTICAZERO
+                    new Ingredient(SnowStalkerBabyPet.DnaBuildablePrefabInfo.TechType, 1),
+                    new Ingredient(PenglingAdultPet.DnaBuildablePrefabInfo.TechType, 1),
+                    new Ingredient(PenglingBabyPet.DnaBuildablePrefabInfo.TechType, 1),
+                    new Ingredient(PinnicaridPet.DnaBuildablePrefabInfo.TechType, 1),
+                    new Ingredient(TrivalveBluePet.DnaBuildablePrefabInfo.TechType, 1),
+                    new Ingredient(TrivalveYellowPet.DnaBuildablePrefabInfo.TechType, 1),
+#endif
                 }
             };
 

@@ -3,6 +3,8 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using DaftAppleGames.SubnauticaPets.Pets;
+using Nautilus.Assets;
+using Nautilus.Assets.Gadgets;
 using Nautilus.Handlers;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
@@ -33,23 +35,14 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <summary>
         /// Sets up coordinated spawns at all listed positions for given TechType
         /// </summary>
-        /// <param name="techType"></param>
-        /// <param name="spawnPositions"></param>
-        internal static void SetupCoordinatedSpawn(TechType  techType, List<Vector3> spawnPositions)
+        /// <param name="prefab"></param>
+        /// <param name="spawnLocations"></param>
+        internal static void SetupCoordinatedSpawn(CustomPrefab prefab, SpawnLocation[] spawnLocations)
         {
-            Log.LogDebug($"ModUtils: CoordinatedSpawns spawning {techType} in {spawnPositions.Count} positions...");
-            List<SpawnInfo> spawnInfos = new List<SpawnInfo>();
-
-            foreach (Vector3 position in spawnPositions)
-            {
-                Log.LogDebug($"ModUtils: CoordinatedSpawns adding {techType} in {position.x},{position.y}, {position.z}...");
-                {
-                    spawnInfos.Add(new SpawnInfo(techType, position));
-                }
-            }
-            Log.LogDebug("ModUtils: CoordinatedSpawns registering SpawnInfo...");
-            CoordinatedSpawnsHandler.RegisterCoordinatedSpawns(spawnInfos);
-            Log.LogDebug($"ModUtils: CoordinatedSpawns spawning {techType}. Done.");
+            Log.LogDebug($"ModUtils: CoordinatedSpawns spawning {prefab.Info.TechType} in {spawnLocations.Length} locations...");
+            Log.LogDebug($"ModUtils: CoordinatedSpawns calling SetSpawns for {prefab.Info.TechType}...");
+            prefab.SetSpawns(spawnLocations);
+            Log.LogDebug($"ModUtils: CoordinatedSpawns spawning {prefab.Info.TechType}. Done.");
         }
 
         /// <summary>

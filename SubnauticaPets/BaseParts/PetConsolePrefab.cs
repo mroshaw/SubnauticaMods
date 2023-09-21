@@ -6,10 +6,9 @@ using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
 using UnityEngine;
 using static CraftData;
-using DaftAppleGames.SubnauticaPets.BaseParts;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
-namespace DaftAppleGames.SubnauticaPets.CustomObjects
+namespace DaftAppleGames.SubnauticaPets.BaseParts
 {
     /// <summary>
     /// Static class for creating the Pet Console prefab
@@ -41,15 +40,16 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
                 craftAmount = 1,
                 Ingredients =
                 {
-                    new Ingredient(TechType.Titanium, 1),
+                    new Ingredient(TechType.Gold, 1),
                     new Ingredient(TechType.Nickel, 1),
-                    new Ingredient(TechType.Copper, 1)
+                    new Ingredient(TechType.Copper, 2),
+                    new Ingredient(TechType.ComputerChip, 1)
                 }
             };
 
             // Set the recipe.
             customConsole.SetRecipe(recipe);
-            customConsole.SetUnlock(PetConsoleFragmentPrefab.PrefabInfo.TechType, 1);
+            ScanningGadget scanning = customConsole.SetUnlock(PetConsoleFragmentPrefab.PrefabInfo.TechType, 3);
             customConsole.SetPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule);
             customConsole.Register();
 

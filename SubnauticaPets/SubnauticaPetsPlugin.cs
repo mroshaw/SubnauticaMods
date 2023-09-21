@@ -4,7 +4,6 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using DaftAppleGames.SubnauticaPets.BaseParts;
 using HarmonyLib;
-using DaftAppleGames.SubnauticaPets.CustomObjects;
 using DaftAppleGames.SubnauticaPets.Pets;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Handlers;
@@ -126,10 +125,6 @@ namespace DaftAppleGames.SubnauticaPets
 
             // Init the Pet Console
             PetConsolePrefab.InitPetConsole();
-
-            // Set up Databank entries
-            PetDatabankEntries.ConfigureDataBank();
-            BasePartDatabankEntries.ConfigureDataBank();
         }
     }
 }

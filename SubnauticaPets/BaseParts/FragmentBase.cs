@@ -18,7 +18,6 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         public virtual void Awake()
         {
             AddSkyApplier();
-            AddFreezeOnSettle();
             UpdatePickupable();
             ResizeCollider();
             // RemoveOldModel();

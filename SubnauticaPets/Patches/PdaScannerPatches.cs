@@ -15,6 +15,7 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         [HarmonyPostfix]
         public static void Unlock_Postfix(PDAScanner.EntryData entryData)
         {
+            /*
             Log.LogDebug($"PDAScanner.Unlock called with {entryData.key}");
             if (entryData.key == PetConsoleFragmentPrefab.PrefabInfo.TechType)
             {
@@ -26,6 +27,7 @@ namespace DaftAppleGames.SubnauticaPets.Patches
             {
                 AddKnownTech(PetFabricator.PrefabInfo.TechType);
             }
+            */
         }
 
         /// <summary>

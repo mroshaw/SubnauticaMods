@@ -17,6 +17,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         public override void Awake()
         {
             base.RemoveOldModel();
+            AddFreezeOnSettle();
             base.Awake();
         }
     }

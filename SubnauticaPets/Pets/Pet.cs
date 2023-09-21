@@ -94,6 +94,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             // Add new components
             AddRigidBody();
             AddWorldForces();
+            AddPetHandTarget();
 
             // Reconfigure existing components
             ConfigureSkyApplier();
