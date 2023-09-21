@@ -125,7 +125,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             // consoleFragmentPrefab.SetUnlock(TechType.None);
             // ScanningGadget scanningGadget = new ScanningGadget(consoleFragmentPrefab, TechType.None);
             // scanningGadget.WithScannerEntry(3.0f, true, PetConsoleEncyKey, true);
-            PDAHandler.AddCustomScannerEntry(PrefabInfo.TechType, 3.0f, true, PetConsoleEncyKey);
+            PDAHandler.AddCustomScannerEntry(consoleFragmentPrefab.Info.TechType, 3.0f, true, PetConsoleEncyKey);
 
             // Set up Databank
             PDAHandler.AddEncyclopediaEntry(PetConsoleEncyKey, PetConsoleEncyPath, null, null,
