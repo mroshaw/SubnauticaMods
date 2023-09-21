@@ -32,19 +32,19 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
 
         // Random DNA collectible distribution biome data
         public static BiomeData[] LootDistributionBiomeData = new LootDistributionData.BiomeData[] {
-            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Sand, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.KooshZone_TechSite, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.KooshZone_TechSite_Barrier, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.KooshZone_TechSite_Scatter, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite_Scatter, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite_Barrier, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.SparseReef_Techsite, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.SparseReef_Techsite_Scatter, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.SparseReef_Techsite_Barrier, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.UnderwaterIslands_TechSite, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.UnderwaterIslands_TechSite_Scatter, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.UnderwaterIslands_TechSite_Barrier, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Sand, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.KooshZone_TechSite, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.KooshZone_TechSite_Barrier, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.KooshZone_TechSite_Scatter, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite_Scatter, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite_Barrier, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SparseReef_Techsite, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SparseReef_Techsite_Scatter, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SparseReef_Techsite_Barrier, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.UnderwaterIslands_TechSite, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.UnderwaterIslands_TechSite_Scatter, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.UnderwaterIslands_TechSite_Barrier, count = 4, probability = 2.0f},
         };
 
         public static Color PetObjectColor = Color.blue;

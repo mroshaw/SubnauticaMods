@@ -30,14 +30,14 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
 
         // Random DNA collectible distribution biome data
         public static BiomeData[] LootDistributionBiomeData = new LootDistributionData.BiomeData[] {
-            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Sand, count = 1, probability = 1.0f},
-            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Rock, count = 1, probability = 1.0f},
-            new LootDistributionData.BiomeData { biome = BiomeType.Dunes_TechSite, count = 1, probability = 1.0f},
-            new LootDistributionData.BiomeData { biome = BiomeType.Dunes_TechSite_Scatter, count = 1, probability = 1.0f},
-            new LootDistributionData.BiomeData { biome = BiomeType.Dunes_TechSite_Barrier, count = 1, probability = 1.0f},
-            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite, count = 1, probability = 1.0f},
-            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite_Scatter, count = 1, probability = 1.0f},
-            new LootDistributionData.BiomeData { biome = BiomeType.SeaTreaderPath_TechSite, count = 1, probability = 1.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Sand, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Rock, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Dunes_TechSite, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Dunes_TechSite_Scatter, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Dunes_TechSite_Barrier, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite_Scatter, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SeaTreaderPath_TechSite, count = 4, probability = 2.0f},
 
         };
 

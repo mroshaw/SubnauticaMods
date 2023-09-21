@@ -30,16 +30,16 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets.Subnautica
 
         // Random DNA collectible distribution biome data
         public static BiomeData[] LootDistributionBiomeData = new LootDistributionData.BiomeData[] {
-            new LootDistributionData.BiomeData { biome = BiomeType.Kelp_TechSite, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.Kelp_TechSite_Barrier, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.Kelp_TechSite_Scattered, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Sand, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_TechSite, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_TechSite_Barrier, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_TechSite_Scattered, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_TechSite, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_TechSite_Barrier, count = 1, probability = 0.9f},
-            new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_TechSite_Scattered, count = 1, probability = 0.9f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Kelp_TechSite, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Kelp_TechSite_Barrier, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.Kelp_TechSite_Scattered, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Sand, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_TechSite, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_TechSite_Barrier, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_TechSite_Scattered, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_TechSite, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_TechSite_Barrier, count = 4, probability = 2.0f},
+            new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_TechSite_Scattered, count = 4, probability = 2.0f},
         };
 
         public static Color PetObjectColor = Color.cyan;
