@@ -19,6 +19,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Utils
         private bool _isStarted = false;
 
         private float _checkTimer = 0.0f;
+        private float _movingTimer = 0.0f;
 
         private Rigidbody _rigidbody;
         [SerializeField]
@@ -32,6 +33,8 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Utils
         private bool _isOnFloor = false;
         [SerializeField]
         private bool _hasStoppedMoving = false;
+        [SerializeField]
+        private bool _hasStartedMoving = false;
 
         private void Start()
         {
@@ -47,6 +50,12 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Utils
         {
             if (_isFrozen || !_isStarted)
             {
+                return;
+            }
+
+            if (!_hasStartedMoving)
+            {
+                _hasStartedMoving = HasStartedMoving();
                 return;
             }
 
@@ -77,6 +86,24 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Utils
                 // Debug.Log($"Either Threshold Reached: HasStoppedMoving = {_hasStoppedMoving}, IsOnFloor = {_isOnFloor}");
                 FreezeMovement();
             }
+        }
+
+        /// <summary>
+        /// Determine if the object has started moving
+        /// </summary>
+        /// <returns></returns>
+        private bool HasStartedMoving()
+        {
+            if (_rigidbody.velocity.magnitude > 0)
+            {
+                _movingTimer += Time.deltaTime;
+            }
+            else
+            {
+                _movingTimer = 0.0f;
+            }
+
+            return _movingTimer > CheckTime;
         }
 
         /// <summary>
