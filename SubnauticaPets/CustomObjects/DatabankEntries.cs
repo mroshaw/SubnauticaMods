@@ -118,7 +118,7 @@ namespace DaftAppleGames.SubnauticaPets.CustomObjects
         /// <param name="scanTechType"></param>
         private static void SetScanGoals(string encyKey, TechType scanTechType)
         {
-            PDAHandler.AddCustomScannerEntry(scanTechType, 2.0f, false, encyKey);
+            PDAHandler.AddCustomScannerEntry(scanTechType, 3.0f, true, encyKey);
         }
     }
 }
