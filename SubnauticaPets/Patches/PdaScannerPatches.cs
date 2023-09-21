@@ -1,6 +1,4 @@
-﻿using DaftAppleGames.SubnauticaPets.CustomObjects;
-using DaftAppleGames.SubnauticaPets.MonoBehaviours.Console;
-using DaftAppleGames.SubnauticaPets.MonoBehaviours.Fabricator;
+﻿using DaftAppleGames.SubnauticaPets.BaseParts;
 using HarmonyLib;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 

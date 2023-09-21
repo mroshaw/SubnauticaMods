@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace DaftAppleGames.SubnauticaPets.CustomObjects
+namespace DaftAppleGames.SubnauticaPets.Utils
 {
     /// <summary>
     /// Static utilities class for common functions and properties to be used within your mod code

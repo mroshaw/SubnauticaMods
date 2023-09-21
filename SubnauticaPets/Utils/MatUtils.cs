@@ -7,6 +7,12 @@ namespace DaftAppleGames.SubnauticaPets.Utils
     /// </summary>
     internal static class MatUtils
     {
+        /// <summary>
+        /// Updates all materials on the gameobject that use the oldTextureName to use the bundleTextureName
+        /// </summary>
+        /// <param name="go"></param>
+        /// <param name="oldTextureName"></param>
+        /// <param name="bundleTextureName"></param>
         public static void SetMaterialTexture(GameObject go, string oldTextureName, string bundleTextureName)
         {
             Renderer[] renderers = go.GetComponentsInChildren<Renderer>(true);

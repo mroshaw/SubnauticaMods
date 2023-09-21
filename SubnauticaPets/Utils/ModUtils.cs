@@ -2,8 +2,7 @@
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using DaftAppleGames.SubnauticaPets.MonoBehaviours;
-using DaftAppleGames.SubnauticaPets.MonoBehaviours.Pets;
+using DaftAppleGames.SubnauticaPets.Pets;
 using Nautilus.Handlers;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
@@ -51,93 +50,6 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             Log.LogDebug("ModUtils: CoordinatedSpawns registering SpawnInfo...");
             CoordinatedSpawnsHandler.RegisterCoordinatedSpawns(spawnInfos);
             Log.LogDebug($"ModUtils: CoordinatedSpawns spawning {techType}. Done.");
-        }
-
-        /// <summary>
-        /// Updates the InputManager Spawn shortcut key
-        /// </summary>
-        /// <param name="newKeyCode"></param>
-        internal static void UpdateSpawnKeyboardShortcut(KeyCode newKeyCode)
-        {
-            ModInputManager inputManager = Object.FindObjectOfType<ModInputManager>();
-            if (inputManager != null)
-            {
-                inputManager.SpawnKeyCode = newKeyCode;
-            }
-            else
-            {
-                Log.LogDebug("UpdateSpawnKeyboardShortcut: Didn't find a ModInputManager");
-            }
-        }
-
-        /// <summary>
-        /// Updates the InputManager Spawn Modifier shortcut key
-        /// </summary>
-        /// <param name="newKeyCode"></param>
-        internal static void UpdateSpawnKeyboardModifierShortcut(KeyCode newKeyCode)
-        {
-            ModInputManager inputManager = Object.FindObjectOfType<ModInputManager>();
-            if (inputManager != null)
-            {
-                inputManager.SpawnModifierKeyCode = newKeyCode;
-            }
-            else
-            {
-                Log.LogDebug("UpdateSpawnKeyboardShortcut: Didn't find a ModInputManager");
-            }
-        }
-
-
-        /// <summary>
-        /// Updates the InputManager Kill All shortcut key
-        /// </summary>
-        /// <param name="newKeyCode"></param>
-        internal static void UpdateKillAllKeyboardShortcut(KeyCode newKeyCode)
-        {
-            ModInputManager inputManager = Object.FindObjectOfType<ModInputManager>();
-            if (inputManager != null)
-            {
-                inputManager.KillAllKeyCode = newKeyCode;
-            }
-            else
-            {
-                Log.LogDebug("UpdateSpawnKeyboardShortcut: Didn't find a ModInputManager");
-            }
-        }
-
-        /// <summary>
-        /// Updates the InputManager Spawn Modifier shortcut key
-        /// </summary>
-        /// <param name="newKeyCode"></param>
-        internal static void UpdateKillAllKeyboardModifierShortcut(KeyCode newKeyCode)
-        {
-            ModInputManager inputManager = Object.FindObjectOfType<ModInputManager>();
-            if (inputManager != null)
-            {
-                inputManager.KillAllModifierKeyCode = newKeyCode;
-            }
-            else
-            {
-                Log.LogDebug("UpdateSpawnKeyboardShortcut: Didn't find a ModInputManager");
-            }
-        }
-
-        /// <summary>
-        /// Update all SkipObstacleCheck values
-        /// </summary>
-        /// <param name="skipObstacleCheck"></param>
-        internal static void UpdateSkipObstacleCheck(bool skipObstacleCheck)
-        {
-            PetSpawner petSpawner = Object.FindObjectOfType<PetSpawner>();
-            if (petSpawner != null)
-            {
-                petSpawner.SkipSpawnObstacleCheck = skipObstacleCheck;
-            }
-            else
-            {
-                Log.LogDebug("UpdateSkipObstacleCheck: Didn't find a PetSpawner");
-            }
-
         }
 
         /// <summary>
@@ -282,6 +194,40 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             Log.LogDebug($"ModUiUtils: Couldn't find object named {objectName}!");
             return null;
         }
+
+        /// <summary>
+        /// Sets up a PDA Databank entry
+        /// </summary>
+        /// <param name="encyKey"></param>
+        /// <param name="encyPath"></param>
+        /// <param name="mainImageTextureName"></param>
+        /// <param name="popupImageTextureName"></param>
+        public static void ConfigureDatabankEntry(string encyKey, string encyPath, string mainImageTextureName,
+            string popupImageTextureName)
+        {
+            Log.LogDebug($"DatabankEntries: Setting up {encyKey} entry...");
+            PDAHandler.AddEncyclopediaEntry(encyKey, encyPath, null, null,
+                ModUtils.GetTexture2DFromAssetBundle(mainImageTextureName),
+                ModUtils.GetSpriteFromAssetBundle(popupImageTextureName));
+
+            Log.LogDebug("DatabankEntries: Setting up PetDNA entry... Done.");
+        }
+
+        /// <summary>
+        /// Can be called to "trigger" the Databank entry manually
+        /// </summary>
+        public static void TriggerDataBankEntry(string encyKey)
+        {
+#if SUBNAUTICAZERO
+            PDAEncyclopedia.Add(encyKey, true, true);
+#endif
+
+#if SUBNAUTICA
+            PDAEncyclopedia.Add(encyKey, true);
+#endif
+        }
+
+
 
         /// <summary>
         /// Applies a texture to the material on a GameObject
