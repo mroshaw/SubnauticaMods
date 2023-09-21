@@ -124,7 +124,7 @@
     <Compile Include="CustomObjects\PetConsoleFragmentPrefab.cs" />
     <Compile Include="CustomObjects\PetFabricatorFragmentPrefab.cs" />
     <Compile Include="ModConfigFile.cs" />
-    <Compile Include="MonoBehaviours\BaseFragment.cs" />
+    <Compile Include="MonoBehaviours\FragmentBase.cs" />
     <Compile Include="MonoBehaviours\Console\PetConsoleFragment.cs" />
     <Compile Include="MonoBehaviours\Pets\Custom\CatPet.cs" />
     <Compile Include="MonoBehaviours\Pets\PetDna.cs" />
