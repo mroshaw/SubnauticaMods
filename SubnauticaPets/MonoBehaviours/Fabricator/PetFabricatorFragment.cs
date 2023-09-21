@@ -7,7 +7,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Fabricator
     /// <summary>
     /// MonoBehaviour class to support the Pet Fabricator Fragment
     /// </summary>
-    internal class PetFabricatorFragment : BaseFragment
+    internal class PetFabricatorFragment : FragmentBase
     {
         // Fragment specific collider dimensions
         public override Vector3 ColliderCenter => new Vector3(0.0f, 0.61f, 0.24f);
@@ -21,15 +21,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours.Fabricator
         public override void Awake()
         {
             MatUtils.SetMaterialTexture(gameObject, MeshTextureName, DamagedTexture);
-            base.AddComponents();
-        }
-
-        /// <summary>
-        /// Don't need any of the base class Start
-        /// </summary>
-        public override void Start()
-        {
-
+            base.Awake();
         }
     }
 }
