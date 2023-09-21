@@ -7,7 +7,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
     /// <summary>
     /// Base MonoBehaviour class for new Fragments
     /// </summary>
-    internal abstract class BaseFragment : MonoBehaviour
+    internal abstract class FragmentBase : MonoBehaviour
     {
         public abstract Vector3 ColliderSize { get; }
         public abstract Vector3 ColliderCenter { get; }
@@ -17,26 +17,20 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
         /// </summary>
         public virtual void Awake()
         {
-            AddComponents();
-            RemoveOldModel();
-        }
-
-        /// <summary>
-        /// Reconfigure any components before start
-        /// </summary>
-        public virtual void Start()
-        {
+            AddSkyApplier();
+            AddFreezeOnSettle();
+            UpdatePickupable();
             ResizeCollider();
-            UpdateComponents();
+            // RemoveOldModel();
+            // DisableWorldForces();
         }
 
         /// <summary>
-        /// Add and configure components
+        /// Adds the Sky Applier component
         /// </summary>
-        public void AddComponents()
+        public void AddSkyApplier()
         {
-            Log.LogDebug($"Adding Components to {gameObject.name}");
-
+            Log.LogDebug($"FragmentBase: Adding SkyApplier...");
             // Sky Applier
             SkyApplier skyApplier = gameObject.GetComponent<SkyApplier>();
             if (skyApplier == null)
@@ -45,51 +39,71 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
             }
             Renderer[] renderers = gameObject.GetComponentsInChildren<Renderer>(true);
             skyApplier.renderers = renderers;
+            Log.LogDebug($"FragmentBase: Adding SkyApplier... Done.");
+        }
 
+        /// <summary>
+        /// Adds the Sky Align to Floor component
+        /// </summary>
+        public void AddAlignToFloor()
+        {
+            Log.LogDebug($"FragmentBase: Adding AlignToFloor...");
             // AlignToFloor
             AlignToFloorOnStart alignToFloor = gameObject.GetComponent<AlignToFloorOnStart>();
             if (alignToFloor == null)
             {
                 // alignToFloor = gameObject.AddComponent<AlignToFloorOnStart>();
             }
+            Log.LogDebug($"FragmentBase: Adding AlignToFloor... Done.");
+        }
 
+        /// <summary>
+        /// Adds the Freeze On Settle component
+        /// </summary>
+        public void AddFreezeOnSettle()
+        {
+            Log.LogDebug($"FragmentBase: Adding FreezeOnSettle...");
             // FreezeOnSettle
             FreezeOnSettle freeze = gameObject.GetComponent<FreezeOnSettle>();
             if (freeze == null)
             {
                 freeze = gameObject.AddComponent<FreezeOnSettle>();
                 freeze.CheckType = FreezeCheckType.Velocity;
-                freeze.VelocityThreshold = 0.001f;
+                freeze.VelocityThreshold = 0.025f;
                 freeze.RayCastDistance = 5f;
                 freeze.StartDelay = 2.0f;
             }
 
-            // Disable WorldForces
-            WorldForces worldForces = gameObject.GetComponent<WorldForces>();
-            if (worldForces != null)
-            {
-                worldForces.enabled = false;
-            }
+            Log.LogDebug($"FragmentBase: Adding FreezeOnSettle... Done.");
         }
 
         /// <summary>
-        /// Update some of the cloned components
+        /// Updates the Pickupable component
         /// </summary>
-        private void UpdateComponents()
+        public void UpdatePickupable()
         {
+            Log.LogDebug($"FragmentBase: Updating Pickupable...");
             // Prevent fragments from being phsyically picked up
             Pickupable pickupable = GetComponent<Pickupable>();
             if (pickupable)
             {
                 pickupable.isPickupable = false;
             }
+            Log.LogDebug($"FragmentBase: Updating Pickupable... Done.");
+        }
 
-            // Prevent fragments from being knocked around, but allow them to sink.
-            Rigidbody rigidbody = GetComponent<Rigidbody>();
-            if (rigidbody)
+        /// <summary>
+        /// Disables World Forces
+        /// </summary>
+        public void DisableWorldForces()
+        {
+            Log.LogDebug($"FragmentBase: Disabling WorldForces...");
+            WorldForces worldForces = gameObject.GetComponent<WorldForces>();
+            if (worldForces != null)
             {
-                // rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+                worldForces.enabled = false;
             }
+            Log.LogDebug($"FragmentBase: Disabling WorldForces... Done.");
         }
 
 
@@ -109,7 +123,7 @@ namespace DaftAppleGames.SubnauticaPets.MonoBehaviours
         /// <summary>
         /// Deletes the old model
         /// </summary>
-        private void RemoveOldModel()
+        public void RemoveOldModel()
         {
             GameObject oldModelGameObject = gameObject.FindChild("model");
             if (oldModelGameObject != null)
