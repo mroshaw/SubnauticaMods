@@ -13,19 +13,13 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
     /// </summary>
     internal static class PetFabricatorFragmentPrefab
     {
-        private static readonly string PrefabId = "PetFabricatorFragment";
-        public static readonly string NewModelName = "newmodel";
+        // Public PrefabInfo, for anything that wants to lookup TechType etc.
+        public static PrefabInfo PrefabInfo;
 
-        // Ency keys
-        private static readonly string PetFabricatorEncyKey = "PetFabricator";
-        private static readonly string PetFabricatorEncyPath = "Tech/Habitats";
-        // Asset Bundle refs
-        private static readonly string PetFabricatorMainImageTexture = "PetFabricatorDataBankMainImageTexture";
-        private static readonly string PetFabricatorPopupImageTexture = "PetFabricatorDataBankPopupImageTexture";
+        // Class Id TechType
+        private static readonly string PrefabClassId = "PetFabricatorFragment";
 
-
-        private static bool _isInitialised = false;
-
+        // Defines spawn locations for instances
 #if SUBNAUTICA
         private static readonly SpawnLocation[] SpawnLocations =
         {
@@ -50,7 +44,6 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             new SpawnLocation(new Vector3(-171.25f,-41.34f, -234.25f), new Vector3(0f, 0f, 0f))
         };
 #endif
-        public static PrefabInfo PrefabInfo;
 
         /// <summary>
         /// Initialise the Pet Fabricator fragment prefab
@@ -58,15 +51,10 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         public static void InitPrefab()
         {
             Log.LogDebug("PetFabricatorFragmentPrefab: InitPrefab...");
-            if (_isInitialised)
-            {
-                Log.LogError("PetFabricatorFragmentPrefab: ... InitPrefab called more than once!!!");
-            }
-            _isInitialised = true;
+            PrefabInfo fabricatorFragmentInfo = PrefabInfo.WithTechType(PrefabClassId, null, null);
+            CustomPrefab fabricatorFragmentPrefab = new CustomPrefab(fabricatorFragmentInfo);
 
-            CustomPrefab fabricatorFragmentPrefab = new CustomPrefab(PrefabId, null, null);
-
-            PrefabTemplate cloneTemplate = new CloneTemplate(fabricatorFragmentPrefab.Info, "8029a9ce-ab75-46d0-a8ab-63138f6f83e4") //TechType.GravSphereFragment)
+            PrefabTemplate cloneTemplate = new CloneTemplate(fabricatorFragmentInfo, TechType.BioreactorFragment)
             {
                 ModifyPrefab = prefab =>
                 {
@@ -79,28 +67,10 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             };
             fabricatorFragmentPrefab.SetGameObject(cloneTemplate);
             ModUtils.SetupCoordinatedSpawn(fabricatorFragmentPrefab, SpawnLocations);
-            Log.LogDebug($"PetFabricatorFragmentPrefab: Registering {PrefabId}...");
+            Log.LogDebug($"PetFabricatorFragmentPrefab: Registering {PrefabClassId}...");
             fabricatorFragmentPrefab.Register();
-            Log.LogDebug($"PetFabricatorFragmentPrefab: Init Prefab for {PrefabId}. Done.");
+            Log.LogDebug($"PetFabricatorFragmentPrefab: Init Prefab for {PrefabClassId}. Done.");
             PrefabInfo = fabricatorFragmentPrefab.Info;
-        }
-
-        /// <summary>
-        /// Set up scanning and databank entries
-        /// </summary>
-        /// <param name="fabricatorFragmentPrefab"></param>
-        private static void SetupScanning(CustomPrefab fabricatorFragmentPrefab)
-        {
-            // Set up Scanning Gadget
-            Log.LogDebug("PetConsoleFragmentPrefab: Setting up scanner entry...");
-            ScanningGadget scanningGadget = fabricatorFragmentPrefab.SetUnlock(TechType.None);
-            scanningGadget.WithScannerEntry(4.0f, true, PetFabricatorEncyKey, true);
-            Log.LogDebug("PetConsoleFragmentPrefab: Setting up scanner entry... Done.");
-
-            // Set up Databank
-            Log.LogDebug("PetConsoleFragmentPrefab: Setting up Databank entry...");
-            ModUtils.ConfigureDatabankEntry(PetFabricatorEncyKey, PetFabricatorEncyPath, PetFabricatorMainImageTexture, PetFabricatorPopupImageTexture);
-            Log.LogDebug("PetConsoleFragmentPrefab: Setting up Databank entry... Done.");
         }
     }
 }

@@ -22,14 +22,6 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         private static readonly string NewModelName = "newmodel";
         public static readonly string OldModelName = "model";
 
-        // Ency keys
-        private static readonly string PetConsoleEncyPath = "Tech/Habitats";
-        private static readonly string PetConsoleEncyKey = "PetConsole";
-
-        // Asset Bundle refs for Databank
-        private static readonly string PetConsoleMainImageTexture = "PetConsoleDataBankMainImageTexture";
-        private static readonly string PetConsolePopupImageTexture = "PetConsoleDataBankPopupImageTexture";
-
 #if SUBNAUTICA
         private static readonly SpawnLocation[] SpawnLocations =
         {
@@ -64,7 +56,6 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         public static void InitPrefab()
         {
             CustomPrefab consoleFragmentPrefab = new CustomPrefab(PrefabId, null, null);
-
             PrefabTemplate cloneTemplate = new CloneTemplate(consoleFragmentPrefab.Info, TechType.GravSphereFragment)
             {
                 ModifyPrefab = prefab =>
@@ -105,32 +96,11 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             };
                 
             consoleFragmentPrefab.SetGameObject(cloneTemplate);
-            SetupScanning(consoleFragmentPrefab);
             ModUtils.SetupCoordinatedSpawn(consoleFragmentPrefab, SpawnLocations);
             Log.LogDebug($"PetConsoleFragmentPrefab: Registering {PrefabId}...");
             consoleFragmentPrefab.Register();
             Log.LogDebug($"PetConsoleFragmentPrefab: Init Prefab for {PrefabId}. Done.");
             PrefabInfo = consoleFragmentPrefab.Info;
-        }
-
-        /// <summary>
-        /// Set up scanning and databank entries
-        /// </summary>
-        /// <param name="consoleFragmentPrefab"></param>
-        private static void SetupScanning(CustomPrefab consoleFragmentPrefab)
-        {
-            // Set up Scanning Gadget
-            Log.LogDebug("PetConsoleFragmentPrefab: Setting up scanner entry...");
-            ScanningGadget scanningGadget = consoleFragmentPrefab.SetUnlock(TechType.None);
-            scanningGadget.WithScannerEntry(scanTime: 4.0f, isFragment:true, encyKey: PetConsoleEncyKey, destroyAfterScan: true);
-            Log.LogDebug("PetConsoleFragmentPrefab: Setting up scanner entry... Done.");
-
-            // Set up Databank
-            Log.LogDebug("PetConsoleFragmentPrefab: Setting up Databank entry...");
-            PDAHandler.AddEncyclopediaEntry(PetConsoleEncyKey, PetConsoleEncyPath, null, null,
-                ModUtils.GetTexture2DFromAssetBundle(PetConsoleMainImageTexture),
-                ModUtils.GetSpriteFromAssetBundle(PetConsolePopupImageTexture));
-            Log.LogDebug("PetConsoleFragmentPrefab: Setting up Databank entry... Done.");
         }
     }
 }

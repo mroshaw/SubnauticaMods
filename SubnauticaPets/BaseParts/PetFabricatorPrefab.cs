@@ -14,6 +14,8 @@ using Nautilus.Crafting;
 using UnityEngine;
 using static CraftData;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
+using Nautilus.Handlers;
+
 namespace DaftAppleGames.SubnauticaPets.BaseParts
 {
     /// <summary>
@@ -21,17 +23,24 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
     /// </summary>
     internal static class PetFabricatorPrefab
     {
+        // Asset Bundle constants
+        private const string PetFabricatorMainImageTexture = "PetFabricatorDataBankMainImageTexture";
+        private const string PetFabricatorPopupImageTexture = "PetFabricatorDataBankPopupImageTexture";
+        // Ency keys constants
+        private const string PetFabricatorEncyKey = "PetFabricator";
+        private const string PetFabricatorEncyPath = "Tech/Habitats";
+
         /// <summary>
         /// Makes the new Pet Fabricator available for use.
         /// </summary>
         public static void InitPetFabricator()
         {
-            CustomPrefab customFab = new CustomPrefab("PetFabricator",
+            CustomPrefab fabriactorPrefab = new CustomPrefab("PetFabricator",
                 null,
                 null,
                 ModUtils.GetSpriteFromAssetBundle(PetFabricator.PetFabricatorIconTexture));
 
-            FabricatorGadget fabGadget = customFab.CreateFabricator(out CraftTree.Type treeType)
+            FabricatorGadget fabGadget = fabriactorPrefab.CreateFabricator(out CraftTree.Type treeType)
                 // Add our Pet Buildables
 #if SUBNAUTICA
                 .AddCraftNode(CaveCrawlerPet.BuildablePrefabInfo.TechType)
@@ -54,13 +63,13 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
                 fabGadget.AddCraftNode(CatPet.BuildablePrefabInfo.TechType);
             }
 
-            FabricatorTemplate fabPrefab = new FabricatorTemplate(customFab.Info, treeType)
+            FabricatorTemplate fabPrefab = new FabricatorTemplate(fabriactorPrefab.Info, treeType)
             {
                 FabricatorModel = FabricatorTemplate.Model.Workbench,
                 ModifyPrefab = ConfigureFabComponents
 
             };
-            customFab.SetGameObject(fabPrefab);
+            fabriactorPrefab.SetGameObject(fabPrefab);
 
             // Define the recipe
             RecipeData recipe = new RecipeData
@@ -68,9 +77,10 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
                 craftAmount = 1,
                 Ingredients =
                 {
-                    new Ingredient(TechType.Titanium, 1),
-                    new Ingredient(TechType.Nickel, 1),
-                    new Ingredient(TechType.Copper, 1),
+                    new Ingredient(TechType.Titanium, 5),
+                    new Ingredient(TechType.Nickel, 2),
+                    new Ingredient(TechType.ComputerChip, 1),
+                    new Ingredient(TechType.CopperWire, 3),
 #if SUBNAUTICA
                     new Ingredient(CrabSquidPet.DnaBuildablePrefabInfo.TechType, 1),
                     new Ingredient(AlienRobotPet.DnaBuildablePrefabInfo.TechType, 1),
@@ -89,12 +99,31 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             };
 
             // Set the recipe
-            customFab.SetRecipe(recipe);
-            customFab.SetUnlock(PetFabricatorFragmentPrefab.PrefabInfo.TechType, 1);
-            customFab.SetPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule);
-            customFab.Register();
+            fabriactorPrefab.SetRecipe(recipe);
+
+            // Set up databank
+            SetupDatabank();
+
+            // Set up the scanning and fragment unlocks
+            fabriactorPrefab.SetUnlock(PetFabricatorFragmentPrefab.PrefabInfo.TechType, 3)
+                .WithScannerEntry(5f, true, PetFabricatorEncyKey, true)
+                .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule);
+            fabriactorPrefab.Register();
             
-            PetFabricator.PrefabInfo = customFab.Info;
+            PetFabricator.PrefabInfo = fabriactorPrefab.Info;
+        }
+
+        /// <summary>
+        /// Set up Databank Entries
+        /// </summary>
+        private static void SetupDatabank()
+        {
+            // Set up Databank
+            Log.LogDebug("PetConsoleFragmentPrefab: Setting up Databank entry...");
+            PDAHandler.AddEncyclopediaEntry(PetFabricatorEncyKey, PetFabricatorEncyPath, null, null,
+                ModUtils.GetTexture2DFromAssetBundle(PetFabricatorMainImageTexture),
+                ModUtils.GetSpriteFromAssetBundle(PetFabricatorPopupImageTexture));
+            Log.LogDebug("PetConsoleFragmentPrefab: Setting up Databank entry... Done.");
         }
 
         /// <summary>

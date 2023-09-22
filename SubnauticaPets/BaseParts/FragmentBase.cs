@@ -20,8 +20,23 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             AddSkyApplier();
             UpdatePickupable();
             ResizeCollider();
+            AddTechTag();
             // RemoveOldModel();
             // DisableWorldForces();
+        }
+
+        /// <summary>
+        /// Adds a TechTag component
+        /// </summary>
+        public void AddTechTag()
+        {
+            Log.LogDebug($"FragmentBase: Adding TechTag...");
+            TechTag techTag = gameObject.GetComponent<TechTag>();
+            if (techTag == null)
+            {
+                techTag = gameObject.AddComponent<TechTag>();
+            }
+            Log.LogDebug($"FragmentBase: Adding TechTag... Done.");
         }
 
         /// <summary>
