@@ -23,10 +23,14 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
     /// </summary>
     internal static class PetFabricatorPrefab
     {
+        // Prefab Class Id
+        private const string PrefabClassId = "PetFabricator";
+
         // Asset Bundle constants
         private const string PetFabricatorMainImageTexture = "PetFabricatorDataBankMainImageTexture";
         private const string PetFabricatorPopupImageTexture = "PetFabricatorDataBankPopupImageTexture";
-        // Ency keys constants
+
+        // Databank key constants
         private const string PetFabricatorEncyKey = "PetFabricator";
         private const string PetFabricatorEncyPath = "Tech/Habitats";
 
@@ -35,7 +39,10 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         /// </summary>
         public static void InitPetFabricator()
         {
-            CustomPrefab fabriactorPrefab = new CustomPrefab("PetFabricator",
+            PrefabInfo consolePrefabInfo = PrefabInfo.WithTechType(PrefabClassId, null, null, unlockAtStart: false);
+            CustomPrefab consolePrefab = new CustomPrefab(consolePrefabInfo);
+
+            CustomPrefab fabriactorPrefab = new CustomPrefab("",
                 null,
                 null,
                 ModUtils.GetSpriteFromAssetBundle(PetFabricator.PetFabricatorIconTexture));
@@ -107,7 +114,8 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             // Set up the scanning and fragment unlocks
             fabriactorPrefab.SetUnlock(PetFabricatorFragmentPrefab.PrefabInfo.TechType, 3)
                 .WithScannerEntry(5f, true, PetFabricatorEncyKey, true)
-                .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule);
+                .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule)
+                .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle(PetFabricatorPopupImageTexture)); ;
             fabriactorPrefab.Register();
             
             PetFabricator.PrefabInfo = fabriactorPrefab.Info;

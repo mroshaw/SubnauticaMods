@@ -16,24 +16,32 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
     /// </summary>
     internal static class PetConsolePrefab
     {
+        // Prefab class Id
+        private const string PrefabClassId = "PetConsole";
+
         // Asset Bundle refs for Databank
         private static readonly string PetConsoleMainImageTexture = "PetConsoleDataBankMainImageTexture";
         private static readonly string PetConsolePopupImageTexture = "PetConsoleDataBankPopupImageTexture";
 
-        // Ency keys
-        private static readonly string PetConsoleEncyPath = "Tech/Habitats";
-        public static readonly string PetConsoleEncyKey = "PetConsole";
+        // Databank key constants
+        private const string PetConsoleEncyPath = "Tech/Habitats";
+        private const string PetConsoleEncyKey = "PetConsole";
 
         /// <summary>
         /// Makes the new Pet Console available for use.
         /// </summary>
         public static void InitPetConsole()
         {
+            PrefabInfo consolePrefabInfo = PrefabInfo.WithTechType(PrefabClassId, null, null, unlockAtStart: false);
+            CustomPrefab consolePrefab = new CustomPrefab(consolePrefabInfo);
+
+            /*
             // Create our custom prefab
-            CustomPrefab consolePrefab = new CustomPrefab("PetConsole",
+            CustomPrefab consolePrefab = new CustomPrefab(PrefabClassId,
                 null,
                 null,
                 ModUtils.GetSpriteFromAssetBundle(PetConsole.PetConsoleIconTexture));
+            */
 
             // We'll use the PictureFrame as a template
             PrefabTemplate consoleTemplate = new CloneTemplate(consolePrefab.Info, TechType.PictureFrame)
@@ -65,8 +73,9 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             // Set up the scanning and fragment unlocks
             Log.LogDebug("PetConsoleFragmentPrefab: Setting up scanner entry...");
             consolePrefab.SetUnlock(PetConsoleFragmentPrefab.PrefabInfo.TechType, 3)
-                .WithScannerEntry(5f, true, PetConsoleEncyKey, true)
-                .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule);
+                .WithScannerEntry(5f, false, PetConsoleEncyKey, true)
+                .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule)
+                .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle(PetConsolePopupImageTexture));
             Log.LogDebug("PetConsoleFragmentPrefab: Setting up scanner entry... Done.");
 
             consolePrefab.Register();

@@ -3,8 +3,6 @@ using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
-using System.Collections.Generic;
-using Nautilus.Assets.Gadgets;
 
 namespace DaftAppleGames.SubnauticaPets.BaseParts
 {
@@ -13,11 +11,11 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
     /// </summary>
     internal static class PetFabricatorFragmentPrefab
     {
-        // Public PrefabInfo, for anything that wants to lookup TechType etc.
+        // Public PrefabInfo, for anything that needs it
         public static PrefabInfo PrefabInfo;
 
-        // Class Id TechType
-        private static readonly string PrefabClassId = "PetFabricatorFragment";
+        // Prefab Class Id
+        private const string PrefabClassId = "PetFabricatorFragment";
 
         // Defines spawn locations for instances
 #if SUBNAUTICA
@@ -44,33 +42,31 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             new SpawnLocation(new Vector3(-171.25f,-41.34f, -234.25f), new Vector3(0f, 0f, 0f))
         };
 #endif
-
         /// <summary>
         /// Initialise the Pet Fabricator fragment prefab
         /// </summary>
         public static void InitPrefab()
         {
-            Log.LogDebug("PetFabricatorFragmentPrefab: InitPrefab...");
-            PrefabInfo fabricatorFragmentInfo = PrefabInfo.WithTechType(PrefabClassId, null, null);
-            CustomPrefab fabricatorFragmentPrefab = new CustomPrefab(fabricatorFragmentInfo);
-
-            PrefabTemplate cloneTemplate = new CloneTemplate(fabricatorFragmentInfo, TechType.BioreactorFragment)
+            PrefabInfo fabricatorPrefabInfo = PrefabInfo.WithTechType(PrefabClassId, null, null, unlockAtStart: false);
+            CustomPrefab fabriactorFragmentPrefab = new CustomPrefab(fabricatorPrefabInfo);
+            PrefabTemplate cloneTemplate = new CloneTemplate(fabriactorFragmentPrefab.Info, TechType.GravSphereFragment)
             {
                 ModifyPrefab = prefab =>
                 {
-                    // Add component
+                // Add components
                     Log.LogDebug("PetFabricatorFragmentPrefab: InitPrefab adding PetFabricatorFragment component...");
                     prefab.AddComponent<PetFabricatorFragment>();
                     Log.LogDebug(
                         "PetFabricatorFragmentPrefab: InitPrefab adding PetFabricatorFragment component... Done.");
                 }
             };
-            fabricatorFragmentPrefab.SetGameObject(cloneTemplate);
-            ModUtils.SetupCoordinatedSpawn(fabricatorFragmentPrefab, SpawnLocations);
+
+            fabriactorFragmentPrefab.SetGameObject(cloneTemplate);
+            ModUtils.SetupCoordinatedSpawn(fabriactorFragmentPrefab, SpawnLocations);
             Log.LogDebug($"PetFabricatorFragmentPrefab: Registering {PrefabClassId}...");
-            fabricatorFragmentPrefab.Register();
+            fabriactorFragmentPrefab.Register();
             Log.LogDebug($"PetFabricatorFragmentPrefab: Init Prefab for {PrefabClassId}. Done.");
-            PrefabInfo = fabricatorFragmentPrefab.Info;
+            PrefabInfo = fabriactorFragmentPrefab.Info;
         }
     }
 }

@@ -1,14 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using DaftAppleGames.SubnauticaPets.Utils;
+﻿using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
-using Nautilus.Assets.Gadgets;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 using Nautilus.Utility;
-using UWE;
-using Nautilus.Handlers;
 
 namespace DaftAppleGames.SubnauticaPets.BaseParts
 {
@@ -17,15 +12,25 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
     /// </summary>
     internal static class PetConsoleFragmentPrefab
     {
-        private static readonly string PrefabId = "PetConsoleFragment";
-        private static readonly string PetConsolePrefabName = "PetConsoleDamaged";
-        private static readonly string NewModelName = "newmodel";
-        public static readonly string OldModelName = "model";
+        // Public PrefabInfo, for anything that needs it
+        public static PrefabInfo PrefabInfo;
+
+        // Prefab Class Id
+        private const string PrefabClassId = "PetConsoleFragment";
+
+        // Asset bundle references
+        private const string PetConsolePrefabName = "PetConsoleDamaged";
+
+        // Model references
+        private const string NewModelName = "newmodel";
+        public const string OldModelName = "model";
 
 #if SUBNAUTICA
         private static readonly SpawnLocation[] SpawnLocations =
         {
-            new SpawnLocation(new Vector3(-47.14f, -29.15f, -409.04f), new Vector3(0f, 0f, 0f))
+            new SpawnLocation(new Vector3(-47.14f, -29.15f, -409.04f), new Vector3(0f, 0f, 0f)),
+            new SpawnLocation(new Vector3(-45.14f, -29.15f, -409.04f), new Vector3(0f, 0f, 0f)),
+            new SpawnLocation(new Vector3(-49.14f, -29.15f, -409.04f), new Vector3(0f, 0f, 0f))
         };
 
         /*
@@ -45,17 +50,17 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
 
         private static readonly SpawnLocation[] SpawnLocations =
         {
-            new SpawnLocation(new Vector3(-171.25f,-41.34f, -234.25f), new Vector3(0f, 0f, 0f))
+            new SpawnLocation(new Vector3(-171.25f,-41.34f, -234.25f), new Vector3(0f, 0f, 0f)),
         };
 #endif
-        public static PrefabInfo PrefabInfo;
 
         /// <summary>
         /// Initialise the Pet Console fragment prefab
         /// </summary>
         public static void InitPrefab()
         {
-            CustomPrefab consoleFragmentPrefab = new CustomPrefab(PrefabId, null, null);
+            PrefabInfo consolePrefabInfo = PrefabInfo.WithTechType(PrefabClassId, null, null, unlockAtStart: false);
+            CustomPrefab consoleFragmentPrefab = new CustomPrefab(consolePrefabInfo);
             PrefabTemplate cloneTemplate = new CloneTemplate(consoleFragmentPrefab.Info, TechType.GravSphereFragment)
             {
                 ModifyPrefab = prefab =>
@@ -97,9 +102,9 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
                 
             consoleFragmentPrefab.SetGameObject(cloneTemplate);
             ModUtils.SetupCoordinatedSpawn(consoleFragmentPrefab, SpawnLocations);
-            Log.LogDebug($"PetConsoleFragmentPrefab: Registering {PrefabId}...");
+            Log.LogDebug($"PetConsoleFragmentPrefab: Registering {PrefabClassId}...");
             consoleFragmentPrefab.Register();
-            Log.LogDebug($"PetConsoleFragmentPrefab: Init Prefab for {PrefabId}. Done.");
+            Log.LogDebug($"PetConsoleFragmentPrefab: Init Prefab for {PrefabClassId}. Done.");
             PrefabInfo = consoleFragmentPrefab.Info;
         }
     }
