@@ -88,14 +88,19 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         /// <summary>
         /// Set up scanning and databank entries
         /// </summary>
-        /// <param name="consoleFragmentPrefab"></param>
+        /// <param name="fabricatorFragmentPrefab"></param>
         private static void SetupScanning(CustomPrefab fabricatorFragmentPrefab)
         {
+            // Set up Scanning Gadget
             Log.LogDebug("PetConsoleFragmentPrefab: Setting up scanner entry...");
-            ScanningGadget scanningGadget = new ScanningGadget(fabricatorFragmentPrefab, TechType.None);
-            scanningGadget.WithScannerEntry(3.0f, true, PetFabricatorEncyKey, true);
-            ModUtils.ConfigureDatabankEntry(PetFabricatorEncyKey, PetFabricatorEncyPath, PetFabricatorMainImageTexture, PetFabricatorPopupImageTexture);
+            ScanningGadget scanningGadget = fabricatorFragmentPrefab.SetUnlock(TechType.None);
+            scanningGadget.WithScannerEntry(4.0f, true, PetFabricatorEncyKey, true);
             Log.LogDebug("PetConsoleFragmentPrefab: Setting up scanner entry... Done.");
+
+            // Set up Databank
+            Log.LogDebug("PetConsoleFragmentPrefab: Setting up Databank entry...");
+            ModUtils.ConfigureDatabankEntry(PetFabricatorEncyKey, PetFabricatorEncyPath, PetFabricatorMainImageTexture, PetFabricatorPopupImageTexture);
+            Log.LogDebug("PetConsoleFragmentPrefab: Setting up Databank entry... Done.");
         }
     }
 }
