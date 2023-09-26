@@ -1,12 +1,11 @@
-﻿using DaftAppleGames.SubnauticaPets.Pets;
-using DaftAppleGames.SubnauticaPets.Pets.Custom;
-#if SUBNAUTICA
-using DaftAppleGames.SubnauticaPets.Pets.Subnautica;
+﻿#if SUBNAUTICA
+using DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica;
 #endif
 #if SUBNAUTICAZERO
 using DaftAppleGames.SubnauticaPets.Pets.BelowZero;
 #endif
-
+using DaftAppleGames.SubnauticaPets.Mono.Pets;
+using DaftAppleGames.SubnauticaPets.Mono.Pets.Custom;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 

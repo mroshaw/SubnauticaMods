@@ -2,12 +2,12 @@
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using DaftAppleGames.SubnauticaPets.Pets;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Handlers;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
+using static KnownTech;
 using Object = UnityEngine.Object;
 
 namespace DaftAppleGames.SubnauticaPets.Utils
@@ -220,8 +220,25 @@ namespace DaftAppleGames.SubnauticaPets.Utils
 #endif
         }
 
+        /*
+        public static void AddToAnalysisTech(TechType techType, TechType requiredForUnlock, Sprite unlockSprite)
+        {
+            List<AnalysisTech> aTech = KnownTech.analysisTech;
+            aTech.techType = requiredForUnlock != TechType.None
+                ? requiredForUnlock
+                : techType;
+            AnalysisTech.unlockTechTypes = RequiredForUnlock != TechType.None
+                ? new() { prefab.Info.TechType }
+                : new();
+            aTech.unlockPopup = popupSprite;
+#if SUBNAUTICA
+            aTech.storyGoals = storyGoalsToTrigger ?? new();
+#endif
+            aTech.unlockSound = unlockSound;
+            aTech.unlockMessage = unlockMessage ?? KnownTechHandler.DefaultUnlockData.BlueprintUnlockMessage;
 
-
+        }
+        */
         /// <summary>
         /// Applies a texture to the material on a GameObject
         /// </summary>

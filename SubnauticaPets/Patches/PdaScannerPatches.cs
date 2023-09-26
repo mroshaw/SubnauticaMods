@@ -1,4 +1,5 @@
-﻿using DaftAppleGames.SubnauticaPets.BaseParts;
+﻿#if DEBUGNOTIFICATIONS
+using DaftAppleGames.SubnauticaPets.Prefabs;
 using HarmonyLib;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
@@ -13,44 +14,30 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         /// <param name="entryData"></param>
         [HarmonyPatch(nameof(PDAScanner.Unlock))]
         [HarmonyPostfix]
-        public static void Unlock_Postfix(PDAScanner.EntryData entryData)
+        public static void Unlock_Postfix(PDAScanner.EntryData entryData, bool unlockBlueprint, bool unlockEncyclopedia, bool verbose)
         {
-            /*
-            Log.LogDebug($"PDAScanner.Unlock called with {entryData.key}");
-            if (entryData.key == PetConsoleFragmentPrefab.PrefabInfo.TechType)
-            {
-                Log.LogDebug($"PDAScanner.Unlock unlocking {entryData.key}...");
-                AddKnownTech(PetConsole.PrefabInfo.TechType);
-            }
+            Log.LogDebug($"PdaScanner: Unlock called on {entryData.key}. unlockBluePrint = {unlockBlueprint}, unlockEncyclopedia = {unlockEncyclopedia}, verbose = {verbose}");
 
-            if (entryData.key == PetFabricatorFragmentPrefab.PrefabInfo.TechType)
+            if (entryData.key == PetConsoleFragmentPrefab.PrefabInfo.TechType && unlockBlueprint == true)
             {
-                AddKnownTech(PetFabricator.PrefabInfo.TechType);
+                Log.LogDebug($"Blueprint unlock detected! Adding notification!.");
             }
-            */
         }
 
-        /// <summary>
-        /// Adds the given TechType to Known Tech
-        /// </summary>
-        /// <param name="techType"></param>
-        private static void AddKnownTech(TechType techType)
+        [HarmonyPatch(nameof(PDAScanner.NotifyProgress))]
+        [HarmonyPostfix]
+        public static void NotifyProgress_Postfix(PDAScanner.Entry entry)
         {
-            Log.LogDebug($"PDAScanner.Unlock checking if {techType} is KnownTech...");
-            if (!KnownTech.Contains(techType))
-            {
-                Log.LogDebug($"PDAScanner.Unlock Adding {techType} to KnownTech.");
-#if SUBNAUTICA
-                KnownTech.Add(techType);
-#endif
-#if SUBNAUTICAZERO
-                KnownTech.Add(techType, false);
-#endif
-            }
-            else
-            {
-                Log.LogDebug($"PDAScanner.Unlock {techType} is already known.");
-            }
+            Log.LogDebug($"PdaScanner: NotifyProgress called on {entry.techType} with progress {entry.progress}. Unlocked: {entry.unlocked}");
         }
+
+        [HarmonyPatch(nameof(PDAScanner.Add))]
+        [HarmonyPostfix]
+        public static void Add_Postfix(TechType techType, int unlocked)
+        {
+            Log.LogDebug($"PdaScanner: Add called on {techType}. Unlocked: {unlocked}");
+        }
+
     }
 }
+#endif

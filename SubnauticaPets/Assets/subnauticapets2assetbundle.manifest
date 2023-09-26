@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3708760197
+CRC: 2439418716
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7cad76d92ed1e6716dff8891a0af4ab0
+    Hash: 5f87e1a49d64bc61e600faab39037328
   TypeTreeHash:
     serializedVersion: 2
-    Hash: c7d55257852eaa0eb643d844a5d710cc
+    Hash: 735305299150517258ed27a1478009c6
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -40,16 +40,28 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 115
+  Script: {instanceID: 0}
+- Class: 128
   Script: {instanceID: 0}
 - Class: 136
   Script: {instanceID: 0}
@@ -58,6 +70,8 @@ ClassTypes:
 - Class: 213
   Script: {instanceID: 0}
 - Class: 222
+  Script: {instanceID: 0}
+- Class: 223
   Script: {instanceID: 0}
 - Class: 224
   Script: {instanceID: 0}
@@ -80,6 +94,7 @@ Assets:
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Subnautica/CrabSquidTexture.png
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/PinnicaridTexture.png
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/PinnicaridDnaStrandTexture.png
+- Assets/SubnauticaPets2/Prefabs/AboutCanvas.prefab
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Custom/CatDnaStrandTexture.png
 - Assets/SubnauticaPets2/Textures/Pet Fabriactor/Icon/PetFabricatorIconTexture.png
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/PenglingBabyDnaStrandTexture.png
@@ -97,7 +112,7 @@ Assets:
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Subnautica/CaveCrawlerDnaStrandTexture.png
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/PenglingAdultDnaStrandTexture.png
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Subnautica/CrabSquidDnaStrandTexture.png
-- Assets/SubnauticaPets2/Textures/Pet Console/Sources/PetConsoleRotatingIconTexture.png
+- Assets/SubnauticaPets2/Textures/Pet Console/Icon/PetConsoleRotatingIconTexture.png
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/TrivalveBlueTexture.png
 - Assets/SubnauticaPets2/Textures/UI/CustomButtonTexture.png
 - Assets/SubnauticaPets2/Textures/Pet Fabriactor/Mesh Texture/PetFabricatorDamagedTexture.png

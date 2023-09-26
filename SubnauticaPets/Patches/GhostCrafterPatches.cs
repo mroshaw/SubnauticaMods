@@ -1,15 +1,15 @@
 ﻿#if SUBNAUTICA
-using DaftAppleGames.SubnauticaPets.Pets.Subnautica;
+using DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica;
 #endif
 #if SUBNAUTICAZERO
 using DaftAppleGames.SubnauticaPets.Pets.BelowZero;
 #endif
-using DaftAppleGames.SubnauticaPets.Pets;
-using DaftAppleGames.SubnauticaPets.Pets.Custom;
+using DaftAppleGames.SubnauticaPets.Mono.Pets;
+using DaftAppleGames.SubnauticaPets.Mono.Pets.Custom;
 using HarmonyLib;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
-namespace CreaturePetMod_SN.Patches
+namespace DaftAppleGames.SubnauticaPets.Patches
 {
 
     /// <summary>

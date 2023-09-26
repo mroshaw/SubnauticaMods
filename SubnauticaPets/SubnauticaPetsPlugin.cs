@@ -2,9 +2,9 @@
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
-using DaftAppleGames.SubnauticaPets.BaseParts;
+using DaftAppleGames.SubnauticaPets.Mono.Pets;
 using HarmonyLib;
-using DaftAppleGames.SubnauticaPets.Pets;
+using DaftAppleGames.SubnauticaPets.Prefabs;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Handlers;
 using Nautilus.Utility;
@@ -98,8 +98,10 @@ namespace DaftAppleGames.SubnauticaPets
             {
                 yield return null;
             }
-
+            Log.LogDebug("SubnauticaPetsPlugin: Calling InitMod()...");
             InitMod();
+            Log.LogDebug("SubnauticaPetsPlugin: Calling InitMod()... Done.");
+
         }
 
         /// <summary>
@@ -120,11 +122,9 @@ namespace DaftAppleGames.SubnauticaPets
             PetConsoleFragmentPrefab.InitPrefab();
             PetFabricatorFragmentPrefab.InitPrefab();
 
-            // Init the Pet Fabricator
-            PetFabricatorPrefab.InitPetFabricator();
-
-            // Init the Pet Console
+            // Init the Pet Console Fabricator
             PetConsolePrefab.InitPetConsole();
+            PetFabricatorPrefab.InitPetFabricator();
         }
     }
 }
