@@ -2,8 +2,9 @@
 using DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica;
 #endif
 #if SUBNAUTICAZERO
-using DaftAppleGames.SubnauticaPets.Pets.BelowZero;
+using DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero;
 #endif
+
 using DaftAppleGames.SubnauticaPets.Mono.Pets.Custom;
 using DaftAppleGames.SubnauticaPets.Mono.Utils;
 using DaftAppleGames.SubnauticaPets.Utils;

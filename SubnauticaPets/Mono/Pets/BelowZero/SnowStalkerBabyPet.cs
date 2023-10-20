@@ -1,12 +1,11 @@
 ﻿#if SUBNAUTICAZERO
-
-using DaftAppleGames.SubnauticaPets.Mono.Pets;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 using Nautilus.Assets;
 using Nautilus.Crafting;
 using UnityEngine;
 using static LootDistributionData;
 
-namespace DaftAppleGames.SubnauticaPets.Pets.BelowZero
+namespace DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero
 {
     /// <summary>
     /// Implements AlienRobot specific Pet functionality
@@ -40,6 +39,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets.BelowZero
 
         public static Color PetObjectColor = Color.white;
 
+        private static readonly string[] SnowStalkerBabyAnims = { "dryFur", "growl", "bite", "roar", "fidget", "standUpSniff", "standUpHowl" };
         /// <summary>
         /// Defines the Recipe for fabricating the Pet
         /// </summary>
@@ -54,6 +54,59 @@ namespace DaftAppleGames.SubnauticaPets.Pets.BelowZero
 
         // Snow Stalker Baby scale factor
         public override float ScaleFactor => 1.0f;
+
+        /// <summary>
+        /// Override base Awake method
+        /// </summary>
+        public override void Awake()
+        {
+            PreventFloatingOnDeath();
+            ConfigureMovement();
+            base.ConfigureSwimming();
+            base.Awake();
+        }
+
+        /// <summary>
+        /// Override the SnowStalker movement
+        /// </summary>
+        private void ConfigureMovement()
+        {
+            SnowStalkerBaby snowStalker = GetComponent<SnowStalkerBaby>();
+
+            // Add a SurfaceMovement component, get that little bugger moving around!
+            Log.LogDebug("... Configuring movement components ...");
+            OnSurfaceTracker onSurfaceTracker = gameObject.GetComponent<OnSurfaceTracker>();
+            WalkBehaviour walkBehaviour = gameObject.GetComponent<WalkBehaviour>();
+            OnSurfaceMovement onSurfaceMovement = gameObject.AddComponent<OnSurfaceMovement>();
+            MoveOnSurface moveOnSurface = gameObject.GetComponent<MoveOnSurface>();
+
+            // Configure walking and movement components
+            onSurfaceMovement.onSurfaceTracker = onSurfaceTracker;
+            onSurfaceMovement.locomotion = gameObject.GetComponent<Locomotion>();
+            moveOnSurface.onSurfaceMovement = onSurfaceMovement;
+            moveOnSurface.moveRadius = 7.0f;
+            walkBehaviour.onSurfaceMovement = onSurfaceMovement;
+            walkBehaviour.onSurfaceTracker = onSurfaceTracker;
+            snowStalker.onSurfaceMovement = onSurfaceMovement;
+            Log.LogDebug("... Configuring movement components ... Done");
+
+            // Add Obstacle Avoidance components
+            Log.LogDebug("... Configuring AvoidObstaclesOnLand...");
+            AvoidObstaclesOnLand avoidObstaclesOnLand = gameObject.AddComponent<AvoidObstaclesOnLand>();
+            AvoidObstaclesOnSurface avoidObstaclesOnSurface = gameObject.AddComponent<AvoidObstaclesOnSurface>();
+            avoidObstaclesOnLand.creature = snowStalker;
+            avoidObstaclesOnSurface.creature = snowStalker;
+            avoidObstaclesOnLand.swimBehaviour = walkBehaviour;
+            avoidObstaclesOnLand.scanDistance = 0.5f;
+            Log.LogDebug("... Configuring AvoidObstaclesOnLand... Done");
+
+            // Configure swim behaviour
+            Log.LogDebug("... Configuring SwimRandom and LastTarget...");
+            LastTarget lastTarget = gameObject.AddComponent<LastTarget>();
+            SwimRandom swimRandom = gameObject.GetComponent<SwimRandom>();
+            swimRandom.swimBehaviour = walkBehaviour;
+            Log.LogDebug("... Configuring SwimRandom and LastTarget... Done");
+        }
     }
 }
 #endif

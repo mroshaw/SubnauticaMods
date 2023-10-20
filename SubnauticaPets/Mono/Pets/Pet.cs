@@ -1,5 +1,8 @@
-﻿using DaftAppleGames.SubnauticaPets.Utils;
+﻿using System;
+using DaftAppleGames.SubnauticaPets.Utils;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Mono.Pets
@@ -99,6 +102,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             ConfigureSkyApplier();
             DestroyPickupable();
             ConfigureAnimator();
+            ConfigurePetTraits();
         }
 
         /// <summary>
@@ -130,7 +134,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         /// </summary>
         private void ConfigureAnimator()
         {
-            Log.LogError("Pet: Configuring animator...");
+            Log.LogDebug("Pet: Configuring animator...");
             _creature = gameObject.GetComponent<Creature>();
             if (_creature)
             {
@@ -149,7 +153,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             {
                 _animator.enabled = true;
             }
-            Log.LogError("Pet: Configuring animator... Done.");
+            Log.LogDebug("Pet: Configuring animator... Done.");
         }
 
         /// <summary>
@@ -277,6 +281,20 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         }
 
         /// <summary>
+        /// Configure Pet Traits for "friendly" creatures
+        /// </summary>
+        private void ConfigurePetTraits()
+        {
+            _creature.Friendliness.Value = 1.0f;
+            _creature.Happy.Value = 1.0f;
+            _creature.Aggression.Value = 0.0f;
+            _creature.Scared.Value = 0.0f;
+            _creature.Curiosity.Value = 1.0f;
+            _creature.Hunger.Value = 1.0f;
+            _creature.Tired.Value = 0.0f;
+        }
+
+        /// <summary>
         /// Adds a RigidBody, if not one already
         /// </summary>
         public void AddRigidBody()
@@ -388,5 +406,89 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         {
             ErrorMessage.AddMessage($"{Language.main.Get("Alert_PetBorn")} {PetTypeString}, {PetNameString}!");
         }
+
+        /// <summary>
+        /// Prevents a Pet from floating on death
+        /// </summary>
+        public void PreventFloatingOnDeath()
+        {
+            // Remove the CreatureDeath component, to prevent floating on death
+            Log.LogDebug("... ConfigurePetCreature:  CreatureDeath...");
+            CreatureDeath creatureDeath = gameObject.GetComponent<CreatureDeath>();
+            Destroy(creatureDeath);
+        }
+
+#if SUBNAUTICAZERO
+
+        /// <summary>
+        /// Cleans up all the NavMesh related components on the Pet Game Object
+        /// </summary>
+        private void CleanNavUpMesh()
+        {
+            // Remove NavMesh components
+            MoveOnNavMesh navMeshComp = gameObject.GetComponent<MoveOnNavMesh>();
+            if (navMeshComp)
+            {
+                Destroy(navMeshComp);
+            }
+            else
+            {
+                Log.LogDebug("... CleanUpMesh: Couldn't find MoveOnNavMesh!");
+            }
+
+            NavMeshFollowing navMeshFollowComp = gameObject.GetComponent<NavMeshFollowing>();
+            Log.LogDebug("... CleanUpMesh: Destroying NavMeshFollowing");
+            if (navMeshFollowComp)
+            {
+                Destroy(navMeshFollowComp);
+            }
+            else
+            {
+                Log.LogError("... CleanUpMesh: Couldn't find NavMeshFollowing!");
+            }
+
+            // Destroy the NavMesh Agent
+            NavMeshAgent navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
+            Log.LogDebug("... Destroying NavMeshAgent");
+            if (navMeshAgent)
+            {
+                Destroy(navMeshAgent);
+
+                // Remove NavMesh behaviour
+                Log.LogDebug("... Removing NavMesh Behaviour");
+                SwimWalkCreatureController swimWalkCreatureController = gameObject.GetComponent<SwimWalkCreatureController>();
+                swimWalkCreatureController.walkBehaviours = RemoveBehaviourItem(swimWalkCreatureController.walkBehaviours, typeof(NavMeshAgent));
+            }
+            else
+            {
+                Log.LogError("... CleanUpMesh: Couldn't find NavMeshAgent!");
+            }
+        }
+
+        /// <summary>
+        /// Remove the given behaviour from the behavior array
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="typeToRemove"></param>
+        /// <returns></returns>
+        private static Behaviour[] RemoveBehaviourItem(Behaviour[] array, Type typeToRemove)
+        {
+            Log.LogDebug($"... Removing behaviour: {typeToRemove}");
+            List<Behaviour> behaviourList = new List<Behaviour>(array);
+            Behaviour behaviorToRemove = behaviourList.Find(x => x.GetType() == typeToRemove);
+            behaviourList.Remove(behaviorToRemove);
+            Log.LogDebug($"... Behaviour removed: {typeToRemove}");
+            return behaviourList.ToArray();
+        }
+
+        public void ConfigureSwimming()
+        {
+            // Prevent Pet from swimming in interiors   
+            Log.LogDebug("... ConfigurePetCreature:  LandCreatureGravity...");
+            LandCreatureGravity landCreatureGravity = gameObject.GetComponent<LandCreatureGravity>();
+            landCreatureGravity.forceLandMode = true;
+            landCreatureGravity.enabled = true;
+        }
+        #endif
     }
 }

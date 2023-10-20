@@ -89,6 +89,10 @@
     <Reference Include="UnityEngine">
       <HintPath>E:\Games\Steam\steamapps\common\$(Configuration)\$(Configuration)_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\UnityEngine.AIModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>E:\Games\Steam\steamapps\common\$(Configuration)\$(Configuration)_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
@@ -120,9 +124,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Localization\French.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="Mono\Utils\ApplySnFont.cs" />
+    <Compile Include="Patches\GroundMotorPatches.cs" />
     <Compile Include="Patches\KnownTechPatches.cs" />
+    <Compile Include="Patches\MoveOnSurfacePatches.cs" />
     <Compile Include="Patches\NotificationManagerPatches.cs" />
+    <Compile Include="Patches\TrivalvePlayerInteractionPatches.cs" />
     <Compile Include="Patches\uGUIMapRoomResourceNodePatches.cs" />
     <Compile Include="Mono\Pets\PetDatabankEntries.cs" />
     <Compile Include="Prefabs\PetConsoleFragmentPrefab.cs" />

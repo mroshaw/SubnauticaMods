@@ -1,12 +1,11 @@
 ﻿#if SUBNAUTICAZERO
 
-using DaftAppleGames.SubnauticaPets.Mono.Pets;
 using Nautilus.Assets;
 using Nautilus.Crafting;
 using UnityEngine;
 using static LootDistributionData;
 
-namespace DaftAppleGames.SubnauticaPets.Pets.BelowZero
+namespace DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero
 {
     /// <summary>
     /// Implements AlienRobot specific Pet functionality
@@ -54,6 +53,16 @@ namespace DaftAppleGames.SubnauticaPets.Pets.BelowZero
 
         // Trivalve scale factor
         public override float ScaleFactor => 1.0f;
+
+        /// <summary>
+        /// Override base Awake method
+        /// </summary>
+        public override void Awake()
+        {
+            PreventFloatingOnDeath();
+            ConfigureSwimming();
+            base.Awake();
+        }
     }
 }
 #endif

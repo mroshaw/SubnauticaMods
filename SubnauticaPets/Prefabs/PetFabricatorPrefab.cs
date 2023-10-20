@@ -2,7 +2,7 @@
 using DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica;
 #endif
 #if SUBNAUTICAZERO
-using DaftAppleGames.SubnauticaPets.Pets.BelowZero;
+using DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero;
 #endif
 using DaftAppleGames.SubnauticaPets.Mono.BaseParts;
 using DaftAppleGames.SubnauticaPets.Mono.Pets;
@@ -89,7 +89,6 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                 Ingredients =
                 {
                     new Ingredient(TechType.Titanium, 5),
-                    new Ingredient(TechType.Nickel, 2),
                     new Ingredient(TechType.ComputerChip, 1),
                     new Ingredient(TechType.CopperWire, 3),
 #if SUBNAUTICA

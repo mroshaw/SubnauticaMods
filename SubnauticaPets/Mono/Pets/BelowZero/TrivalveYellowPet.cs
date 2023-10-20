@@ -1,6 +1,7 @@
 ﻿#if SUBNAUTICAZERO
 
 using DaftAppleGames.SubnauticaPets.Mono.Pets;
+using DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero;
 using Nautilus.Assets;
 using Nautilus.Crafting;
 using UnityEngine;
@@ -53,6 +54,16 @@ namespace DaftAppleGames.SubnauticaPets.Pets.BelowZero
 
         // Trivalve scale factor
         public override float ScaleFactor => 1.0f;
+
+        /// <summary>
+        /// Override base Awake method
+        /// </summary>
+        public override void Awake()
+        {
+            PreventFloatingOnDeath();
+            ConfigureSwimming();
+            base.Awake();
+        }
     }
 }
 #endif

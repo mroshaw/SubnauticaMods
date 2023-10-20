@@ -1,11 +1,10 @@
 ﻿#if SUBNAUTICAZERO
-using DaftAppleGames.SubnauticaPets.Mono.Pets;
 using Nautilus.Assets;
 using Nautilus.Crafting;
 using UnityEngine;
 using static LootDistributionData;
 
-namespace DaftAppleGames.SubnauticaPets.Pets.BelowZero
+namespace DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero
 {
     /// <summary>
     /// Implements AlienRobot specific Pet functionality
@@ -26,7 +25,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets.BelowZero
         // Pet DNA
         public static string DnaClassId = "PenglingAdultPetDna";
         
-        
         public static string DnaTextureName = "PenglingAdultDnaStrandTexture";
         public static PrefabInfo DnaBuildablePrefabInfo;
 
@@ -39,6 +37,8 @@ namespace DaftAppleGames.SubnauticaPets.Pets.BelowZero
         };
 
         public static Color PetObjectColor = Color.grey;
+
+        private static readonly string[] PenglingAdultAnims = { "peck", "flutter", "bite" };
 
         /// <summary>
         /// Defines the Recipe for fabricating the Pet
@@ -54,6 +54,16 @@ namespace DaftAppleGames.SubnauticaPets.Pets.BelowZero
 
         // Adult Pengling scale factor
         public override float ScaleFactor => 1.0f;
+
+        /// <summary>
+        /// Override base Awake method
+        /// </summary>
+        public override void Awake()
+        {
+            PreventFloatingOnDeath();
+            ConfigureSwimming();
+            base.Awake();
+        }
     }
 }
 #endif
