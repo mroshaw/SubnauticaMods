@@ -74,8 +74,8 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             // Set up the scanning and fragment unlocks
             Log.LogDebug("PetConsolePrefab: Setting up scanner entry...");
             Log.LogDebug($"PetConsolePrefab: Info is: {consolePrefab.Info.TechType}");
-
-            consolePrefab.SetUnlock(PetConsoleFragmentPrefab.PrefabInfo.TechType)
+            
+            consolePrefab.SetUnlock(consolePrefabInfo.TechType)
                 .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule)
                 .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle(PetConsolePopupImageTexture), null, null);
 
