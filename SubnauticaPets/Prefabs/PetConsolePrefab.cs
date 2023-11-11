@@ -30,8 +30,8 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         private const string PetConsoleIconTexture = "PetConsoleIconTexture";
 
         // Databank key constants
-        private const string PetConsoleEncyPath = "Tech/Habitats";
-        private const string PetConsoleEncyKey = "PetConsole";
+        public const string PetConsoleEncyPath = "Tech/Habitats";
+        public const string PetConsoleEncyKey = "PetConsole";
 
         /// <summary>
         /// Makes the new Pet Console available for use.
@@ -72,16 +72,14 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             SetupDatabank();
 
             // Set up the scanning and fragment unlocks
-            Log.LogDebug("PetConsoleFragmentPrefab: Setting up scanner entry...");
-            Log.LogDebug($"PetConsoleFragmentPrefab: FragmentInfo is: {consolePrefab.Info.TechType}");
-            bool found = EnumHandler.TryGetValue<TechType>(PrefabClassId, out TechType enumValue);
+            Log.LogDebug("PetConsolePrefab: Setting up scanner entry...");
+            Log.LogDebug($"PetConsolePrefab: Info is: {consolePrefab.Info.TechType}");
 
-            Log.LogDebug($"PetConsoleFragmentPrefab: ");
-            consolePrefab.SetUnlock(PetConsoleFragmentPrefab.PrefabInfo.TechType, 3)
-                .WithScannerEntry(5f, true, PetConsoleEncyKey, true)
+            consolePrefab.SetUnlock(PetConsoleFragmentPrefab.PrefabInfo.TechType)
                 .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule)
-                .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle(PetConsolePopupImageTexture));
-            Log.LogDebug("PetConsoleFragmentPrefab: Setting up scanner entry... Done.");
+                .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle(PetConsolePopupImageTexture), null, null);
+
+            Log.LogDebug("PetConsoleFPrefab: Setting up scanner entry... Done.");
 
             consolePrefab.Register();
 

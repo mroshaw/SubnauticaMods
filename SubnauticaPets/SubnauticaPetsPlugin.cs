@@ -101,7 +101,6 @@ namespace DaftAppleGames.SubnauticaPets
             Log.LogDebug("SubnauticaPetsPlugin: Calling InitMod()...");
             InitMod();
             Log.LogDebug("SubnauticaPetsPlugin: Calling InitMod()... Done.");
-
         }
 
         /// <summary>
@@ -115,12 +114,12 @@ namespace DaftAppleGames.SubnauticaPets
             // Initialise Pet DNA prefabs
             PetDnaPrefab.InitPetPrefabs();
 
+            // Init Console and Fabricator Fragments
+            PetFabricatorFragmentPrefab.InitPrefab();
+            PetConsoleFragmentPrefab.InitPrefab();
+ 
             // Initialise the Pet Buildables
             PetBuildablePrefab.InitPetBuildables();
-
-            // Init Console and Fabricator Fragments
-            PetConsoleFragmentPrefab.InitPrefab();
-            PetFabricatorFragmentPrefab.InitPrefab();
 
             // Init the Pet Console Fabricator
             PetConsolePrefab.InitPetConsole();

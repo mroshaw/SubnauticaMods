@@ -79,6 +79,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 ModifyPrefab = prefab =>
                 {
+                    #region Replace Model
                     // Replace model
                     GameObject damagedConsoleGameObject =
                         ModUtils.GetGameObjectInstanceFromAssetBundle(PetConsolePrefabName);
@@ -113,11 +114,23 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     prefab.AddComponent<PetConsoleFragment>();
                     Log.LogDebug(
                         "PetConsoleFragmentPrefab: InitPrefab adding PetConsoleFragment component... Done.");
+                    #endregion
                 }
             };
 
             consoleFragmentPrefab.SetGameObject(cloneTemplate);
-            ModUtils.SetupCoordinatedSpawn(consoleFragmentPrefab, SpawnLocations);
+            consoleFragmentPrefab.SetSpawns(SpawnLocations);
+
+            // Set up scannable
+
+            /*
+            consoleFragmentPrefab.SetUnlock(consolePrefabInfo.TechType, 3)
+                .WithScannerEntry(consolePrefabInfo.TechType, 5f, true, PetConsolePrefab.PetConsoleEncyKey, true)
+                .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle(PetConsolePopupImageTexture), null, null);
+            */
+
+            consoleFragmentPrefab.CreateFragment(PetConsolePrefab.PrefabInfo.TechType, 5.0f, 3,
+                PetConsolePrefab.PetConsoleEncyKey, true, true);
             Log.LogDebug($"PetConsoleFragmentPrefab: Registering {PrefabClassId}...");
             consoleFragmentPrefab.Register();
             Log.LogDebug($"PetConsoleFragmentPrefab: Init Prefab for {PrefabClassId}. Done.");

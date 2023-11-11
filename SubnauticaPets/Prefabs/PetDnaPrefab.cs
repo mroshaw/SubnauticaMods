@@ -125,7 +125,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                 TrivalveBluePet.PetObjectColor,
                 TrivalveBluePet.LootDistributionBiomeData);
 #endif
-            SetFixedSpawns();
+            // SetFixedSpawns();
             ConfigureDataBank();
         }
 

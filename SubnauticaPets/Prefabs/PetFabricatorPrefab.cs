@@ -4,6 +4,7 @@ using DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica;
 #if SUBNAUTICAZERO
 using DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero;
 #endif
+using System;
 using DaftAppleGames.SubnauticaPets.Mono.BaseParts;
 using DaftAppleGames.SubnauticaPets.Mono.Pets;
 using DaftAppleGames.SubnauticaPets.Mono.Pets.Custom;
@@ -38,8 +39,8 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         private const string PetFabricatorIconTexture = "PetFabricatorIconTexture";
 
         // Databank key constants
-        private const string PetFabricatorEncyKey = "PetFabricator";
-        private const string PetFabricatorEncyPath = "Tech/Habitats";
+        public const string PetFabricatorEncyKey = "PetFabricator";
+        public const string PetFabricatorEncyPath = "Tech/Habitats";
 
         /// <summary>
         /// Makes the new Pet Fabricator available for use.
@@ -116,9 +117,8 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
 
             // Set up the scanning and fragment unlocks
             fabricatorPrefab.SetUnlock(PetFabricatorFragmentPrefab.PrefabInfo.TechType, 3)
-                .WithScannerEntry(5f, true, PetFabricatorEncyKey, true)
                 .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule)
-                .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle(PetFabricatorPopupImageTexture)); ;
+                .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle(PetFabricatorPopupImageTexture), null, null);
             fabricatorPrefab.Register();
             
             PrefabInfo = fabricatorPrefab.Info;

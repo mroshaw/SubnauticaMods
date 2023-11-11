@@ -2,6 +2,7 @@
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
+using Nautilus.Assets.Gadgets;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 using Nautilus.Utility;
@@ -19,7 +20,10 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         // Prefab Class Id
         private const string PrefabClassId = "PetFabricatorFragment";
 
-        // Defines spawn locations for instances
+        // Asset bundle references
+        private const string PetFabricatorPopupImageTexture = "PetFabricatorDataBankPopupImageTexture";
+
+
 #if SUBNAUTICA
         private static readonly SpawnLocation[] SpawnLocations =
         {
@@ -55,20 +59,24 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             new SpawnLocation(new Vector3(-171.25f,-41.34f, -234.25f), new Vector3(0f, 0f, 0f))
         };
 #endif
+
         /// <summary>
         /// Initialise the Pet Fabricator fragment prefab
         /// </summary>
         public static void InitPrefab()
         {
-            PrefabInfo fabricatorPrefabInfo = PrefabInfo.WithTechType(PrefabClassId, null, null, unlockAtStart: false);
-            CustomPrefab fabriactorFragmentPrefab = new CustomPrefab(fabricatorPrefabInfo);
-            // PrefabTemplate cloneTemplate = new CloneTemplate(fabriactorFragmentPrefab.Info, TechType.WorkbenchFragment)
-            PrefabTemplate cloneTemplate = new CloneTemplate(fabriactorFragmentPrefab.Info,
-                "8029a9ce-ab75-46d0-a8ab-63138f6f83e4")
+            PrefabInfo fabricatorPrefabInfo = PrefabInfo
+                .WithTechType(PrefabClassId, null, null, unlockAtStart: false);
+
+            CustomPrefab fabricatorFragmentPrefab = new CustomPrefab(fabricatorPrefabInfo);
+
+            PrefabTemplate cloneTemplate = new CloneTemplate(fabricatorFragmentPrefab.Info, TechType.GravSphereFragment)
+
+            // PrefabTemplate cloneTemplate = new CloneTemplate(fabricatorFragmentPrefab.Info, "8029a9ce-ab75-46d0-a8ab-63138f6f83e4")
             {
                 ModifyPrefab = prefab =>
                 {
-                // Add components
+                    // Add components
                     Log.LogDebug("PetFabricatorFragmentPrefab: InitPrefab adding PetFabricatorFragment component...");
                     PrefabUtils.AddBasicComponents(prefab, PrefabClassId, fabricatorPrefabInfo.TechType, LargeWorldEntity.CellLevel.Medium);
                     PrefabUtils.AddResourceTracker(prefab, TechType.Fragment);
@@ -77,13 +85,19 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                         "PetFabricatorFragmentPrefab: InitPrefab adding PetFabricatorFragment component... Done.");
                 }
             };
+            
+            fabricatorFragmentPrefab.SetGameObject(cloneTemplate);
+            fabricatorFragmentPrefab.SetSpawns(SpawnLocations);
 
-            fabriactorFragmentPrefab.SetGameObject(cloneTemplate);
-            ModUtils.SetupCoordinatedSpawn(fabriactorFragmentPrefab, SpawnLocations);
+            // Set up scannable
+            fabricatorFragmentPrefab.SetUnlock(fabricatorPrefabInfo.TechType)
+                .WithScannerEntry(fabricatorPrefabInfo.TechType, 5f, true, PetFabricatorPrefab.PetFabricatorEncyKey, true)
+                .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle(PetFabricatorPopupImageTexture), null, null);
+
             Log.LogDebug($"PetFabricatorFragmentPrefab: Registering {PrefabClassId}...");
-            fabriactorFragmentPrefab.Register();
+            fabricatorFragmentPrefab.Register();
             Log.LogDebug($"PetFabricatorFragmentPrefab: Init Prefab for {PrefabClassId}. Done.");
-            PrefabInfo = fabriactorFragmentPrefab.Info;
+            PrefabInfo = fabricatorFragmentPrefab.Info;
         }
     }
 }
