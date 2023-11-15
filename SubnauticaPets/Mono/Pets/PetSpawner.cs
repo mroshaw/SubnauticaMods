@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using DaftAppleGames.SubnauticaPets.Mono.Pets.Custom;
+using DaftAppleGames.SubnauticaPets.Prefabs;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Utility;
 using UnityEngine;
@@ -201,7 +202,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             {
                 // Custom pets
                 case PetCreatureType.Cat:
-                    return CatPet.BuildablePrefabInfo.TechType;
+                    return PetBuildablePrefab.CatBuildable.Info.TechType;
 #if SUBNAUTICA
                 case PetCreatureType.CaveCrawler:
                     return TechType.CaveCrawler;
@@ -242,7 +243,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         private PetCreatureType GetPetCreatureType(TechType techType)
         {
             // Custom types
-            if (techType == CatPet.BuildablePrefabInfo.TechType)
+            if (techType == PetBuildablePrefab.CatBuildable.Info.TechType)
             {
                 return PetCreatureType.Cat;
             }

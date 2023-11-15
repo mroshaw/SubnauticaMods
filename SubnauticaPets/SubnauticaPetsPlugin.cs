@@ -26,7 +26,7 @@ namespace DaftAppleGames.SubnauticaPets
         private const string MyGuid = "com.daftapplegames.subnauticapetsbz";
 #endif
         public const string PluginName = "SubnauticaPets";
-        private const string VersionString = "2.0.0";
+        private const string VersionString = "2.1.0";
 #endregion
         #region Mod Statics
         // Public log static so we can call logging elsewhere in the mod
@@ -110,7 +110,7 @@ namespace DaftAppleGames.SubnauticaPets
         {
             // Initialise Pet DNA prefabs
             LogUtils.LogDebug(LogArea.Main, "Init Pet Prefabs...");
-            PetDnaPrefab.InitPetPrefabs();
+            PetDnaPrefab.InitPetDnaPrefabs();
 
             // Initialise the Pet Buildables
             LogUtils.LogDebug(LogArea.Main, "Init Pet Buildables...");
@@ -118,13 +118,13 @@ namespace DaftAppleGames.SubnauticaPets
 
             // Init Console and Fabricator Fragments
             LogUtils.LogDebug(LogArea.Main, "Init Fragments...");
-            PetFabricatorFragmentPrefab.InitPrefab();
+            // PetFabricatorFragmentPrefab.InitPrefab();
             PetConsoleFragmentPrefab.InitPrefab();
 
             // Init the Pet Console Fabricator
             LogUtils.LogDebug(LogArea.Main, "Init Pet Console and Fabricator...");
-            PetConsolePrefab.InitPetConsole();
             PetFabricatorPrefab.InitPetFabricator();
+            PetConsolePrefab.InitPetConsole();
         }
         #endregion
     }

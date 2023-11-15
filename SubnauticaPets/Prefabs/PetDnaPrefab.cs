@@ -11,7 +11,6 @@ using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Assets.PrefabTemplates;
-using Nautilus.Handlers;
 using Nautilus.Utility;
 using UnityEngine;
 
@@ -36,96 +35,198 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         /// <summary>
         /// Register all prefabs
         /// </summary>
-        public static void InitPetPrefabs()
+        public static void InitPetDnaPrefabs()
         {
             // Get and init the DNA model prefab
             SetDnaModelObjectPrefab();
 
-            // Custom types
-            // Cat
-            CatPet.DnaBuildablePrefabInfo = InitPrefab(CatPet.DnaClassId,
-                null,
-                null,
-                CatPet.DnaTextureName,
-                CatPet.PetObjectColor,
-                CatPet.LootDistributionBiomeData);
+            // Init DNA spawn prefabs
+            CatDnaPrefab.Init();
+
 #if SUBNAUTICA
-            // Cave Crawler
-            CaveCrawlerPet.DnaBuildablePrefabInfo = InitPrefab(CaveCrawlerPet.DnaClassId,
-                null,
-                null,
-                CaveCrawlerPet.DnaTextureName,
-                CaveCrawlerPet.PetObjectColor,
-                CaveCrawlerPet.LootDistributionBiomeData);
-            // Blood Crawler
-            BloodCrawlerPet.DnaBuildablePrefabInfo = InitPrefab(BloodCrawlerPet.DnaClassId,
-                null,
-                null,
-                BloodCrawlerPet.DnaTextureName,
-                BloodCrawlerPet.PetObjectColor,
-                BloodCrawlerPet.LootDistributionBiomeData);
-            // Crab Squid
-            CrabSquidPet.DnaBuildablePrefabInfo = InitPrefab(CrabSquidPet.DnaClassId,
-                null,
-                null,
-                CrabSquidPet.DnaTextureName,
-                CrabSquidPet.PetObjectColor,
-                CrabSquidPet.LootDistributionBiomeData);
-            // Alien Robot
-            AlienRobotPet.DnaBuildablePrefabInfo = InitPrefab(AlienRobotPet.DnaClassId,
-                null,
-                null,
-                AlienRobotPet.DnaTextureName,
-                AlienRobotPet.PetObjectColor,
-                AlienRobotPet.LootDistributionBiomeData);
+            AlienRobotDnaPrefab.Init();
+            BloodCrawlerDnaPrefab.Init();
+            CaveCrawlerDnaPrefab.Init();
+            CrabSquidDnaPrefab.Init();
 #endif
 #if SUBNAUTICAZERO
-            // Snow Stalker Baby
-            SnowStalkerBabyPet.DnaBuildablePrefabInfo = InitPrefab(SnowStalkerBabyPet.DnaClassId,
-                null,
-                null,
-                SnowStalkerBabyPet.DnaTextureName,
-                SnowStalkerBabyPet.PetObjectColor,
-                SnowStalkerBabyPet.LootDistributionBiomeData);
-            // Pengling Adult
-            PenglingAdultPet.DnaBuildablePrefabInfo = InitPrefab(PenglingAdultPet.DnaClassId,
-                null,
-                null,
-                PenglingAdultPet.DnaTextureName,
-                PenglingAdultPet.PetObjectColor,
-                PenglingAdultPet.LootDistributionBiomeData);
-            // Pengling Baby
-            PenglingBabyPet.DnaBuildablePrefabInfo = InitPrefab(PenglingBabyPet.DnaClassId,
-                null,
-                null,
-                PenglingBabyPet.DnaTextureName,
-                PenglingBabyPet.PetObjectColor,
-                PenglingBabyPet.LootDistributionBiomeData);
-            // Pinnicarid
-            PinnicaridPet.DnaBuildablePrefabInfo = InitPrefab(PinnicaridPet.DnaClassId,
-                null,
-                null,
-                PinnicaridPet.DnaTextureName,
-                PinnicaridPet.PetObjectColor,
-                PinnicaridPet.LootDistributionBiomeData);
-            // Yellow Trivalve
-            TrivalveYellowPet.DnaBuildablePrefabInfo = InitPrefab(TrivalveYellowPet.DnaClassId,
-                null,
-                null,
-                TrivalveYellowPet.DnaTextureName,
-                TrivalveYellowPet.PetObjectColor,
-                TrivalveYellowPet.LootDistributionBiomeData);
-            // Blue Trivalve
-            TrivalveBluePet.DnaBuildablePrefabInfo = InitPrefab(TrivalveBluePet.DnaClassId,
-                null,
-                null,
-                TrivalveBluePet.DnaTextureName,
-                TrivalveBluePet.PetObjectColor,
-                TrivalveBluePet.LootDistributionBiomeData);
+            PenglingAdultDnaPrefab.Init();
+            PenglingBabyDnaPrefab.Init();
+            PinnicaridDnaPrefab.Init();
+            SnowstalkerBabyDnaPrefab.Init();
+            TrivalveBlueDnaPrefab.Init();
+            TrivalveYellowDnaPrefab.Init();
 #endif
             ConfigureDataBank();
         }
 
+        public static class CatDnaPrefab
+        {
+            public static PrefabInfo Info;
+
+            public static void Init()
+            {
+                Info = InitPrefab(CatPet.DnaClassId,
+                    null,
+                    null,
+                    CatPet.DnaTextureName,
+                    CatPet.PetObjectColor,
+                    CatPet.LootDistributionBiomeData);
+            }
+        }
+#if SUBNAUTICAZERO
+        public static class PenglingAdultDnaPrefab
+        {
+            public static PrefabInfo Info;
+
+            public static void Init()
+            {
+                Info = InitPrefab(PenglingAdultPet.DnaClassId,
+                    null,
+                    null,
+                    PenglingAdultPet.DnaTextureName,
+                    PenglingAdultPet.PetObjectColor,
+                    PenglingAdultPet.LootDistributionBiomeData);
+            }
+        }
+
+        public static class PenglingBabyDnaPrefab
+        {
+            public static PrefabInfo Info;
+
+            public static void Init()
+            {
+                Info = InitPrefab(PenglingBabyPet.DnaClassId,
+                    null,
+                    null,
+                    PenglingBabyPet.DnaTextureName,
+                    PenglingBabyPet.PetObjectColor,
+                    PenglingBabyPet.LootDistributionBiomeData);
+            }
+        }
+
+        public static class PinnicaridDnaPrefab
+        {
+            public static PrefabInfo Info;
+
+            public static void Init()
+            {
+                Info = InitPrefab(PinnicaridPet.DnaClassId,
+                    null,
+                    null,
+                    PinnicaridPet.DnaTextureName,
+                    PinnicaridPet.PetObjectColor,
+                    PinnicaridPet.LootDistributionBiomeData);
+            }
+        }
+
+        public static class SnowstalkerBabyDnaPrefab
+        {
+            public static PrefabInfo Info;
+
+            public static void Init()
+            {
+                Info = InitPrefab(SnowStalkerBabyPet.DnaClassId,
+                    null,
+                    null,
+                    SnowStalkerBabyPet.DnaTextureName,
+                    SnowStalkerBabyPet.PetObjectColor,
+                    SnowStalkerBabyPet.LootDistributionBiomeData);
+            }
+        }
+
+        public static class TrivalveBlueDnaPrefab
+        {
+            public static PrefabInfo Info;
+
+            public static void Init()
+            {
+                Info = InitPrefab(TrivalveBluePet.DnaClassId,
+                    null,
+                    null,
+                    TrivalveBluePet.DnaTextureName,
+                    TrivalveBluePet.PetObjectColor,
+                    TrivalveBluePet.LootDistributionBiomeData);
+            }
+        }
+
+        public static class TrivalveYellowDnaPrefab
+        {
+            public static PrefabInfo Info;
+
+            public static void Init()
+            {
+                Info = InitPrefab(TrivalveYellowPet.DnaClassId,
+                    null,
+                    null,
+                    TrivalveYellowPet.DnaTextureName,
+                    TrivalveYellowPet.PetObjectColor,
+                    TrivalveYellowPet.LootDistributionBiomeData);
+            }
+        }
+#endif
+
+#if SUBNAUTICA
+        public static class AlienRobotDnaPrefab
+        {
+            public static PrefabInfo Info;
+
+            public static void Init()
+            {
+                Info = InitPrefab(AlienRobotPet.DnaClassId,
+                    null,
+                    null,
+                    AlienRobotPet.DnaTextureName,
+                    AlienRobotPet.PetObjectColor,
+                    AlienRobotPet.LootDistributionBiomeData);
+            }
+        }
+
+        public static class BloodCrawlerDnaPrefab
+        {
+            public static PrefabInfo Info;
+
+            public static void Init()
+            {
+                Info = InitPrefab(BloodCrawlerPet.DnaClassId,
+                    null,
+                    null,
+                    BloodCrawlerPet.DnaTextureName,
+                    BloodCrawlerPet.PetObjectColor,
+                    BloodCrawlerPet.LootDistributionBiomeData);
+            }
+        }
+
+        public static class CaveCrawlerDnaPrefab
+        {
+            public static PrefabInfo Info;
+
+            public static void Init()
+            {
+                Info = InitPrefab(CaveCrawlerPet.DnaClassId,
+                    null,
+                    null,
+                    CaveCrawlerPet.DnaTextureName,
+                    CaveCrawlerPet.PetObjectColor,
+                    CaveCrawlerPet.LootDistributionBiomeData);
+            }
+        }
+
+        public static class CrabSquidDnaPrefab
+        {
+            public static PrefabInfo Info;
+
+            public static void Init()
+            {
+                Info = InitPrefab(CrabSquidPet.DnaClassId,
+                    null,
+                    null,
+                    CrabSquidPet.DnaTextureName,
+                    CrabSquidPet.PetObjectColor,
+                    CrabSquidPet.LootDistributionBiomeData);
+            }
+        }
+#endif
         /// <summary>
         /// Generic method to set up the DNA prefabs
         /// </summary>
@@ -141,12 +242,11 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         {
             LogUtils.LogDebug(LogArea.Prefabs, $"PetDnaPrefab: Init Prefab for {classId}...");
 
-            CustomPrefab clonePrefab = new CustomPrefab(
-               classId,
-               displayName,
-               description,
-               ModUtils.GetSpriteFromAssetBundle(textureName)
-            );
+            PrefabInfo prefabInfo = PrefabInfo
+                .WithTechType(classId, displayName, description, unlockAtStart: true)
+                .WithIcon(ModUtils.GetSpriteFromAssetBundle(textureName));
+
+            CustomPrefab clonePrefab = new CustomPrefab(prefabInfo);
 
             CloneTemplate cloneTemplate = new CloneTemplate(clonePrefab.Info, TechType.Titanium)
             {
@@ -186,7 +286,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             LogUtils.LogDebug(LogArea.Prefabs, $"PetDnaPrefab: Registering {classId}...");
             clonePrefab.Register();
             LogUtils.LogDebug(LogArea.Prefabs, $"PetDnaPrefab: Init Prefab for {classId}. Done.");
-            return clonePrefab.Info;
+            return prefabInfo;
         }
 
         /// <summary>
@@ -228,18 +328,18 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         {
             LogUtils.LogDebug(LogArea.Prefabs, "DatabankEntries: Setting up ItemGoals...");
 #if SUBNAUTICA
-            StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, AlienRobotPet.DnaBuildablePrefabInfo.TechType);
-            StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, BloodCrawlerPet.DnaBuildablePrefabInfo.TechType);
-            StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, CaveCrawlerPet.DnaBuildablePrefabInfo.TechType);
-            StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, CrabSquidPet.DnaBuildablePrefabInfo.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, AlienRobotDnaPrefab.Info.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, BloodCrawlerDnaPrefab.Info.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, CaveCrawlerDnaPrefab.Info.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, CrabSquidDnaPrefab.Info.TechType);
 #endif
 #if SUBNAUTICAZERO
-            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, PenglingAdultPet.DnaBuildablePrefabInfo.TechType);
-            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, PenglingBabyPet.DnaBuildablePrefabInfo.TechType);
-            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, PinnicaridPet.DnaBuildablePrefabInfo.TechType);
-            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, SnowStalkerBabyPet.DnaBuildablePrefabInfo.TechType);
-            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, TrivalveYellowPet.DnaBuildablePrefabInfo.TechType);
-            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, TrivalveBluePet.DnaBuildablePrefabInfo.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, PenglingAdultDnaPrefab.Info.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, PenglingBabyDnaPrefab.Info.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, PinnicaridDnaPrefab.Info.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, SnowstalkerBabyDnaPrefab.Info.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, TrivalveYellowDnaPrefab.Info.TechType);
+            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(encyKey, Story.GoalType.Encyclopedia, TrivalveBlueDnaPrefab.Info.TechType);
 #endif
             LogUtils.LogDebug(LogArea.Prefabs, "DatabankEntries: Setting up ItemGoals... Done.");
         }

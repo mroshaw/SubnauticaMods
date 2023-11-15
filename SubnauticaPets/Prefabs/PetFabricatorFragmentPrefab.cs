@@ -19,8 +19,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         private const string PrefabClassId = "PetFabricatorFragment";
 
         // Public PrefabInfo, for anything that needs it
-        public static PrefabInfo Info { get; } = PrefabInfo
-            .WithTechType(PrefabClassId, null, null, unlockAtStart: false);
+        public static PrefabInfo Info;
 
         // Asset bundle references
         private const string PetFabricatorPopupImageTexture = "PetFabricatorDataBankPopupImageTexture";
@@ -71,6 +70,8 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         /// </summary>
         public static void InitPrefab()
         {
+            Info = PrefabInfo
+                .WithTechType(PrefabClassId, null, null, unlockAtStart: false);
             CustomPrefab fabricatorFragmentPrefab = new CustomPrefab(Info);
 
             LogUtils.LogDebug(LogArea.Prefabs, $"PetFabricator: Creating Clone Template...");

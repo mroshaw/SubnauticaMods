@@ -1,4 +1,5 @@
 ﻿#if SUBNAUTICA
+using DaftAppleGames.SubnauticaPets.Prefabs;
 using Nautilus.Assets;
 using Nautilus.Crafting;
 using UnityEngine;
@@ -25,7 +26,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica
         // Pet DNA
         public static string DnaClassId = "CaveCrawlerPetDna";
         public static string DnaTextureName = "CaveCrawlerDnaStrandTexture";
-        public static PrefabInfo DnaBuildablePrefabInfo;
 
         // Random DNA collectible distribution biome data
         public static BiomeData[] LootDistributionBiomeData = new LootDistributionData.BiomeData[] {
@@ -53,7 +53,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica
                 new CraftData.Ingredient(TechType.Gold, 1),
                 new CraftData.Ingredient(TechType.Sulphur, 1),
                 new CraftData.Ingredient(TechType.Salt, 1),
-                new CraftData.Ingredient(DnaBuildablePrefabInfo.TechType, 3));
+                new CraftData.Ingredient(PetDnaPrefab.CaveCrawlerDnaPrefab.Info.TechType, 3));
             return recipe;
         }
 

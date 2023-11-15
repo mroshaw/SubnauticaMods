@@ -1,4 +1,5 @@
 ﻿#if SUBNAUTICA
+using DaftAppleGames.SubnauticaPets.Prefabs;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
 using Nautilus.Crafting;
@@ -26,7 +27,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica
         // Pet DNA
         public static string DnaClassId = "CrabSquidPetDna";
         public static string DnaTextureName = "CrabSquidDnaStrandTexture";
-        public static PrefabInfo DnaBuildablePrefabInfo;
 
         // Random DNA collectible distribution biome data
         public static BiomeData[] LootDistributionBiomeData = new LootDistributionData.BiomeData[] {
@@ -57,7 +57,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica
                 new CraftData.Ingredient(TechType.Gold, 1),
                 new CraftData.Ingredient(TechType.JellyPlant, 1),
                 new CraftData.Ingredient(TechType.Salt, 1),
-                new CraftData.Ingredient(DnaBuildablePrefabInfo.TechType, 3));
+                new CraftData.Ingredient(PetDnaPrefab.CrabSquidDnaPrefab.Info.TechType, 3));
             return recipe;
         }
 

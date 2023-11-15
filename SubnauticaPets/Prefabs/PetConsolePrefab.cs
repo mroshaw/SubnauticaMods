@@ -16,9 +16,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
     internal static class PetConsolePrefab
     {
         // Pubic PrefabInfo, for anything that needs it
-        public static PrefabInfo Info { get; } = PrefabInfo
-            .WithTechType(PrefabClassId, null, null, unlockAtStart: false)
-            .WithIcon(ModUtils.GetSpriteFromAssetBundle(PetConsoleIconTexture));
+        public static PrefabInfo Info;
 
         // Prefab class Id
         private const string PrefabClassId = "PetConsole";
@@ -39,6 +37,9 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         /// </summary>
         public static void InitPetConsole()
         {
+            Info = PrefabInfo
+                .WithTechType(PrefabClassId, null, null, unlockAtStart: false)
+                .WithIcon(ModUtils.GetSpriteFromAssetBundle(PetConsoleIconTexture));
             CustomPrefab consolePrefab = new CustomPrefab(Info);
 
             // We'll use the PictureFrame as a template
@@ -65,32 +66,19 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             // Set the recipe.
             consolePrefab.SetRecipe(recipe);
 
-            // Set up Databank
-            SetupDatabank();
-
             // Set up the scanning and fragment unlocks
             LogUtils.LogDebug(LogArea.Prefabs, "PetConsolePrefab: Setting up scanner entry...");
             LogUtils.LogDebug(LogArea.Prefabs, $"PetConsolePrefab: Info is: {consolePrefab.Info.TechType}");
 
             consolePrefab.SetUnlock(Info.TechType)
                 .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle(PetConsolePopupImageTexture), null, null)
-                .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule);
+                .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule)
+                .WithEncyclopediaEntry(PetConsoleEncyPath,
+                    ModUtils.GetSpriteFromAssetBundle(PetConsolePopupImageTexture),
+                    ModUtils.GetTexture2DFromAssetBundle(PetConsoleMainImageTexture));
 
-            LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFPrefab: Setting up scanner entry... Done.");
+            LogUtils.LogDebug(LogArea.Prefabs, "PetConsolePrefab: Setting up scanner entry... Done.");
             consolePrefab.Register();
-        }
-
-        /// <summary>
-        /// Set up Databank Entries
-        /// </summary>
-        private static void SetupDatabank()
-        {
-                // Set up Databank
-                LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: Setting up Databank entry...");
-                PDAHandler.AddEncyclopediaEntry(PetConsoleEncyKey, PetConsoleEncyPath, null, null,
-                    ModUtils.GetTexture2DFromAssetBundle(PetConsoleMainImageTexture),
-                    ModUtils.GetSpriteFromAssetBundle(PetConsolePopupImageTexture));
-                LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: Setting up Databank entry... Done.");
         }
 
         /// <summary>

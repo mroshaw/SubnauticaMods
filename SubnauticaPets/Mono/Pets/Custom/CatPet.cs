@@ -2,6 +2,7 @@
 using Nautilus.Crafting;
 using UnityEngine;
 using static LootDistributionData;
+using DaftAppleGames.SubnauticaPets.Prefabs;
 
 #if SUBNAUTICA
 using static CraftData;
@@ -23,7 +24,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.Custom
         public static string ClassId = "CatPet";
         public static string IconTextureName = "CatTexture";
         public static string CustomPrefabName = "PetCat";
-        public static PrefabInfo BuildablePrefabInfo;
         public static string PrefabGuid = "4fae8fa4-0280-43bd-bcf1-f3cba97eed77";
         public static string ModelName = "Precursor_Droid"; // "Precursor_Droid_horn_geo" is mode, Anim on "Precursor_Droid"
         public static Vector3 ModelScale = new Vector3(0.5f, 0.5f, 0.5f);
@@ -33,7 +33,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.Custom
         // Pet DNA
         public static string DnaClassId = "CatPetDna";
         public static string DnaTextureName = "CatDnaStrandTexture";
-        public static PrefabInfo DnaBuildablePrefabInfo;
 
         // DNA collectible distribution biome data
         public static BiomeData[] LootDistributionBiomeData = new LootDistributionData.BiomeData[] {
@@ -52,7 +51,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.Custom
         {
             RecipeData recipe = new RecipeData(
                 new Ingredient(TechType.Gold, 3),
-                new Ingredient(DnaBuildablePrefabInfo.TechType, 5));
+                new Ingredient(PetDnaPrefab.CatDnaPrefab.Info.TechType, 5));
             return recipe;
         }
 

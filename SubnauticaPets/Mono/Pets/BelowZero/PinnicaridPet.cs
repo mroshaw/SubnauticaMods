@@ -1,4 +1,5 @@
 ﻿#if SUBNAUTICAZERO
+using DaftAppleGames.SubnauticaPets.Prefabs;
 using Nautilus.Assets;
 using Nautilus.Crafting;
 using UnityEngine;
@@ -25,7 +26,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero
         // Pet DNA
         public static string DnaClassId = "PinnicaridPetDna";
         public static string DnaTextureName = "PinnicaridDnaStrandTexture";
-        public static PrefabInfo DnaBuildablePrefabInfo;
 
         // Random DNA collectible distribution biome data
         public static BiomeData[] LootDistributionBiomeData = new LootDistributionData.BiomeData[] {
@@ -47,7 +47,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero
         {
             RecipeData recipe = new RecipeData(
                 new Ingredient(TechType.Gold, 3),
-                new Ingredient(DnaBuildablePrefabInfo.TechType, 5));
+                new Ingredient(PetDnaPrefab.PinnicaridDnaPrefab.Info.TechType, 5));
             return recipe;
         }
         

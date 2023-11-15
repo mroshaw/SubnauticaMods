@@ -1,4 +1,5 @@
 ﻿#if SUBNAUTICAZERO
+using DaftAppleGames.SubnauticaPets.Prefabs;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
 using Nautilus.Crafting;
@@ -26,7 +27,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero
         // Pet DNA
         public static string DnaClassId = "BabySnowStalkerPetDna";
         public static string DnaTextureName = "SnowStalkerBabyDnaStrandTexture";
-        public static PrefabInfo DnaBuildablePrefabInfo;
 
         // Random DNA collectible distribution biome data
         public static BiomeData[] LootDistributionBiomeData = new LootDistributionData.BiomeData[] {
@@ -47,7 +47,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero
         {
             RecipeData recipe = new RecipeData(
                 new Ingredient(TechType.Gold, 3),
-                new Ingredient(DnaBuildablePrefabInfo.TechType, 5));
+                new Ingredient(PetDnaPrefab.SnowstalkerBabyDnaPrefab.Info.TechType, 5));
             return recipe;
         }
 

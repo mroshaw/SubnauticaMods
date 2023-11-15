@@ -1,4 +1,5 @@
-﻿using Nautilus.Assets;
+﻿using DaftAppleGames.SubnauticaPets.Prefabs;
+using Nautilus.Assets;
 using Nautilus.Crafting;
 using UnityEngine;
 using static LootDistributionData;
@@ -25,7 +26,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica
         // Pet DNA
         public static string DnaClassId = "AlienRobotPetDna";
         public static string DnaTextureName = "AlienRobotDnaStrandTexture";
-        public static PrefabInfo DnaBuildablePrefabInfo;
 
         // Random DNA collectible distribution biome data
         public static BiomeData[] LootDistributionBiomeData = new LootDistributionData.BiomeData[] {
@@ -53,7 +53,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica
                                 new CraftData.Ingredient(TechType.CopperWire, 1),
                                 new CraftData.Ingredient(TechType.ComputerChip, 1),
                                 new CraftData.Ingredient(TechType.Titanium, 2),
-                                new CraftData.Ingredient(DnaBuildablePrefabInfo.TechType, 3));
+                                new CraftData.Ingredient(PetDnaPrefab.AlienRobotDnaPrefab.Info.TechType, 3));
             return recipe;
         }
 

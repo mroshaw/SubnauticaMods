@@ -3,10 +3,10 @@ using DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica;
 #endif
 #if SUBNAUTICAZERO
 using DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero;
-using DaftAppleGames.SubnauticaPets.Prefabs;
 #endif
 using DaftAppleGames.SubnauticaPets.Mono.Pets;
 using DaftAppleGames.SubnauticaPets.Mono.Pets.Custom;
+using DaftAppleGames.SubnauticaPets.Prefabs;
 using HarmonyLib;
 using DaftAppleGames.SubnauticaPets.Utils;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
@@ -63,7 +63,7 @@ namespace DaftAppleGames.SubnauticaPets.Patches
                 LogUtils.LogDebug(LogArea.Patches, $"GhostCrafterPatches: Setting PetCreatureType, ready for spawning {techType}");
 
                 // Custom types
-                if(techType == CatPet.BuildablePrefabInfo.TechType)
+                if(techType == PetBuildablePrefab.CatBuildable.Info.TechType)
                 {
                     SelectedCreaturePetType = PetCreatureType.Cat;
                 }

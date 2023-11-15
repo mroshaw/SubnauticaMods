@@ -81,7 +81,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <returns></returns>
         public static Sprite GetSpriteFromAssetBundle(string textureName)
         {
-            LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Getting Sprite from {textureName} in Asset Bundle.");
+            // LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Getting Sprite from {textureName} in Asset Bundle.");
             Texture2D texture = GetTexture2DFromAssetBundle(textureName);
             return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         }
@@ -93,7 +93,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <returns></returns>
         public static Texture2D GetTexture2DFromAssetBundle(string textureName)
         {
-            LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Getting Texture {textureName} in Asset Bundle.");
+            // LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Getting Texture {textureName} in Asset Bundle.");
             Object obj = GetObjectFromAssetBundle(textureName, typeof(Texture2D));
             if (obj == null)
             {
@@ -145,7 +145,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <returns></returns>
         public static Object GetObjectFromAssetBundle(string objectName, System.Type type)
         {
-            LogUtils.LogDebug(LogArea.Utilities, $"ModUiUtils: Loading AssetBundle {AssetBundleName}, looking for {objectName} of type {type}");
+            // LogUtils.LogDebug(LogArea.Utilities, $"ModUiUtils: Loading AssetBundle {AssetBundleName}, looking for {objectName} of type {type}");
 
             string modPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
@@ -166,7 +166,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
                 }
             }
 
-            LogUtils.LogDebug(LogArea.Utilities, "ModUiUtils:  Found AssetBundle. Looking for object...");
+            // LogUtils.LogDebug(LogArea.Utilities, "ModUiUtils:  Found AssetBundle. Looking for object...");
 
             // Iterate over loaded objects to find what we want
             if (ModAssetBundleObjects != null)

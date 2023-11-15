@@ -14,8 +14,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
     internal static class PetConsoleFragmentPrefab
     {
         // Public PrefabInfo, for anything that needs it
-        public static PrefabInfo Info { get; } = PrefabInfo
-            .WithTechType(PrefabClassId, null, null, unlockAtStart: false);
+        public static PrefabInfo Info;
 
         // Prefab Class Id
         private const string PrefabClassId = "PetConsoleFragment";
@@ -72,6 +71,8 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         /// </summary>
         public static void InitPrefab()
         {
+            Info = PrefabInfo
+                .WithTechType(PrefabClassId, null, null, unlockAtStart: false);
             CustomPrefab consoleFragmentPrefab = new CustomPrefab(Info);
 
             CloneTemplate cloneTemplate = new CloneTemplate(consoleFragmentPrefab.Info, TechType.GravSphereFragment)
