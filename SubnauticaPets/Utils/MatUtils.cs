@@ -3,7 +3,7 @@
 namespace DaftAppleGames.SubnauticaPets.Utils
 {
     /// <summary>
-    /// Static utilities class for Material methods
+    /// Static LogUtils.LogDebug(LogArea.Utilities, LogArea.Utilities,  class for Material methods
     /// </summary>
     internal static class MatUtils
     {

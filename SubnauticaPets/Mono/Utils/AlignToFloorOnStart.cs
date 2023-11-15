@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
+﻿
+using UnityEngine;
+using DaftAppleGames.SubnauticaPets.Utils;
 
 namespace DaftAppleGames.SubnauticaPets.Mono.Utils
 {
@@ -27,12 +28,12 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Utils
             bool isHit = Physics.Raycast(transform.position, Vector3.down, out var hit, 5.0f);
             if (isHit)
             {
-                Log.LogDebug($"AlignToFloorOnStart: Aligning object {gameObject.name} to floor.");
+                LogUtils.LogDebug(LogArea.MonoUtils, $"AlignToFloorOnStart: Aligning object {gameObject.name} to floor.");
                 return hit.point + HitOffset;
             }
             else
             {
-                Log.LogDebug($"AlignToFloorOnStart: Raycast failed to hit while aligning object {gameObject.name} to floor.");
+                LogUtils.LogDebug(LogArea.MonoUtils, $"AlignToFloorOnStart: Raycast failed to hit while aligning object {gameObject.name} to floor.");
                 return transform.position;
             }
         }

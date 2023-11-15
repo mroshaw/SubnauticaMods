@@ -16,7 +16,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica
         // Pet
         public static string ClassId = "BloodCrawlerPet";
         public static string TextureName = "BloodCrawlerTexture";
-        public static PrefabInfo BuildablePrefabInfo;
         public static string PrefabGuid = "830a8fa0-d92d-4683-a193-7531e6968042"; // https://github.com/LeeTwentyThree/Nautilus/blob/master/Nautilus/Documentation/resources/SN1-PrefabPaths.json
         public static string ModelName = "Cave_Crawler_blood_01"; // Animator on "Cave_Crawler_03"
         public static Vector3 ModelScale = new Vector3(0.3f, 0.3f, 0.3f);
@@ -58,7 +57,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica
         }
 
         // Blood Crawler scale factor
-        public override float ScaleFactor => 0.3f;
+        public override Vector3 ScaleFactor => new(0.3f, 0.3f, 0.3f);
     }
 }
 #endif

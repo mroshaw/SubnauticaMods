@@ -6,7 +6,6 @@ using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
 using UnityEngine;
 using static CraftData;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 using Nautilus.Handlers;
 
 namespace DaftAppleGames.SubnauticaPets.Prefabs
@@ -17,7 +16,9 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
     internal static class PetConsolePrefab
     {
         // Pubic PrefabInfo, for anything that needs it
-        public static PrefabInfo PrefabInfo;
+        public static PrefabInfo Info { get; } = PrefabInfo
+            .WithTechType(PrefabClassId, null, null, unlockAtStart: false)
+            .WithIcon(ModUtils.GetSpriteFromAssetBundle(PetConsoleIconTexture));
 
         // Prefab class Id
         private const string PrefabClassId = "PetConsole";
@@ -38,11 +39,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         /// </summary>
         public static void InitPetConsole()
         {
-            PrefabInfo consolePrefabInfo = PrefabInfo
-                .WithTechType(PrefabClassId, null, null, unlockAtStart: false)
-                .WithIcon(ModUtils.GetSpriteFromAssetBundle(PetConsoleIconTexture));
-
-            CustomPrefab consolePrefab = new CustomPrefab(consolePrefabInfo);
+            CustomPrefab consolePrefab = new CustomPrefab(Info);
 
             // We'll use the PictureFrame as a template
             PrefabTemplate consoleTemplate = new CloneTemplate(consolePrefab.Info, TechType.PictureFrame)
@@ -72,18 +69,15 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             SetupDatabank();
 
             // Set up the scanning and fragment unlocks
-            Log.LogDebug("PetConsolePrefab: Setting up scanner entry...");
-            Log.LogDebug($"PetConsolePrefab: Info is: {consolePrefab.Info.TechType}");
-            
-            consolePrefab.SetUnlock(consolePrefabInfo.TechType)
-                .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule)
-                .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle(PetConsolePopupImageTexture), null, null);
+            LogUtils.LogDebug(LogArea.Prefabs, "PetConsolePrefab: Setting up scanner entry...");
+            LogUtils.LogDebug(LogArea.Prefabs, $"PetConsolePrefab: Info is: {consolePrefab.Info.TechType}");
 
-            Log.LogDebug("PetConsoleFPrefab: Setting up scanner entry... Done.");
+            consolePrefab.SetUnlock(Info.TechType)
+                .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle(PetConsolePopupImageTexture), null, null)
+                .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule);
 
+            LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFPrefab: Setting up scanner entry... Done.");
             consolePrefab.Register();
-
-            PrefabInfo = consolePrefab.Info;
         }
 
         /// <summary>
@@ -92,11 +86,11 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         private static void SetupDatabank()
         {
                 // Set up Databank
-                Log.LogDebug("PetConsoleFragmentPrefab: Setting up Databank entry...");
+                LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: Setting up Databank entry...");
                 PDAHandler.AddEncyclopediaEntry(PetConsoleEncyKey, PetConsoleEncyPath, null, null,
                     ModUtils.GetTexture2DFromAssetBundle(PetConsoleMainImageTexture),
                     ModUtils.GetSpriteFromAssetBundle(PetConsolePopupImageTexture));
-                Log.LogDebug("PetConsoleFragmentPrefab: Setting up Databank entry... Done.");
+                LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: Setting up Databank entry... Done.");
         }
 
         /// <summary>
@@ -106,9 +100,10 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         private static void ConfigureConsoleComponents(GameObject consoleGameObject)
         {
             // Add the PetConsole component, which will provision the UI
-            Log.LogDebug("PetConsolePrefab: Adding PetConsole component...");
+            consoleGameObject.SetActive(false);
+            LogUtils.LogDebug(LogArea.Prefabs, "PetConsolePrefab: Adding PetConsole component...");
             PetConsole petConsole = consoleGameObject.AddComponent<PetConsole>();
-            Log.LogDebug("PetConsolePrefab: Adding PetConsole component... Done.");
+            LogUtils.LogDebug(LogArea.Prefabs, "PetConsolePrefab: Adding PetConsole component... Done.");
         }
     }
 }

@@ -4,7 +4,6 @@ using Nautilus.Json;
 using Nautilus.Options;
 using Nautilus.Options.Attributes;
 using UnityEngine;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets
 {
@@ -23,13 +22,30 @@ namespace DaftAppleGames.SubnauticaPets
         [Toggle("Enable Cat Pet (requires restart)")]
         public bool EnableCat = false;
 
+        [Toggle("Detailed logging")]
+        public bool DetailedLogging = true;
+
+        [Toggle("Logging (Base Parts)")]
+        public bool LogBaseParts = true;
+
+        [Toggle("Logging (Pets)")]
+        public bool LogPets = true;
+
+        [Toggle("Logging (Prefabs)")]
+        public bool LogPrefabs = true;
+
+        [Toggle("Logging (Utils)")]
+        public bool LogUtils = true;
+
+        [Toggle("Logging (Patches)")]
+        public bool LogPatches = true;
+        
         /// <summary>
         /// Display a dialogue with mod credits.
         /// </summary>
         [Button("Credits")]
         public void ShowCredits(ButtonClickedEventArgs e)
         {
-            Log.LogDebug("ModConfigFile: Button clicked!");
             InitAboutUi();
             AboutGameObject.SetActive(true);
         }
@@ -41,7 +57,7 @@ namespace DaftAppleGames.SubnauticaPets
         {
             if (AboutGameObject == null)
             {
-                AboutGameObject = ModUtils.GetGameObjectInstanceFromAssetBundle(AboutGameObjectName);
+                AboutGameObject = ModUtils.GetGameObjectInstanceFromAssetBundle(AboutGameObjectName, true);
                 AboutGameObject.AddComponent<CloseOnAnyInput>();
                 AboutGameObject.AddComponent<ApplySnFont>();
             }

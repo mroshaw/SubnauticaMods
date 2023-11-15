@@ -1,8 +1,7 @@
 ﻿#if SUBNAUTICAZERO
 using DaftAppleGames.SubnauticaPets.Mono.Pets;
 using HarmonyLib;
-using Oculus.Platform;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
+using DaftAppleGames.SubnauticaPets.Utils;
 
 namespace DaftAppleGames.SubnauticaPets.Patches
 {
@@ -23,11 +22,12 @@ namespace DaftAppleGames.SubnauticaPets.Patches
             [HarmonyPrefix]
             public static bool OnHandHover_Prefix(TrivalvePlayerInteraction __instance, GUIHand hand)
             {
-                // CreaturePetPlugin_BZ.Log.LogDebug("In TrivalvePlayerInteraction.OnHandOver");
+                LogUtils.LogDebug(LogArea.Patches, "In TrivalvePlayerInteraction.OnHandOver");
                 Pet pet = __instance.GetComponent<Pet>();
                 // Call original class method if not dealing with a Pet
                 if (!pet)
                 {
+                    LogUtils.LogDebug(LogArea.Patches, "Trivalve is not a pet.");
                     return true;
                 }
 
@@ -59,25 +59,25 @@ namespace DaftAppleGames.SubnauticaPets.Patches
                 // Call original class method if not dealing with a Pet
                 if (!pet)
                 {
-                    Log.LogDebug("TrivalvePlayerInteraction.OnHandClick: not a pet Trivalve!");
+                    LogUtils.LogDebug(LogArea.Patches, "TrivalvePlayerInteraction.OnHandClick: not a pet Trivalve!");
                     return true;
                 }
 
                 SwimWalkCreatureController.State state = __instance.trivalve.swimWalkController.state;
                 if (!AllowedToInteract(state, pet))
                 {
-                    Log.LogDebug("TrivalvePlayerInteraction.OnHandClick: Pet Trivalve, not allowed to interact!");
+                    LogUtils.LogDebug(LogArea.Patches, "TrivalvePlayerInteraction.OnHandClick: Pet Trivalve, not allowed to interact!");
                     return false;
                 }
 
                 if (state == SwimWalkCreatureController.State.Swim)
                 {
-                    Log.LogDebug("TrivalvePlayerInteraction.OnHandClick: Swimming state!");
+                    LogUtils.LogDebug(LogArea.Patches, "TrivalvePlayerInteraction.OnHandClick: Swimming state!");
                     __instance.PrepareWaterCinematic(hand.player);
                     return false;
                 }
 
-                Log.LogDebug("TrivalvePlayerInteraction.OnHandClick: Land state!");
+                LogUtils.LogDebug(LogArea.Patches, "TrivalvePlayerInteraction.OnHandClick: Land state!");
                 __instance.PrepareLandCinematic(hand.player);
                 return false;
             }
@@ -93,26 +93,26 @@ namespace DaftAppleGames.SubnauticaPets.Patches
 
                 if (_trivalvePlayerInteraction.state != TrivalvePlayerInteraction.State.None)
                 {
-                    // CreaturePetPlugin_BZ.Log.LogDebug( $"CreaturePet.AllowedToInteract: State is not None!");
+                    LogUtils.LogDebug(LogArea.Patches,  $"CreaturePet.AllowedToInteract: State is not None!");
                     return false;
                 }
 
                 if (PlayerCinematicController.cinematicModeCount > 0)
                 {
-                    // CreaturePetPlugin_BZ.Log.LogDebug( $"CreaturePet.AllowedToInteract: Player cinematic count is not 0!");
+                    LogUtils.LogDebug(LogArea.Patches,  $"CreaturePet.AllowedToInteract: Player cinematic count is not 0!");
                     return false;
                 }
 
                 if (!_trivalvePlayerInteraction.liveMixin.IsAlive())
                 {
-                    // CreaturePetPlugin_BZ.Log.LogDebug( $"CreaturePet.AllowedToInteract: Trivalve is not alive!");
+                    LogUtils.LogDebug(LogArea.Patches,  $"CreaturePet.AllowedToInteract: Trivalve is not alive!");
                     return false;
                 }
 
                 Player localPlayerComp = Player.main;
                 if (localPlayerComp == null)
                 {
-                    // CreaturePetPlugin_BZ.Log.LogDebug( $"CreaturePet.AllowedToInteract: Can't find LocalPlayerComp!");
+                    LogUtils.LogDebug(LogArea.Patches,  $"CreaturePet.AllowedToInteract: Can't find LocalPlayerComp!");
                     return false;
                 }
 
@@ -120,7 +120,7 @@ namespace DaftAppleGames.SubnauticaPets.Patches
                 {
                     if (!localPlayerComp.IsSwimming())
                     {
-                        // CreaturePetPlugin_BZ.Log.LogDebug( $"CreaturePet.AllowedToInteract: Trivale is swimming and Player is not!!");
+                        LogUtils.LogDebug(LogArea.Patches,  $"CreaturePet.AllowedToInteract: Trivale is swimming and Player is not!!");
                         return false;
                     }
                 }
@@ -128,7 +128,7 @@ namespace DaftAppleGames.SubnauticaPets.Patches
                 {
                     if (!_trivalvePlayerInteraction.trivalve.onSurfaceTracker.onSurface)
                     {
-                        // CreaturePetPlugin_BZ.Log.LogDebug( $"CreaturePet.AllowedToInteract: Trivalve not on surface!");
+                        LogUtils.LogDebug(LogArea.Patches,  $"CreaturePet.AllowedToInteract: Trivalve not on surface!");
                         return false;
                     }
                 }

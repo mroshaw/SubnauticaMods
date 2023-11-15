@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
+using DaftAppleGames.SubnauticaPets.Utils;
 
 namespace DaftAppleGames.SubnauticaPets.Mono.Pets
 {
@@ -146,7 +146,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
                 float obstacleDistance = Vector3.Distance(Eyes.position, hit.point);
                 if (obstacleDistance <= ObstacleDetectionThreshold)
                 {
-                    Log.LogDebug($"We've hit an object: {hit.collider.gameObject}");
+                    // LogUtils.LogDebug(LogArea.MonoPets, $"We've hit an object: {hit.collider.gameObject}");
                     ToIdle();
                 }
             }
@@ -176,9 +176,9 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             Vector2 randomTarget = Random.insideUnitCircle * MoveRadius;
             Vector3 newTarget = new Vector3(randomTarget.x + _moveAnchor.x, transform.position.y, randomTarget.y + _moveAnchor.z);
 
-            Log.LogDebug(
-                $"SimpleMovement: transform is {transform.position.x}, {transform.position.y}, {transform.position.z}." +
-                $"Moving to {newTarget.x}, {newTarget.y}, {newTarget.z}");
+            // LogUtils.LogDebug(LogArea.MonoPets, 
+            //    $"SimpleMovement: transform is {transform.position.x}, {transform.position.y}, {transform.position.z}." +
+            //    $"Moving to {newTarget.x}, {newTarget.y}, {newTarget.z}");
 
             _moveTarget = newTarget;
 

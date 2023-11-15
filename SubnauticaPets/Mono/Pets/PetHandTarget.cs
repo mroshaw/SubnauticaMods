@@ -1,4 +1,5 @@
-﻿using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
+﻿
+using DaftAppleGames.SubnauticaPets.Utils;
 
 namespace DaftAppleGames.SubnauticaPets.Mono.Pets
 {
@@ -10,19 +11,18 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
     {
         // Useful pointer to pet component
         private Pet _pet;
-
-
+        
         /// <summary>
         /// Initialise the component
         /// </summary>
         public void Start()
         {
-            Log.LogDebug($"PetHandTarget: In PetHandTarget.Start on parent Game Object: {gameObject.name}");
+            // LogUtils.LogDebug(LogArea.MonoPets, $"PetHandTarget: In PetHandTarget.Start on parent Game Object: {gameObject.name}");
 
             _pet = GetComponent<Pet>();
             if (!_pet)
             {
-                Log.LogError("PetHandTarget: GameObject MUST have a Pet component!");
+                LogUtils.LogError("PetHandTarget: GameObject MUST have a Pet component!");
             }
         }
 
@@ -34,11 +34,13 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         {
             HandReticle main = HandReticle.main;
 
+            // LogUtils.LogDebug(LogArea.MonoPets, $"OnHandOver... hand.IsFreeToInteract is: {hand.IsFreeToInteract()}");
+
             // Check for right mouse click
             if (Player.main.GetRightHandDown())
             {
                 // Walk towards the player
-                Log.LogDebug("PetHandTarget: Walking to player...");
+                LogUtils.LogDebug(LogArea.MonoPets, "PetHandTarget: Walking to player...");
                 _pet.MoveToPlayer();
                 return;
             }
@@ -61,7 +63,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         /// <param name="hand"></param>
         public void OnHandClick(GUIHand hand)
         {
-            Log.LogDebug("PetHandTarget: In OnHandClick");
+            LogUtils.LogDebug(LogArea.MonoPets, "PetHandTarget: In OnHandClick");
 
             if (!hand.IsFreeToInteract())
             {
@@ -69,7 +71,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             }
 
             // Play random animation
-            Log.LogDebug("PetHandTarget: Playing animation...");
+            LogUtils.LogDebug(LogArea.MonoPets, "PetHandTarget: Playing animation...");
             _pet.PlayAnimation();
         }
     }

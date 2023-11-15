@@ -1,7 +1,7 @@
 ﻿/*
  using DaftAppleGames.SubnauticaPets.MonoBehaviours;
 using HarmonyLib;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
+using DaftAppleGames.SubnauticaPets.Utils;
 namespace DaftAppleGames.SubnauticaPets.Patches
 {
 
@@ -23,9 +23,9 @@ namespace DaftAppleGames.SubnauticaPets.Patches
             PetDna petDna = __instance.gameObject.GetComponent<PetDna>();
             if (petDna)
             {
-                Log.LogDebug("Pickupable: in Pickup postfix, calling DataBank method...");
+                LogUtils.LogDebug(LogArea.Patches, "Pickupable: in Pickup postfix, calling DataBank method...");
                 petDna.OnPickupDna();
-                Log.LogDebug("Pickupable: in Pickup postfix, calling DataBank method... Done.");
+                LogUtils.LogDebug(LogArea.Patches, "Pickupable: in Pickup postfix, calling DataBank method... Done.");
 
             }
         }

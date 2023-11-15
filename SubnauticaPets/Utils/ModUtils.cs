@@ -1,19 +1,16 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Handlers;
 using UnityEngine;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
-using static KnownTech;
 using Object = UnityEngine.Object;
 
 namespace DaftAppleGames.SubnauticaPets.Utils
 {
     /// <summary>
-    /// Static utilities class for common functions and properties to be used within your mod code
+    /// Static LogUtils.LogDebug(LogArea.Utilities, LogArea.Utilities,  class for common functions and properties to be used within your mod code
     /// </summary>
     internal static class ModUtils
     {
@@ -39,10 +36,10 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <param name="spawnLocations"></param>
         internal static void SetupCoordinatedSpawn(CustomPrefab prefab, SpawnLocation[] spawnLocations)
         {
-            Log.LogDebug($"ModUtils: CoordinatedSpawns spawning {prefab.Info.TechType} in {spawnLocations.Length} locations...");
-            Log.LogDebug($"ModUtils: CoordinatedSpawns calling SetSpawns for {prefab.Info.TechType}...");
+            LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: CoordinatedSpawns spawning {prefab.Info.TechType} in {spawnLocations.Length} locations...");
+            LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: CoordinatedSpawns calling SetSpawns for {prefab.Info.TechType}...");
             prefab.SetSpawns(spawnLocations);
-            Log.LogDebug($"ModUtils: CoordinatedSpawns spawning {prefab.Info.TechType}. Done.");
+            LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: CoordinatedSpawns spawning {prefab.Info.TechType}. Done.");
         }
 
         /// <summary>
@@ -51,18 +48,18 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <typeparam name="T"></typeparam>
         internal static void DestroyComponentsInChildren<T>(GameObject gameObject)
         {
-            Log.LogDebug($"ModUtils: Destroying all components of type: {typeof(T)}");
+            LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Destroying all components of type: {typeof(T)}");
             var components = gameObject.GetComponentsInChildren<T>(true);
 
-            Log.LogDebug($"ModUtils: Found {components.Length} instances to destroy");
+            LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Found {components.Length} instances to destroy");
 
             // Iterate through all child components and destroy them
             foreach (var component in components)
             {
                 Object.Destroy(component as MonoBehaviour);
-                Log.LogDebug($"ModUtils: Destroyed: {component.GetType()}");
+                LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Destroyed: {component.GetType()}");
             }
-            Log.LogDebug($"ModUtils: Destroying all components of type: {typeof(T)}. Done.");
+            LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Destroying all components of type: {typeof(T)}. Done.");
         }
 
         /// <summary>
@@ -84,7 +81,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <returns></returns>
         public static Sprite GetSpriteFromAssetBundle(string textureName)
         {
-            Log.LogDebug($"ModUtils: Getting Sprite from {textureName} in Asset Bundle.");
+            LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Getting Sprite from {textureName} in Asset Bundle.");
             Texture2D texture = GetTexture2DFromAssetBundle(textureName);
             return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         }
@@ -96,11 +93,11 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <returns></returns>
         public static Texture2D GetTexture2DFromAssetBundle(string textureName)
         {
-            Log.LogDebug($"ModUtils: Getting Texture {textureName} in Asset Bundle.");
+            LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Getting Texture {textureName} in Asset Bundle.");
             Object obj = GetObjectFromAssetBundle(textureName, typeof(Texture2D));
             if (obj == null)
             {
-                Log.LogDebug($"ModUtils: Couldn't find Texture named {textureName} in Asset Bundle.");
+                LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Couldn't find Texture named {textureName} in Asset Bundle.");
                 return null;
             }
             return Object.Instantiate(obj) as Texture2D;
@@ -111,15 +108,16 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// </summary>
         /// <param name="objectName"></param>
         /// <returns></returns>
-        public static GameObject GetGameObjectInstanceFromAssetBundle(string objectName)
+        public static GameObject GetGameObjectInstanceFromAssetBundle(string objectName, bool activeState)
         {
-            Object obj = GetObjectFromAssetBundle(objectName, typeof(GameObject));
+            GameObject obj = GetObjectFromAssetBundle(objectName, typeof(GameObject)) as GameObject;
             if (obj == null)
             {
-                Log.LogDebug($"ModUtils: Couldn't find GameObject named {objectName} in Asset Bundle.");
+                LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Couldn't find GameObject named {objectName} in Asset Bundle.");
                 return null;
             }
-            return Object.Instantiate(obj) as GameObject;
+            obj.SetActive(activeState);
+            return GameObject.Instantiate(obj) as GameObject;
         }
 
         /// <summary>
@@ -132,7 +130,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             Object obj = GetObjectFromAssetBundle(objectName, typeof(GameObject));
             if (obj == null)
             {
-                Log.LogDebug($"ModUtils: Couldn't find GameObject named {objectName} in Asset Bundle.");
+                LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Couldn't find GameObject named {objectName} in Asset Bundle.");
                 return null;
             }
 
@@ -147,7 +145,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <returns></returns>
         public static Object GetObjectFromAssetBundle(string objectName, System.Type type)
         {
-            Log.LogDebug($"ModUiUtils: Loading AssetBundle {AssetBundleName}, looking for {objectName} of type {type}");
+            LogUtils.LogDebug(LogArea.Utilities, $"ModUiUtils: Loading AssetBundle {AssetBundleName}, looking for {objectName} of type {type}");
 
             string modPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
@@ -161,30 +159,30 @@ namespace DaftAppleGames.SubnauticaPets.Utils
                     // Check we've loaded the Asset Bundle
                     if (modAssetBundle == null)
                     {
-                        Log.LogDebug("Failed to load AssetBundle!");
+                        LogUtils.LogDebug(LogArea.Utilities, "Failed to load AssetBundle!");
                         return null;
                     }
                     ModAssetBundleObjects = modAssetBundle.LoadAllAssets();
                 }
             }
 
-            Log.LogDebug("ModUiUtils:  Found AssetBundle. Looking for object...");
+            LogUtils.LogDebug(LogArea.Utilities, "ModUiUtils:  Found AssetBundle. Looking for object...");
 
             // Iterate over loaded objects to find what we want
             if (ModAssetBundleObjects != null)
                 foreach (Object currObject in ModAssetBundleObjects)
                 {
-                    // Log.LogDebug($"ModUiUtils: Comparing {currObject.ToString()} with {objectName}...");
+                    // LogUtils.LogDebug(LogArea.Utilities, $"ModUiUtils: Comparing {currObject.ToString()} with {objectName}...");
 
                     // Check if this is what we're looking for
                     if (currObject.ToString().Contains(objectName) && currObject.GetType() == type)
                     {
-                        Log.LogDebug($"ModUiUtils: Found object {currObject}");
+                        LogUtils.LogDebug(LogArea.Utilities, $"ModUiUtils: Found object {currObject}");
                         return currObject;
                     }
                 }
 
-            Log.LogDebug($"ModUiUtils: Couldn't find object named {objectName}!");
+            LogUtils.LogDebug(LogArea.Utilities, $"ModUiUtils: Couldn't find object named {objectName}!");
             return null;
         }
 
@@ -198,47 +196,14 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         public static void ConfigureDatabankEntry(string encyKey, string encyPath, string mainImageTextureName,
             string popupImageTextureName)
         {
-            Log.LogDebug($"DatabankEntries: Setting up {encyKey} entry...");
+            LogUtils.LogDebug(LogArea.Utilities, $"DatabankEntries: Setting up {encyKey} entry...");
             PDAHandler.AddEncyclopediaEntry(encyKey, encyPath, null, null,
                 ModUtils.GetTexture2DFromAssetBundle(mainImageTextureName),
                 ModUtils.GetSpriteFromAssetBundle(popupImageTextureName));
 
-            Log.LogDebug("DatabankEntries: Setting up PetDNA entry... Done.");
+            LogUtils.LogDebug(LogArea.Utilities, "DatabankEntries: Setting up PetDNA entry... Done.");
         }
 
-        /// <summary>
-        /// Can be called to "trigger" the Databank entry manually
-        /// </summary>
-        public static void TriggerDataBankEntry(string encyKey)
-        {
-#if SUBNAUTICAZERO
-            PDAEncyclopedia.Add(encyKey, true, true);
-#endif
-
-#if SUBNAUTICA
-            PDAEncyclopedia.Add(encyKey, true);
-#endif
-        }
-
-        /*
-        public static void AddToAnalysisTech(TechType techType, TechType requiredForUnlock, Sprite unlockSprite)
-        {
-            List<AnalysisTech> aTech = KnownTech.analysisTech;
-            aTech.techType = requiredForUnlock != TechType.None
-                ? requiredForUnlock
-                : techType;
-            AnalysisTech.unlockTechTypes = RequiredForUnlock != TechType.None
-                ? new() { prefab.Info.TechType }
-                : new();
-            aTech.unlockPopup = popupSprite;
-#if SUBNAUTICA
-            aTech.storyGoals = storyGoalsToTrigger ?? new();
-#endif
-            aTech.unlockSound = unlockSound;
-            aTech.unlockMessage = unlockMessage ?? KnownTechHandler.DefaultUnlockData.BlueprintUnlockMessage;
-
-        }
-        */
         /// <summary>
         /// Applies a texture to the material on a GameObject
         /// </summary>
@@ -247,23 +212,23 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <param name="gameObjectNameHint"></param>
         public static void ApplyNewMeshTexture(GameObject targetGameObject, string textureName, string gameObjectNameHint)
         {
-            Log.LogDebug("ModUtils: In ApplyNewMeshTexture...");
+            LogUtils.LogDebug(LogArea.Utilities, "ModUtils: In ApplyNewMeshTexture...");
             Renderer[] renderers = targetGameObject.GetComponentsInChildren<Renderer>();
 
             if (gameObjectNameHint == "")
             {
-                Log.LogDebug($"ModUtils: ApplyNewMeshTexture is applying {textureName} to {renderers[0].gameObject.name} ...");
+                LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: ApplyNewMeshTexture is applying {textureName} to {renderers[0].gameObject.name} ...");
                 renderers[0].material.mainTexture = ModUtils.GetTexture2DFromAssetBundle(textureName);
             }
             else
             {
-                Log.LogDebug($"ModUtils: In ApplyNewMeshTexture searching across {renderers.Length}...");
+                LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: In ApplyNewMeshTexture searching across {renderers.Length}...");
                 foreach (Renderer renderer in renderers)
                 {
-                    Log.LogDebug($"ModUtils: ApplyNewMeshTexture comparing at {renderer.gameObject.name} to {gameObjectNameHint}...");
+                    LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: ApplyNewMeshTexture comparing at {renderer.gameObject.name} to {gameObjectNameHint}...");
                     if (renderer.gameObject.name == gameObjectNameHint)
                     {
-                        Log.LogDebug($"ModUtils: ApplyNewMeshTexture is applying {textureName} to {renderer.gameObject.name} ...");
+                        LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: ApplyNewMeshTexture is applying {textureName} to {renderer.gameObject.name} ...");
                         renderer.material.mainTexture = ModUtils.GetTexture2DFromAssetBundle(textureName);
                     }
                 }

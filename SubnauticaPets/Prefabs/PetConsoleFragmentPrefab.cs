@@ -4,7 +4,6 @@ using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using UnityEngine;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 using Nautilus.Utility;
 
 namespace DaftAppleGames.SubnauticaPets.Prefabs
@@ -15,7 +14,8 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
     internal static class PetConsoleFragmentPrefab
     {
         // Public PrefabInfo, for anything that needs it
-        public static PrefabInfo PrefabInfo;
+        public static PrefabInfo Info { get; } = PrefabInfo
+            .WithTechType(PrefabClassId, null, null, unlockAtStart: false);
 
         // Prefab Class Id
         private const string PrefabClassId = "PetConsoleFragment";
@@ -28,6 +28,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         private const string NewModelName = "newmodel";
         public const string OldModelName = "model";
 
+        #region Spawn Locations
 #if SUBNAUTICA
         private static readonly SpawnLocation[] SpawnLocations =
         {
@@ -64,30 +65,28 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             new SpawnLocation(new Vector3(-171.25f,-41.34f, -234.25f), new Vector3(0f, 0f, 0f)),
         };
 #endif
+        #endregion
 
         /// <summary>
         /// Initialise the Pet Console fragment prefab
         /// </summary>
         public static void InitPrefab()
         {
-            PrefabInfo consolePrefabInfo = PrefabInfo
-                .WithTechType(PrefabClassId, null, null, unlockAtStart: false);
+            CustomPrefab consoleFragmentPrefab = new CustomPrefab(Info);
 
-            CustomPrefab consoleFragmentPrefab = new CustomPrefab(consolePrefabInfo);
-            
-            PrefabTemplate cloneTemplate = new CloneTemplate(consoleFragmentPrefab.Info, TechType.GravSphereFragment)
+            CloneTemplate cloneTemplate = new CloneTemplate(consoleFragmentPrefab.Info, TechType.GravSphereFragment)
             {
                 ModifyPrefab = prefab =>
                 {
                     #region Replace Model
                     // Replace model
                     GameObject damagedConsoleGameObject =
-                        ModUtils.GetGameObjectInstanceFromAssetBundle(PetConsolePrefabName);
+                        ModUtils.GetGameObjectInstanceFromAssetBundle(PetConsolePrefabName, true);
 
                     GameObject modelGameObject = damagedConsoleGameObject.FindChild(NewModelName);
 
                     // Add new model
-                    Log.LogDebug(
+                    LogUtils.LogDebug(LogArea.Prefabs, 
                         $"PetConsoleFragmentPrefab: InitPrefab is setting the model for {prefab.name} to {modelGameObject.name}...");
                     modelGameObject.transform.SetParent(prefab.transform);
                     modelGameObject.transform.localPosition = new Vector3(0, 0, 0);
@@ -97,44 +96,37 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     GameObject oldModelGameObject = prefab.FindChild(OldModelName);
                     if (oldModelGameObject != null)
                     {
-                        Log.LogDebug("PetConsoleFragmentPrefab: Destroying old model.");
+                        LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: Destroying old model.");
                         Object.Destroy(oldModelGameObject);
                     }
                     else
                     {
-                        Log.LogDebug("PetConsoleFragmentPrefab: Old model not found.");
+                        LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: Old model not found.");
                     }
-
+                    #endregion
+                    #region Configure Prefab
                     MaterialUtils.ApplySNShaders(modelGameObject);
-                    PrefabUtils.AddBasicComponents(prefab, PrefabClassId, consolePrefabInfo.TechType, LargeWorldEntity.CellLevel.Medium);
+                    PrefabUtils.AddBasicComponents(prefab, PrefabClassId, Info.TechType, LargeWorldEntity.CellLevel.Medium);
                     ResourceTracker resourceTracker = PrefabUtils.AddResourceTracker(prefab, TechType.Fragment);
 
                     // Add component
-                    Log.LogDebug("PetConsoleFragmentPrefab: InitPrefab adding PetConsoleFragment component...");
+                    LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: InitPrefab adding PetConsoleFragment component...");
                     prefab.AddComponent<PetConsoleFragment>();
-                    Log.LogDebug(
+                    LogUtils.LogDebug(LogArea.Prefabs, 
                         "PetConsoleFragmentPrefab: InitPrefab adding PetConsoleFragment component... Done.");
                     #endregion
                 }
             };
-
             consoleFragmentPrefab.SetGameObject(cloneTemplate);
             consoleFragmentPrefab.SetSpawns(SpawnLocations);
 
-            // Set up scannable
-
-            /*
-            consoleFragmentPrefab.SetUnlock(consolePrefabInfo.TechType, 3)
-                .WithScannerEntry(consolePrefabInfo.TechType, 5f, true, PetConsolePrefab.PetConsoleEncyKey, true)
-                .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle(PetConsolePopupImageTexture), null, null);
-            */
-
-            consoleFragmentPrefab.CreateFragment(PetConsolePrefab.PrefabInfo.TechType, 5.0f, 3,
+            // Set up as a scannable fragment
+            consoleFragmentPrefab.CreateFragment(PetConsolePrefab.Info.TechType, 5.0f, 3,
                 PetConsolePrefab.PetConsoleEncyKey, true, true);
-            Log.LogDebug($"PetConsoleFragmentPrefab: Registering {PrefabClassId}...");
+
+            LogUtils.LogDebug(LogArea.Prefabs, $"PetConsoleFragmentPrefab: Registering {PrefabClassId}...");
             consoleFragmentPrefab.Register();
-            Log.LogDebug($"PetConsoleFragmentPrefab: Init Prefab for {PrefabClassId}. Done.");
-            PrefabInfo = consoleFragmentPrefab.Info;
+            LogUtils.LogDebug(LogArea.Prefabs, $"PetConsoleFragmentPrefab: Init Prefab for {PrefabClassId}. Done.");
         }
     }
 }

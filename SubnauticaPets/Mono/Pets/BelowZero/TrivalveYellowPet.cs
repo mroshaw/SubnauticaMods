@@ -1,16 +1,13 @@
 ﻿#if SUBNAUTICAZERO
-
-using DaftAppleGames.SubnauticaPets.Mono.Pets;
-using DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero;
 using Nautilus.Assets;
 using Nautilus.Crafting;
 using UnityEngine;
 using static LootDistributionData;
 
-namespace DaftAppleGames.SubnauticaPets.Pets.BelowZero
+namespace DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero
 {
     /// <summary>
-    /// Implements AlienRobot specific Pet functionality
+    /// Implements Trivalve Yellow specific Pet functionality
     /// </summary>
     internal class TrivalveYellowPet : Pet
     {
@@ -19,7 +16,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets.BelowZero
         // Pet
         public static string ClassId = "TrivalveYellowPet";
         public static string TextureName = "TrivalveYellowTexture";
-        public static PrefabInfo BuildablePrefabInfo;
         public static string PrefabGuid = "e8f2bfd4-49c6-45d1-a029-489b492515a9"; // https://github.com/LeeTwentyThree/Nautilus/blob/master/Nautilus/Documentation/resources/BZ-PrefabPaths.json
         public static string ModelName = "";
         public static Vector3 ModelScale = new Vector3(1, 1, 1);
@@ -53,17 +49,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets.BelowZero
         }
 
         // Trivalve scale factor
-        public override float ScaleFactor => 1.0f;
-
-        /// <summary>
-        /// Override base Awake method
-        /// </summary>
-        public override void Awake()
-        {
-            PreventFloatingOnDeath();
-            ConfigureSwimming();
-            base.Awake();
-        }
+        public override Vector3 ScaleFactor => new(1.0f, 1.0f, 1.0f);
     }
 }
 #endif

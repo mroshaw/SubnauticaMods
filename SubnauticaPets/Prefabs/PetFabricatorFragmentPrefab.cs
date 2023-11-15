@@ -1,10 +1,11 @@
-﻿using DaftAppleGames.SubnauticaPets.Mono.BaseParts;
-using DaftAppleGames.SubnauticaPets.Utils;
+﻿using System.Collections;
+using DaftAppleGames.SubnauticaPets.Mono.BaseParts;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
+using Nautilus.Extensions;
 using UnityEngine;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
+using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Utility;
 
 namespace DaftAppleGames.SubnauticaPets.Prefabs
@@ -14,16 +15,17 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
     /// </summary>
     internal static class PetFabricatorFragmentPrefab
     {
-        // Public PrefabInfo, for anything that needs it
-        public static PrefabInfo PrefabInfo;
-
         // Prefab Class Id
         private const string PrefabClassId = "PetFabricatorFragment";
+
+        // Public PrefabInfo, for anything that needs it
+        public static PrefabInfo Info { get; } = PrefabInfo
+            .WithTechType(PrefabClassId, null, null, unlockAtStart: false);
 
         // Asset bundle references
         private const string PetFabricatorPopupImageTexture = "PetFabricatorDataBankPopupImageTexture";
 
-
+        #region Spawn Locations
 #if SUBNAUTICA
         private static readonly SpawnLocation[] SpawnLocations =
         {
@@ -50,8 +52,6 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
              *
              */
         };
-
-
 #endif
 #if SUBNAUTICAZERO
         private static readonly SpawnLocation[] SpawnLocations =
@@ -59,45 +59,76 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             new SpawnLocation(new Vector3(-171.25f,-41.34f, -234.25f), new Vector3(0f, 0f, 0f))
         };
 #endif
+        #endregion
+
+        public class StaticMonoBehaviour : MonoBehaviour { }
+
+        // WORKAROUND for Nautilus ClassId issue. Fixed in future Nautilus version
+        private static StaticMonoBehaviour myStaticMonoBehaviour;
 
         /// <summary>
         /// Initialise the Pet Fabricator fragment prefab
         /// </summary>
         public static void InitPrefab()
         {
-            PrefabInfo fabricatorPrefabInfo = PrefabInfo
-                .WithTechType(PrefabClassId, null, null, unlockAtStart: false);
+            CustomPrefab fabricatorFragmentPrefab = new CustomPrefab(Info);
 
-            CustomPrefab fabricatorFragmentPrefab = new CustomPrefab(fabricatorPrefabInfo);
-
-            PrefabTemplate cloneTemplate = new CloneTemplate(fabricatorFragmentPrefab.Info, TechType.GravSphereFragment)
-
-            // PrefabTemplate cloneTemplate = new CloneTemplate(fabricatorFragmentPrefab.Info, "8029a9ce-ab75-46d0-a8ab-63138f6f83e4")
+            LogUtils.LogDebug(LogArea.Prefabs, $"PetFabricator: Creating Clone Template...");
+            CloneTemplate cloneTemplate = new CloneTemplate(fabricatorFragmentPrefab.Info, "8029a9ce-ab75-46d0-a8ab-63138f6f83e4")
             {
                 ModifyPrefab = prefab =>
                 {
+                    #region Configure Prefab
                     // Add components
-                    Log.LogDebug("PetFabricatorFragmentPrefab: InitPrefab adding PetFabricatorFragment component...");
-                    PrefabUtils.AddBasicComponents(prefab, PrefabClassId, fabricatorPrefabInfo.TechType, LargeWorldEntity.CellLevel.Medium);
+                    LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorFragmentPrefab: InitPrefab adding PetFabricatorFragment component...");
+                    PrefabUtils.AddBasicComponents(prefab, PrefabClassId, Info.TechType, LargeWorldEntity.CellLevel.Medium);
                     PrefabUtils.AddResourceTracker(prefab, TechType.Fragment);
                     prefab.AddComponent<PetFabricatorFragment>();
-                    Log.LogDebug(
+                    LogUtils.LogDebug(LogArea.Prefabs, 
                         "PetFabricatorFragmentPrefab: InitPrefab adding PetFabricatorFragment component... Done.");
+                    #endregion
                 }
             };
-            
+
+            LogUtils.LogDebug(LogArea.Prefabs, $"PetFabricator: Clone Template: {cloneTemplate}");
+
             fabricatorFragmentPrefab.SetGameObject(cloneTemplate);
             fabricatorFragmentPrefab.SetSpawns(SpawnLocations);
 
-            // Set up scannable
-            fabricatorFragmentPrefab.SetUnlock(fabricatorPrefabInfo.TechType)
-                .WithScannerEntry(fabricatorPrefabInfo.TechType, 5f, true, PetFabricatorPrefab.PetFabricatorEncyKey, true)
-                .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle(PetFabricatorPopupImageTexture), null, null);
+            // Set up as a scannable fragment
+            fabricatorFragmentPrefab.CreateFragment(PetFabricatorPrefab.Info.TechType, 5.0f, 3,
+                PetFabricatorPrefab.PetFabricatorEncyKey, true, true);
 
-            Log.LogDebug($"PetFabricatorFragmentPrefab: Registering {PrefabClassId}...");
+            LogUtils.LogDebug(LogArea.Prefabs, $"PetFabricatorFragmentPrefab: Registering {PrefabClassId}...");
             fabricatorFragmentPrefab.Register();
-            Log.LogDebug($"PetFabricatorFragmentPrefab: Init Prefab for {PrefabClassId}. Done.");
-            PrefabInfo = fabricatorFragmentPrefab.Info;
+            LogUtils.LogDebug(LogArea.Prefabs, $"PetFabricatorFragmentPrefab: Init Prefab for {PrefabClassId}. Done.");
+
+            // WORKAROUND for Nautilus ClassId issue. Fixed in future Nautilus version
+            LogUtils.LogDebug(LogArea.Prefabs, $"PetFabricatorFragmentPrefab: Checking prefab...");
+            GameObject staticGameObject = new GameObject();
+            myStaticMonoBehaviour = staticGameObject.AddComponent<StaticMonoBehaviour>();
+            myStaticMonoBehaviour.StartCoroutine(CheckTemplate(cloneTemplate));
+        }
+
+        /// <summary>
+        /// Check to see that we can derive the GameObject from the custom prefab
+        /// </summary>
+        /// <param name="cloneTemplate"></param>
+        /// <returns></returns>
+        private static IEnumerator CheckTemplate(CloneTemplate cloneTemplate)
+        {
+            TaskResult<GameObject> task = new();
+            yield return cloneTemplate.GetPrefabAsync(task);
+
+            GameObject prefabGameObject = task.Get();
+            if (prefabGameObject != null)
+            {
+                LogUtils.LogDebug(LogArea.Prefabs, $"PetFabricator: Prefab GameObject found: {prefabGameObject.name}");
+            }
+            else
+            {
+                LogUtils.LogDebug(LogArea.Prefabs, "PetFabricator: GetPrefabAsync returned null!!!");
+            }
         }
     }
 }

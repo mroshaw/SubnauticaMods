@@ -33,7 +33,7 @@ namespace DaftAppleGames.SubnauticaPets.Patches
             PetSaver.PetDetails petDetails = Saver.GetPetDetailsWithPrefabId(loadedPrefabId);
             if (petDetails != null)
             {
-                Pet pet = PetUtils.AddPetComponent(__instance.gameObject, petDetails.PetType, petDetails.PetName);
+                Pet pet = PetConfig.ConfigurePet(__instance.gameObject, petDetails.PetType, petDetails.PetName, __instance.gameObject.transform.gameObject);
                 pet.PetSaverDetails = petDetails;
                 __instance.gameObject.name = $"{__instance.gameObject.name}_Pet";
             }

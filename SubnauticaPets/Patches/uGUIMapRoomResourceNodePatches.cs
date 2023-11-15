@@ -7,9 +7,6 @@ using DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero;
 using DaftAppleGames.SubnauticaPets.Mono.Pets.Custom;
 using DaftAppleGames.SubnauticaPets.Utils;
 using HarmonyLib;
-using Nautilus.Utility;
-using UnityEngine;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Patches
 {
@@ -47,7 +44,7 @@ namespace DaftAppleGames.SubnauticaPets.Patches
 
             // Lookup our scanner text
             string textString = Language.main.Get($"Scanner_{techType}");
-            Log.LogDebug($"uGUI_MapRoomResourceNode: Setting item text to: {textString}.");
+            LogUtils.LogDebug(LogArea.Patches, $"uGUI_MapRoomResourceNode: Setting item text to: {textString}.");
             __instance.text.text = textString;
             __instance.icon.enabled = true;
         }

@@ -23,7 +23,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         /// </summary>
         private void AddRigidBody()
         {
-            // Log.LogDebug("PetDna: Adding rigidbody....");
+            // LogUtils.LogDebug(LogArea.MonoPets, "PetDna: Adding rigidbody....");
             Rigidbody rigidbody = gameObject.GetComponent<Rigidbody>();
             if (rigidbody == null)
             {
@@ -32,7 +32,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             rigidbody.mass = 0.1f;
             rigidbody.isKinematic = false;
             rigidbody.useGravity = true;
-            // Log.LogDebug("PetDna: Adding rigidbody....Done.");
+            // LogUtils.LogDebug(LogArea.MonoPets, "PetDna: Adding rigidbody....Done.");
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         /// </summary>
         private void AddFreezeOnSettle()
         {
-            // Log.LogDebug("PetDna: Adding FreezeOnSettle....");
+            // LogUtils.LogDebug(LogArea.MonoPets, "PetDna: Adding FreezeOnSettle....");
             FreezeOnSettle freeze = gameObject.GetComponent<FreezeOnSettle>();
             if (freeze == null)
             {
@@ -51,7 +51,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
                 freeze.StartDelay = 2.0f;
                 freeze.RayCastDistance = 5.0f;
             }
-            // Log.LogDebug("PetDna: Adding FreezeOnSettle.... Done.");
+            // LogUtils.LogDebug(LogArea.MonoPets, "PetDna: Adding FreezeOnSettle.... Done.");
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         /// </summary>
         private void AddCollider()
         {
-            // Log.LogDebug("PetDna: Adding Collider....");
+            // LogUtils.LogDebug(LogArea.MonoPets, "PetDna: Adding Collider....");
             // Resize
             gameObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
 
@@ -73,7 +73,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
                 newCollider.height = 0.73f;
                 newCollider.direction = 1;
             }
-            // Log.LogDebug("PetDna: Adding Collider.... Done.");
+            // LogUtils.LogDebug(LogArea.MonoPets, "PetDna: Adding Collider.... Done.");
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿#if SUBNAUTICAZERO
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
+using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
 using Nautilus.Crafting;
 using UnityEngine;
@@ -8,7 +8,7 @@ using static LootDistributionData;
 namespace DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero
 {
     /// <summary>
-    /// Implements AlienRobot specific Pet functionality
+    /// Implements Snowstalker Baby specific Pet functionality
     /// </summary>
     internal class SnowStalkerBabyPet : Pet
     {
@@ -17,7 +17,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero
         // Pet
         public static string ClassId = "BabySnowStalkerPet";
         public static string TextureName = "SnowStalkerBabyTexture";
-        public static PrefabInfo BuildablePrefabInfo;
         public static string PrefabGuid = "78d3dbce-856f-4eba-951c-bd99870554e2"; // https://github.com/LeeTwentyThree/Nautilus/blob/master/Nautilus/Documentation/resources/BZ-PrefabPaths.json
         public static string ModelName = "";
         public static Vector3 ModelScale = new Vector3(1, 1, 1);
@@ -53,60 +52,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero
         }
 
         // Snow Stalker Baby scale factor
-        public override float ScaleFactor => 1.0f;
-
-        /// <summary>
-        /// Override base Awake method
-        /// </summary>
-        public override void Awake()
-        {
-            PreventFloatingOnDeath();
-            ConfigureMovement();
-            base.ConfigureSwimming();
-            base.Awake();
-        }
-
-        /// <summary>
-        /// Override the SnowStalker movement
-        /// </summary>
-        private void ConfigureMovement()
-        {
-            SnowStalkerBaby snowStalker = GetComponent<SnowStalkerBaby>();
-
-            // Add a SurfaceMovement component, get that little bugger moving around!
-            Log.LogDebug("... Configuring movement components ...");
-            OnSurfaceTracker onSurfaceTracker = gameObject.GetComponent<OnSurfaceTracker>();
-            WalkBehaviour walkBehaviour = gameObject.GetComponent<WalkBehaviour>();
-            OnSurfaceMovement onSurfaceMovement = gameObject.AddComponent<OnSurfaceMovement>();
-            MoveOnSurface moveOnSurface = gameObject.GetComponent<MoveOnSurface>();
-
-            // Configure walking and movement components
-            onSurfaceMovement.onSurfaceTracker = onSurfaceTracker;
-            onSurfaceMovement.locomotion = gameObject.GetComponent<Locomotion>();
-            moveOnSurface.onSurfaceMovement = onSurfaceMovement;
-            moveOnSurface.moveRadius = 7.0f;
-            walkBehaviour.onSurfaceMovement = onSurfaceMovement;
-            walkBehaviour.onSurfaceTracker = onSurfaceTracker;
-            snowStalker.onSurfaceMovement = onSurfaceMovement;
-            Log.LogDebug("... Configuring movement components ... Done");
-
-            // Add Obstacle Avoidance components
-            Log.LogDebug("... Configuring AvoidObstaclesOnLand...");
-            AvoidObstaclesOnLand avoidObstaclesOnLand = gameObject.AddComponent<AvoidObstaclesOnLand>();
-            AvoidObstaclesOnSurface avoidObstaclesOnSurface = gameObject.AddComponent<AvoidObstaclesOnSurface>();
-            avoidObstaclesOnLand.creature = snowStalker;
-            avoidObstaclesOnSurface.creature = snowStalker;
-            avoidObstaclesOnLand.swimBehaviour = walkBehaviour;
-            avoidObstaclesOnLand.scanDistance = 0.5f;
-            Log.LogDebug("... Configuring AvoidObstaclesOnLand... Done");
-
-            // Configure swim behaviour
-            Log.LogDebug("... Configuring SwimRandom and LastTarget...");
-            LastTarget lastTarget = gameObject.AddComponent<LastTarget>();
-            SwimRandom swimRandom = gameObject.GetComponent<SwimRandom>();
-            swimRandom.swimBehaviour = walkBehaviour;
-            Log.LogDebug("... Configuring SwimRandom and LastTarget... Done");
-        }
+        public override Vector3 ScaleFactor => new(1.0f, 1.0f, 1.0f);
     }
 }
 #endif

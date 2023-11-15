@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using BepInEx;
-using BepInEx.Configuration;
 using BepInEx.Logging;
 using DaftAppleGames.SubnauticaPets.Mono.Pets;
 using HarmonyLib;
@@ -8,7 +7,6 @@ using DaftAppleGames.SubnauticaPets.Prefabs;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Handlers;
 using Nautilus.Utility;
-using static OVRHaptics;
 
 namespace DaftAppleGames.SubnauticaPets
 {
@@ -19,25 +17,24 @@ namespace DaftAppleGames.SubnauticaPets
     [BepInPlugin(MyGuid, PluginName, VersionString)]
     public class SubnauticaPetsPlugin : BaseUnityPlugin
     {
-        #region MOD_DETAILS
+        #region Mod Details
         /// Mod details
+#if SUBNAUTICA
         private const string MyGuid = "com.daftapplegames.subnauticapets";
+#endif
+#if SUBNAUTICAZERO
+        private const string MyGuid = "com.daftapplegames.subnauticapetsbz";
+#endif
         public const string PluginName = "SubnauticaPets";
         private const string VersionString = "2.0.0";
-        #endregion
-        #region MOD_STATICS
+#endregion
+        #region Mod Statics
         // Public log static so we can call logging elsewhere in the mod
         public static ManualLogSource Log = new ManualLogSource(PluginName);
 
         // Keep a public static Saver for use in load and save operations
         public static PetSaver Saver;
-
-        // Config entry key strings
-        public static string SkipSpawnObstacleCheckKey = "Skip Spawn Obstacle Check";
-
-        // Configuration entries. Static, so can be accessed directly elsewhere in code
-        public static ConfigEntry<bool> SkipSpawnObstacleCheckConfig;
-
+        
         // Keep tabs on currently selected options
         public static PetCreatureType SelectedCreaturePetType;
         public static string SelectedPetName;
@@ -49,10 +46,10 @@ namespace DaftAppleGames.SubnauticaPets
         public static ModConfigFile ModConfig;
 
 #endregion
-        #region MOD_PRIVATE
+        #region Private Properties
         private static readonly Harmony Harmony = new Harmony(MyGuid);
         #endregion
-        #region UNITY_SIGNALS        
+        #region Unity Methods        
         /// <summary>
         /// Initialise the configuration settings and patch methods
         /// </summary>
@@ -74,8 +71,11 @@ namespace DaftAppleGames.SubnauticaPets
 
             // Sets up our static Log, so it can be used elsewhere in code.
             // .e.g.
-            // CreaturePetMod_SNPlugin.Log.LogDebug("Debug Message to BepInEx log file");
+            // CreaturePetMod_SNPlugin.LogUtils.LogDebug("Debug Message to BepInEx log file");
             Log = Logger;
+
+            // Add the PetSaver component
+            Saver = gameObject.AddComponent<PetSaver>();
         }
 
         /// <summary>
@@ -87,20 +87,20 @@ namespace DaftAppleGames.SubnauticaPets
             StartCoroutine(InitWhenReadyAsync());
         }
         #endregion
-
+        #region Private Methods
         /// <summary>
         /// Wait for any dependent systems to initialise, then init our mod
         /// </summary>
         /// <returns></returns>
         private IEnumerator InitWhenReadyAsync()
         {
-            while (!MaterialUtils.IsReady)
+            while (!MaterialUtils.IsReady || (Base.pieces == null || Base.pieces.Length == 0))
             {
                 yield return null;
             }
-            Log.LogDebug("SubnauticaPetsPlugin: Calling InitMod()...");
+            LogUtils.LogDebug(LogArea.Main, "SubnauticaPetsPlugin: Calling InitMod()...");
             InitMod();
-            Log.LogDebug("SubnauticaPetsPlugin: Calling InitMod()... Done.");
+            LogUtils.LogDebug(LogArea.Main, "SubnauticaPetsPlugin: Calling InitMod()... Done.");
         }
 
         /// <summary>
@@ -108,22 +108,24 @@ namespace DaftAppleGames.SubnauticaPets
         /// </summary>
         private void InitMod()
         {
-            // Add the PetSaver component
-            Saver = gameObject.AddComponent<PetSaver>();
-
             // Initialise Pet DNA prefabs
+            LogUtils.LogDebug(LogArea.Main, "Init Pet Prefabs...");
             PetDnaPrefab.InitPetPrefabs();
 
-            // Init Console and Fabricator Fragments
-            PetFabricatorFragmentPrefab.InitPrefab();
-            PetConsoleFragmentPrefab.InitPrefab();
- 
             // Initialise the Pet Buildables
+            LogUtils.LogDebug(LogArea.Main, "Init Pet Buildables...");
             PetBuildablePrefab.InitPetBuildables();
 
+            // Init Console and Fabricator Fragments
+            LogUtils.LogDebug(LogArea.Main, "Init Fragments...");
+            PetFabricatorFragmentPrefab.InitPrefab();
+            PetConsoleFragmentPrefab.InitPrefab();
+
             // Init the Pet Console Fabricator
+            LogUtils.LogDebug(LogArea.Main, "Init Pet Console and Fabricator...");
             PetConsolePrefab.InitPetConsole();
             PetFabricatorPrefab.InitPetFabricator();
         }
+        #endregion
     }
 }

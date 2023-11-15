@@ -14,8 +14,8 @@ using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
 using Nautilus.Utility;
 using UnityEngine;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 using Object = UnityEngine.Object;
+using Nautilus.Handlers;
 
 namespace DaftAppleGames.SubnauticaPets.Prefabs
 {
@@ -59,9 +59,9 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         /// <returns></returns>
         public static PrefabInfo CreateBuildablePrefabInfo(string classId, string displayName, string description, string textureName)
         {
-            Log.LogDebug($"PetBuildablePrefab: CreateBuildablePrefabInfo with classId {classId}.");
+            LogUtils.LogDebug(LogArea.Prefabs, $"PetBuildablePrefab: CreateBuildablePrefabInfo with classId {classId}.");
             PrefabInfo prefabInfo = PrefabInfo
-                .WithTechType(classId, displayName, description)
+                .WithTechType(classId, displayName, description, unlockAtStart: true)
                 // Set the icon
                 .WithIcon(ModUtils.GetSpriteFromAssetBundle(textureName));
 
@@ -95,29 +95,29 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                 ConstructableFlags constructableFlags = ConstructableFlags.Inside;
 
                 // Get instance for new model
-                GameObject customPrefabInstance = ModUtils.GetGameObjectInstanceFromAssetBundle(cloneModelPrefabName);
-                Log.LogDebug($"Created prefab instance from {cloneModelPrefabName}");
+                GameObject customPrefabInstance = ModUtils.GetGameObjectInstanceFromAssetBundle(cloneModelPrefabName, true);
+                LogUtils.LogDebug(LogArea.Prefabs, $"Created prefab instance from {cloneModelPrefabName}");
                 MaterialUtils.ApplySNShaders(customPrefabInstance);
 
                 // Find the object that holds the model for the fabricator
                 GameObject modelGameObject = null;
 
-                Log.LogDebug($"PetBuildablePrefab: RegisterPrefabInfo looking for prefab model for {obj.name}...");
+                LogUtils.LogDebug(LogArea.Prefabs, $"PetBuildablePrefab: RegisterPrefabInfo looking for prefab model for {obj.name}...");
                 // First, find the Animator
                 Animator animator = obj.GetComponentInChildren<Animator>(true);
                 if (animator == null)
                 {
-                    Log.LogError($"PetBuildableInfo: RegisterPrefabInfo can't find Animator in {obj.name}"!);
+                    LogUtils.LogError($"PetBuildableInfo: RegisterPrefabInfo can't find Animator in {obj.name}"!);
                 }
                 else
                 {
-                    Log.LogDebug("PetBuildableInfo: Swapping model game objects...");
+                    LogUtils.LogDebug(LogArea.Prefabs, "PetBuildableInfo: Swapping model game objects...");
                     GameObject animatorGameObject = animator.gameObject;
-                    Log.LogDebug($"PetBuildableInfo: Using parent {animatorGameObject.transform.parent.gameObject.name} of {animatorGameObject.name}...");
+                    LogUtils.LogDebug(LogArea.Prefabs, $"PetBuildableInfo: Using parent {animatorGameObject.transform.parent.gameObject.name} of {animatorGameObject.name}...");
                     customPrefabInstance.transform.SetParent(animatorGameObject.transform.parent);
                     customPrefabInstance.transform.localPosition = new Vector3(0, 0, 0);
                     customPrefabInstance.transform.localRotation = new Quaternion(0, 0, 0, 0);
-                    Log.LogDebug($"PetBuildableInfo: {customPrefabInstance.name} has been re-parented.");
+                    LogUtils.LogDebug(LogArea.Prefabs, $"PetBuildableInfo: {customPrefabInstance.name} has been re-parented.");
 
                     modelGameObject = animatorGameObject.transform.parent.gameObject;
                     Object.Destroy(animatorGameObject);
@@ -142,6 +142,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             // Assign the created clone model to the prefab itself:
             prefab.SetGameObject(cloneTemplate);
             // Set recipe
+            LogUtils.LogDebug(LogArea.Prefabs, $"PetBuildablePrefab: Setting up recipe {recipe.ingredientCount} for {prefab.Info.TechType}...");
             prefab.SetRecipe(recipe);
             // Register it into the game:
             prefab.Register();
@@ -175,12 +176,12 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                 // Find the object that holds the model for the fabricator
                 GameObject modelGameObject = null;
 
-                Log.LogDebug($"PetBuildablePrefab: RegisterPrefabInfo looking for prefab model for {obj.name}...");
+                LogUtils.LogDebug(LogArea.Prefabs, $"PetBuildablePrefab: RegisterPrefabInfo looking for prefab model for {obj.name}...");
                 // First, find the Animator
                 Animator animator = obj.GetComponentInChildren<Animator>(true);
                 if (animator == null)
                 {
-                    Log.LogError($"PetBuildableInfo: RegisterPrefabInfo can't find Animator in {obj.name}"!);
+                    LogUtils.LogError($"PetBuildableInfo: RegisterPrefabInfo can't find Animator in {obj.name}"!);
                 }
                 else
                 {
@@ -208,7 +209,16 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             // Assign the created clone model to the prefab itself:
             prefab.SetGameObject(cloneTemplate);
             // Set recipe
-            prefab.SetRecipe(recipe);
+            LogUtils.LogDebug(LogArea.Prefabs, $"PetBuildablePrefab: Setting up recipe {recipe.ingredientCount} for {prefab.Info.TechType}...");
+            CraftingGadget crafting = prefab.SetRecipe(recipe);
+            foreach(Ingredient ingredient in crafting.RecipeData.Ingredients)
+            {
+                LogUtils.LogDebug(LogArea.Prefabs, $"PetBuildablePrefab: {ingredient._amount} of {ingredient._techType}");
+            }
+
+            // DEBUG
+            CraftDataHandler.SetRecipeData(prefabInfo.TechType, recipe);
+
             // Register it into the game:
             prefab.Register();
         }
@@ -313,7 +323,6 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 RegisterPrefabInfoWithGuid(Info, PenglingBabyPet.PrefabGuid, PenglingBabyPet.ModelName, PenglingBabyPet.GetRecipeData(),
                     PenglingBabyPet.ModelScale, PenglingBabyPet.VfxMinOffset, PenglingBabyPet.VfxMaxOffset);
-                PenglingBabyPet.BuildablePrefabInfo = Info;
             }
         }
 
@@ -330,7 +339,6 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 RegisterPrefabInfoWithGuid(Info, PenglingAdultPet.PrefabGuid, PenglingAdultPet.ModelName, PenglingAdultPet.GetRecipeData(),
                     PenglingAdultPet.ModelScale, PenglingAdultPet.VfxMinOffset, PenglingAdultPet.VfxMaxOffset);
-                PenglingAdultPet.BuildablePrefabInfo = Info;
             }
         }
 
@@ -347,7 +355,6 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 RegisterPrefabInfoWithGuid(Info, SnowStalkerBabyPet.PrefabGuid, SnowStalkerBabyPet.ModelName, SnowStalkerBabyPet.GetRecipeData(),
                     SnowStalkerBabyPet.ModelScale, SnowStalkerBabyPet.VfxMinOffset, SnowStalkerBabyPet.VfxMaxOffset);
-                SnowStalkerBabyPet.BuildablePrefabInfo = Info;
             }
         }
 
@@ -364,7 +371,6 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 RegisterPrefabInfoWithGuid(Info, PinnicaridPet.PrefabGuid, PinnicaridPet.ModelName, PinnicaridPet.GetRecipeData(),
                     PinnicaridPet.ModelScale, PinnicaridPet.VfxMinOffset, PinnicaridPet.VfxMaxOffset);
-                PinnicaridPet.BuildablePrefabInfo = Info;
             }
         }
 
@@ -381,7 +387,6 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 RegisterPrefabInfoWithGuid(Info, TrivalveYellowPet.PrefabGuid, TrivalveYellowPet.ModelName, TrivalveYellowPet.GetRecipeData(),
                     TrivalveYellowPet.ModelScale, TrivalveYellowPet.VfxMinOffset, TrivalveYellowPet.VfxMaxOffset);
-                TrivalveYellowPet.BuildablePrefabInfo = Info;
             }
         }
 
@@ -400,7 +405,6 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                 RegisterPrefabInfoWithGuid(Info, TrivalveBluePet.PrefabGuid,
                     TrivalveBluePet.ModelName, TrivalveBluePet.GetRecipeData(), TrivalveBluePet.ModelScale,
                     TrivalveBluePet.VfxMinOffset, TrivalveBluePet.VfxMaxOffset);
-                TrivalveBluePet.BuildablePrefabInfo = Info;
             }
         }
 #endif

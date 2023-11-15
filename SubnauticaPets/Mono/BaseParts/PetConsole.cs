@@ -8,9 +8,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 using Button = UnityEngine.UI.Button;
 using static DaftAppleGames.SubnauticaPets.Utils.UiUtils;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
 {
@@ -55,15 +55,30 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
 
         private string _sureButtonText = "";
 
-        private List<GameObject> _petList;
+        private List<GameObject> _petButtonGameObjectList;
+
+        private bool _uiIsReady = false;
 
         /// <summary>
         /// Apply some changes before we render
         /// </summary>
         public void Awake()
         {
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsole: Awake");
+
             // Apply custom mesh texture
             ApplyNewMeshTexture();
+
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsole: Create UI");
+
+            // Create UI
+            if (!_uiIsReady)
+            {
+                CreateUi();
+            }
+
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsole: Done");
+
         }
 
         /// <summary>
@@ -71,17 +86,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// </summary>
         public void Start()
         {
-            Log.LogDebug("PetConsolePrefab: Removing PictureFrame components...");
-            ModUtils.DestroyComponentsInChildren<PictureFrame>(gameObject);
-            Log.LogDebug("PetConsolePrefab: Removing PictureFrame components... Done.");
 
-            Log.LogDebug("PetConsoleUi: Creating UI...");
-            CreateUi();
-            Log.LogDebug("PetConsoleUi: Creating UI... Done.");
-
-            // Subscribe to the Pet Saver, to update the UI when required.
-            Saver.PetListAddEvent.AddListener(OnPetsChangedHandler);
-            Saver.PetListRemoveEvent.AddListener(OnPetsChangedHandler);
         }
 
         /// <summary>
@@ -100,7 +105,46 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// </summary>
         private void CreateUi()
         {
-            StartCoroutine(CreateUiAsync(gameObject));
+            ModUtils.DestroyComponentsInChildren<PictureFrame>(gameObject);
+            GameObject consolePrefabGameObject = Base.pieces[(int)Base.Piece.MoonpoolUpgradeConsoleShort].prefab.gameObject;
+            GameObject consoleClone = Instantiate(consolePrefabGameObject);
+            
+            _uiGameObject = consoleClone.FindChild("EditScreen");
+            _uiGameObject.transform.SetParent(gameObject.transform);
+            _uiGameObject.transform.localPosition = new Vector3(0, 0, 0.02f);
+            _uiGameObject.transform.localRotation = new Quaternion(0, 180, 0, 0);
+            _uiGameObject.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsoleUi: CopyUiFromPrefab done.");
+
+            // Clean up
+            Destroy(consoleClone);
+
+            // Init UI
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsoleUi: Init Ui...");
+            _newScreenGameObject = UiUtils.InitUi(_uiGameObject, "PetConsolePanel");
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsoleUi: Creating buttons...");
+            CreateButtons(_uiGameObject, _newScreenGameObject);
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsoleUi: Creating buttons... Done.");
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsoleUi: Creating text entry...");
+            CreateTextEntry(_uiGameObject, _newScreenGameObject);
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsoleUi: Creating text entry... Done.");
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsoleUi: Creating scroll view...");
+            CreatePetList(_uiGameObject, _scrollViewContentGameObject);
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsoleUi: Creating scroll view... Done.");
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsoleUi: Add PetConsoleInput...");
+            PetConsoleInput petConsoleInput = _uiGameObject.AddComponent<PetConsoleInput>();
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsoleUi: Add PetConsoleInput... Done.");
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsoleUi: Add RotatingIcon...");
+            AddRotatingIcon(_uiGameObject);
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsoleUi: Add RotatingIcon... Done.");
+
+            // Subscribe to the Pet Saver, to update the UI when required, once it's initialised
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsoleUi: Adding Saver listeners...");
+            LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsoleUi: Saver is null: {Saver==null}");
+            Saver.PetListAddEvent.AddListener(OnPetsChangedHandler);
+            Saver.PetListRemoveEvent.AddListener(OnPetsChangedHandler);
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsoleUi: Adding Saver listeners... Done.");
+            _uiIsReady = true;
         }
 
         /// <summary>
@@ -116,7 +160,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// </summary>
         private void KillAllConfirmButtonProxy()
         {
-            Log.LogDebug("Kill All Button Clicked!");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, "Kill All Button Clicked!");
             PetUtils.KillAllPets();
             _killAllConfirmButton.SetActive(false);
             _killAllButton.SetActive(true);
@@ -131,7 +175,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// </summary>
         private void KillButtonProxy()
         {
-            Log.LogDebug("Kill Button Clicked!");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, "Kill Button Clicked!");
             if (_selectedPet != null)
             {
                 _selectedPet.Kill();
@@ -151,7 +195,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// </summary>
         private void RenameButtonProxy()
         {
-            Log.LogDebug("Rename Button Clicked!");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, "Rename Button Clicked!");
             if (_selectedPet != null)
             {
                 _selectedPet.RenamePet(_petNameText);
@@ -174,7 +218,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// <param name="nameText"></param>
         private void RenameTextChangedProxy(string nameText)
         {
-            Log.LogDebug($"Name Text Changed: {nameText}!");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, $"Name Text Changed: {nameText}!");
             
             // Local name, for changing existing pets
             _petNameText = nameText;
@@ -191,7 +235,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// <param name="pet"></param>
         private void PetSelectedProxy(Pet pet)
         {
-            Log.LogDebug($"Selected Pet Changed: {pet.PetName}");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, $"Selected Pet Changed: {pet.PetName}");
             _selectedPet = pet;
 
             // Set the Kill and Rename buttons to interactable
@@ -199,65 +243,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
             _renameButton.GetComponent<Button>().interactable = true;
 
             SelectedPetChangedEvent.Invoke(pet);
-        }
-
-        /// <summary>
-        /// Async method to create the UI. Needs to be async, to wait for the
-        /// base pieces array to be initialised.
-        /// </summary>
-        /// <param name="targetGameObject"></param>
-        /// <returns></returns>
-        private IEnumerator CreateUiAsync(GameObject targetGameObject)
-        {
-            yield return null;
-
-            Log.LogDebug("PetConsoleUi: CopyUiFromPrefab getting BaseUpgradeConsole...");
-            while (Base.pieces == null || Base.pieces.Length == 0)
-            {
-                yield return null;
-            }
-            GameObject consolePrefabGameObject = Base.pieces[(int)Base.Piece.MoonpoolUpgradeConsoleShort].prefab.gameObject;
-            GameObject consoleClone = Instantiate(consolePrefabGameObject);
-
-            // Temporarily make source UI visible for debugging
-            consoleClone.name = "PetConsoleUiSource";
-            consoleClone.transform.position = gameObject.transform.position;
-
-            _uiGameObject = consoleClone.FindChild("EditScreen");
-            if (!_uiGameObject)
-            {
-                Log.LogDebug("PetConsolePrefab: Couldn't find the EditScreen GameObject in BaseConsole prefab!");
-                yield break;
-            }
-            Log.LogDebug("PetConsoleUi: CopyUiFromPrefab cloning EditScreen...");
-            Log.LogDebug("PetConsoleUi: CopyUiFromPrefab parenting EditScreen...");
-            _uiGameObject.transform.SetParent(targetGameObject.transform);
-            _uiGameObject.transform.localPosition = new Vector3(0, 0, 0.02f);
-            _uiGameObject.transform.localRotation = new Quaternion(0, 180, 0, 0);
-            _uiGameObject.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
-            Log.LogDebug("PetConsoleUi: CopyUiFromPrefab done.");
-
-            // Clean up
-            Destroy(consoleClone);
-
-            // Init UI
-            Log.LogDebug("PetConsoleUi: Init Ui...");
-            _newScreenGameObject = UiUtils.InitUi(_uiGameObject, "PetConsolePanel");
-            Log.LogDebug("PetConsoleUi: Creating buttons...");
-            CreateButtons(_uiGameObject, _newScreenGameObject);
-            Log.LogDebug("PetConsoleUi: Creating buttons... Done.");
-            Log.LogDebug("PetConsoleUi: Creating text entry...");
-            CreateTextEntry(_uiGameObject, _newScreenGameObject);
-            Log.LogDebug("PetConsoleUi: Creating text entry... Done.");
-            Log.LogDebug("PetConsoleUi: Creating pet list...");
-            CreatePetList(_uiGameObject, _scrollViewContentGameObject);
-            Log.LogDebug("PetConsoleUi: Creating pet list... Done.");
-            Log.LogDebug("PetConsoleUi: Add PetConsoleInput...");
-            PetConsoleInput petConsoleInput = _uiGameObject.AddComponent<PetConsoleInput>();
-            Log.LogDebug("PetConsoleUi: Add PetConsoleInput... Done.");
-            Log.LogDebug("PetConsoleUi: Add RotatingIcon...");
-            AddRotatingIcon(_uiGameObject);
-            Log.LogDebug("PetConsoleUi: Add RotatingIcon... Done.");
         }
 
         /// <summary>
@@ -330,6 +315,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// </summary>
         /// <param name="sourceUiScreen"></param>
         /// <param name="targetUiGameObject"></param>
+        /// <param name="petList"></param>
         public void CreatePetList(GameObject sourceUiScreen, GameObject targetUiGameObject)
         {
             Sprite backgroundSprite = ModUtils.GetSpriteFromAssetBundle(CustomButtonTexture);
@@ -340,33 +326,38 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
             }
 
             // Clear the current UI objects
-            Log.LogDebug("CreatePetList: Clearing existing buttons...");
-            if (_petList != null)
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "CreatePetList: Clearing existing buttons...");
+            if (_petButtonGameObjectList != null)
             {
-                foreach (GameObject uiObject in _petList)
+                foreach (GameObject uiObject in _petButtonGameObjectList)
                 {
                     Destroy(uiObject);
                 }
             }
 
-            _petList = new List<GameObject>();
+            _petButtonGameObjectList = new List<GameObject>();
             float yBase = 20;
             float yOffset = -45;
 
             int currPetIndex = 0;
 
+            if (Saver.PetList == null)
+            {
+                return;
+            }
+
             List<Pet> sortedPetList = Saver.PetList.OrderBy(pet => pet.PetName).ToList();
 
-            Log.LogDebug($"PetConsoleUi: Sorted list into {sortedPetList.Count} pets.");
+            LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsoleUi: Sorted list into {sortedPetList.Count} pets.");
 
             foreach (Pet currPet in sortedPetList)
             {
                 PetSaver.PetDetails currPetDetails = currPet.PetSaverDetails;
-                Log.LogDebug($"CreatePetList: Creating button for {currPet.PetName}...");
+                LogUtils.LogDebug(LogArea.MonoBaseParts, $"CreatePetList: Creating button for {currPet.PetName}...");
                 GameObject newButton = UiUtils.CreateButton(sourceUiScreen, "Button",
                     $"SelectPetButton{currPetIndex}", $"{currPetDetails.PetName} ({currPetDetails.PetType})",
                     _scrollViewContentGameObject, new Vector3(-180, yBase + (yOffset * currPetIndex), 0), true);
-                Log.LogDebug($"CreatePetList: Creating button for {currPet.PetName}... Done.");
+                LogUtils.LogDebug(LogArea.MonoBaseParts, $"CreatePetList: Creating button for {currPet.PetName}... Done.");
 
                 newButton.GetComponent<Button>().onClick.AddListener(delegate { PetSelectedProxy(currPet);});
                 newButton.GetComponent<Button>().onClick.AddListener(delegate { UpdateSelected(newButton); });
@@ -375,13 +366,13 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
 
                 newButton.GetComponent<Image>().sprite = backgroundSprite;
 
-                _petList.Add(newButton);
+                _petButtonGameObjectList.Add(newButton);
 
                 currPetIndex++;
             }
 
             // Enable Kill All if there are any pets
-            Log.LogDebug($"PetConsole: Setting KillAllButton interactable to: {sortedPetList.Count > 0}");
+            LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsole: Setting KillAllButton interactable to: {sortedPetList.Count > 0}");
             _killAllButton.GetComponentInChildren<Button>().interactable = sortedPetList.Count > 0;
         }
 
@@ -392,7 +383,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         private void UpdateSelected(GameObject selected)
         {
             // Reset all backgrounds
-            foreach (GameObject uiObject in _petList)
+            foreach (GameObject uiObject in _petButtonGameObjectList)
             {
                 Color backColour = Color.cyan;
                 backColour.a = 128;
@@ -461,7 +452,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// </summary>
         private void ApplyNewMeshTexture()
         {
-            Log.LogDebug("PetConsole: Applying new mesh texture...");
+            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsole: Applying new mesh texture...");
             ModUtils.ApplyNewMeshTexture(this.gameObject, PetConsoleTexture, PetConsoleTextureGameObject);
         }
     }

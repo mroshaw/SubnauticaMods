@@ -1,6 +1,7 @@
-﻿using DaftAppleGames.SubnauticaPets.Mono.Utils;
+﻿
+using DaftAppleGames.SubnauticaPets.Mono.Utils;
 using UnityEngine;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
+using DaftAppleGames.SubnauticaPets.Utils;
 
 namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
 {
@@ -31,13 +32,13 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// </summary>
         public void AddTechTag()
         {
-            Log.LogDebug($"FragmentBase: Adding TechTag...");
+            LogUtils.LogDebug(LogArea.MonoBaseParts, $"FragmentBase: Adding TechTag...");
             TechTag techTag = gameObject.GetComponent<TechTag>();
             if (techTag == null)
             {
                 techTag = gameObject.AddComponent<TechTag>();
             }
-            Log.LogDebug($"FragmentBase: Adding TechTag... Done.");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, $"FragmentBase: Adding TechTag... Done.");
         }
 
         /// <summary>
@@ -45,7 +46,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// </summary>
         public void AddSkyApplier()
         {
-            Log.LogDebug($"FragmentBase: Adding SkyApplier...");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, $"FragmentBase: Adding SkyApplier...");
             // Sky Applier
             SkyApplier skyApplier = gameObject.GetComponent<SkyApplier>();
             if (skyApplier == null)
@@ -54,7 +55,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
             }
             Renderer[] renderers = gameObject.GetComponentsInChildren<Renderer>(true);
             skyApplier.renderers = renderers;
-            Log.LogDebug($"FragmentBase: Adding SkyApplier... Done.");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, $"FragmentBase: Adding SkyApplier... Done.");
         }
 
         /// <summary>
@@ -62,14 +63,14 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// </summary>
         public void AddAlignToFloor()
         {
-            Log.LogDebug($"FragmentBase: Adding AlignToFloor...");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, $"FragmentBase: Adding AlignToFloor...");
             // AlignToFloor
             AlignToFloorOnStart alignToFloor = gameObject.GetComponent<AlignToFloorOnStart>();
             if (alignToFloor == null)
             {
                 // alignToFloor = gameObject.AddComponent<AlignToFloorOnStart>();
             }
-            Log.LogDebug($"FragmentBase: Adding AlignToFloor... Done.");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, $"FragmentBase: Adding AlignToFloor... Done.");
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// </summary>
         public void AddFreezeOnSettle()
         {
-            Log.LogDebug($"FragmentBase: Adding FreezeOnSettle...");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, $"FragmentBase: Adding FreezeOnSettle...");
             // FreezeOnSettle
             FreezeOnSettle freeze = gameObject.GetComponent<FreezeOnSettle>();
             if (freeze == null)
@@ -89,7 +90,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
                 freeze.StartDelay = 2.0f;
             }
 
-            Log.LogDebug($"FragmentBase: Adding FreezeOnSettle... Done.");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, $"FragmentBase: Adding FreezeOnSettle... Done.");
         }
 
         /// <summary>
@@ -97,14 +98,14 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// </summary>
         public void UpdatePickupable()
         {
-            Log.LogDebug($"FragmentBase: Updating Pickupable...");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, $"FragmentBase: Updating Pickupable...");
             // Prevent fragments from being phsyically picked up
             Pickupable pickupable = GetComponent<Pickupable>();
             if (pickupable)
             {
                 pickupable.isPickupable = false;
             }
-            Log.LogDebug($"FragmentBase: Updating Pickupable... Done.");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, $"FragmentBase: Updating Pickupable... Done.");
         }
 
         /// <summary>
@@ -112,13 +113,13 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// </summary>
         public void DisableWorldForces()
         {
-            Log.LogDebug($"FragmentBase: Disabling WorldForces...");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, $"FragmentBase: Disabling WorldForces...");
             WorldForces worldForces = gameObject.GetComponent<WorldForces>();
             if (worldForces != null)
             {
                 worldForces.enabled = false;
             }
-            Log.LogDebug($"FragmentBase: Disabling WorldForces... Done.");
+            // LogUtils.LogDebug(LogArea.MonoBaseParts, $"FragmentBase: Disabling WorldForces... Done.");
         }
 
         /// <summary>
@@ -154,7 +155,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
             GameObject oldModelGameObject = gameObject.FindChild("model");
             if (oldModelGameObject != null)
             {
-                Log.LogDebug("BaseFragment: Destroying old model...");
+                // LogUtils.LogDebug(LogArea.MonoBaseParts, "BaseFragment: Destroying old model...");
                 Object.Destroy(oldModelGameObject);
             }
         }

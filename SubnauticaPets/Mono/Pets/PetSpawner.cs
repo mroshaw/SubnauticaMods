@@ -7,6 +7,15 @@ using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Mono.Pets
 {
+    // Define available Pet types, depending on which game the mod is compiled for
+#if SUBNAUTICA
+    public enum PetCreatureType { CaveCrawler, BloodCrawler, CrabSquid, AlienRobot, Cat }
+#endif
+
+#if SUBNAUTICAZERO
+    public enum PetCreatureType { SnowstalkerBaby, PenglingBaby, PenglingAdult, Pinnicarid, BlueTrivalve, YellowTrivalve, Cat }
+#endif
+
     /// <summary>
     /// PetSpawner MonoBehaviour. Allows the spawning of a pet. Can be attached
     /// to a Player, or to a Fabricator / Workbench
@@ -57,8 +66,8 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         /// </summary>
         public void SpawnPet(PetCreatureType petType, string petName)
         {
-            Log.LogDebug($"PetSpawner: Spawning Pet. Type: {petType}, Name: {petName}");
-            Log.LogDebug($"PetSpawner: IsANaughtyBoyThen is {IsANaughtyBoy}");
+            LogUtils.LogDebug(LogArea.MonoPets, $"PetSpawner: Spawning Pet. Type: {petType}, Name: {petName}");
+            LogUtils.LogDebug(LogArea.MonoPets, $"PetSpawner: IsANaughtyBoyThen is {IsANaughtyBoy}");
 
             // We don't allow Pirates to look after Pets
             if (IsANaughtyBoy)
@@ -73,14 +82,14 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             // If the player is the spawner, do some checks before spawning
             if (_isSpawnerPlayer)
             {
-                Log.LogDebug("PetSpawner: Player is spawner.");
+                LogUtils.LogDebug(LogArea.MonoPets, "PetSpawner: Player is spawner.");
                 if (CheckPlayerSpawnConditions())
                 {
                     if (GetSpawnLocation(out desiredSpawnLocation))
                     {
                         if (CheckPetSpawnLocation(desiredSpawnLocation) || _skipSpawnObstacleCheck)
                         {
-                            Log.LogDebug($"Preparing to Spawn from Player location. Skip obstacle check is {_skipSpawnObstacleCheck}");
+                            LogUtils.LogDebug(LogArea.MonoPets, $"Preparing to Spawn from Player location. Skip obstacle check is {_skipSpawnObstacleCheck}");
                             InstantiatePet(desiredSpawnLocation, petType, petName);
                             spawnSuccess = true;
                         }
@@ -89,12 +98,12 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             }
             else
             {
-                Log.LogDebug("PetSpawner: Player is not spawner. Assume Fabricator.");
+                LogUtils.LogDebug(LogArea.MonoPets, "PetSpawner: Player is not spawner. Assume Fabricator.");
                 CrafterGhostModel ghostModel = GetComponentInChildren<CrafterGhostModel>();
                 desiredSpawnLocation = ghostModel.itemSpawnPoint.position;
 
                 // desiredSpawnLocation = gameObject.transform.position + (Vector3.up * fabricatorSpawnYAdjustment);
-                Log.LogDebug("Preparing to Spawn from Fabricator location!");
+                LogUtils.LogDebug(LogArea.MonoPets, "Preparing to Spawn from Fabricator location!");
                 InstantiatePet(desiredSpawnLocation, petType, petName);
                 spawnSuccess = true;
             }
@@ -103,7 +112,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             if (!spawnSuccess)
             {
                 ErrorMessage.AddMessage($"{Language.main.Get("Alert_SpawnError")} {_spawnFailReason}");
-                Log.LogDebug($"You can't spawn a pet here! {_spawnFailReason}");
+                LogUtils.LogDebug(LogArea.MonoPets, $"You can't spawn a pet here! {_spawnFailReason}");
             }
         }
 
@@ -128,45 +137,18 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         /// <returns></returns>
         private IEnumerator InstantiatePetAsync(Vector3 spawnLocation, PetCreatureType petType, string petName)
         {
-            Log.LogDebug($"InstantiatePetAsync called with: Type: {petType}, Name: {petName}");
+            LogUtils.LogDebug(LogArea.MonoPets, $"InstantiatePetAsync called with: Type: {petType}, Name: {petName}");
 
             yield return null;
             TechType techType = GetPetCreatureTechType(petType);
 
             if (techType == TechType.None)
             {
-                Log.LogDebug("Failed to instantiate! Invalid TechType detected");
+                LogUtils.LogDebug(LogArea.MonoPets, "Failed to instantiate! Invalid TechType detected");
                 yield break;
             }
-            Log.LogDebug("Instantiating Pet...");
+            LogUtils.LogDebug(LogArea.MonoPets, "Instantiating Pet...");
             GameObject newCreatureGameObject;
-
-            // Custom Types
-            if (petType == PetCreatureType.Cat)
-            {
-                // Get instance from asset bundle
-                newCreatureGameObject =
-                    ModUtils.GetGameObjectInstanceFromAssetBundle(CatPet.CustomPrefabName);
-                // Apply SN shaders to model
-                MaterialUtils.ApplySNShaders(newCreatureGameObject);
-
-                // Add PrefabIdentifer
-                newCreatureGameObject.AddComponent<PrefabIdentifier>();
-            }
-            // Built in types
-            else
-            {
-                CoroutineTask<GameObject> task = CraftData.GetPrefabForTechTypeAsync(techType);
-                yield return task;
-                GameObject newCreaturePrefab = task.GetResult();
-                newCreatureGameObject = Instantiate(newCreaturePrefab);
-            }
-
-            // Add the Pet component and configure name and type
-            Log.LogDebug("Adding Pet component...");
-            Pet newPet = PetUtils.AddPetComponent(newCreatureGameObject, petType, petName);
-            newPet.PetCreatureType = petType;
-            newPet.PetName = petName;
 
             // Parent the spawn to the current Base interior and set the position and rotation
             GameObject baseGameObject = gameObject.transform.parent.gameObject;
@@ -174,22 +156,40 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             {
                 Log.LogError("PetSpawner: Pet Fabricator not in a base!!");
             }
-            newCreatureGameObject.transform.SetParent(baseGameObject.transform);
+
+            // Custom Types
+            if (petType == PetCreatureType.Cat)
+            {
+                // Get instance from asset bundle
+                newCreatureGameObject =
+                    ModUtils.GetGameObjectInstanceFromAssetBundle(CatPet.CustomPrefabName, false);
+                newCreatureGameObject.transform.SetParent(baseGameObject.transform);
+            }
+            // Built in types
+            else
+            {
+                CoroutineTask<GameObject> task = CraftData.GetPrefabForTechTypeAsync(techType);
+                yield return task;
+                GameObject newCreaturePrefab = task.GetResult();
+                newCreaturePrefab.SetActive(false);
+                newCreatureGameObject = Instantiate(newCreaturePrefab, baseGameObject.transform);
+            }
+
+            // Configure the new Pet GameObject
+            Pet newPet = PetConfig.ConfigurePet(newCreatureGameObject, petType, petName, baseGameObject);
+
+            // Position and name the spawn GameObject
             newCreatureGameObject.transform.position = spawnLocation;
             newCreatureGameObject.transform.LookAt(Player.main.transform);
             newCreatureGameObject.name = $"{newCreatureGameObject.name}_Pet";
 
-            // Register pet with the saver
-            Log.LogDebug("PetSpawner: Registering new Pet...");
-            newPet.RegisterNewPet();
-            Log.LogDebug("PetSpawner: Registering new Pet... Done.");
-
-            Log.LogDebug($"Instantiated {petType} at {spawnLocation} as {newCreatureGameObject.name}");
-            newPet.Born();
-            Log.LogDebug("Done!");
-
+            // Spawning complete. Set the Pet GameObject active
+            LogUtils.LogDebug(LogArea.MonoPets, $"Instantiated {petType} at {spawnLocation} as {newCreatureGameObject.name} in parent {newCreatureGameObject.transform.parent.name}");
+            ErrorMessage.AddMessage($"{Language.main.Get("Alert_PetBorn")} {newPet.PetTypeString}, {newPet.PetNameString}!");
+            newCreatureGameObject.SetActive(true);
+            LogUtils.LogDebug(LogArea.MonoPets, "Done!");
         }
-
+        
         /// <summary>
         /// Lookup the TechType from the PetCreatureType
         /// </summary>
@@ -233,8 +233,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
 
             }
         }
-
-
+        
         /// <summary>
         /// Look up the CreatureType from the TechType
         /// </summary>
@@ -292,11 +291,11 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             if(!Player.main.IsInBase())
             {
                 _spawnFailReason = Language.main.Get("Alert_PlayerMustBeInBase");
-                Log.LogDebug("CheckPlayerSpawnConditions: Player is not in base.");
+                LogUtils.LogDebug(LogArea.MonoPets, "CheckPlayerSpawnConditions: Player is not in base.");
 
                 return false;
             }
-            Log.LogDebug("CheckPlayerSpawnConditions: Spawning conditions met.");
+            LogUtils.LogDebug(LogArea.MonoPets, "CheckPlayerSpawnConditions: Spawning conditions met.");
             return true;
         }
 
@@ -310,12 +309,12 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             Vector3 fromPosition = MainCameraControl.main.transform.position;
             if (Physics.Linecast(fromPosition, spawnPosition, out RaycastHit hit))
             {
-                Log.LogDebug($"CheckPetSpawnLocation: Linecast has hit an object: {hit.collider.gameObject.name}");
+                LogUtils.LogDebug(LogArea.MonoPets, $"CheckPetSpawnLocation: Linecast has hit an object: {hit.collider.gameObject.name}");
                 _spawnFailReason = $"{Language.main.Get("Alert_ObjectBlocking")} {hit.collider.gameObject.name}";
                 return false;
             }
 
-            Log.LogDebug("CheckPetSpawnLocation: Linecast has found no objects in it's path.");
+            LogUtils.LogDebug(LogArea.MonoPets, "CheckPetSpawnLocation: Linecast has found no objects in it's path.");
             return true;
         }
 
@@ -335,13 +334,12 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             // Set the spawn on the ground
             if(GetGroundPosition(initialPosition, out spawnPosition))
             {
-                Log.LogDebug($"GetSpawnLocation: Location on ground has been found: {spawnPosition}.");
+                LogUtils.LogDebug(LogArea.MonoPets, $"GetSpawnLocation: Location on ground has been found: {spawnPosition}.");
                 return true;
             }
 
-            Log.LogDebug("GetSpawnLocation: Could not find location on ground.");
+            LogUtils.LogDebug(LogArea.MonoPets, "GetSpawnLocation: Could not find location on ground.");
             return false;
-
         }
 
         /// <summary>
@@ -358,11 +356,11 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             {
                 groundPosition = hit.point;
 
-                Log.LogDebug($"GetGroundPosition: Raycast hit ground: {groundPosition}.");
+                LogUtils.LogDebug(LogArea.MonoPets, $"GetGroundPosition: Raycast hit ground: {groundPosition}.");
                 return true;
             }
 
-            Log.LogDebug("GetGroundPosition: Raycast did not hit ground.");
+            LogUtils.LogDebug(LogArea.MonoPets, "GetGroundPosition: Raycast did not hit ground.");
             groundPosition = new Vector3();
             return false;
         }

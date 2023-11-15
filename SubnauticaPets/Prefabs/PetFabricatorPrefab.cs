@@ -1,10 +1,12 @@
 ﻿#if SUBNAUTICA
 using DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica;
+using static CraftData;
 #endif
 #if SUBNAUTICAZERO
 using DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero;
 #endif
 using System;
+
 using DaftAppleGames.SubnauticaPets.Mono.BaseParts;
 using DaftAppleGames.SubnauticaPets.Mono.Pets;
 using DaftAppleGames.SubnauticaPets.Mono.Pets.Custom;
@@ -14,7 +16,6 @@ using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
 using UnityEngine;
-using static CraftData;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 using Nautilus.Handlers;
 
@@ -26,7 +27,9 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
     internal static class PetFabricatorPrefab
     {
         // Pubic PrefabInfo, for anything that needs it
-        public static PrefabInfo PrefabInfo;
+        public static PrefabInfo Info { get; } = PrefabInfo
+            .WithTechType(PrefabClassId, null, null, unlockAtStart: false)
+            .WithIcon(ModUtils.GetSpriteFromAssetBundle(PetFabricatorIconTexture));
 
         // Prefab Class Id
         private const string PrefabClassId = "PetFabricator";
@@ -47,35 +50,31 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         /// </summary>
         public static void InitPetFabricator()
         {
-            PrefabInfo fabricatorPrefabInfo = PrefabInfo
-                .WithTechType(PrefabClassId, null, null, unlockAtStart: false)
-                .WithIcon(ModUtils.GetSpriteFromAssetBundle(PetFabricatorIconTexture));
-            
-            CustomPrefab fabricatorPrefab = new CustomPrefab(fabricatorPrefabInfo);
+            CustomPrefab fabricatorPrefab = new CustomPrefab(Info);
             FabricatorGadget fabGadget = fabricatorPrefab.CreateFabricator(out CraftTree.Type treeType)
                 // Add our Pet Buildables
 #if SUBNAUTICA
-                .AddCraftNode(CaveCrawlerPet.BuildablePrefabInfo.TechType)
-                .AddCraftNode(BloodCrawlerPet.BuildablePrefabInfo.TechType)
-                .AddCraftNode(CrabSquidPet.BuildablePrefabInfo.TechType)
-                .AddCraftNode(AlienRobotPet.BuildablePrefabInfo.TechType);
+                .AddCraftNode(PetBuildablePrefab.CaveCrawlerBuildable.Info.TechType)
+                .AddCraftNode(PetBuildablePrefab.BloodCrawlerBuildable.Info.TechType)
+                .AddCraftNode(PetBuildablePrefab.CrabSquidBuildable.Info.TechType)
+                .AddCraftNode(PetBuildablePrefab.AlienRobotBuildable.Info.TechType);
 #endif
 #if SUBNAUTICAZERO
-                .AddCraftNode(PenglingBabyPet.BuildablePrefabInfo.TechType)
-                .AddCraftNode(PenglingAdultPet.BuildablePrefabInfo.TechType)
-                .AddCraftNode(SnowStalkerBabyPet.BuildablePrefabInfo.TechType)
-                .AddCraftNode(PinnicaridPet.BuildablePrefabInfo.TechType)
-                .AddCraftNode(TrivalveYellowPet.BuildablePrefabInfo.TechType)
-                .AddCraftNode(TrivalveBluePet.BuildablePrefabInfo.TechType);
+                .AddCraftNode(PetBuildablePrefab.PenglingBabyBuildable.Info.TechType)
+                .AddCraftNode(PetBuildablePrefab.PenglingAdultBuildable.Info.TechType)
+                .AddCraftNode(PetBuildablePrefab.SnowStalkerBabyBuildable.Info.TechType)
+                .AddCraftNode(PetBuildablePrefab.PinnicaridBuildable.Info.TechType)
+                .AddCraftNode(PetBuildablePrefab.TrivalveYellowBuildable.Info.TechType)
+                .AddCraftNode(PetBuildablePrefab.TrivalveBluePetBuildable.Info.TechType);
 #endif
             // Add Cat pet, if it's been enabled.
             if (ModConfig.EnableCat)
             {
-                Log.LogDebug("PetFabricatorPrefab: Cat enabled, adding to Fabricator...");
+                LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorPrefab: Cat enabled, adding to Fabricator...");
                 fabGadget.AddCraftNode(CatPet.BuildablePrefabInfo.TechType);
             }
 
-            FabricatorTemplate fabPrefab = new FabricatorTemplate(fabricatorPrefab.Info, treeType)
+            FabricatorTemplate fabPrefab = new FabricatorTemplate(Info, treeType)
             {
                 FabricatorModel = FabricatorTemplate.Model.Workbench,
                 ModifyPrefab = ConfigureFabComponents
@@ -116,12 +115,10 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             SetupDatabank();
 
             // Set up the scanning and fragment unlocks
-            fabricatorPrefab.SetUnlock(PetFabricatorFragmentPrefab.PrefabInfo.TechType, 3)
+            fabricatorPrefab.SetUnlock(Info.TechType, 3)
                 .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule)
                 .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle(PetFabricatorPopupImageTexture), null, null);
             fabricatorPrefab.Register();
-            
-            PrefabInfo = fabricatorPrefab.Info;
         }
 
         /// <summary>
@@ -130,11 +127,11 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         private static void SetupDatabank()
         {
             // Set up Databank
-            Log.LogDebug("PetConsoleFragmentPrefab: Setting up Databank entry...");
+            LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: Setting up Databank entry...");
             PDAHandler.AddEncyclopediaEntry(PetFabricatorEncyKey, PetFabricatorEncyPath, null, null,
                 ModUtils.GetTexture2DFromAssetBundle(PetFabricatorMainImageTexture),
                 ModUtils.GetSpriteFromAssetBundle(PetFabricatorPopupImageTexture));
-            Log.LogDebug("PetConsoleFragmentPrefab: Setting up Databank entry... Done.");
+            LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: Setting up Databank entry... Done.");
         }
 
         /// <summary>
@@ -143,13 +140,15 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         /// <param name="fabricatorGameObject"></param>
         private static void ConfigureFabComponents(GameObject fabricatorGameObject)
         {
-            Log.LogDebug("PetFabricatorUtils: Adding PetSpawner component...");
-            PetSpawner newPetSpawner = fabricatorGameObject.AddComponent<PetSpawner>();
-            Log.LogDebug("PetFabricatorUtils: Adding PetSpawner component... Done.");
+            fabricatorGameObject.SetActive(false);
 
-            Log.LogDebug("PetFabricatorUtils: Adding PetFabricator component...");
+            LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorUtils: Adding PetSpawner component...");
+            PetSpawner newPetSpawner = fabricatorGameObject.AddComponent<PetSpawner>();
+            LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorUtils: Adding PetSpawner component... Done.");
+
+            LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorUtils: Adding PetFabricator component...");
             PetFabricator newPetFabricator = fabricatorGameObject.AddComponent<PetFabricator>();
-            Log.LogDebug("PetFabricatorUtils: Adding PetFabricator component... Done.");
+            LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorUtils: Adding PetFabricator component... Done.");
         }
     }
 }

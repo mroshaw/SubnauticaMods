@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
+using DaftAppleGames.SubnauticaPets.Utils;
 
 namespace DaftAppleGames.SubnauticaPets.Mono.Pets
 {
@@ -41,20 +42,23 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             string prefabId = GetPrefabId(pet);
             if (string.IsNullOrEmpty(prefabId))
             {
-                Log.LogError("PetSaver: Couldn't derive the PrefabId from the Pet GameObject!");
+                LogUtils.LogError("PetSaver: Couldn't derive the PrefabId from the Pet GameObject!");
                 return null;
             }
 
             // Add to the HashSet
-            Log.LogDebug("PetSaver: Adding new Pet to HashSet...");
             PetDetails newPetDetails = new PetDetails(prefabId, pet.PetName, pet.PetCreatureType);
+            LogUtils.LogDebug(LogArea.MonoPets, "PetSaver: Adding new Pet to HashSet...");
+            LogUtils.LogDebug(LogArea.MonoPets, $"PetSaver: Is HashSet null? {PetDetailsHashSet==null}");
             PetDetailsHashSet.Add(newPetDetails);
-            Log.LogDebug("PetSaver: Adding new Pet to HashSet... Done.");
+            LogUtils.LogDebug(LogArea.MonoPets, "PetSaver: Adding new Pet to HashSet... Done.");
+
+            // Add to Pet List
+            AddPetToList(pet);
 
             // Call any event listeners
             RegisterPetEvent.Invoke();
-
-
+            
             return newPetDetails;
         }
 
@@ -67,6 +71,9 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             // Remove from HashSet
             PetDetailsHashSet.Remove(pet.PetSaverDetails);
 
+            // Remove from Pet List
+            RemovePetFromList(pet);
+
             // Call any event listeners
             UnregisterPetEvent.Invoke();
         }
@@ -78,6 +85,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         public void AddPetToList(Pet pet)
         {
             PetList.Add(pet);
+            LogUtils.LogDebug(LogArea.MonoPets, "PetSaver: Calling PetListAddEvent.");
             PetListAddEvent.Invoke();
         }
 
@@ -88,6 +96,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         public void RemovePetFromList(Pet pet)
         {
             PetList.Remove(pet);
+            LogUtils.LogDebug(LogArea.MonoPets, "PetSaver: Calling PetListRemoveEvent.");
             PetListRemoveEvent.Invoke();
         }
 
@@ -131,7 +140,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         public void SavePetsGame()
         {
             string savePath = SaveLoadManager.GetTemporarySavePath();
-            Log.LogDebug($"PetSaver.SavePetGame: Found this save path: {savePath}");
+            LogUtils.LogDebug(LogArea.MonoPets, $"PetSaver.SavePetGame: Found this save path: {savePath}");
             WritePetSave(savePath);
         }
 
@@ -141,7 +150,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         public void LoadPetsGame()
         {
             string savePath = SaveLoadManager.GetTemporarySavePath();
-            Log.LogDebug($"PetSaver.LoadPetGame: Found this save path: {savePath}");
+            LogUtils.LogDebug(LogArea.MonoPets, $"PetSaver.LoadPetGame: Found this save path: {savePath}");
             ReadPetSave(savePath);
         }
 
@@ -152,7 +161,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         private void WritePetSave(string baseFolderLocation)
         {
             // Determine where to save the file
-            Log.LogDebug("PetSaver: Writing Pets save file...");
+            LogUtils.LogDebug(LogArea.MonoPets, "PetSaver: Writing Pets save file...");
             string saveFileFolder = $"{baseFolderLocation}\\{SaveFileFolder}";
 
             // Create the folder if it doesn't already exist
@@ -170,12 +179,12 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
                 PetDetailsHashSet = PetDetailsHashSet
             };
 
-            Log.LogDebug($"PetSaver: Saving {saveFile}...");
+            LogUtils.LogDebug(LogArea.MonoPets, $"PetSaver: Saving {saveFile}...");
 
             // Serialize to JSON and write the save file
             string serializedJson = JsonConvert.SerializeObject(newSave, Formatting.Indented);
             File.WriteAllText(saveFile, serializedJson);
-            Log.LogDebug($"PetSaver: Saved {saveFile}.");
+            LogUtils.LogDebug(LogArea.MonoPets, $"PetSaver: Saved {saveFile}.");
         }
 
         /// <summary>
@@ -186,20 +195,20 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         {
             // Determine location from which to read the save file
             string saveFile = $"{baseFolderLocation}\\{SaveFileFolder}\\{SaveFileName}";
-            Log.LogDebug($"Reading Pets save file: {saveFile}...");
+            LogUtils.LogDebug(LogArea.MonoPets, $"Reading Pets save file: {saveFile}...");
 
 
             // Check if the file exists and then De-serialize the JSON
             if (File.Exists(saveFile))
             {
-                Log.LogDebug($"PetSaver: Reading {saveFile}...");
+                LogUtils.LogDebug(LogArea.MonoPets, $"PetSaver: Reading {saveFile}...");
                 string serializedJson = File.ReadAllText(saveFile);
                 SaveData tempSave = JsonConvert.DeserializeObject<SaveData>(serializedJson);
                 PetDetailsHashSet = tempSave.PetDetailsHashSet;
             }
             else
             {
-                Log.LogDebug("PetSaver: No save file found.");
+                LogUtils.LogDebug(LogArea.MonoPets, "PetSaver: No save file found.");
                 PetDetailsHashSet = new HashSet<PetDetails>();
             }
         }

@@ -31,10 +31,10 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Utils
         {
             if (_counter < DelayBeforeInput)
             {
-                _counter += Time.deltaTime;
+                _counter += Time.unscaledDeltaTime;
                 return;
             }
-            if (Input.anyKey)
+            if (Input.anyKeyDown)
             {
                 _uiGameObject.SetActive(false);
                 _counter = 0.0f;

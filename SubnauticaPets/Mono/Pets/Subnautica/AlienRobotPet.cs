@@ -16,7 +16,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica
         // Pet
         public static string ClassId = "AlienRobotPet";
         public static string TextureName = "AlienRobotTexture";
-        public static PrefabInfo BuildablePrefabInfo;
         public static string PrefabGuid = "4fae8fa4-0280-43bd-bcf1-f3cba97eed77"; // https://github.com/LeeTwentyThree/Nautilus/blob/master/Nautilus/Documentation/resources/SN1-PrefabPaths.json
         public static string ModelName = "Precursor_Droid"; // "Precursor_Droid_horn_geo" is mode, Anim on "Precursor_Droid"
         public static Vector3 ModelScale = new Vector3(1, 1, 1);
@@ -59,7 +58,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica
         }
 
         // Alien Robot scale factor
-        public override float ScaleFactor => 1.0f;
+        public override Vector3 ScaleFactor => new(1.0f, 1.0f, 1.0f);
     }
 }
 #endif

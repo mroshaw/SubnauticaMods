@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+
 using HarmonyLib;
+using DaftAppleGames.SubnauticaPets.Utils;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Patches
@@ -21,7 +23,7 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         private static IEnumerator LoadAsync_Postfix(IEnumerator result)
         {
             yield return result;
-            Log.LogDebug("SaveLoadManagerPatches: LoadAsync done.");
+            LogUtils.LogDebug(LogArea.Patches, "SaveLoadManagerPatches: LoadAsync done.");
             Saver.LoadPetsGame();
         }
     }

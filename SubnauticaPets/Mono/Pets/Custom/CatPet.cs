@@ -57,15 +57,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets.Custom
         }
 
         // Cat pet scale factor
-        public override float ScaleFactor => 0.5f;
-
-        /// <summary>
-        /// Override the base Pet awake method
-        /// </summary>
-        public override void Awake()
-        {
-            base.Awake();
-            base.AddSimpleMovement();
-        }
+        public override Vector3 ScaleFactor => new(0.5f, 0.5f, 0.5f);
     }
 }
