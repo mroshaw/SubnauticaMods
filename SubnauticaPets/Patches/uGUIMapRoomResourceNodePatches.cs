@@ -1,11 +1,4 @@
-﻿#if SUBNAUTICA
-using DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica;
-#endif
-#if SUBNAUTICAZERO
-using DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero;
-#endif
-using DaftAppleGames.SubnauticaPets.Mono.Pets.Custom;
-using DaftAppleGames.SubnauticaPets.Prefabs;
+﻿using DaftAppleGames.SubnauticaPets.Prefabs;
 using DaftAppleGames.SubnauticaPets.Utils;
 using HarmonyLib;
 
@@ -29,15 +22,15 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         public static void SetTechType_Postfix(uGUI_MapRoomResourceNode __instance, TechType techType)
         {
 #if SUBNAUTICA
-            if (techType != PetDnaPrefab.AlienRobotDnaPrefab.Info.TechType && techType != PetDnaPrefab.CaveCrawlerDnaPrefab.Info.TechType &&
-                techType!= PetDnaPrefab.BloodCrawlerDnaPrefab.Info.TechType && techType != PetDnaPrefab.CrabSquidDnaPrefab.Info.TechType &&
-                techType != PetDnaPrefab.CatDnaPrefab.Info.TechType)
+            if (techType != PetDnaPrefabs.AlienRobotDnaPrefab.Info.TechType && techType != PetDnaPrefabs.CaveCrawlerDnaPrefab.Info.TechType &&
+                techType!= PetDnaPrefabs.BloodCrawlerDnaPrefab.Info.TechType && techType != PetDnaPrefabs.CrabSquidDnaPrefab.Info.TechType &&
+                techType != PetDnaPrefabs.CatDnaPrefab.Info.TechType)
 #endif
 #if SUBNAUTICAZERO
-            if (techType != PetDnaPrefab.PenglingAdultDnaPrefab.Info.TechType && techType != PetDnaPrefab.PenglingBabyDnaPrefab.Info.TechType &&
-                techType!= PetDnaPrefab.PinnicaridDnaPrefab.Info.TechType && techType != PetDnaPrefab.SnowstalkerBabyDnaPrefab.Info.TechType &&
-                techType!= PetDnaPrefab.TrivalveBlueDnaPrefab.Info.TechType && techType != PetDnaPrefab.TrivalveYellowDnaPrefab.Info.TechType &&
-                techType != PetDnaPrefab.CatDnaPrefab.Info.TechType)
+            if (techType != PetDnaPrefabs.PengwingAdultDnaPrefab.Info.TechType && techType != PetDnaPrefabs.PenglingBabyDnaPrefab.Info.TechType &&
+                techType!= PetDnaPrefabs.PinnacaridDnaPrefab.Info.TechType && techType != PetDnaPrefabs.SnowstalkerBabyDnaPrefab.Info.TechType &&
+                techType!= PetDnaPrefabs.TrivalveBlueDnaPrefab.Info.TechType && techType != PetDnaPrefabs.TrivalveYellowDnaPrefab.Info.TechType &&
+                techType != PetDnaPrefabs.CatDnaPrefab.Info.TechType)
 #endif
             {
                 return;

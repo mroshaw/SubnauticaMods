@@ -19,26 +19,8 @@ namespace DaftAppleGames.SubnauticaPets
         /// <summary>
         /// For initial release, the "Cat Pet" can be enabled for testing purposes.
         /// </summary>
-        [Toggle("Enable Cat Pet (requires restart)")]
-        public bool EnableCat = false;
-
-        [Toggle("Detailed logging")]
-        public bool DetailedLogging = true;
-
-        [Toggle("Logging (Base Parts)")]
-        public bool LogBaseParts = true;
-
-        [Toggle("Logging (Pets)")]
-        public bool LogPets = true;
-
-        [Toggle("Logging (Prefabs)")]
-        public bool LogPrefabs = true;
-
-        [Toggle("Logging (Utils)")]
-        public bool LogUtils = true;
-
-        [Toggle("Logging (Patches)")]
-        public bool LogPatches = true;
+        [Toggle("Enable Cat Pet (requires restart)")] public bool EnableCat = false;
+        [Toggle("Detailed logging")] public bool DetailedLogging = true;
         
         /// <summary>
         /// Display a dialogue with mod credits.

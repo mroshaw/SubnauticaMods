@@ -17,12 +17,10 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         /// </summary>
         public void Start()
         {
-            // LogUtils.LogDebug(LogArea.MonoPets, $"PetHandTarget: In PetHandTarget.Start on parent Game Object: {gameObject.name}");
-
             _pet = GetComponent<Pet>();
             if (!_pet)
             {
-                LogUtils.LogError("PetHandTarget: GameObject MUST have a Pet component!");
+                LogUtils.LogError(LogArea.MonoUtils, "PetHandTarget: GameObject MUST have a Pet component!");
             }
         }
 

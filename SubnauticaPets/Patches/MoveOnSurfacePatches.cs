@@ -22,7 +22,7 @@ namespace DaftAppleGames.SubnauticaPets.Patches
             // Get parent Creature and check that it's a Pet
             Creature creature = __instance.creature;
             Pet pet = __instance.gameObject.GetComponent<Pet>();
-            if (!pet || pet.PetCreatureType != PetCreatureType.SnowstalkerBaby)
+            if (!pet)
             {
                 // Invoke the "unpatched" method
                 return true;

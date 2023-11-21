@@ -126,20 +126,19 @@
     <None Include="Localization\French.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="Mono\Pets\PetSaver.cs" />
     <Compile Include="Mono\Utils\ApplySnFont.cs" />
-    <Compile Include="Prefabs\TestFabricator.cs" />
-    <Compile Include="Utils\PetConfig.cs" />
-    <Compile Include="Utils\PetConfigUtils.cs" />
+    <Compile Include="Mono\Utils\FixSkyApplier.cs" />
+    <Compile Include="Prefabs\BaseModulePrefabs.cs" />
+    <Compile Include="Prefabs\FragmentPrefabs.cs" />
+    <Compile Include="Prefabs\PetPrefabs.cs" />
+    <Compile Include="Utils\PrefabConfigUtils.cs" />
     <Compile Include="Patches\GroundMotorPatches.cs" />
     <Compile Include="Patches\MoveOnSurfacePatches.cs" />
     <Compile Include="Patches\TrivalvePlayerInteractionPatches.cs" />
     <Compile Include="Patches\uGUIMapRoomResourceNodePatches.cs" />
-    <Compile Include="Prefabs\PetConsoleFragmentPrefab.cs" />
-    <Compile Include="Prefabs\PetFabricatorFragmentPrefab.cs" />
     <Compile Include="ModConfigFile.cs" />
-    <Compile Include="Mono\BaseParts\FragmentBase.cs" />
     <Compile Include="Mono\BaseParts\PetConsoleFragment.cs" />
-    <Compile Include="Mono\Pets\Custom\CatPet.cs" />
     <Compile Include="Mono\Pets\PetDna.cs" />
     <Compile Include="Mono\BaseParts\PetFabricator.cs" />
     <Compile Include="Mono\BaseParts\PetFabricatorFragment.cs" />
@@ -151,39 +150,15 @@
     <Compile Include="Mono\Utils\RotateModel.cs" />
     <Compile Include="Mono\BaseParts\PetConsole.cs" />
     <Compile Include="Mono\BaseParts\PetConsoleInput.cs" />
-    <Compile Include="Mono\Pets\BelowZero\PenglingBabyPet.cs" />
-    <Compile Include="Mono\Pets\BelowZero\PenglingAdultPet.cs" />
-    <Compile Include="Mono\Pets\BelowZero\PinnicaridPet.cs" />
-    <Compile Include="Mono\Pets\BelowZero\SnowStalkerBabyPet.cs" />
-    <Compile Include="Mono\Pets\BelowZero\TrivalveBluePet.cs" />
-    <Compile Include="Mono\Pets\BelowZero\TrivalveYellowPet.cs" />
     <Compile Include="Mono\Utils\ScaleOnStart.cs" />
     <Compile Include="Patches\GhostCrafterPatches.cs" />
-    <Compile Include="Prefabs\PetConsolePrefab.cs" />
-    <Compile Include="Prefabs\PetFabricatorPrefab.cs" />
-    <Compile Include="Prefabs\PetBuildablePrefab.cs" />
-    <Compile Include="Mono\Pets\Subnautica\AlienRobotPet.cs" />
-    <Compile Include="Mono\Pets\Subnautica\BloodCrawlerPet.cs" />
-    <Compile Include="Mono\Pets\Subnautica\CaveCrawlerPet.cs" />
-    <Compile Include="Mono\Pets\PetSaver.cs" />
     <Compile Include="Mono\Pets\PetHandTarget.cs" />
-    <Compile Include="Mono\Pets\Subnautica\CrabSquidPet.cs" />
-    <Compile Include="Mono\Pets\IPet.cs" />
     <Compile Include="Mono\Pets\Pet.cs" />
-    <Compile Include="Mono\Pets\PetSpawner.cs" />
-    <Compile Include="Patches\CreaturePatches.cs" />
-    <Compile Include="Patches\InGameMenuPatches.cs" />
-    <Compile Include="Patches\PickupablePatches.cs" />
-    <Compile Include="Patches\PlayerPatches.cs" />
     <Compile Include="SubnauticaPetsPlugin.cs" />
-    <Compile Include="Patches\SaveLoadManagerPatches.cs" />
-    <Compile Include="Prefabs\PetDnaPrefab.cs" />
+    <Compile Include="Prefabs\PetDnaPrefabs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\LogUtils.cs" />
-    <Compile Include="Utils\MatUtils.cs" />
     <Compile Include="Utils\ModUtils.cs" />
-    <Compile Include="Utils\PetUtils.cs" />
-    <Compile Include="Utils\PirateCheckUtils.cs" />
     <Compile Include="Utils\UiUtils.cs" />
   </ItemGroup>
   <ItemGroup />

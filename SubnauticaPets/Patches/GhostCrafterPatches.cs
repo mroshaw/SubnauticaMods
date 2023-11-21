@@ -1,14 +1,9 @@
-﻿#if SUBNAUTICA
-using DaftAppleGames.SubnauticaPets.Mono.Pets.Subnautica;
-#endif
-#if SUBNAUTICAZERO
-using DaftAppleGames.SubnauticaPets.Mono.Pets.BelowZero;
-#endif
+﻿using DaftAppleGames.SubnauticaPets.Mono.BaseParts;
 using DaftAppleGames.SubnauticaPets.Mono.Pets;
-using DaftAppleGames.SubnauticaPets.Mono.Pets.Custom;
 using DaftAppleGames.SubnauticaPets.Prefabs;
-using HarmonyLib;
 using DaftAppleGames.SubnauticaPets.Utils;
+using HarmonyLib;
+using Oculus.Platform;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Patches
@@ -21,32 +16,6 @@ namespace DaftAppleGames.SubnauticaPets.Patches
     internal class GhostCrafterPatches
     {
         /// <summary>
-        /// Patches the OnCraftingEnd method, allowing us to cancel
-        /// the craft, and spawn our Pet instead
-        /// </summary>
-        /// <param name="__instance"></param>
-        /// <returns></returns>
-        [HarmonyPatch(nameof(GhostCrafter.OnCraftingEnd))]
-        [HarmonyPrefix]
-        public static bool OnCraftingEnd_Prefix(GhostCrafter __instance)
-        {
-            PetSpawner petSpawner = __instance.gameObject.GetComponent<PetSpawner>();
-            if (petSpawner)
-            {
-                LogUtils.LogDebug(LogArea.Patches, "GhostCrafterPatches: Pet crafting complete. Spawning pet...");
-                petSpawner.SpawnPet(SelectedCreaturePetType, SelectedPetName);
-                LogUtils.LogDebug(LogArea.Patches, "GhostCrafterPatches: Pet crafting complete. Spawning pet... Done.");
-
-                LogUtils.LogDebug(LogArea.Patches, "GhostCrafterPatches: Reset crafter...");
-                CrafterLogic crafterLogic = __instance.GetComponent<CrafterLogic>();
-                crafterLogic.ResetCrafter();
-                LogUtils.LogDebug(LogArea.Patches, "GhostCrafterPatches: Reset crafter... Done.");
-                return false;
-            }
-            return true;
-        }
-
-        /// <summary>
         /// Patches the Craft method, allowing us to set the type of Pet to spawn
         /// </summary>
         /// <param name="__instance"></param>
@@ -57,70 +26,43 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         [HarmonyPrefix]
         public static bool Craft_Prefix(GhostCrafter __instance, TechType techType, float duration)
         {
-            PetSpawner petSpawner = __instance.gameObject.GetComponent<PetSpawner>();
-            if (petSpawner)
-            {
-                LogUtils.LogDebug(LogArea.Patches, $"GhostCrafterPatches: Setting PetCreatureType, ready for spawning {techType}");
-
-                // Custom types
-                if(techType == PetBuildablePrefab.CatBuildable.Info.TechType)
-                {
-                    SelectedCreaturePetType = PetCreatureType.Cat;
-                }
-#if SUBNAUTICA
-                if (techType == PetBuildablePrefab.CaveCrawlerBuildable.Info.TechType)
-                {
-                    SelectedCreaturePetType = PetCreatureType.CaveCrawler;
-                }
-
-                if (techType == PetBuildablePrefab.BloodCrawlerBuildable.Info.TechType)
-                {
-                    SelectedCreaturePetType = PetCreatureType.BloodCrawler;
-                }
-
-                if (techType == PetBuildablePrefab.CrabSquidBuildable.Info.TechType)
-                {
-                    SelectedCreaturePetType = PetCreatureType.CrabSquid;
-                }
-
-                if (techType == PetBuildablePrefab.AlienRobotBuildable.Info.TechType)
-                {
-                    SelectedCreaturePetType = PetCreatureType.AlienRobot;
-                }
-#endif
 #if SUBNAUTICAZERO
-                if (techType == PetBuildablePrefab.PenglingBabyBuildable.Info.TechType)
-                {
-                    SelectedCreaturePetType = PetCreatureType.PenglingBaby;
-                }
-
-                if (techType == PetBuildablePrefab.PenglingAdultBuildable.Info.TechType)
-                {
-                    SelectedCreaturePetType = PetCreatureType.PenglingAdult;
-                }
-
-                if (techType == PetBuildablePrefab.SnowStalkerBabyBuildable.Info.TechType)
-                {
-                    SelectedCreaturePetType = PetCreatureType.SnowstalkerBaby;
-                }
-
-                if (techType == PetBuildablePrefab.PinnicaridBuildable.Info.TechType)
-                {
-                    SelectedCreaturePetType = PetCreatureType.Pinnicarid;
-                }
-
-                if (techType == PetBuildablePrefab.TrivalveBluePetBuildable.Info.TechType)
-                {
-                    SelectedCreaturePetType = PetCreatureType.BlueTrivalve;
-                }
-
-                if (techType == PetBuildablePrefab.TrivalveYellowBuildable.Info.TechType)
-                {
-                    SelectedCreaturePetType = PetCreatureType.YellowTrivalve;
-                }
+            if (techType == PetPrefabs.PenglingBabyPrefab.Info.TechType || techType == PetPrefabs.PengwingAdultPrefab.Info.TechType ||
+                techType == PetPrefabs.SnowstalkerBabyPrefab.Info.TechType || techType == PetPrefabs.PinnacaridPrefab.Info.TechType ||
+                    techType == PetPrefabs.TrivalveYellowPrefab.Info.TechType || techType == PetPrefabs.TrivalveBluePrefab.Info.TechType)
 #endif
+#if SUBNAUTICA
+            if (techType == PetPrefabs.AlienRobotPrefab.Info.TechType || techType == PetPrefabs.CaveCrawlerPrefab.Info.TechType ||
+                techType == PetPrefabs.BloodCrawlerPrefab.Info.TechType || techType == PetPrefabs.CrabSquidPrefab.Info.TechType)
+#endif
+            {
+                SelectedCreaturePetType = techType;
             }
+            return true;
+        }
 
+        [HarmonyPatch(nameof(GhostCrafter.OnCraftingEnd))]
+        [HarmonyPrefix]
+        public static bool OnCraftingEnd_Prefix(GhostCrafter __instance)
+        {
+            CrafterLogic crafterLogic = __instance.logic;
+            TechType techType = crafterLogic.craftingTechType;
+
+#if SUBNAUTICAZERO
+            if (techType == PetPrefabs.PenglingBabyPrefab.Info.TechType || techType == PetPrefabs.PengwingAdultPrefab.Info.TechType ||
+                techType == PetPrefabs.SnowstalkerBabyPrefab.Info.TechType || techType == PetPrefabs.PinnacaridPrefab.Info.TechType ||
+                techType == PetPrefabs.TrivalveYellowPrefab.Info.TechType || techType == PetPrefabs.TrivalveBluePrefab.Info.TechType)
+#endif
+#if SUBNAUTICA
+            if (techType == PetPrefabs.AlienRobotPrefab.Info.TechType || techType == PetPrefabs.CaveCrawlerPrefab.Info.TechType ||
+                techType == PetPrefabs.BloodCrawlerPrefab.Info.TechType || techType == PetPrefabs.CrabSquidPrefab.Info.TechType)
+#endif
+            {
+                PetFabricator petFabricator = __instance.GetComponent<PetFabricator>();
+                crafterLogic.ResetCrafter();
+                petFabricator.SpawnPet(techType);
+                return false;
+            }
             return true;
         }
     }

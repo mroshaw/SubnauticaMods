@@ -1,10 +1,17 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System;
+using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using DaftAppleGames.SubnauticaPets.Mono.BaseParts;
+using DaftAppleGames.SubnauticaPets.Mono.Pets;
+using DaftAppleGames.SubnauticaPets.Mono.Utils;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Handlers;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace DaftAppleGames.SubnauticaPets.Utils
@@ -19,6 +26,29 @@ namespace DaftAppleGames.SubnauticaPets.Utils
 
         // The name of the mods Asset Bundle
         private const string AssetBundleName = "subnauticapets2assetbundle";
+
+        // Pirate check statics
+        internal static string SteamApi => "steam_api64.dll";
+        internal static int SteamApiLength => 220000;
+
+        internal static string Folder = Environment.CurrentDirectory;
+
+        internal static readonly HashSet<string> CrackedFiles = new HashSet<string>
+        {
+            "steam_api64.cdx",
+            "steam_api64.ini",
+            "steam_emu.ini",
+            "valve.ini",
+            "SmartSteamEmu.ini",
+            "Subnautica_Data/Plugins/steam_api64.cdx",
+            "Subnautica_Data/Plugins/steam_api64.ini",
+            "Subnautica_Data/Plugins/steam_emu.ini",
+            "Profile/SteamUserID.cfg",
+            "Profile/Stats/Achievements.Bin",
+            "launcher.bat",
+            "chuj.cdx",
+        };
+
 
         /// <summary>
         /// Example static method to return Players current location / transform
@@ -46,7 +76,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// Destroys all child components of a given type
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        internal static void DestroyComponentsInChildren<T>(GameObject gameObject)
+        internal static void DestroyComponentsInChildren<T>(this GameObject gameObject)
         {
             LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Destroying all components of type: {typeof(T)}");
             var components = gameObject.GetComponentsInChildren<T>(true);
@@ -56,10 +86,30 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             // Iterate through all child components and destroy them
             foreach (var component in components)
             {
-                Object.Destroy(component as MonoBehaviour);
+                Object.Destroy(component as Object);
                 LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Destroyed: {component.GetType()}");
             }
             LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Destroying all components of type: {typeof(T)}. Done.");
+        }
+
+        /// <summary>
+        /// Disables all components of given type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="gameObject"></param>
+        internal static void DisableComponentsInChildren<T>(this GameObject gameObject)
+        {
+            var components = gameObject.GetComponentsInChildren<Behaviour>(true);
+
+            // Iterate through all child components and disable them
+            foreach (Behaviour component in components)
+            {
+                if (component.GetType() == typeof(T))
+                {
+                    component.enabled = false;
+                }
+            }
+            LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Disabling all components of type: {typeof(T)}. Done.");
         }
 
         /// <summary>
@@ -69,9 +119,9 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// </summary>
         /// <param name="enumString"></param>
         /// <returns></returns>
-        internal static string AddSpacesInCamelCase(string enumString)
+        internal static string AddSpacesInCamelCase(this string enumString)
         {
-            return Regex.Replace(enumString, "([A-Z])", " $1").Trim();
+            return string.IsNullOrEmpty(enumString) ? "" : Regex.Replace(enumString, "([A-Z])", " $1").Trim();
         }
 
         /// <summary>
@@ -81,7 +131,6 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <returns></returns>
         public static Sprite GetSpriteFromAssetBundle(string textureName)
         {
-            // LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Getting Sprite from {textureName} in Asset Bundle.");
             Texture2D texture = GetTexture2DFromAssetBundle(textureName);
             return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         }
@@ -93,11 +142,10 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <returns></returns>
         public static Texture2D GetTexture2DFromAssetBundle(string textureName)
         {
-            // LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Getting Texture {textureName} in Asset Bundle.");
             Object obj = GetObjectFromAssetBundle(textureName, typeof(Texture2D));
             if (obj == null)
             {
-                LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Couldn't find Texture named {textureName} in Asset Bundle.");
+                LogUtils.LogError(LogArea.Utilities, $"ModUtils: Couldn't find Texture named {textureName} in Asset Bundle.");
                 return null;
             }
             return Object.Instantiate(obj) as Texture2D;
@@ -113,7 +161,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             GameObject obj = GetObjectFromAssetBundle(objectName, typeof(GameObject)) as GameObject;
             if (obj == null)
             {
-                LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Couldn't find GameObject named {objectName} in Asset Bundle.");
+                LogUtils.LogError(LogArea.Utilities, $"ModUtils: Couldn't find GameObject named {objectName} in Asset Bundle.");
                 return null;
             }
             obj.SetActive(activeState);
@@ -130,7 +178,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             Object obj = GetObjectFromAssetBundle(objectName, typeof(GameObject));
             if (obj == null)
             {
-                LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Couldn't find GameObject named {objectName} in Asset Bundle.");
+                LogUtils.LogError(LogArea.Utilities, $"ModUtils: Couldn't find GameObject named {objectName} in Asset Bundle.");
                 return null;
             }
 
@@ -145,8 +193,6 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <returns></returns>
         public static Object GetObjectFromAssetBundle(string objectName, System.Type type)
         {
-            // LogUtils.LogDebug(LogArea.Utilities, $"ModUiUtils: Loading AssetBundle {AssetBundleName}, looking for {objectName} of type {type}");
-
             string modPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             // Load the Asset Bundle, if it hasn't been loaded already
@@ -159,30 +205,25 @@ namespace DaftAppleGames.SubnauticaPets.Utils
                     // Check we've loaded the Asset Bundle
                     if (modAssetBundle == null)
                     {
-                        LogUtils.LogDebug(LogArea.Utilities, "Failed to load AssetBundle!");
+                        LogUtils.LogError(LogArea.Utilities, "Failed to load AssetBundle!");
                         return null;
                     }
                     ModAssetBundleObjects = modAssetBundle.LoadAllAssets();
                 }
             }
 
-            // LogUtils.LogDebug(LogArea.Utilities, "ModUiUtils:  Found AssetBundle. Looking for object...");
-
             // Iterate over loaded objects to find what we want
             if (ModAssetBundleObjects != null)
                 foreach (Object currObject in ModAssetBundleObjects)
                 {
-                    // LogUtils.LogDebug(LogArea.Utilities, $"ModUiUtils: Comparing {currObject.ToString()} with {objectName}...");
-
                     // Check if this is what we're looking for
                     if (currObject.ToString().Contains(objectName) && currObject.GetType() == type)
                     {
-                        LogUtils.LogDebug(LogArea.Utilities, $"ModUiUtils: Found object {currObject}");
                         return currObject;
                     }
                 }
 
-            LogUtils.LogDebug(LogArea.Utilities, $"ModUiUtils: Couldn't find object named {objectName}!");
+            LogUtils.LogError(LogArea.Utilities, $"ModUiUtils: Couldn't find object named {objectName}!");
             return null;
         }
 
@@ -196,12 +237,29 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         public static void ConfigureDatabankEntry(string encyKey, string encyPath, string mainImageTextureName,
             string popupImageTextureName)
         {
-            LogUtils.LogDebug(LogArea.Utilities, $"DatabankEntries: Setting up {encyKey} entry...");
             PDAHandler.AddEncyclopediaEntry(encyKey, encyPath, null, null,
                 ModUtils.GetTexture2DFromAssetBundle(mainImageTextureName),
                 ModUtils.GetSpriteFromAssetBundle(popupImageTextureName));
+        }
 
-            LogUtils.LogDebug(LogArea.Utilities, "DatabankEntries: Setting up PetDNA entry... Done.");
+        /// <summary>
+        /// Updates all materials on the gameobject that use the oldTextureName to use the bundleTextureName
+        /// </summary>
+        /// <param name="go"></param>
+        /// <param name="oldTextureName"></param>
+        /// <param name="bundleTextureName"></param>
+        public static void SetMaterialTexture(GameObject go, string oldTextureName, string bundleTextureName)
+        {
+            Renderer[] renderers = go.GetComponentsInChildren<Renderer>(true);
+            Texture texture = ModUtils.GetTexture2DFromAssetBundle(bundleTextureName);
+
+            foreach (Renderer renderer in renderers)
+            {
+                if (renderer.material.mainTexture.name == oldTextureName)
+                {
+                    renderer.material.mainTexture = texture;
+                }
+            }
         }
 
         /// <summary>
@@ -212,27 +270,60 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <param name="gameObjectNameHint"></param>
         public static void ApplyNewMeshTexture(GameObject targetGameObject, string textureName, string gameObjectNameHint)
         {
-            LogUtils.LogDebug(LogArea.Utilities, "ModUtils: In ApplyNewMeshTexture...");
             Renderer[] renderers = targetGameObject.GetComponentsInChildren<Renderer>();
 
             if (gameObjectNameHint == "")
             {
-                LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: ApplyNewMeshTexture is applying {textureName} to {renderers[0].gameObject.name} ...");
                 renderers[0].material.mainTexture = ModUtils.GetTexture2DFromAssetBundle(textureName);
             }
             else
             {
-                LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: In ApplyNewMeshTexture searching across {renderers.Length}...");
                 foreach (Renderer renderer in renderers)
                 {
-                    LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: ApplyNewMeshTexture comparing at {renderer.gameObject.name} to {gameObjectNameHint}...");
                     if (renderer.gameObject.name == gameObjectNameHint)
                     {
-                        LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: ApplyNewMeshTexture is applying {textureName} to {renderer.gameObject.name} ...");
                         renderer.material.mainTexture = ModUtils.GetTexture2DFromAssetBundle(textureName);
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Find and Kill all pets
+        /// </summary>
+        public static void KillAllPets()
+        {
+            foreach (Pet pet in GameObject.FindObjectsOfType<Pet>())
+            {
+                pet.Kill();
+            }
+        }
+
+        /// <summary>
+        /// Run various checks to detect pirated version of the game
+        /// </summary>
+        /// <returns></returns>
+        internal static bool IsPirate()
+        {
+            string steamDll = Path.Combine(Folder, SteamApi);
+            bool steamStore = File.Exists(steamDll);
+            if (steamStore)
+            {
+                FileInfo fileInfo = new FileInfo(steamDll);
+                if (fileInfo.Length > SteamApiLength)
+                {
+                    return true;
+                }
+            }
+
+            foreach (string file in CrackedFiles)
+            {
+                if (File.Exists(Path.Combine(Folder, file)))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

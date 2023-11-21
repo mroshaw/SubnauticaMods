@@ -18,29 +18,17 @@ namespace DaftAppleGames.SubnauticaPets.Utils
                 return;
             }
 
-            // Check if we're set up to log this message
-            if ((logArea == LogArea.MonoBaseParts && !ModConfig.LogBaseParts) ||
-                (logArea == LogArea.MonoPets && !ModConfig.LogPets) ||
-                (logArea == LogArea.Patches && !ModConfig.LogPatches) ||
-                (logArea == LogArea.Prefabs && !ModConfig.LogPrefabs) ||
-                ((logArea == LogArea.MonoUtils || logArea == LogArea.Utilities) && !ModConfig.LogUtils))
-            {
-                return;
-            }
-
-            if (ModConfig.DetailedLogging)
-            {
-                Log.LogDebug($"{logArea}: {logEntry}");
-            }
+            Log.LogDebug($"{logArea}: {logEntry}");
         }
 
         /// <summary>
         /// Write to error log, always
         /// </summary>
+        /// <param name="logArea"></param>
         /// <param name="logEntry"></param>
-        public static void LogError(string logEntry)
+        public static void LogError(LogArea logArea, string logEntry)
         {
-            Log.LogError(logEntry);
+            Log.LogError($"{logArea}: {logEntry}");
         }
 
         /// <summary>

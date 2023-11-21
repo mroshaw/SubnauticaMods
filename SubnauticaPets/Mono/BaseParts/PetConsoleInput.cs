@@ -54,8 +54,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// <param name="lockMovement"></param>
         public override void OnSelect(bool lockMovement)
         {
-            // base.OnSelect(lockMovement);
-            LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsoleInput: OnSelect called with lockMovement: {lockMovement}");
             base.OnSelect(true);
             _player = Player.main;
             GamepadInputModule.current.SetCurrentGrid(_panel);
@@ -66,8 +64,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
         /// </summary>
         public override void OnDeselect()
         {
-            LogUtils.LogDebug(LogArea.MonoBaseParts, "PetConsoleInput: DeSelect called");
-
             base.OnDeselect();
             _player = null;
         }

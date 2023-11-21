@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 using DaftAppleGames.SubnauticaPets.Utils;
 using UnityEngine;
-using UnityEngine.AI;
-using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Mono.Pets
 {
@@ -11,99 +9,125 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
     /// MonoBehaviour component providing Pet behaviours and properties.
     /// Acts as a base to be inherited by Creature specific classes
     /// </summary>
-    public abstract class Pet : MonoBehaviour, IPet
+    public class Pet : MonoBehaviour
     {
         // Public properties
-
-        // Scale factor is set as the LocalScale of spawned gameobject
-        // across all axis
-        public abstract Vector3 ScaleFactor { get; }
-
         public GameObject ParentBaseGameObject { get; set; }
 
-        // Private pet info
-        private PetCreatureType _petCreatureType;
-        private string _petName;
-        private MoveOnSurface _moveOnSurface;
-        private MoveOnGround _moveOnGround;
-        private SimpleMovement _simpleMovement;
-        private Animator _animator;
-
-        private bool _canMove = false;
-
-        // Used to keep tabs on saved pets
-        private PetSaver.PetDetails _petSaverDetails;
-
-        // private bool _isFollowingPlayer;
+        /// <summary>
+        /// The TechType or type of Pet
+        /// </summary>
+        public TechType TechType => _techTag.type;
 
         /// <summary>
-        /// Public getter and setter for PetCreatureType
+        /// The PrefabIdentifier. Used to load and re-configure saved pets
         /// </summary>
-        public PetCreatureType PetCreatureType
-        {
-            set => _petCreatureType = value;
-            get => _petCreatureType;
-        }
+        public string PrefabId => _prefabIdentifier.Id;
 
         /// <summary>
-        /// Gets a "display friendly" version of the Pet Type
+        /// Gets a "display friendly" version of the Pet Type for display
         /// </summary>
-        public string PetTypeString
-        {
-            get => ModUtils.AddSpacesInCamelCase(_petCreatureType.ToString());
-        }
+        public string PetTypeString {
+            get
+            {
+                if (_techTag == null)
+                {
+                    LogUtils.LogError(LogArea.MonoPets, "Pet _techTag is null!!!");
+                    return "Unknown";
+                }
+                else
+                {
+                    return _techTag.type.ToString().Substring(0, _techTag.type.ToString().Length - 3).AddSpacesInCamelCase();
+                }
+            }
+    } 
 
         /// <summary>
         /// Gets a "display friendly" version of the Pet Name
         /// </summary>
-        public string PetNameString
-        {
-            get => ModUtils.AddSpacesInCamelCase(_petName);
-        }
+        public string PetNameString => PetName.AddSpacesInCamelCase();
 
         /// <summary>
-        /// Public getter and setter for CreatureName
+        /// Public getter and setter for Pet Name
         /// </summary>
-        public string PetName
-        {
-            set => _petName = value;
-            get => _petName;
-        }
+        public string PetName { set; get; }
 
-        /// <summary>
-        /// Public getter and setter for PetDetails
-        /// </summary>
-        public PetSaver.PetDetails PetSaverDetails
-        {
-            set => _petSaverDetails = value;
-            get => _petSaverDetails;
-        }
+        // Private components
+        private MoveOnSurface _moveOnSurface;
+        private MoveOnGround _moveOnGround;
+        private SimpleMovement _simpleMovement;
+        private Animator _animator;
+        private TechTag _techTag;
+        private PrefabIdentifier _prefabIdentifier;
 
+        private bool _canMove = false;
+        
         /// <summary>
         /// Set up new components
         /// </summary>
-        public virtual void Awake()
+        public void Awake()
         {
-            _animator = GetComponent<Animator>();
+            _animator = GetComponentInChildren<Animator>();
+            _animator.enabled = true;
+            gameObject.DestroyComponentsInChildren<Pickupable>();
+#if SUBNAUTICAZERO
+            PrefabConfigUtils.CleanNavUpMesh(gameObject);
+#endif
+            _techTag = GetComponent<TechTag>();
+            _prefabIdentifier = GetComponent<PrefabIdentifier>();
         }
 
         /// <summary>
         /// Unity Start method
         /// </summary>
-        public virtual void Start()
+        public void Start()
         {
             UpdateActions();
-            RegisterNewPet();
             SetMoveMethod();
-            SetScale();
+            CleanUpConstructable();
+#if SUBNAUTICA
+            LoadPetData();
+#endif
         }
 
         /// <summary>
-        /// Sets the GameObject scale
+        /// Wait for data to be loaded, then update if this is a loaded pet
         /// </summary>
-        private void SetScale()
+        /// <returns></returns>
+        public void LoadPetData()
         {
-            transform.localScale = ScaleFactor;
+            foreach (PetSaver.PetDetails petDetails in SubnauticaPetsPlugin.LoadedPetDetailsHashSet)
+            {
+                if (petDetails.PrefabId == PrefabId)
+                {
+                    LogUtils.LogDebug(LogArea.MonoPets, $"Pet: Found {petDetails.PrefabId}, assigning Pet name");
+                    PetName = petDetails.PetName;
+                    break;
+                }
+            }
+            SubnauticaPetsPlugin.PetSaver.RegisterPet(this);
+        }
+
+        /// <summary>
+        /// Write Pet data to the log
+        /// </summary>
+        /// <param name="identifier"></param>
+        private void LogPetData(string identifier)
+        {
+            LogUtils.LogDebug(LogArea.MonoPets, $"{identifier}: GameObject is: {gameObject.name}, ObjectId is: {gameObject.GetInstanceID()}, " +
+                                                $"Transform is: ({gameObject.transform.position.x},{gameObject.transform.position.y}, {gameObject.transform.position.z}), Type is: {PetTypeString}, PrefabId is: {PrefabId}");
+        }
+
+        /// <summary>
+        /// Clean up Constructable components
+        /// </summary>
+        private void CleanUpConstructable()
+        {
+            Constructable constructable = GetComponent<Constructable>();
+            if (constructable != null)
+            {
+                constructable.enabled = false;
+            }
         }
 
         /// <summary>
@@ -140,7 +164,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         /// <summary>
         /// Play a pet animation
         /// </summary>
-        public virtual void PlayAnimation()
+        public void PlayAnimation()
         {
             if (_animator)
             {
@@ -148,7 +172,7 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             }
             else
             {
-                LogUtils.LogDebug(LogArea.MonoPets, "Pet: No animator found, so can't play animation.");
+                LogUtils.LogError(LogArea.MonoPets, "Pet: No animator found, so can't play animation.");
             }
         }
 
@@ -159,13 +183,12 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         {
             if (!_canMove)
             {
-                LogUtils.LogDebug(LogArea.MonoPets, "Pet: No movement component found, so can't walk to player");
+                LogUtils.LogError(LogArea.MonoPets, "Pet: No movement component found, so can't walk to player");
                 return;
             }
 
             if (_moveOnSurface)
             {
-                LogUtils.LogDebug(LogArea.MonoPets, "Pet: Moving via MoveOnSurface");
                 _moveOnSurface.walkBehaviour.GoToInternal(Player.main.transform.position,
                     (Player.main.transform.position - transform.position).normalized, _moveOnSurface.moveVelocity);
                 return;
@@ -173,14 +196,13 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
 
             if (_moveOnGround)
             {
-                LogUtils.LogDebug(LogArea.MonoPets, "Pet: Moving via MoveOnGround");
                 _moveOnGround.swimBehaviour.GoToInternal(Player.main.transform.position,
                     (Player.main.transform.position - transform.position).normalized, _moveOnGround.swimVelocity);
+                return;
             }
 
             if (_simpleMovement)
             {
-                LogUtils.LogDebug(LogArea.MonoPets, "Pet: Moving via SimpleMovement");
                 _simpleMovement.SetDestination(Player.main.transform.position);
             }
         }
@@ -198,32 +220,15 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             }
         }
 
-
         /// <summary>
-        /// Registers the new pet with the saver and UI list
+        /// Listen for the OnKill message
         /// </summary>
-        public void RegisterNewPet()
+        public void OnKill()
         {
-            _petSaverDetails = Saver.RegisterPet(this);
-        }
-
-        /// <summary>
-        /// Unregisters the pet with the saver. For example, if the
-        /// pet dies
-        /// </summary>
-        public void UnregisterPet()
-        {
-            Saver.UnregisterPet(this);
-        }
-
-        /// <summary>
-        /// Rename the Pet
-        /// </summary>
-        /// <param name="newName"></param>
-        public void RenamePet(string newName)
-        {
-            PetName = newName;
-            _petSaverDetails.PetName = newName;
+            LogUtils.LogDebug(LogArea.MonoPets, "Picked up the OnKill message...");
+            ErrorMessage.AddMessage(
+                $"{Language.main.Get("Alert_PetDeadFarewell")} {PetNameString}! {Language.main.Get("Alert_PetDeadGoodBoy")} {PetTypeString}!");
+            SubnauticaPetsPlugin.PetSaver.UnregisterPet(this);
         }
 
         /// <summary>
@@ -235,8 +240,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
             if (liveMixin)
             {
                 liveMixin.Kill();
-                ErrorMessage.AddMessage(
-                    $"{Language.main.Get("Alert_PetDeadFarewell")} {PetNameString}! {Language.main.Get("Alert_PetDeadGoodBoy")} {PetTypeString}!");
             }
         }
     }
