@@ -286,6 +286,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             Rigidbody rigidbody = targetGameObject.GetComponent<Rigidbody>();
             if (rigidbody != null)
             {
+                rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
                 rigidbody.isKinematic = isKinematic;
             }
             LogUtils.LogDebug(LogArea.PetConfigUtils, "SetRigidBodyKinematic done.");

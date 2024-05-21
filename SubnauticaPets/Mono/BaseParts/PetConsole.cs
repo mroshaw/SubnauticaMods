@@ -200,8 +200,14 @@ namespace DaftAppleGames.SubnauticaPets.Mono.BaseParts
             _petButtonList = new List<Button>();
             int currPetIndex = 0;
 
+            // Check the PetList
+            if (SubnauticaPetsPlugin.PetSaver.PetList == null)
+            {
+                LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsoleUi: The PetList is null, and cannot be sorted.");
+                return;
+            }
+
             // Sort by name
-            // List<Pet> sortedPetList = GameObject.FindObjectsOfType<Pet>().OrderBy(pet => pet.PetName).ToList();
             List<Pet> sortedPetList = SubnauticaPetsPlugin.PetSaver.PetList.OrderBy(pet => pet.PetName).ToList();
 
             LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsoleUi: Sorted list into {sortedPetList.Count} pets.");

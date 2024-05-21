@@ -89,6 +89,7 @@ namespace DaftAppleGames.SubnauticaPets
                     LoadedPetDetailsHashSet = new();
                 }
 
+                CraftData.PreparePrefabIDCache();
                 PetSaver.Init();
 #if SUBNAUTICAZERO
                 PetSaver.LoadData();

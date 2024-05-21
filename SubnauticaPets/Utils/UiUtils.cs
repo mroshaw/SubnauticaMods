@@ -179,7 +179,6 @@ namespace DaftAppleGames.SubnauticaPets.Utils
 
             foreach (Transform child in sourceUi.GetComponentsInChildren<Transform>(true))
             {
-                // LogUtils.LogDebug(LogArea.Utilities, $"UiUtils: CreateButton comparing: {child.name} to {sourceButtonName}...");
                 if (child.name == sourceButtonName && child.GetComponent<Button>())
                 {
                     origButtonGameObject = child.gameObject;
@@ -189,7 +188,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
 
             if (!origButtonGameObject)
             {
-                LogUtils.LogDebug(LogArea.Utilities, $"UiUtils: CreateButton can't find a Button in {sourceUi}");
+                LogUtils.LogError(LogArea.Utilities, $"UiUtils: CreateButton can't find a Button in {sourceUi}");
                 return null;
             }
 
@@ -204,7 +203,6 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             newButtonGameObject.transform.localScale = new Vector3(1, 1, 1);
 
             // Add translation component on label
-            LogUtils.LogDebug(LogArea.Utilities, $"UiUtils: Adding translation component on {newButtonGameObject.name} using key {newButtonTextKey}...");
             newButtonGameObject.SetActive(false);
             TextMeshProUGUI label = newButtonGameObject.GetComponentInChildren<TextMeshProUGUI>(true);
             if (label)
@@ -215,16 +213,11 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             }
             else
             {
-                LogUtils.LogDebug(LogArea.Utilities, $"UiUtils: Couldn't find TextMeshProUGUI on {newButtonGameObject.name}!");
+                LogUtils.LogError(LogArea.Utilities, $"UiUtils: Couldn't find TextMeshProUGUI on {newButtonGameObject.name}!");
             }
-            LogUtils.LogDebug(LogArea.Utilities, "UiUtils: Adding translation component. Done.");
-            // Set interactable default
             newButtonGameObject.GetComponent<Button>().interactable = isInteractable;
-
             newButtonGameObject.SetActive(true);
-
             return newButtonGameObject.GetComponent<Button>();
-
         }
 
         /// <summary>

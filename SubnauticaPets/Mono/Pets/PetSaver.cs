@@ -147,8 +147,6 @@ namespace DaftAppleGames.SubnauticaPets.Mono.Pets
         /// <summary>
         /// Iterate through and Init pets loaded, once scene is loaded
         /// </summary>
-        /// <param name="scene"></param>
-        /// <param name="mode"></param>
         private void FixPetLoadData()
         {
             LogUtils.LogDebug(LogArea.MonoUtils, $"Loading Pet Data...");

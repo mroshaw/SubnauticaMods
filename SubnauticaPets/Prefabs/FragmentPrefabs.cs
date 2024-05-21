@@ -6,6 +6,7 @@ using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Utility;
 using UnityEngine;
 using SpawnLocation = Nautilus.Assets.SpawnLocation;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Prefabs
 {
@@ -33,22 +34,41 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     .WithTechType("PetFabricatorFragment", null, null, unlockAtStart: false);
                 CustomPrefab fabricatorFragmentPrefab = new CustomPrefab(Info);
 
+#if SUBNAUTICA
+                // Submarine workbench (damaged)
                 CloneTemplate cloneTemplate = new CloneTemplate(Info, "8029a9ce-ab75-46d0-a8ab-63138f6f83e4")
+#endif
+
+#if SUBNAUTICAZERO
+                // Submarine workbench (damaged)
+                CloneTemplate cloneTemplate = new CloneTemplate(Info, "8029a9ce-ab75-46d0-a8ab-63138f6f83e4")
+#endif
                 {
                     ModifyPrefab = obj =>
                     {
+                        if (!obj)
+                        {
+                            Log.LogError($"FabricatorFragmentPrefab cloned obj is null!");
+                        }
+                        LogUtils.LogDebug(LogArea.Prefabs, $"FabricatorFragmentPrefab cloned. Obj is: {obj.name}");
                         obj.SetActive(false);
                         // Add components
+                        LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorFragment: AddBasicComponents...");
                         PrefabUtils.AddBasicComponents(obj, "PetFabricatorFragment", Info.TechType, LargeWorldEntity.CellLevel.Medium);
+                        LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorFragment: AddResourceTracker...");
                         PrefabUtils.AddResourceTracker(obj, TechType.Fragment);
+                        LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorFragment: ConfigureSkyApplier...");
                         PrefabConfigUtils.ConfigureSkyApplier(obj);
+                        LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorFragment: UpdatePickupable...");
                         PrefabConfigUtils.UpdatePickupable(obj, false);
+                        LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorFragment: SetRigidBodyKinematic...");
                         PrefabConfigUtils.SetRigidBodyKinematic(obj, true);
+                        LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorFragment: ResizeCollider...");
                         PrefabConfigUtils.ResizeCollider(obj, new Vector3(0.0f, 0.61f, 0.24f), new Vector3(1.02f, 1.2f, 0.52f));
                         obj.AddComponent<PetFabricatorFragment>();
                     }
                 };
-
+                LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorFragment: SetGameObject...");
                 fabricatorFragmentPrefab.SetGameObject(cloneTemplate);
 #if SUBNAUTICA
                 SpawnLocation[] spawnLocations =
@@ -67,11 +87,17 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
 #if SUBNAUTICAZERO
                 SpawnLocation[] spawnLocations =
                 {
-                    new SpawnLocation(new Vector3(-171.25f,-41.34f, -234.25f), new Vector3(0f, 0f, 0f))
+                    new SpawnLocation(new Vector3(-132.6f, -12.6f, 49.3f), new Vector3(0f, 0f, 0f)),
+                    new SpawnLocation(new Vector3(-133.6f, -12.6f, 49.3f), new Vector3(0f, 0f, 0f)),
+                    new SpawnLocation(new Vector3(-131.6f, -12.6f, 49.3f), new Vector3(0f, 0f, 0f)),
+
                 };
 #endif
+                LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorFragment: SetSpawns...");
                 fabricatorFragmentPrefab.SetSpawns(spawnLocations);
+                LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorFragment: CreateFragment...");
                 fabricatorFragmentPrefab.CreateFragment(BaseModulePrefabs.PetFabricatorPrefab.Info.TechType, 5.0f, 3, "PetFabricator", true, true);
+                LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorFragment: Register...");
                 fabricatorFragmentPrefab.Register();
             }
         }
@@ -91,36 +117,72 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                 Info = PrefabInfo
                     .WithTechType("PetConsoleFragment", null, null, unlockAtStart: false);
                 CustomPrefab consoleFragmentPrefab = new CustomPrefab(Info);
+#if SUBNAUTICA
+                // Base upgrade console fragment
+                CloneTemplate cloneTemplate = new CloneTemplate(Info, "7eaf11d3-5b65-4325-a249-d69c7cc838b0")
+#endif
 
-                CloneTemplate cloneTemplate = new CloneTemplate(consoleFragmentPrefab.Info, TechType.GravSphereFragment)
+#if SUBNAUTICAZERO
+                // Base upgrade console fragment
+                CloneTemplate cloneTemplate = new CloneTemplate(Info, "7eaf11d3-5b65-4325-a249-d69c7cc838b0")
+#endif
                 {
                     ModifyPrefab = obj =>
                     {
+                        if (!obj)
+                        {
+                            Log.LogError($"PetConsoleFragmentPrefab cloned obj is null!");
+                        }
+                        LogUtils.LogDebug(LogArea.Prefabs, $"ConsoleFragmentPrefab cloned. Obj is: {obj.name}");
+
                         obj.SetActive(false);
 
                         GameObject damagedConsoleGameObject =
                             ModUtils.GetGameObjectInstanceFromAssetBundle("PetConsoleDamaged", true);
+                        GameObject newModelGameObject = damagedConsoleGameObject.FindChild("newmodel");
 
-                        GameObject newGodelGameObject = damagedConsoleGameObject.FindChild("newmodel");
+                        if (!newModelGameObject)
+                        {
+                            Log.LogError($"PetConsoleFragmentPrefab: Unable to find model in new Asset!");
+                        }
 
                         // Find old model and replace
                         GameObject oldModelGameObject = obj.FindChild("model");
-                        newGodelGameObject.transform.SetParent(oldModelGameObject.transform);
-                        newGodelGameObject.transform.localPosition = new Vector3(0, 0, 0);
-                        newGodelGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
+
+                        if (!oldModelGameObject)
+                        {
+                            Log.LogError($"PetConsoleFragmentPrefab: Couldn't find old model! All children:");
+                        }
+
+                        LogUtils.LogDebug(LogArea.Prefabs, "Found old model!");
+
+                        newModelGameObject.transform.SetParent(oldModelGameObject.transform.parent);
+                        newModelGameObject.transform.localPosition = new Vector3(0, 0, 0);
+                        newModelGameObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
+
+                        oldModelGameObject.SetActive(false);
 
                         // Configure
-                        MaterialUtils.ApplySNShaders(newGodelGameObject);
+                        LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: ApplySNShaders...");
+                        MaterialUtils.ApplySNShaders(newModelGameObject);
+                        LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: AddBasicComponents...");
                         PrefabUtils.AddBasicComponents(obj, "PetConsoleFragment", Info.TechType, LargeWorldEntity.CellLevel.Medium);
+                        LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: AddResourceTracker...");
                         PrefabUtils.AddResourceTracker(obj, TechType.Fragment);
+                        LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: ConfigureSkyApplier...");
                         PrefabConfigUtils.ConfigureSkyApplier(obj);
+                        LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: UpdatePickupable...");
                         PrefabConfigUtils.UpdatePickupable(obj, false);
+                        LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: SetRigidBodyKinematic...");
                         PrefabConfigUtils.SetRigidBodyKinematic(obj, true);
                         obj.AddComponent<PetConsoleFragment>();
                     }
                 };
 
+                LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: SetGameObject...");
                 consoleFragmentPrefab.SetGameObject(cloneTemplate);
+
+                LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: SetSpawns...");
 #if SUBNAUTICA
                 SpawnLocation[] spawnLocations =
                 {
@@ -140,11 +202,15 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
 
                 SpawnLocation[] spawnLocations =
                 {
-                    new SpawnLocation(new Vector3(-171.25f, -41.34f, -234.25f), new Vector3(0f, 0f, 0f)),
+                    new SpawnLocation(new Vector3(-129f, -12.9f, 46.3f), new Vector3(0f, 0f, 0f)),
+                    new SpawnLocation(new Vector3(-130f, -12.9f, 46.3f), new Vector3(0f, 0f, 0f)),
+                    new SpawnLocation(new Vector3(-129f, -12.9f, 45.3f), new Vector3(0f, 0f, 0f)),
                 };
 #endif
                 consoleFragmentPrefab.SetSpawns(spawnLocations);
+                LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: CreateFragment...");
                 consoleFragmentPrefab.CreateFragment(BaseModulePrefabs.PetConsolePrefab.Info.TechType, 5.0f, 3, "PetConsole", true, true);
+                LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: Register...");
                 consoleFragmentPrefab.Register();
             }
         }
