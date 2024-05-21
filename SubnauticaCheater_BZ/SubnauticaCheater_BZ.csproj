@@ -59,8 +59,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Patches\LiveMixinPatches.cs" />
     <Compile Include="Patches\OxygenPatches.cs" />
     <Compile Include="Patches\BodyTemperaturePatches.cs" />
+    <Compile Include="Patches\SuitBoosterTankPatches.cs" />
     <Compile Include="SubnauticaCheater_BZPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

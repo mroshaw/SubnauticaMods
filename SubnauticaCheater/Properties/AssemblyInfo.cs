@@ -1,14 +1,15 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SubnauticaCheater_BZ")]
+[assembly: AssemblyTitle("SubnauticaCheater")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SubnauticaCheater_BZ")]
+[assembly: AssemblyProduct("SubnauticaCheater")]
 [assembly: AssemblyCopyright("Copyright ©  2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c9cb7209-33ac-40cf-8e73-5afcc9123676")]
+[assembly: Guid("0cbec5e7-6718-4b8b-8942-7cf2ff8657e8")]
 
 // Version information for an assembly consists of the following four values:
 //
