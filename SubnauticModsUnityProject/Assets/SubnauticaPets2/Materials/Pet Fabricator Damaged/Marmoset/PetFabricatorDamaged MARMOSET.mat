@@ -1,0 +1,237 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: PetFabricatorDamaged MARMOSET
+  m_Shader: {fileID: 4800000, guid: ae1e9ad80a9e4814f91ba08066e169f9, type: 3}
+  m_ShaderKeywords: _NORMALMAP _ZWRITE_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AnimMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 2800000, guid: fe53f820cf0584e4f8a6dc82409a1762, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DeformMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailBumpTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailDiffuseTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailSpecTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DispTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissiveTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlowMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlowScrollMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Illum:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _InfectionNoiseTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Lightmap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 0d61c558771f3564eac3a6cd8b4b5418, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MultiColorMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SIGMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ScrollTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ScrollTex2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecTex:
+        m_Texture: {fileID: 2800000, guid: 2344395044393f8438f201a9bb65f469, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _VrFadeMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - FX: 0
+    - FX_Vertex: 0
+    - _AddDstBlend: 10
+    - _AddDstBlend2: 10
+    - _AddSrcBlend: 1
+    - _AddSrcBlend2: 1
+    - _BuildLinear: 0
+    - _Built: 0
+    - _BumpScale: 1
+    - _BurstStrength: 0
+    - _ClipRange: 0.6
+    - _Cutoff: 0
+    - _DetailNormalMapScale: 1
+    - _Displacement: 5
+    - _DstBlend: 0
+    - _DstBlend2: 10
+    - _EmissionLM: 0
+    - _EmissionLMNight: 0
+    - _Enable3Color: 0
+    - _EnableBurst: 0
+    - _EnableCutOff: 0
+    - _EnableDetailMaps: 0
+    - _EnableDitherAlpha: 0
+    - _EnableGlow: 0
+    - _EnableInfection: 0
+    - _EnableLighting: 1
+    - _EnableLightmap: 0
+    - _EnableMainMaps: 1
+    - _EnableMisc: 1
+    - _EnablePlayerInfection: 0
+    - _EnableSchoolFish: 0
+    - _EnableSimpleGlass: 0
+    - _EnableVertexColor: 0
+    - _EnableVrFadeOut: 0
+    - _Fallof: 1
+    - _FillSack: 0
+    - _Fresnel: 0
+    - _GlossMapScale: 0.104
+    - _Glossiness: 0.034
+    - _GlossyReflections: 1
+    - _GlowStrength: 1
+    - _GlowStrengthNight: 1
+    - _GlowUVfromVC: 0
+    - _Hypnotize: 1
+    - _IBLreductionAtNight: 0.99
+    - _InfectionHeightStrength: 0
+    - _LightmapStrength: 2.65
+    - _MarmoSpecEnum: 0
+    - _Metallic: 0.511
+    - _Mode: 0
+    - _MyCullVariable: 0
+    - _NoiseStr: 0.2
+    - _NoiseThickness: 0.05
+    - _OcclusionStrength: 1
+    - _OverlayStrength: 1
+    - _Parallax: 0.02
+    - _RopeGravity: 1
+    - _Shininess: 4
+    - _SmoothnessTextureChannel: 0
+    - _SpecInt: 1
+    - _SpecularHighlights: 1
+    - _SquaresIntensityPow: 2
+    - _SquaresSpeed: 0.5
+    - _SquaresTile: 30
+    - _SrcBlend: 1
+    - _SrcBlend2: 1
+    - _UVSec: 0
+    - _WaveUpMin: 0
+    - _ZOffset: 0
+    - _ZWrite: 1
+    - _maxYpos: 0.5
+    - _minYpos: 0.5
+    m_Colors:
+    - _BorderColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BuildParams: {r: 1, g: 1, b: 5, a: 4}
+    - _Color: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+    - _Color2: {r: 1, g: 1, b: 1, a: 1}
+    - _Color3: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorStrength: {r: 1, g: 1, b: 1, a: 1}
+    - _DeformParams: {r: 1, g: 1, b: 0.2, a: 0.2}
+    - _DetailIntensities: {r: 0.2, g: 0.2, b: 0.2, a: 0}
+    - _DetailsColor: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FakeSSSSpeed: {r: 1, g: 1, b: 1, a: 1}
+    - _FakeSSSparams: {r: 1, g: 1, b: 1, a: 1}
+    - _Frequency: {r: 0.6, g: 0.5, b: 0.75, a: 0.8}
+    - _GlowColor: {r: 1, g: 1, b: 1, a: 1}
+    - _GlowMaskSpeed: {r: 1, g: 1, b: 1, a: 1}
+    - _GlowScrollColor: {r: 1, g: 1, b: 1, a: 1}
+    - _InfectionOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _InfectionScale: {r: 1, g: 1, b: 1, a: 0}
+    - _InfectionSpeed: {r: 1, g: 1, b: 1, a: 0}
+    - _NoiseSpeed: {r: 1, g: 1, b: 1, a: 1}
+    - _ObjectUp: {r: 0, g: 0, b: 1, a: 0}
+    - _Range: {r: 0, g: 70, b: 0, a: 1}
+    - _Scale: {r: 0.12, g: 0.05, b: 0.12, a: 0.1}
+    - _ScrollColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ScrollSpeed: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecColor2: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecColor3: {r: 1, g: 1, b: 1, a: 1}
+    - _Speed: {r: 0.6, g: 0.3, b: 0, a: 0}
+    - _SquaresColor: {r: 1, g: 1, b: 1, a: 1}

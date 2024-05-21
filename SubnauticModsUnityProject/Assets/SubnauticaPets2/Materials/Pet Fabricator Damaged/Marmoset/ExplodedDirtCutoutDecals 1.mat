@@ -182,7 +182,7 @@ Material:
     - _MarmoSpecEnum: 0
     - _Metallic: 0
     - _Mode: 1
-    - _MyCullVariable: 2
+    - _MyCullVariable: 0
     - _NoiseStr: 0.2
     - _NoiseThickness: 0.05
     - _OcclusionStrength: 1

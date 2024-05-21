@@ -9,7 +9,7 @@ namespace DaftAppleGames.SubnauticaModsProject.SubnauticaPets2.Editor
     
     public class CreateAssetBundleSubnauticaPets2
     {
-        [MenuItem("Assets/SubnauticaPets2/Build and Deploy AssetBundles")]
+        [MenuItem("Assets/Build and Deploy AssetBundles/SubnauticaPets2")]
         public static void BuildAndDeployAssetBundle()
         {
             ModEditorUtils.BuildAssetBundle("subnauticapets2assetbundle", "SubnauticaPets");

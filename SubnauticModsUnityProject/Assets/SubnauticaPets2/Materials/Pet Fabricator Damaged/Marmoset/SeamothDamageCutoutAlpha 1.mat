@@ -24,7 +24,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 21abf1a4315a34145a61874680ff290e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 61b9826ad3bfbfe44b44b7003350cd85, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DeformMap:
@@ -88,7 +88,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 17a8e3f2c4d713b48a745c73fd91c8f6, type: 3}
+        m_Texture: {fileID: 2800000, guid: c0e795b68a3d8504d87ab520bf9e202a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -124,7 +124,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: d642ac137be83da4ea72db30d7f8d04e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _VrFadeMask:
@@ -182,7 +182,7 @@ Material:
     - _MarmoSpecEnum: 0
     - _Metallic: 0
     - _Mode: 1
-    - _MyCullVariable: 2
+    - _MyCullVariable: 0
     - _NoiseStr: 0.2
     - _NoiseThickness: 0.05
     - _OcclusionStrength: 1
