@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
-using DaftAppleGames.SeatruckRecall_BZ.AutoPilot;
-using DaftAppleGames.SeatruckRecall_BZ.DockRecaller;
+using DaftAppleGames.SeatruckRecall_BZ.Utils;
 using HarmonyLib;
-using UnityEngine;
 
 namespace DaftAppleGames.SeatruckRecall_BZ
 {
@@ -13,7 +10,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ
     internal enum RecallMoveMethod
     {
         Teleport,
-        Autopilot
+        Smooth,
+        Fixed
     };
 
     [BepInPlugin(MyGuid, PluginName, VersionString)]
@@ -25,7 +23,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ
         private const string VersionString = "1.0.0";
 
         // Config properties
-        internal static string RecallKeyboardShortcutKey = "Recall Keyboard Shortcut";
         private const string TravelMethodKey = "Travel Method";
         private const string MaximumRangeKey = "Maximum Range";
         private const string TransitSpeedKey = "Transit Speed";
@@ -33,32 +30,24 @@ namespace DaftAppleGames.SeatruckRecall_BZ
 
         // Static config settings
         internal static ConfigEntry<RecallMoveMethod> TravelMethod;
-        internal static ConfigEntry<KeyboardShortcut> RecallKeyboardShortcut;
         internal static ConfigEntry<float> MaximumRange;
         internal static ConfigEntry<float> TransitSpeed;
         internal static ConfigEntry<float> RotationSpeed;
-
-        // Static global list of SeaTruck Docking Recall modules
-        internal static List<SeaTruckDockRecaller> AllDockRecallers = new List<SeaTruckDockRecaller>();
-        internal static List<BaseAutoPilot> AllSeaTruckAutoPilots = new List<AutoPilot.BaseAutoPilot>();
 
         private static readonly Harmony Harmony = new Harmony(MyGuid);
 
         internal static ManualLogSource Log;
 
+        /// <summary>
+        /// Set up the mod plugin
+        /// </summary>
         private void Awake()
         {
-
-            // Recall creature keyboard shortcut
-            RecallKeyboardShortcut = Config.Bind("General",
-                RecallKeyboardShortcutKey,
-                new KeyboardShortcut(KeyCode.R, KeyCode.LeftControl));
-
             // Travel method for the recall process
             TravelMethod = Config.Bind("General",
                 TravelMethodKey,
-                RecallMoveMethod.Teleport,
-                "Determines how the SeaTruck will move to the dock location");
+                RecallMoveMethod.Smooth,
+                "Determines how the SeaTruck will move to the dock location. Change requires a game restart.");
 
             TransitSpeed = Config.Bind("General",
                 TransitSpeedKey,
@@ -70,13 +59,17 @@ namespace DaftAppleGames.SeatruckRecall_BZ
                 MaximumRangeKey,
                 200.0f,
                 new ConfigDescription("The maximum range of the recall function.",
-                    new AcceptableValueRange<float>(10.0f, 500.0f)));
+                    new AcceptableValueRange<float>(10.0f, 2000.0f)));
 
             RotationSpeed = Config.Bind("General",
                 RotationSpeedKey,
                 20.0f,
                 new ConfigDescription("The speed at which the SeaTruck will rotate.",
                     new AcceptableValueRange<float>(0.1f, 30.0f)));
+
+            TransitSpeed.SettingChanged += ConfigSettingChanged;
+            MaximumRange.SettingChanged += ConfigSettingChanged;
+            RotationSpeed.SettingChanged += ConfigSettingChanged;
 
             // Patch in our MOD
             Logger.LogInfo(PluginName + " " + VersionString + " " + "loading...");
@@ -86,56 +79,37 @@ namespace DaftAppleGames.SeatruckRecall_BZ
         }
 
         /// <summary>
-        /// Register a Seatruck with the recaller
+        /// Manage changes made to configuration settings at run-time
         /// </summary>
-        /// <param name="seatruck"></param>
-        internal static void RegisterDockRecaller(SeaTruckDockRecaller dockRecaller)
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ConfigSettingChanged(object sender, System.EventArgs e)
         {
-            SeaTruckDockRecallPlugin.Log.LogDebug("Registering SeaTruckDockRecaller...");
-            AllDockRecallers.Add(dockRecaller);
-            SeaTruckDockRecallPlugin.Log.LogDebug("Registered SeaTruckDockRecaller!");
-        }
+            SettingChangedEventArgs settingChangedEventArgs = e as SettingChangedEventArgs;
 
-        /// <summary>
-        /// Unregister a Seatruck with the recaller
-        /// </summary>
-        /// <param name="seatruck"></param>
-        internal static void UnregisterDockRecaller(SeaTruckDockRecaller dockRecaller)
-        {
-            SeaTruckDockRecallPlugin.Log.LogInfo("Unregistering SeaTruckDockRecaller...");
-            AllDockRecallers.Remove(dockRecaller);
-            SeaTruckDockRecallPlugin.Log.LogInfo("Unregistered SeaTruckDockRecaller!");
-        }
+            // Check if null and return
+            if (settingChangedEventArgs == null)
+            {
+                return;
+            }
 
-        /// <summary>
-        /// Register a Seatruck with the recaller
-        /// </summary>
-        /// <param name="seatruck"></param>
-        internal static void RegisterAutoPilot(BaseAutoPilot autoPilot)
-        {
-            SeaTruckDockRecallPlugin.Log.LogDebug("Registering SeaTruckAutoPilot...");
-            AllSeaTruckAutoPilots.Add(autoPilot);
-            SeaTruckDockRecallPlugin.Log.LogDebug("Registered SeaTruckAutoPilot!");
-        }
+            // Speed changed
+            if (settingChangedEventArgs.ChangedSetting.Definition.Key == TransitSpeedKey)
+            {
+                ModUtils.UpdateAllAutoPilotSpeed((float)settingChangedEventArgs.ChangedSetting.BoxedValue);
+            }
 
-        /// <summary>
-        /// Unregister a Seatruck with the recaller
-        /// </summary>
-        /// <param name="seatruck"></param>
-        internal static void UnRegisterAutoPilot(BaseAutoPilot autoPilot)
-        {
-            SeaTruckDockRecallPlugin.Log.LogInfo("Unregistering SeaTruckAutoPilot...");
-            AllSeaTruckAutoPilots.Remove(autoPilot);
-            SeaTruckDockRecallPlugin.Log.LogInfo("Unregistered SeaTruckAutoPilot!");
-        }
+            // Rotation changed
+            if (settingChangedEventArgs.ChangedSetting.Definition.Key == RotationSpeedKey)
+            {
+                ModUtils.UpdateAllAutoPilotRotate((float)settingChangedEventArgs.ChangedSetting.BoxedValue);
+            }
 
-        /// <summary>
-        /// Return the current list of SeaTruckAutoPilots
-        /// </summary>
-        /// <returns></returns>
-        internal static List<BaseAutoPilot> GetAllAutoPilots()
-        {
-            return AllSeaTruckAutoPilots;
+            // Range changed
+            if (settingChangedEventArgs.ChangedSetting.Definition.Key == MaximumRangeKey)
+            {
+                ModUtils.UpdateAllDockSettings((float)settingChangedEventArgs.ChangedSetting.BoxedValue);
+            }
         }
     }
 }

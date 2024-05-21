@@ -2,6 +2,7 @@
 using DaftAppleGames.SeatruckRecall_BZ.Navigation;
 using UnityEngine;
 using UnityEngine.Events;
+using Plugin = DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
 {
@@ -13,6 +14,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
         Moving,
         Paused,
         Stopped,
+        Aborted,
         WaypointReached,
         Arrived,
         WaypointBlocked,
@@ -30,7 +32,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
         }
 
         // Public properties
-        internal bool AutoPilotEnabled { get; private set; }
+        internal bool AutoPilotInProgress { get; private set; }
 
         // Autopilot state
         private AutoPilotState _currentAutoPilotState = AutoPilotState.None;
@@ -54,7 +56,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
 
             // Set default state
             _currentAutoPilotState = AutoPilotState.Ready;
-            AutoPilotEnabled = false;
+            AutoPilotInProgress = false;
 
             // Subscribe to Waypoint changed event
             _waypointNav.OnNavStateChanged.AddListener(NavStateChangedHandler);
@@ -71,7 +73,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
             if (_currentAutoPilotState != AutoPilotState.Ready)
             {
                 // Already being recalled or is already docked
-                SeaTruckDockRecallPlugin.Log.LogDebug("AutoPilot is not ready.");
+                Plugin.Log.LogDebug("AutoPilot is not ready.");
                 return false;
             }
 
@@ -79,24 +81,26 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
             _waypointNav.Waypoints = waypoints;
 
             // Start navigation
-            SeaTruckDockRecallPlugin.Log.LogDebug("AutoPilot engaged...");
-            AutoPilotEnabled = true;
+            Plugin.Log.LogDebug("AutoPilot engaged...");
+            AutoPilotInProgress = true;
             _waypointNav.StartNavigation();
 
             return true;
         }
 
-        internal void EndNavigation()
+        /// <summary>
+        /// Public method to abort navigation
+        /// </summary>
+        internal void AbortNavigation()
         {
-            AutoPilotEnabled = false;
+            _currentAutoPilotState = AutoPilotState.Aborted;
         }
-
+        
         /// <summary>
         /// Handle the state transitions
         /// </summary>
         internal void Update()
         {
-            SetNextState();
             CheckState();
         }
 
@@ -121,30 +125,35 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
             {
                 OnAutopilotStatusChanged.Invoke(_currentAutoPilotState, _currentWaypoint);
             }
-        }
 
-        /// <summary>
-        /// Update AutoPilot state
-        /// </summary>
-        private void SetNextState()
-        {
             switch (_currentAutoPilotState)
             {
+                case AutoPilotState.Moving:
+                    AutoPilotInProgress = true;
+                    break;
                 case AutoPilotState.Arrived:
-                    EndNavigation();
+                    AutoPilotInProgress = false;
+                    break;
+                case AutoPilotState.Aborted:
+                    AutoPilotInProgress = false;
+                    _waypointNav.StopNavigation();
+                    _currentWaypoint = null;
+                    _currentAutoPilotState = AutoPilotState.Ready;
                     break;
                 default:
+                    AutoPilotInProgress = false;
                     break;
             }
         }
 
         /// <summary>
-        /// Handle Waypoint change
+        /// Handle NavState change event
         /// </summary>
+        /// <param name="navState"></param>
         /// <param name="waypoint"></param>
         private void NavStateChangedHandler(NavState navState, Waypoint waypoint)
         {
-            SeaTruckDockRecallPlugin.Log.LogDebug($"AutoPilot.NavStateChangeHandler: {navState}.");
+            Plugin.Log.LogDebug($"AutoPilot.NavStateChangeHandler: {navState}.");
             _currentWaypoint = waypoint;
             _currentNavState = navState;
 

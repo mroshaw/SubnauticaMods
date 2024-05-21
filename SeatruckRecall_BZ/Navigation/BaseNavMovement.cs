@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Plugin = DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 {
@@ -14,6 +15,19 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         public float RotateTolerance { get; set; }
         public float MoveTolerance { get; set; }
 
+        private Rigidbody _rigidbody;
+
+        /// <summary>
+        /// Nudge object forward with RigidBody, if present
+        /// </summary>
+        public void Nudge(float velocity)
+        {
+            if (_rigidbody)
+            {
+                _rigidbody.velocity = SourceGameObject.transform.forward * velocity;
+            }
+        }
+
         // Private fields
         public GameObject SourceGameObject;
         public Transform SourceTransform;
@@ -22,6 +36,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         {
             SourceGameObject = gameObject;
             SourceTransform = gameObject.transform;
+            _rigidbody = GetComponent<Rigidbody>();
         }
 
         /// <summary>
@@ -30,6 +45,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// <param name="targetTransform"></param>
         public virtual void MoveCompleted(Transform targetTransform)
         {
+            Plugin.Log.LogDebug($"Move Completed.");
         }
 
         /// <summary>
@@ -38,6 +54,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// <param name="targetTransform"></param>
         public virtual void RotationCompleted(Transform targetTransform)
         {
+            Plugin.Log.LogDebug($"Rotation Completed.");
         }
 
         /// <summary>
@@ -49,6 +66,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         {
             Vector3 dirToTarget = (targetTransform.position - SourceTransform.position).normalized;
             float dotProduct = Vector3.Dot(dirToTarget, SourceTransform.forward);
+
+            Plugin.Log.LogDebug($"Checking Rotation: Current dot: {dotProduct}, Tolerance dot: {RotateTolerance}");
 
             // Return true if source is "looking" at target
             return dotProduct > RotateTolerance;

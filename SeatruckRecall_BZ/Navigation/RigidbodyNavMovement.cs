@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Plugin = DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 {
@@ -93,9 +94,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// </summary>
         public override void PreNavigate()
         {
-            SeaTruckDockRecallPlugin.Log.LogDebug("RigidBodyNavMovement PreNavigate");
+            Plugin.Log.LogDebug("RigidBodyNavMovement PreNavigate");
             Rigidbody[] allRigidBodies = SourceTransform.gameObject.GetComponentsInChildren<Rigidbody>(true);
-            SeaTruckDockRecallPlugin.Log.LogDebug($"Updating {allRigidBodies.Length} RigidBodies");
+            Plugin.Log.LogDebug($"Updating {allRigidBodies.Length} RigidBodies");
             backupMass = new float[allRigidBodies.Length];
             backupDrag = new float[allRigidBodies.Length];
             for (int bodyNum = 0; bodyNum < allRigidBodies.Length; bodyNum++)
@@ -117,9 +118,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// </summary>
         public override void PostNavigate()
         {
-            SeaTruckDockRecallPlugin.Log.LogDebug("RigidBodyNavMovement PostNavigate");
+            Plugin.Log.LogDebug("RigidBodyNavMovement PostNavigate");
             Rigidbody[] allRigidBodies = SourceTransform.gameObject.GetComponentsInChildren<Rigidbody>(true);
-            SeaTruckDockRecallPlugin.Log.LogDebug($"Updating {allRigidBodies.Length} RigidBodies");
+            Plugin.Log.LogDebug($"Updating {allRigidBodies.Length} RigidBodies");
             for (int bodyNum = 0; bodyNum < allRigidBodies.Length; bodyNum++)
             {
                 if (allRigidBodies[bodyNum] != _sourceRigidbody)

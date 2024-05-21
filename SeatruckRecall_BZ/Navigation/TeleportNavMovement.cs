@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Plugin = DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 {
@@ -41,6 +42,17 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         public override void RotationCompleted(Transform targetTransform)
         {
             base.RotationCompleted(targetTransform);
+        }
+
+        /// <summary>
+        /// Apply a small force to push the teleported vehicle into the docking trigger
+        /// </summary>
+        public override void PostNavigate()
+        {
+            // Force docking
+            Plugin.Log.LogInfo("Teleport Movement: Nudging...");
+            base.Nudge(10.0f);
+            Plugin.Log.LogInfo("Teleport Movement: Nudged.");
         }
     }
 }

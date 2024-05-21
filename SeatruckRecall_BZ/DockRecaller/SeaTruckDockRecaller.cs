@@ -2,8 +2,10 @@
 using DaftAppleGames.Common.Utils;
 using DaftAppleGames.SeatruckRecall_BZ.AutoPilot;
 using DaftAppleGames.SeatruckRecall_BZ.Navigation;
+using DaftAppleGames.SeatruckRecall_BZ.Utils;
 using UnityEngine;
 using UnityEngine.Events;
+using Plugin = DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
 {
@@ -37,6 +39,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
 
         // Useful internal components
         private MoonpoolExpansionManager _dockingManager;
+
+        // Public properties
+        public float MaxRange { get; set; } = 500.0f;
 
         // Internal tracking and audit
         private DockRecallState _currentRecallState = DockRecallState.None;
@@ -85,7 +90,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
                 WaypointAction.RotateBeforeMove,
                 MoveToBaseText));
 
-            SeaTruckDockRecallPlugin.Log.LogDebug($"Dock tube above end position: {aboveDockingTubeWaypoint.transform.position}");
+            Plugin.Log.LogDebug($"Dock tube above end position: {aboveDockingTubeWaypoint.transform.position}");
 
             // Waypoint at the end of the docking tube.
             GameObject endOfDockTubeWaypoint = new GameObject("End of Tube Waypoint")
@@ -99,21 +104,21 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
                 WaypointAction.RotateBeforeMove,
                 AlignToDockText));
 
-            SeaTruckDockRecallPlugin.Log.LogDebug($"Dock tube end position: {endOfDockTubeWaypoint.transform.position}");
+            Plugin.Log.LogDebug($"Dock tube end position: {endOfDockTubeWaypoint.transform.position}");
 
             // Waypoint into the docking tube itself
             GameObject dockingWaypoint = new GameObject("Docking Waypoint")
             {
                 transform =
                 {
-                    position = gameObject.transform.position + (-gameObject.transform.right * 13.7f)
+                    position = gameObject.transform.position + (-gameObject.transform.right * 15.0f)
                 }
             };
             _dockingWaypoints.Add(new Waypoint(dockingWaypoint.transform,
                 WaypointAction.RotateBeforeMove,
                 MovingToDockText));
 
-            SeaTruckDockRecallPlugin.Log.LogDebug($"Dock final position: {dockingWaypoint.transform.position}");
+            Plugin.Log.LogDebug($"Dock final position: {dockingWaypoint.transform.position}");
         }
 
         /// <summary>
@@ -146,6 +151,13 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
             if (OnRecallStateChanged != null)
             {
                 OnRecallStateChanged.Invoke(_currentRecallState, _currentAutoPilotState, _currentWaypoint);
+            }
+
+            switch (_currentRecallState)
+            {
+                case DockRecallState.Aborted:
+                    _currentRecallAutoPilot.AbortNavigation();
+                    break;
             }
         }
 
@@ -196,7 +208,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         /// <param name="waypoint"></param>
         private void AutoPilotStateChangedHandler(AutoPilotState autoPilotState, Waypoint waypoint)
         {
-            SeaTruckDockRecallPlugin.Log.LogDebug($"DockRecaller.AutoPilotStateChangedHandler: {autoPilotState}.");
+            Plugin.Log.LogDebug($"DockRecaller.AutoPilotStateChangedHandler: {autoPilotState}.");
             _currentAutoPilotState = autoPilotState;
             _currentWaypoint = waypoint;
 
@@ -213,10 +225,20 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
                     break;
                 case AutoPilotState.RouteBlocked:
                 case AutoPilotState.WaypointBlocked:
-                    _currentRecallState = DockRecallState.Aborted;
+                case AutoPilotState.Aborted:
+                    _currentRecallState = DockRecallState.Ready;
                     break;
             }
             StateOrWaypointChanged();
+        }
+
+        /// <summary>
+        /// Public method to cancel in-progress Recall
+        /// </summary>
+        internal void AbortRecall()
+        {
+            Plugin.Log.LogDebug("Aborting Recall...");
+            _currentRecallState = DockRecallState.Aborted;
         }
 
         /// <summary>
@@ -232,12 +254,12 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
                 return;
             }
 
-            SeaTruckDockRecallPlugin.Log.LogDebug("Finding closest Seatruck...");
+            Plugin.Log.LogDebug("Finding closest Seatruck...");
             _currentRecallAutoPilot = GetClosestSeaTruck();
             if (_currentRecallAutoPilot == null)
             {
                 // Couldn't find a closest Seatruck
-                SeaTruckDockRecallPlugin.Log.LogDebug("No Seatrucks found!");
+                Plugin.Log.LogDebug("No Seatrucks found!");
                 _currentRecallState = DockRecallState.NoneInRange;
                 return;
             }
@@ -254,41 +276,38 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         private BaseAutoPilot GetClosestSeaTruck()
         {
             Transform currentTransform = transform;
-            AutoPilot.BaseAutoPilot closestSeaTruck = null;
+            BaseAutoPilot closestSeaTruck = null;
             float closestDistance = 0.0f;
-            List<AutoPilot.BaseAutoPilot> allSeaTrucks = SeaTruckDockRecallPlugin.GetAllAutoPilots();
-
-            float maxRange = SeaTruckDockRecallPlugin.MaximumRange.Value;
 
             // Don't need to do anything if there are no Seatrucks
-            if (allSeaTrucks.Count == 0)
+            if (ModUtils.AllSeaTruckAutoPilots.Count == 0)
             {
-                SeaTruckDockRecallPlugin.Log.LogInfo("No Seatrucks registered.");
+                Plugin.Log.LogInfo("No Seatrucks registered.");
                 _currentRecallState = DockRecallState.NoneInRange;
 
                 return null;
             }
 
-            SeaTruckDockRecallPlugin.Log.LogInfo($"Looking for SeaTrucks. Max range is: {maxRange}");
+            Plugin.Log.LogInfo($"Looking for SeaTrucks. Max range is: {MaxRange}");
 
             // Loop through each seatruck, find out which is closest
-            foreach (AutoPilot.BaseAutoPilot seatruck in allSeaTrucks)
+            foreach (BaseAutoPilot seatruck in ModUtils.AllSeaTruckAutoPilots)
             {
                 // Check if already docked
                 SeaTruckSegment segment = seatruck.GetComponent<SeaTruckSegment>();
-                if (segment.isDocked || seatruck.AutoPilotEnabled)
+                if (segment.isDocked || seatruck.AutoPilotInProgress)
                 {
-                    SeaTruckDockRecallPlugin.Log.LogInfo($"Seatruck {seatruck.gameObject.name} is already docking or docked. Skipping...");
+                    Plugin.Log.LogInfo($"Seatruck {seatruck.gameObject.name} is already docking or docked. Skipping...");
                     continue;
                 }
 
-                SeaTruckDockRecallPlugin.Log.LogInfo($"Checking distance to {seatruck.gameObject.name}...");
+                Plugin.Log.LogInfo($"Checking distance to {seatruck.gameObject.name}...");
                 float currDistance = Vector3.Distance(currentTransform.position, seatruck.gameObject.transform.position);
                 {
-                    SeaTruckDockRecallPlugin.Log.LogInfo($"Distance is: {currDistance}, closest so far is: {closestDistance}");
-                    if ((closestDistance == 0 || currDistance < closestDistance) && currDistance <= maxRange)
+                    Plugin.Log.LogInfo($"Distance is: {currDistance}, closest so far is: {closestDistance}");
+                    if ((closestDistance == 0 || currDistance < closestDistance) && currDistance <= MaxRange)
                     {
-                        SeaTruckDockRecallPlugin.Log.LogInfo("New closest Seatruck found!");
+                        Plugin.Log.LogInfo("New closest Seatruck found!");
                         closestDistance = currDistance;
                         closestSeaTruck = seatruck;;
                     }
@@ -298,11 +317,11 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
             // Check to see if we've found anything in range
             if (closestSeaTruck == null)
             {
-                SeaTruckDockRecallPlugin.Log.LogInfo($"No SeaTrucks found within range!");
+                Plugin.Log.LogInfo($"No SeaTrucks found within range!");
             }
             else
             {
-                SeaTruckDockRecallPlugin.Log.LogInfo($"Closest Seatruck found: {closestSeaTruck.gameObject.name} at {closestDistance}");
+                Plugin.Log.LogInfo($"Closest Seatruck found: {closestSeaTruck.gameObject.name} at {closestDistance}");
             }
             
             return closestSeaTruck;

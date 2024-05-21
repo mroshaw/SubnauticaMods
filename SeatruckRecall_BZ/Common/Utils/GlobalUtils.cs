@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System;
-using DaftAppleGames.SeatruckRecall_BZ;
 using UnityEngine;
+using Plugin = DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.Common.Utils
 {
@@ -43,7 +43,7 @@ namespace DaftAppleGames.Common.Utils
             {
                 if (child.gameObject.name == childName)
                 {
-                    SeaTruckDockRecallPlugin.Log.LogDebug($"Found {childName} GameObject...");
+                    Plugin.Log.LogDebug($"Found {childName} GameObject...");
                     return child.gameObject;
                 }
             }

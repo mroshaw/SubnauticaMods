@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Plugin = DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 {
@@ -31,7 +32,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
         // Public properties
         internal List<Waypoint> Waypoints { get; set; }
-        private INavMovement _navMovement;
+        internal INavMovement NavMovement { get; set; }
 
         // Events to publish current state of Navigation
         internal NavStateChangedEvent OnNavStateChanged = new NavStateChangedEvent();
@@ -58,15 +59,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         public void Start()
         {
             // Get the NavMovement component
-            _navMovement = GetComponent<INavMovement>();
-
-            // Configure the NavMovement component
-            _navMovement.RotateSpeed = SeaTruckDockRecallPlugin.RotationSpeed.Value;
-            _navMovement.MoveSpeed = SeaTruckDockRecallPlugin.TransitSpeed.Value;
-            _navMovement.MoveTolerance = 0.2f;
-            _navMovement.RotateTolerance = 0.99f;
-            _navMovement.SlowDistance = 2.0f;
-
+            NavMovement = GetComponent<INavMovement>();
             ResetState();
         }
 
@@ -107,18 +100,19 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             {
                 case NavState.Stopped:
                 case NavState.Arrived:
+                case NavState.None:
                     return;
 
                 case NavState.WaypointReached:
                     if (!NoMoreWaypoints())
                     {
-                        SeaTruckDockRecallPlugin.Log.LogDebug("Moving to next waypoint.");
+                        Plugin.Log.LogDebug("Moving to next waypoint.");
                         NextWaypoint();
                         _currentNavState = NavState.Moving;
                     }
                     else
                     {
-                        SeaTruckDockRecallPlugin.Log.LogDebug("Final Waypoint Reached.");
+                        Plugin.Log.LogDebug("Final Waypoint Reached.");
                         StopNavigation();
                         _currentNavState = NavState.Arrived;
                     }
@@ -154,8 +148,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             _totalWaypoints = Waypoints.Count;
             _currentWaypointIndex = StartingWaypointIndex -1;
             _currentNavState = NavState.Moving;
-            SeaTruckDockRecallPlugin.Log.LogDebug("Starting Waypoint Navigation...");
-            _navMovement.PreNavigate();
+            Plugin.Log.LogDebug("Starting Waypoint Navigation...");
+            NavMovement.PreNavigate();
             NextWaypoint();
         }
 
@@ -194,18 +188,21 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         }
 
         /// <summary>
-        /// Public method to pause navigation. Can be restarted
+        /// Public method to restart navigation.
         /// </summary>
         internal void RestartNavigation()
         {
             StartNavigation();
         }
 
+        /// <summary>
+        /// Public method to stop navigation.
+        /// </summary>
         internal void StopNavigation()
         {
             ResetState();
             _currentNavState = NavState.Stopped;
-            _navMovement.PostNavigate();
+            NavMovement.PostNavigate();
         }
 
         /// <summary>
@@ -263,7 +260,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         {
             if (_currentMoveComplete && _currentRotateComplete)
             {
-                SeaTruckDockRecallPlugin.Log.LogDebug($"Waypoint {_currentWaypointIndex} complete.");
+                Plugin.Log.LogDebug($"Waypoint {_currentWaypointIndex} complete.");
                 _currentNavState = NavState.WaypointReached;
             }
 
@@ -293,9 +290,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             }
 
             // Move and check if we've arrived
-            if (_navMovement.MoveUpdate(_currentWaypoint.Transform))
+            if (NavMovement.MoveUpdate(_currentWaypoint.Transform))
             {
-                SeaTruckDockRecallPlugin.Log.LogDebug($"Waypoint {_currentWaypointIndex} reached.");
+                Plugin.Log.LogDebug($"Waypoint {_currentWaypointIndex} reached.");
                 _currentMoveComplete = true;
             }
         }
@@ -311,9 +308,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             }
 
             // Rotate and check if we're now facing the target
-            if (_navMovement.RotateUpdate(_currentWaypoint.Transform))
+            if (NavMovement.RotateUpdate(_currentWaypoint.Transform))
             {
-                SeaTruckDockRecallPlugin.Log.LogDebug($"Waypoint {_currentWaypointIndex} rotation complete.");
+                Plugin.Log.LogDebug($"Waypoint {_currentWaypointIndex} rotation complete.");
                 _currentRotateComplete = true;
             }
         }
@@ -329,7 +326,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             Collider[] allColliders = Physics.OverlapSphere(position, radius);
             foreach (Collider collider in allColliders)
             {
-                SeaTruckDockRecallPlugin.Log.LogInfo($"Found this Collider in waypoint radius: {collider.gameObject.name}");
+                Plugin.Log.LogInfo($"Found this Collider in waypoint radius: {collider.gameObject.name}");
             }
 
             /*
@@ -355,7 +352,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
             if (Physics.SphereCast(source.position, radius, direction, out RaycastHit hit, distance))
             {
-                SeaTruckDockRecallPlugin.Log.LogInfo($"Found this Collider from current position to this Waypoint {targetWaypoint.Name}: {hit.collider.gameObject.name}");
+                Plugin.Log.LogInfo($"Found this Collider from current position to this Waypoint {targetWaypoint.Name}: {hit.collider.gameObject.name}");
             }
 
             return true;

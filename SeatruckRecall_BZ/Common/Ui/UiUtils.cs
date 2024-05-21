@@ -1,7 +1,7 @@
-﻿using DaftAppleGames.SeatruckRecall_BZ;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Plugin = DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.Common.Ui
 {
@@ -23,7 +23,7 @@ namespace DaftAppleGames.Common.Ui
         public static void CloneText(GameObject existingTextGo, string objName, string defaultText, float positionY, float fontSize,
             out GameObject newTextGo, out TextMeshProUGUI newText)
         {
-            SeaTruckDockRecallPlugin.Log.LogDebug($"Creating {objName} Text...");
+            Plugin.Log.LogDebug($"Creating {objName} Text...");
             newTextGo = GameObject.Instantiate(existingTextGo);
             newTextGo.transform.parent = existingTextGo.transform.parent;
             newTextGo.name = objName;
@@ -33,7 +33,7 @@ namespace DaftAppleGames.Common.Ui
             newText = newTextGo.GetComponent<TextMeshProUGUI>();
             newText.text = defaultText;
             newText.fontSizeMax = fontSize;
-            SeaTruckDockRecallPlugin.Log.LogDebug($"Created {objName} Text...");
+            Plugin.Log.LogDebug($"Created {objName} Text...");
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace DaftAppleGames.Common.Ui
             float fontSize, float scale,
             out GameObject newButtonGo, out Button newButton)
         {
-            SeaTruckDockRecallPlugin.Log.LogDebug($"Creating {objName} button...");
+            Plugin.Log.LogDebug($"Creating {objName} button...");
             newButtonGo = GameObject.Instantiate(existingButtonGo);
             newButtonGo.name = objName;
             newButton = newButtonGo.GetComponent<Button>();
@@ -63,7 +63,7 @@ namespace DaftAppleGames.Common.Ui
             TextMeshProUGUI buttonLabel = newButtonGo.GetComponentInChildren<TextMeshProUGUI>();
             buttonLabel.text = labelText;
             buttonLabel.fontSizeMax = fontSize;
-            SeaTruckDockRecallPlugin.Log.LogDebug($"Button {objName} created.");
+            Plugin.Log.LogDebug($"Button {objName} created.");
         }
 
     }
