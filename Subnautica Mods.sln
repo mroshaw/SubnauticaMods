@@ -27,9 +27,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubnauticaCheater_BZ", "Sub
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAGCommon", "DAGCommon\DAGCommon.csproj", "{99733096-491D-40A1-B8E1-EC6B4DD97F09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubnauticaPets", "SubnauticaPets\SubnauticaPets.csproj", "{7FA86975-0BFA-43D5-A10F-1970A5A49D20}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubnauticaPets2", "SubnauticaPets\SubnauticaPets2.csproj", "{7FA86975-0BFA-43D5-A10F-1970A5A49D20}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateTestPluginSn", "TemplateTestPluginSn\TemplateTestPluginSn.csproj", "{22CDD268-E826-4DAF-AC92-C2E86621C6B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubnauticaCheater", "SubnauticaCheater\SubnauticaCheater.csproj", "{0CBEC5E7-6718-4B8B-8942-7CF2FF8657E8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetsHelper", "PetsHelper\PetsHelper.csproj", "{BB54960A-A0B2-4354-BF7F-37B0586ED03B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -131,26 +133,34 @@ Global
 		{7FA86975-0BFA-43D5-A10F-1970A5A49D20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FA86975-0BFA-43D5-A10F-1970A5A49D20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FA86975-0BFA-43D5-A10F-1970A5A49D20}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7FA86975-0BFA-43D5-A10F-1970A5A49D20}.Subnautica|Any CPU.ActiveCfg = SubnauticaZero|Any CPU
-		{7FA86975-0BFA-43D5-A10F-1970A5A49D20}.Subnautica|Any CPU.Build.0 = SubnauticaZero|Any CPU
+		{7FA86975-0BFA-43D5-A10F-1970A5A49D20}.Subnautica|Any CPU.ActiveCfg = Subnautica|Any CPU
+		{7FA86975-0BFA-43D5-A10F-1970A5A49D20}.Subnautica|Any CPU.Build.0 = Subnautica|Any CPU
 		{7FA86975-0BFA-43D5-A10F-1970A5A49D20}.SubnauticaZero|Any CPU.ActiveCfg = SubnauticaZero|Any CPU
 		{7FA86975-0BFA-43D5-A10F-1970A5A49D20}.SubnauticaZero|Any CPU.Build.0 = SubnauticaZero|Any CPU
-		{22CDD268-E826-4DAF-AC92-C2E86621C6B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22CDD268-E826-4DAF-AC92-C2E86621C6B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22CDD268-E826-4DAF-AC92-C2E86621C6B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{22CDD268-E826-4DAF-AC92-C2E86621C6B6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{22CDD268-E826-4DAF-AC92-C2E86621C6B6}.Subnautica|Any CPU.ActiveCfg = Release|Any CPU
-		{22CDD268-E826-4DAF-AC92-C2E86621C6B6}.Subnautica|Any CPU.Build.0 = Release|Any CPU
-		{22CDD268-E826-4DAF-AC92-C2E86621C6B6}.SubnauticaZero|Any CPU.ActiveCfg = Release|Any CPU
-		{22CDD268-E826-4DAF-AC92-C2E86621C6B6}.SubnauticaZero|Any CPU.Build.0 = Release|Any CPU
+		{0CBEC5E7-6718-4B8B-8942-7CF2FF8657E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CBEC5E7-6718-4B8B-8942-7CF2FF8657E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CBEC5E7-6718-4B8B-8942-7CF2FF8657E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CBEC5E7-6718-4B8B-8942-7CF2FF8657E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CBEC5E7-6718-4B8B-8942-7CF2FF8657E8}.Subnautica|Any CPU.ActiveCfg = Subnautica|Any CPU
+		{0CBEC5E7-6718-4B8B-8942-7CF2FF8657E8}.Subnautica|Any CPU.Build.0 = Subnautica|Any CPU
+		{0CBEC5E7-6718-4B8B-8942-7CF2FF8657E8}.SubnauticaZero|Any CPU.ActiveCfg = Subnautica|Any CPU
+		{0CBEC5E7-6718-4B8B-8942-7CF2FF8657E8}.SubnauticaZero|Any CPU.Build.0 = Subnautica|Any CPU
+		{BB54960A-A0B2-4354-BF7F-37B0586ED03B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB54960A-A0B2-4354-BF7F-37B0586ED03B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB54960A-A0B2-4354-BF7F-37B0586ED03B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB54960A-A0B2-4354-BF7F-37B0586ED03B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB54960A-A0B2-4354-BF7F-37B0586ED03B}.Subnautica|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB54960A-A0B2-4354-BF7F-37B0586ED03B}.Subnautica|Any CPU.Build.0 = Debug|Any CPU
+		{BB54960A-A0B2-4354-BF7F-37B0586ED03B}.SubnauticaZero|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB54960A-A0B2-4354-BF7F-37B0586ED03B}.SubnauticaZero|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		    SolutionGuid = {F75DB666-86C3-40EC-BB33-11B2BCDD7844}
-		            SolutionGuid = {B7C207F6-0B63-4258-B838-FA393F8CEA5F}
-		        SolutionGuid = {3DC6A6DD-22CC-45F9-9AC2-ACD7DC8CCBD7}
 		SolutionGuid = {DAF74111-BA59-4F12-9B63-549EB0B8F5D5}
+		        SolutionGuid = {3DC6A6DD-22CC-45F9-9AC2-ACD7DC8CCBD7}
+		            SolutionGuid = {B7C207F6-0B63-4258-B838-FA393F8CEA5F}
+		    SolutionGuid = {F75DB666-86C3-40EC-BB33-11B2BCDD7844}
 	EndGlobalSection
 EndGlobal
