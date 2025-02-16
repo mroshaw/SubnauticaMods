@@ -15,8 +15,6 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         /// <summary>
         /// Patch in names and force enable icons when setting up map room TechTypes
         /// </summary>
-        /// <param name="__instance"></param>
-        /// <param name="techType"></param>
         [HarmonyPatch(nameof(uGUI_MapRoomResourceNode.SetTechType))]
         [HarmonyPostfix]
         public static void SetTechType_Postfix(uGUI_MapRoomResourceNode __instance, TechType techType)

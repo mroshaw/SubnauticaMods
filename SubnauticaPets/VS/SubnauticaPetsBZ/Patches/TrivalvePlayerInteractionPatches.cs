@@ -9,6 +9,9 @@ namespace DaftAppleGames.SubnauticaPets.Patches
     [HarmonyPatch(typeof(TrivalvePlayerInteraction))]
     internal class TrivalvePlayerInteractionPatches
     {
+        /// <summary>
+        /// Always allow the player to interace with a Pet
+        /// </summary>
         [HarmonyPatch(nameof(TrivalvePlayerInteraction.AllowedToInteract))]
         [HarmonyPrefix]
         public static bool AllowedToInteract_Prefix(TrivalvePlayerInteraction __instance, ref bool __result,
@@ -22,6 +25,9 @@ namespace DaftAppleGames.SubnauticaPets.Patches
             return true;
         }
 
+        /// <summary>
+        /// Custom text for the Trivalve interaction prompt
+        /// </summary>
         [HarmonyPatch(nameof(TrivalvePlayerInteraction.OnHandHover))]
         [HarmonyPostfix]
         public static void OnHandHover_Postfix(TrivalvePlayerInteraction __instance, GUIHand hand)

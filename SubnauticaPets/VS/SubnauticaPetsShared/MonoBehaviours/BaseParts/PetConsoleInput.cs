@@ -3,10 +3,8 @@ using UnityEngine.EventSystems;
 
 namespace DaftAppleGames.SubnauticaPets.BaseParts
 {
-    // TODO Review this file and update to your own requirements, or remove it altogether if not required
     /// <summary>
-    /// Template MonoBehaviour class. Use this to add new functionality and behaviours to
-    /// the game.
+    /// Provides functionality for to interact with the Pet Console
     /// </summary>
     internal class PetConsoleInput : uGUI_InputGroup, IEventSystemHandler, uGUI_IButtonReceiver, IPointerHoverHandler
     {
@@ -50,7 +48,6 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         /// <summary>
         /// Implements OnSelect method
         /// </summary>
-        /// <param name="lockMovement"></param>
         public override void OnSelect(bool lockMovement)
         {
             base.OnSelect(true);
@@ -70,7 +67,6 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         /// <summary>
         /// Implementation of OnButtonHover
         /// </summary>
-        /// <param name="eventData"></param>
         public void OnPointerHover(PointerEventData eventData)
         {
             if (enabled && !selected)
@@ -84,8 +80,6 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         /// <summary>
         /// Implementation of OnButtonDown
         /// </summary>
-        /// <param name="button"></param>
-        /// <returns></returns>
         public bool OnButtonDown(GameInput.Button button)
         {
             if (button == uGUI.button1)

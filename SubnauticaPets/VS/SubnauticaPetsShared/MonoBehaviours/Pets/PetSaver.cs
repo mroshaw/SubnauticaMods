@@ -202,6 +202,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             }
         }
 
+        /// <summary>
+        /// Removes everything from the Pet List
+        /// </summary>
         private void ClearPetList()
         {
             if (PetList != null)

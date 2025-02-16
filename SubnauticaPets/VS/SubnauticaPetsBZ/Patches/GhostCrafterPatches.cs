@@ -15,10 +15,6 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         /// <summary>
         /// Patches the Craft method, allowing us to set the type of Pet to spawn
         /// </summary>
-        /// <param name="__instance"></param>
-        /// <param name="techType"></param>
-        /// <param name="duration"></param>
-        /// <returns></returns>
         [HarmonyPatch(nameof(GhostCrafter.Craft))]
         [HarmonyPrefix]
         public static bool Craft_Prefix(GhostCrafter __instance, TechType techType, float duration)

@@ -7,7 +7,7 @@ namespace DaftAppleGames.SubnauticaPets.Patches
     internal class LandCreatureGravityPatches
     {
         /// <summary>
-        /// Patches the Player Awake method with prefix code.
+        /// Forces a pet to always think it's above water.
         /// </summary>
         /// <param name="__instance"></param>
         [HarmonyPatch(nameof(LandCreatureGravity.IsUnderwater))]

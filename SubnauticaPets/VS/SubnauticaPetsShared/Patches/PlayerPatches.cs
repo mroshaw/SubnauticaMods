@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace DaftAppleGames.SubnauticaPets.Patches
 {
+    /// <summary>
+    /// Patches for the Player class. Typically used to trigger something when the player is spawned
+    /// </summary>
     [HarmonyPatch(typeof(Player))]
     internal class PlayerPatches
     {
@@ -15,6 +18,7 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         [HarmonyPostfix]
         public static void Start_Postfix(Player __instance)
         {
+            // Once spawned, wait a few seconds then check if Pets related items need to be unlocked
             __instance.StartCoroutine(CheckUnlockStateSync(__instance));
         }
 

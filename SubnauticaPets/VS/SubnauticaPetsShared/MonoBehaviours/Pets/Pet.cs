@@ -7,7 +7,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
     /// <summary>
     /// MonoBehaviour component providing Pet behaviours and properties.
-    /// Acts as a base to be inherited by Creature specific classes
+    /// Can be used as a base to be inherited by Creature specific classes
     /// </summary>
     public class Pet : MonoBehaviour
     {

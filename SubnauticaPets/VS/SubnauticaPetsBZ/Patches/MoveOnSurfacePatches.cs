@@ -10,10 +10,6 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         /// <summary>
         /// Overrides the Perform method specifically for SnowStalkerBaby pets, forcing the GoToInternal behaviour
         /// </summary>
-        /// <param name="__instance"></param>
-        /// <param name="time"></param>
-        /// <param name="deltaTime"></param>
-        /// <returns></returns>
         [HarmonyPatch(nameof(MoveOnSurface.Perform))]
         [HarmonyPrefix]
         private static bool Perform_Prefix(MoveOnSurface __instance, float time, float deltaTime)

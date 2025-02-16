@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace DaftAppleGames.SubnauticaPets.Patches
 {
+    /// <summary>
+    /// Prevents the player getting stuck on Pets
+    /// </summary>
     [HarmonyPatch(typeof(GroundMotor))]
     internal class GroundMotorPatches
     {

@@ -70,7 +70,6 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         /// <summary>
         /// Spawn a Pet
         /// </summary>
-        /// <param name="techType"></param>
         public void SpawnPet(TechType techType)
         {
             StartCoroutine(SpawnPetAsync(techType));
@@ -79,8 +78,6 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         /// <summary>
         /// Spawn Pet Async version
         /// </summary>
-        /// <param name="techType"></param>
-        /// <returns></returns>
         private IEnumerator SpawnPetAsync(TechType techType)
         {
             CoroutineTask<GameObject> task = CraftData.GetPrefabForTechTypeAsync(techType);

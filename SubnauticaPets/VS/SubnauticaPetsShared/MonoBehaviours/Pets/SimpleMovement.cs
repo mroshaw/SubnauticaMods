@@ -2,10 +2,9 @@
 
 namespace DaftAppleGames.SubnauticaPets.Pets
 {
-    // TODO Review this file and update to your own requirements, or remove it altogether if not required
+
     /// <summary>
-    /// Template MonoBehaviour class. Use this to add new functionality and behaviours to
-    /// the game.
+    /// Very simple movement behaviour for "custom" pets
     /// </summary>
     internal class SimpleMovement : MonoBehaviour
     {

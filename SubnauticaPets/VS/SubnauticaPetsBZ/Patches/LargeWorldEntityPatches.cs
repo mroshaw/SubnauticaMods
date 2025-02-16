@@ -4,7 +4,6 @@ using HarmonyLib;
 
 namespace DaftAppleGames.SubnauticaPets.Patches
 {
-
     [HarmonyPatch(typeof(LargeWorldEntity))]
     internal class LargeWorldEntityPatches
     {

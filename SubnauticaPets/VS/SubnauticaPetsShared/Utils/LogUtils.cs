@@ -9,8 +9,6 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <summary>
         /// Write to debug log, if detailed logging is enabled
         /// </summary>
-        /// <param name="logArea"></param>
-        /// <param name="logEntry"></param>
         public static void LogDebug(LogArea logArea, string logEntry)
         {
             if (!ModConfig.DetailedLogging)
@@ -24,8 +22,6 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <summary>
         /// Write to error log, always
         /// </summary>
-        /// <param name="logArea"></param>
-        /// <param name="logEntry"></param>
         public static void LogError(LogArea logArea, string logEntry)
         {
             Log.LogError($"{logArea}: {logEntry}");
@@ -34,7 +30,6 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <summary>
         /// Write to info log, if detailed logging is enabled.
         /// </summary>
-        /// <param name="logEntry"></param>
         public static void LogInfo(string logEntry)
         {
             if (ModConfig.DetailedLogging)
