@@ -19,20 +19,10 @@ namespace DaftAppleGames.SubnauticaCheater_BZ.Patches
         /// <param name="__instance"></param>
         [HarmonyPatch(nameof(Oxygen.RemoveOxygen))]
         [HarmonyPrefix]
-        public static bool RemoveOxygen_Prefix(Oxygen __instance)
+        public static bool RemoveOxygen_Prefix(Oxygen __instance, ref float __result)
         {
+            __result = __instance.oxygenAvailable;
             return false;
-        }
-
-        /// <summary>
-        /// Patches the Player Awake method with postfix code.
-        /// </summary>
-        /// <param name="__instance"></param>
-        [HarmonyPatch(nameof(Player.Awake))]
-        [HarmonyPostfix]
-        public static void Awake_Postfix(Player __instance)
-        {
-            SubnauticaCheater_BZPlugin.Log.LogInfo("In Player Awake method Postfix.");
         }
     }
 }

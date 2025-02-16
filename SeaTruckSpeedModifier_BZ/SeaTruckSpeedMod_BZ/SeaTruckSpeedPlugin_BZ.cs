@@ -3,40 +3,56 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using System.Collections.Generic;
+using SeaTruckSpeedMod_BZ.MonoBehaviours;
 
 namespace DaftAppleGames.SeaTruckSpeedMod_BZ
 {
+    public enum ChangeType { Speed, EnergyDrain }
+
     [BepInPlugin(MyGuid, PluginName, VersionString)]
     public class SeaTruckSpeedPluginBz : BaseUnityPlugin
     {
         // Plugin properties
         private const string MyGuid = "com.mroshaw.seatruckspeedmodbz";
         private const string PluginName = "Sea Truck Speed Mod BZ";
-        private const string VersionString = "2.0.0";
+        private const string VersionString = "2.1.0";
 
         // Config properties
         private const string SpeedMultiplierConfigKey = "Speed Multiplier";
+        private const string EnergyDrainMultiplierConfigKey = "Energy Drain Multiplier";
 
         // Static config settings
-        public static ConfigEntry<float> BoosterSpeedMultiplier;
+        public static ConfigEntry<float> BoosterSpeedMultiplierConfig;
+        public static ConfigEntry<float> EnergyDrainMultiplierConfig;
 
-        // Static tracking list of booster tanks to update
+        // Static tracking list of SeaTrucks to update
         internal static List<SeaTruckHistoryItem> SeaTruckHistory = new List<SeaTruckHistoryItem>();
 
         private static readonly Harmony Harmony = new Harmony(MyGuid);
 
         public static ManualLogSource Log;
 
+        /// <summary>
+        /// Configure the mod
+        /// </summary>
         private void Awake()
         {
             // Modifier config - speed
-            BoosterSpeedMultiplier = Config.Bind("General",
+            BoosterSpeedMultiplierConfig = Config.Bind("General",
                 SpeedMultiplierConfigKey,
-                1.0f,
+                2.0f,
                 new ConfigDescription("SeaTruck speed multiplier.", new AcceptableValueRange<float>(0.0f, 10.0f)));
 
+            // Modifier config - energy drain
+            EnergyDrainMultiplierConfig = Config.Bind("General",
+                EnergyDrainMultiplierConfigKey,
+                2.5f,
+                new ConfigDescription("SeaTruck energy drain multiplier.", new AcceptableValueRange<float>(0.0f, 10.0f)));
+
+
             // Listen for config change events
-            BoosterSpeedMultiplier.SettingChanged += ConfigSettingChanged;
+            BoosterSpeedMultiplierConfig.SettingChanged += ConfigSettingChanged;
+            EnergyDrainMultiplierConfig.SettingChanged += ConfigSettingChanged;
 
             // Patch in our MOD
             Harmony.PatchAll();
@@ -45,7 +61,7 @@ namespace DaftAppleGames.SeaTruckSpeedMod_BZ
         }
 
         /// <summary>
-        /// Oxygen Consumption Modifier config was changed
+        /// Propagates any config changes to all SeaTrucks
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -57,16 +73,24 @@ namespace DaftAppleGames.SeaTruckSpeedMod_BZ
             if (settingChangedEventArgs.ChangedSetting.Definition.Key == SpeedMultiplierConfigKey)
             {
                 float newValue = (float)settingChangedEventArgs.ChangedSetting.BoxedValue;
-                UpdateHistory(newValue);
+                UpdateHistory(ChangeType.Speed, newValue);
+            }
+
+            // Energy multiplier changed
+            // Speed setting changed
+            if (settingChangedEventArgs.ChangedSetting.Definition.Key == EnergyDrainMultiplierConfigKey)
+            {
+                float newValue = (float)settingChangedEventArgs.ChangedSetting.BoxedValue;
+                UpdateHistory(ChangeType.EnergyDrain, newValue);
             }
         }
 
         /// <summary>
-        /// Updates all Booster Tanks known to the mod, with the amended config values
+        /// Updates all SeaTrucks known to the mod, with the amended config values
         /// </summary>
         /// <param name="changeType"></param>
-        /// <param name="modifierValue"></param>
-        private void UpdateHistory(float modifierValue)
+        /// <param name="newValue"></param>
+        private void UpdateHistory(ChangeType changeType, float newValue)
         {
              // Update max speed on all SeaTruckMotors
             if (SeaTruckHistory != null)
@@ -76,11 +100,22 @@ namespace DaftAppleGames.SeaTruckSpeedMod_BZ
                 {
                     if (seaTruckHistoryItem.SeaTruckInstance != null)
                     {
-                        // Apply modifier
-                        float currentDrag = seaTruckHistoryItem.SeaTruckDrag;
-                        float newDrag = currentDrag / modifierValue;
-                        seaTruckHistoryItem.SeaTruckInstance.pilotingDrag = (newDrag);
-                        Logger.LogInfo($"Updated existing SeaTruckMotor. Current drag: {currentDrag} to new drag: {newDrag}");
+                        SeaTruckSpeedMultiplier speedMultiplier =
+                            seaTruckHistoryItem.SeaTruckInstance.GetComponent<SeaTruckSpeedMultiplier>();
+
+                        if (speedMultiplier)
+                        {
+                            switch (changeType)
+                            {
+                                case ChangeType.Speed:
+                                    speedMultiplier.UpdateSpeedModifier();
+                                    break;
+
+                                case ChangeType.EnergyDrain:
+                                    speedMultiplier.UpdateEnergyDrainModifier();
+                                    break;
+                            }
+                        }
                     }
                     else
                     {
