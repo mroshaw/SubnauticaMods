@@ -181,6 +181,13 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             return obj as GameObject;
         }
 
+        public static GameObject GetPrefabFromAssetBundle(string objectName)
+        {
+            string modPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            AssetBundle modAssetBundle = AssetBundle.LoadFromFile(Path.Combine(modPath, $"Assets/{AssetBundleName}"));
+            return modAssetBundle.LoadAsset<GameObject>(objectName);
+        }
+
         /// <summary>
         /// Loads a given Game Object from Asset Bundles shipped in the Mod folder
         /// </summary>

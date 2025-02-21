@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DaftAppleGames.SubnauticaPets.Pets
 {
-
+    internal enum PetHappiness { Ecstatic, Happy, Neutral, Sad, Devastated, Dead }
     /// <summary>
     /// MonoBehaviour component providing Pet behaviours and properties.
     /// Can be used as a base to be inherited by Creature specific classes
@@ -12,22 +12,16 @@ namespace DaftAppleGames.SubnauticaPets.Pets
     public class Pet : MonoBehaviour
     {
         // Public properties
-        public Base Base { get; set; }
+        internal Base Base { get; set; }
+        internal PetHappiness Happiness { get; private set; }
+        internal string BaseId => Base != null ? Base.GetComponent<PrefabIdentifier>().Id : "NO BASE!";
 
-        public string BaseId
-        {
-            get
-            {
-                if (Base != null)
-                {
-                    return Base.GetComponent<PrefabIdentifier>().Id;
-                }
-                else
-                {
-                    return "NO BASE!";
-                }
-            }
-        }
+        internal float timeBeforePetNeutral = 60.0f;
+        internal float timeBeforePetSad = 120.0f;
+        internal float timeBeforePetDevastated = 180.0f;
+        internal float timeBeforePetDead = 360.0f;
+
+        private float _timeSinceLastInteraction;
 
         /// <summary>
         /// The TechType or type of Pet
@@ -60,6 +54,8 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             }
         }
 
+        private static readonly int Dead = Animator.StringToHash("dead");
+
         /// <summary>
         /// Gets a "display friendly" version of the Pet Name
         /// </summary>
@@ -75,19 +71,22 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         private MoveOnGround _moveOnGround;
         private SimpleMovement _simpleMovement;
         private Animator _animator;
+        private CustomPetAnimator _customPetAnimator;
+        private AudioSource _audioSource;
         private TechTag _techTag;
         private PrefabIdentifier _prefabIdentifier;
         private SkyApplier _skyApplier;
 
-        private RaycastHit[] _baseCheckCache = new RaycastHit[10];
+        private readonly RaycastHit[] _baseCheckCache = new RaycastHit[10];
         private Ray _rayOrigin = new Ray();
         private BaseRoot _baseRootCache = new BaseRoot();
 
         private bool _canMove = false;
 
-        private float delayBeforeDestroy = 10.0f;
+        private const float DelayBeforeDestroy = 10.0f;
 
         private LiveMixin _liveMixin;
+        private Rigidbody _rigidBody;
 
         private void OnDisable()
         {
@@ -105,6 +104,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             _prefabIdentifier = GetComponent<PrefabIdentifier>();
             _liveMixin = GetComponent<LiveMixin>();
             _skyApplier = GetComponent<SkyApplier>();
+            _audioSource = GetComponent<AudioSource>();
+            _rigidBody = GetComponent<Rigidbody>();
+            _customPetAnimator = GetComponent<CustomPetAnimator>();
         }
 
         /// <summary>
@@ -127,6 +129,32 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             LoadPetData();
             DeriveBase();
             SubnauticaPetsPlugin.PetSaver.RegisterPet(this);
+        }
+
+        private void Update()
+        {
+            SetPetHappiness();
+        }
+
+        private void SetPetHappiness()
+        {
+            _timeSinceLastInteraction += Time.deltaTime;
+
+            if (_timeSinceLastInteraction < timeBeforePetNeutral)
+            {
+                Happiness = PetHappiness.Happy;
+            } else if (_timeSinceLastInteraction < timeBeforePetSad)
+            {
+                Happiness = PetHappiness.Sad;
+            } else if (_timeSinceLastInteraction < timeBeforePetDevastated)
+            {
+                Happiness = PetHappiness.Devastated;
+            }
+            else
+            {
+                Happiness = PetHappiness.Dead;
+                Kill();
+            }
         }
 
         private void ParentToBase()
@@ -264,13 +292,23 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         public void PlayAnimation()
         {
-            if (_animator)
+            if (!_customPetAnimator && _animator)
             {
                 _animator.SetTrigger("flinch");
+            }
+            else if (_customPetAnimator)
+            {
+                _customPetAnimator.PlayRandomBodyAnim();
+                _customPetAnimator.PlayRandomFaceAnim();
             }
             else
             {
                 LogUtils.LogError(LogArea.MonoPets, "Pet: No animator found, so can't play animation.");
+            }
+
+            if (_audioSource)
+            {
+                _audioSource.Play();
             }
         }
 
@@ -324,6 +362,14 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         public void OnKill()
         {
             IsDead = true;
+            _rigidBody.isKinematic = true;
+            if (_simpleMovement)
+            {
+                _simpleMovement.Stop();
+            }
+
+            Happiness = PetHappiness.Dead;
+
             SubnauticaPetsPlugin.PetSaver.UnregisterPet(this);
             LogUtils.LogDebug(LogArea.MonoPets, $"Picked up the OnKill message in {gameObject.name}");
 
@@ -349,7 +395,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
         private IEnumerator DestroyAfterDelay()
         {
-            yield return new WaitForSeconds(delayBeforeDestroy);
+            yield return new WaitForSeconds(DelayBeforeDestroy);
             Destroy(this.gameObject);
         }
     }

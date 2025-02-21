@@ -150,7 +150,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             killAllConfirmButton.GetComponentInChildren<TextMeshProUGUI>().text = _confirmButtonText;
 
             // Iterate over all pets and kill those in this base
-            foreach (Pet currPet in SubnauticaPetsPlugin.PetSaver.PetList)
+            foreach (Pet currPet in SubnauticaPetsPlugin.PetSaver.PetList.ToArray())
             {
                 // Check to see if the Pet is in the same Base as the Console
                 if (currPet.Base == Base)

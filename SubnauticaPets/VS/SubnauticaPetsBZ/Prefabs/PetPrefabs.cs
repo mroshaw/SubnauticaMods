@@ -56,7 +56,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     PrefabUtils.AddConstructable(obj, Info.TechType, ConstructableFlags.Inside, modelGameObject);
                     obj.DestroyComponentsInChildren<Pickupable>();
                     PrefabConfigUtils.AddPetHandTarget(obj);
-                    PrefabConfigUtilsBelowZero.ConfigureSwimming(obj);
+                    PrefabConfigUtilsPlatform.ConfigureSwimming(obj);
                     PrefabConfigUtils.ConfigureSkyApplier(obj);
                     PrefabConfigUtils.ConfigureAnimator(obj, false);
                     obj.DestroyComponentsInChildren<CreatureDeath>();
@@ -114,7 +114,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     PrefabUtils.AddConstructable(obj, Info.TechType, ConstructableFlags.Inside, modelGameObject);
                     PrefabConfigUtils.UpdatePickupable(obj, false);
                     PrefabConfigUtils.AddPetHandTarget(obj);
-                    PrefabConfigUtilsBelowZero.ConfigureSwimming(obj);
+                    PrefabConfigUtilsPlatform.ConfigureSwimming(obj);
                     PrefabConfigUtils.ConfigureSkyApplier(obj);
                     PrefabConfigUtils.ConfigureAnimator(obj, false);
                     obj.DestroyComponentsInChildren<CreatureDeath>();
@@ -172,7 +172,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     PrefabUtils.AddConstructable(obj, Info.TechType, ConstructableFlags.Inside, modelGameObject);
                     obj.DestroyComponentsInChildren<Pickupable>();
                     PrefabConfigUtils.AddPetHandTarget(obj);
-                    PrefabConfigUtilsBelowZero.ConfigureSwimming(obj);
+                    PrefabConfigUtilsPlatform.ConfigureSwimming(obj);
                     PrefabConfigUtils.ConfigureSkyApplier(obj);
                     PrefabConfigUtils.ConfigureAnimator(obj, false);
                     PrefabConfigUtils.AddPetComponent(obj);
@@ -230,11 +230,11 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     PrefabUtils.AddConstructable(obj, Info.TechType, ConstructableFlags.Inside, modelGameObject);
                     obj.DestroyComponentsInChildren<Pickupable>();
                     PrefabConfigUtils.AddPetHandTarget(obj);
-                    PrefabConfigUtilsBelowZero.ConfigureSwimming(obj);
+                    PrefabConfigUtilsPlatform.ConfigureSwimming(obj);
                     PrefabConfigUtils.ConfigureSkyApplier(obj);
                     PrefabConfigUtils.ConfigureAnimator(obj, false);
-                    PrefabConfigUtilsBelowZero.ConfigureMovement(obj);
-                    PrefabConfigUtilsBelowZero.CleanNavUpMesh(obj);
+                    PrefabConfigUtilsPlatform.ConfigureMovement(obj);
+                    PrefabConfigUtilsPlatform.CleanNavUpMesh(obj);
                     PrefabConfigUtils.AddPetComponent(obj);
                     obj.name = "SnowstalkerBabyPet";
                     LogUtils.LogDebug(LogArea.Prefabs, $"Done modifying {Info.TechType}");
@@ -269,7 +269,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             obj.DestroyComponentsInChildren<Pickupable>();
             // obj.DisableComponentsInChildren<LargeWorldEntity>();
             PrefabConfigUtils.AddPetHandTarget(obj);
-            PrefabConfigUtilsBelowZero.ConfigureSwimming(obj);
+            PrefabConfigUtilsPlatform.ConfigureSwimming(obj);
             PrefabConfigUtils.ConfigureSkyApplier(obj);
             PrefabConfigUtils.ConfigureAnimator(obj, false);
             PrefabConfigUtils.AddPetComponent(obj);

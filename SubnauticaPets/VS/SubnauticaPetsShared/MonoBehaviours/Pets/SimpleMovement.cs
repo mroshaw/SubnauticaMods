@@ -1,39 +1,57 @@
-﻿using UnityEngine;
+﻿using DaftAppleGames.SubnauticaPets.Utils;
+using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace DaftAppleGames.SubnauticaPets.Pets
 {
-
-    /// <summary>
-    /// Very simple movement behaviour for "custom" pets
-    /// </summary>
     internal class SimpleMovement : MonoBehaviour
     {
-        public float IdleCoolDown = 2.0f;
-        public float MoveRadius = 5.0f;
-        public float MoveSpeed = 0.5f;
-        public float MoveSmoothTime = 0.5f;
-        public int MoveProbability = 20;
-        public float IdleTimer = 0.0f;
-        public float ObstacleDetectionRange = 0.5f;
-        public float ObstacleDetectionThreshold = 0.4f;
-        public Transform Eyes;
+        public float idleCoolDown = 2.0f;
+        public float moveRadius = 5.0f;
+        public float moveSpeed = 0.5f;
+        public float dropSpeed = 1.5f;
+        public float rotateSpeed = 5.0f;
+        public float moveSmoothTime = 0.5f;
+        public int moveProbabilty = 20;
+        public float idleTimer = 0.0f;
+        public float obstacleDetectionRange = 0.3f;
+        public float groundDetectionRange = 2.0f;
+        public float groundDetectionOffset = 0.4f;
 
-        private Vector3 _moveTarget;
-        private bool _isMoving = false;
+        public Transform Eyes { get; set; }
 
+        public float minTravelDistance = 2.0f;
+        public float maxTravelDistance = 5.0f;
+        public float minTravelAngle = 30.0f;
+        public float maxTravelAngle = 150.0f;
+
+        [SerializeField] private Vector3 moveTarget;
+        [SerializeField] private bool isMoving = false;
+        [SerializeField] private bool isObstacleDetected = false;
+        [SerializeField] private bool isRotatingFromObstacle = false;
+        [SerializeField] private bool isFalling = false;
+        [SerializeField] private bool isStopped = false;
         private Animator _animator;
-        private Vector3 _moveAnchor;
         private Vector3 _velocity;
+
+        [SerializeField] private float groundHeight;
+
+        // Cached objects to save on garbage
+        private RaycastHit[] _cachedHits = new RaycastHit[10];
+        private Ray _cachedRay = new Ray();
+        private Vector3 _cachedHitPosition;
+        private GameObject _cachedHitGameObject;
 
         /// <summary>
         /// Public setter for IsMoving
         /// </summary>
         public bool IsMoving
         {
-            get => _isMoving;
+            get => isMoving;
             set
             {
-                _isMoving = value;
+                isMoving = value;
                 _animator.SetBool(IsMovingAnimParameter, value);
             }
         }
@@ -43,8 +61,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         // Start is called before the first frame update
         private void Start()
         {
-            // Use spawned position as move anchor
-            _moveAnchor = transform.position;
             _animator = GetComponent<Animator>();
 
             // Set the eyes, if not set already
@@ -62,8 +78,14 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         private void Update()
         {
+
+            if (isStopped)
+            {
+                return;
+            }
+
             // Perform action
-            if (_isMoving)
+            if (isMoving)
             {
                 Move();
             }
@@ -72,11 +94,13 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 Idle();
             }
 
+            HandleFalling();
+
             // Are we ready to move again?
             if (CanMove())
             {
                 // Decide if we want to move
-                if (MakeDecision(MoveProbability))
+                if (MakeDecision(moveProbabilty))
                 {
                     ToMoving();
                 }
@@ -87,10 +111,10 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// Public method to set the target destination
         /// </summary>
         /// <param name="newMoveTarget"></param>
-        public void SetDestination(Vector3 newMoveTarget)
+        internal void SetDestination(Vector3 newMoveTarget)
         {
-            transform.LookAt(new Vector3(newMoveTarget.x, transform.position.y, newMoveTarget.z));
-            _moveTarget = newMoveTarget;
+            moveTarget = newMoveTarget;
+            IsMoving = true;
         }
 
         /// <summary>
@@ -100,13 +124,13 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         private bool CanMove()
         {
             // If we're already moving, not ready to move again
-            if (_isMoving)
+            if (isMoving)
             {
                 return false;
             }
 
             // If idle, check we've idled long enough
-            return (IdleTimer > IdleCoolDown);
+            return (idleTimer > idleCoolDown);
         }
 
         /// <summary>
@@ -125,28 +149,45 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         private void Move()
         {
-            if (!_isMoving)
+            if (!isMoving)
             {
                 return;
             }
 
-            // Move to target
-            Vector3 adjustedMoveTarget = new Vector3(_moveTarget.x, transform.position.y, _moveTarget.z);
-            transform.position = Vector3.SmoothDamp(transform.position, adjustedMoveTarget, ref _velocity, MoveSmoothTime, MoveSpeed);
+            Vector3 adjustedMoveTarget = new Vector3(moveTarget.x, transform.position.y, moveTarget.z);
+
+            // Rotate away from obstacle before moving again
+            if (isObstacleDetected && !isRotatingFromObstacle)
+            {
+                isRotatingFromObstacle = true;
+            }
+
+            if (!isRotatingFromObstacle)
+            {
+                transform.position = Vector3.SmoothDamp(transform.position, adjustedMoveTarget, ref _velocity, moveSmoothTime, moveSpeed);
+            }
+
+            // Rotate to target
+            Vector3 direction = (adjustedMoveTarget - transform.position).normalized;
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
+            }
 
             // See how far we've got left to go
             float distanceToTarget = Vector3.Distance(transform.position, adjustedMoveTarget);
 
             // See if there's anything blocking our way
-            bool isHit = Physics.Raycast(Eyes.position, Eyes.forward, out var hit, 1.0f);
-            if (isHit)
+            isObstacleDetected = CheckForObstacles(out _cachedHitPosition, out _cachedHitGameObject);
+            if (isObstacleDetected && !isRotatingFromObstacle)
             {
-                float obstacleDistance = Vector3.Distance(Eyes.position, hit.point);
-                if (obstacleDistance <= ObstacleDetectionThreshold)
-                {
-                    // LogUtils.LogDebug(LogArea.MonoPets, $"We've hit an object: {hit.collider.gameObject}");
-                    ToIdle();
-                }
+                LogUtils.LogDebug(LogArea.MonoPets, $"We've hit an object: {_cachedHitGameObject.name}");
+                ToIdle();
+            }
+            else
+            {
+                isRotatingFromObstacle = false;
             }
 
             // We've arrived
@@ -161,8 +202,18 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         private void ToIdle()
         {
-            IdleTimer = 0.0f;
+            idleTimer = 0.0f;
             IsMoving = false;
+        }
+
+        internal void Stop()
+        {
+            isStopped = true;
+        }
+
+        internal void Restart()
+        {
+            isStopped = false;
         }
 
         /// <summary>
@@ -171,19 +222,17 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         private void ToMoving()
         {
             // Get target in range
-            Vector2 randomTarget = Random.insideUnitCircle * MoveRadius;
-            Vector3 newTarget = new Vector3(randomTarget.x + _moveAnchor.x, transform.position.y, randomTarget.y + _moveAnchor.z);
-
-            // LogUtils.LogDebug(LogArea.MonoPets, 
-            //    $"SimpleMovement: transform is {transform.position.x}, {transform.position.y}, {transform.position.z}." +
-            //    $"Moving to {newTarget.x}, {newTarget.y}, {newTarget.z}");
-
-            _moveTarget = newTarget;
-
-            // Rotate to target
-            transform.LookAt(newTarget);
+            if (isObstacleDetected)
+            {
+                moveTarget = GetNewTargetPosition(-transform.forward);
+            }
+            else
+            {
+                moveTarget = GetNewTargetPosition(transform.forward);
+            }
 
             IsMoving = true;
+
         }
 
         /// <summary>
@@ -192,7 +241,95 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         private void Idle()
         {
             // Reset the action timer
-            IdleTimer += Time.deltaTime;
+            idleTimer += Time.deltaTime;
+        }
+
+
+        public Vector3 GetNewTargetPosition(Vector3 direction)
+        {
+            // Get a random distance within the defined range
+            float distance = Random.Range(minTravelDistance, maxTravelDistance);
+
+            // Get a random angle within the defined range
+            float angle = Random.Range(minTravelAngle, maxTravelAngle) * Mathf.Deg2Rad;
+
+            // Randomly decide left or right deviation from directly behind
+            float sign = Random.value < 0.5f ? -1f : 1f;
+
+            // Calculate direction relative to the transform
+            Vector3 lateralOffset = Mathf.Sin(angle) * sign * transform.right;
+            Vector3 targetDirection = (direction + lateralOffset).normalized;
+
+            // Compute final position
+            Vector3 newTargetPosition = transform.position + targetDirection * distance;
+            return newTargetPosition;
+        }
+
+        private bool CheckForObstacles(out Vector3 hitPosition, out GameObject hitGameObject)
+        {
+            bool hitObstacle = RaycastColliderCheck(Eyes.transform.position, Eyes.transform.forward, obstacleDetectionRange, out hitPosition, out hitGameObject);
+            return hitObstacle;
+        }
+
+        private void CheckForGround()
+        {
+            Vector3 rayOrigin = transform.position + (transform.forward * -1 * groundDetectionOffset);
+
+            if (RaycastColliderCheck(Eyes.transform.position + (Eyes.transform.forward * -1 * groundDetectionOffset), transform.up * -1, groundDetectionRange, out _cachedHitPosition, out _cachedHitGameObject))
+            {
+                // LogUtils.LogDebug(LogArea.MonoPets, $"Ground detected: {_cachedHitGameObject}");
+                groundHeight = _cachedHitPosition.y;
+            }
+        }
+
+        private void HandleFalling()
+        {
+            CheckForGround();
+            isFalling = (Math.Abs(transform.position.y - groundHeight) >= 0.00001);
+            // _isFalling = _groundHeight < transform.position.y;
+
+            if (isFalling)
+            {
+                Vector3 adjustedMoveTarget = new Vector3(transform.position.x, groundHeight, transform.position.z);
+                transform.position = Vector3.SmoothDamp(transform.position, adjustedMoveTarget, ref _velocity, moveSmoothTime, dropSpeed);
+            }
+        }
+
+        private bool RaycastColliderCheck(Vector3 origin, Vector3 direction, float maxDistance, out Vector3 hitPosition, out GameObject hitGameObject)
+        {
+            _cachedRay.direction = direction;
+            _cachedRay.origin = origin;
+
+            Debug.DrawLine(origin, origin + direction * maxDistance);
+
+            int numHits = Physics.RaycastNonAlloc(_cachedRay, _cachedHits, maxDistance);
+
+            if (numHits > 0)
+            {
+                int closestHitIndex = 0;
+                float closestHitDistance = float.MaxValue;
+
+                for (int curHit = 0; curHit < numHits; curHit++)
+                {
+                    // Check we haven't hit ourselves
+                    if ((!_cachedHits[curHit].collider.transform.parent) || (_cachedHits[curHit].collider.transform.parent && _cachedHits[curHit].collider.transform.parent.gameObject != gameObject))
+                    {
+                        float hitDistance = Vector3.Distance(transform.position, _cachedHits[curHit].point);
+                        if (hitDistance < closestHitDistance)
+                        {
+                            closestHitDistance = hitDistance;
+                            closestHitIndex = curHit;
+                        }
+                    }
+                }
+                hitPosition = _cachedHits[closestHitIndex].point;
+                hitGameObject = _cachedHits[closestHitIndex].collider.gameObject;
+                return true;
+            }
+
+            hitPosition = Vector3.zero;
+            hitGameObject = null;
+            return false;
         }
     }
 }

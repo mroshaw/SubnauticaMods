@@ -24,6 +24,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         public static void AddPetComponent(GameObject targetGameObject)
         {
             Pet pet = targetGameObject.EnsureComponent<Pet>();
+            CustomPetAnimator customPetAnimator = targetGameObject.EnsureComponent<CustomPetAnimator>();
         }
 
         public static void ConfigureLargeWorldEntity(GameObject targetGameObject, bool state)
@@ -197,7 +198,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             if (movement == null)
             {
                 movement = targetGameObject.AddComponent<SimpleMovement>();
-                movement.MoveSpeed = 1.0f;
+                movement.moveSpeed = 1.0f;
             }
             LogUtils.LogDebug(LogArea.PetConfigUtils, "AddSimpleMovement done.");
         }

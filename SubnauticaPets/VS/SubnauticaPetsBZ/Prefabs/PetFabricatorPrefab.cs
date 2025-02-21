@@ -13,12 +13,12 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
     internal static class PetFabricatorPrefab
     {
         // Pubic PrefabInfo, for anything that needs it
-        public static PrefabInfo Info;
+        internal static PrefabInfo Info;
 
         /// <summary>
         /// Makes the new Pet Fabricator available for use.
         /// </summary>
-        public static void Register()
+        internal static void Register()
         {
             // Unlock at start if in Creative mode
             Info = PrefabInfo
@@ -34,8 +34,21 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                 .AddCraftNode(PetPrefabs.SnowstalkerBabyPrefab.Info.TechType)
                 .AddCraftNode(PetPrefabs.TrivalveBluePrefab.Info.TechType)
                 .AddCraftNode(PetPrefabs.TrivalveYellowPrefab.Info.TechType)
-                ;
+            ;
 
+            // If enabled, add the "bonus pets" to the fabricator
+            if (SubnauticaPetsPlugin.ModConfig.EnableBonusPets)
+            {
+                fabGadget
+
+                .AddCraftNode(CustomPetPrefabs.CatPetPrefab.Info.TechType)
+                .AddCraftNode(CustomPetPrefabs.DogPetPrefab.Info.TechType)
+                .AddCraftNode(CustomPetPrefabs.RabbitPetPrefab.Info.TechType)
+                .AddCraftNode(CustomPetPrefabs.SealPetPrefab.Info.TechType)
+                .AddCraftNode(CustomPetPrefabs.WalrusPetPrefab.Info.TechType)
+                .AddCraftNode(CustomPetPrefabs.FoxPetPrefab.Info.TechType)
+                ;
+            }
             FabricatorTemplate fabPrefab = new FabricatorTemplate(Info, treeType)
             {
                 FabricatorModel = FabricatorTemplate.Model.Workbench,

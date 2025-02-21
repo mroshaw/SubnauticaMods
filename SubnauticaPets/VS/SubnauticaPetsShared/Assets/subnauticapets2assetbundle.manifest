@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2417891952
+CRC: 856396265
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1c4bcfaf771cada8461f6e7d6f88723e
+    Hash: b258850960edff5ade361748a38b273a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 694eecc3527bf5486979582e4a3c54a0
+    Hash: 3c9387a2f51bfff280832f33855a65f7
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -28,6 +28,10 @@ ClassTypes:
 - Class: 54
   Script: {instanceID: 0}
 - Class: 74
+  Script: {instanceID: 0}
+- Class: 82
+  Script: {instanceID: 0}
+- Class: 83
   Script: {instanceID: 0}
 - Class: 90
   Script: {instanceID: 0}
@@ -63,9 +67,13 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 128
   Script: {instanceID: 0}
+- Class: 135
+  Script: {instanceID: 0}
 - Class: 136
   Script: {instanceID: 0}
 - Class: 137
+  Script: {instanceID: 0}
+- Class: 205
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
@@ -79,47 +87,108 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/SubnauticaPets2/Textures/Pet Fabriactor/Icon/RabbitTexture.png
+- Assets/SubnauticaPets2/Textures/Pet Fabriactor/Icon/WalrusTexture.png
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Subnautica/AlienRobotTexture.png
 - Assets/SubnauticaPets2/Textures/Pet Fabriactor/Databank Textures/PetFabricatorDataBankMainImageTexture.png
-- Assets/SubnauticaPets2/Prefabs/PetCat.prefab
+- Assets/SubnauticaPets2/Animations/PetWalrus/Walrus_Animations.fbx
+- Assets/SubnauticaPets2/Prefabs/Pets/PetCat.prefab
+- Assets/SubnauticaPets2/Textures/Pet Fabriactor/Icon/DogTexture.png
+- Assets/SubnauticaPets2/Textures/Pet Fabriactor/Icon/SealTexture.png
 - Assets/SubnauticaPets2/Textures/Pet DNA/Databank Textures/PetDnaDataBankPopupImageTexture
   .png
 - Assets/SubnauticaPets2/Textures/Pet Console/Mesh Texture/PetConsoleTexture.png
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Models/Walrus_LOD0.fbx
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Models/Cat_LOD2.fbx
 - Assets/SubnauticaPets2/Prefabs/DNASampleTube_OLD.prefab
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/PengwingAdultTexture.png
+- Assets/SubnauticaPets2/Prefabs/CatPetAudio.prefab
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Models/Cat_LOD3.fbx
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Models/ArcticFox_LOD2.fbx
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Models/Cat_LOD0.fbx
 - Assets/SubnauticaPets2/Prefabs/PetConsoleDamaged.prefab
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Models/Rabbit_LOD1.fbx
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Models/Walrus_LOD2.fbx
+- Assets/SubnauticaPets2/Prefabs/Pets/PetSeal.prefab
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/TrivalveYellowDnaStrandTexture.png
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Textures/T_ArcticFox.png
+- Assets/SubnauticaPets2/Animations/PetRabbit/Rabbit_Animations.fbx
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Subnautica/AlienRobotDnaStrandTexture.png
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/PenglingBabyTexture.png
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Models/Dog_LOD2.fbx
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Models/Rabbit_LOD2.fbx
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Materials/M_SeaLion.mat
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Models/ArcticFox_LOD3.fbx
 - Assets/SubnauticaPets2/Textures/Pet Fabriactor/Databank Textures/PetFabricatorDataBankPopupImageTexture.png
 - Assets/SubnauticaPets2/Textures/Pet Console/Databank Textures/PetConsoleDataBankPopupImageTexture.png
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Subnautica/CrabSquidTexture.png
+- Assets/SubnauticaPets2/Animations/PetDog/Dog_Animations.fbx
+- Assets/SubnauticaPets2/Audio/CatMeow.wav
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/PinnacaridTexture.png
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Textures/T_SeaLion.png
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Models/SeaLion_LOD2.fbx
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/PinnacaridDnaStrandTexture.png
 - Assets/SubnauticaPets2/Prefabs/AboutCanvas.prefab
+- Assets/SubnauticaPets2/Animations/PetFox/ArcticFox_Animations.fbx
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Textures/T_Cat.png
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Models/ArcticFox_LOD0.fbx
+- Assets/SubnauticaPets2/Animations/PetDog/Pet Dog Animator.controller
+- Assets/SubnauticaPets2/Animations/PetCat/Pet Cat Animator.controller
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Custom/CatDnaStrandTexture.png
 - Assets/SubnauticaPets2/Textures/Pet Fabriactor/Icon/PetFabricatorIconTexture.png
+- Assets/SubnauticaPets2/Animations/PetRabbit/Pet Rabbit Animator.controller
+- Assets/SubnauticaPets2/Textures/Pet Fabriactor/Icon/FoxTexture.png
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Models/Rabbit_LOD3.fbx
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/PenglingBabyDnaStrandTexture.png
+- Assets/SubnauticaPets2/Animations/PetWalrus/Pet Walrus Animator.controller
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Models/Dog_LOD0.fbx
 - Assets/SubnauticaPets2/Prefabs/DNASampleTube.prefab
+- Assets/SubnauticaPets2/Prefabs/Pets/PetWalrus.prefab
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Models/SeaLion_LOD1.fbx
 - Assets/SubnauticaPets2/Textures/UI/ButtonBackgroundTexture.png
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Models/Cat_LOD1.fbx
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Subnautica/BloodCrawlerDnaStrandTexture.png
 - Assets/SubnauticaPets2/Textures/Pet Fabriactor/Mesh Texture/PetFabricatorTexture.png
 - Assets/SubnauticaPets2/Textures/Pet Console/Icon/PetConsoleIconTexture.png
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Materials/M_Dog.mat
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Models/Dog_LOD1.fbx
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Subnautica/CaveCrawlerTexture.png
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Materials/M_Rabbit.mat
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Models/Dog_LOD3.fbx
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/TrivalveBlueDnaStrandTexture.png
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/SnowstalkerBabyTexture.png
+- Assets/SubnauticaPets2/Audio/RabbitSqueak.wav
+- Assets/SubnauticaPets2/Animations/PetFox/Pet Fox Animator.controller
 - Assets/SubnauticaPets2/Prefabs/ScrollView.prefab
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Subnautica/BloodCrawlerTexture.png
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Models/ArcticFox_LOD1.fbx
+- Assets/SubnauticaPets2/Animations/PetSeal/SeaLion_Animations.fbx
+- Assets/SubnauticaPets2/Animations/PetSeal/Pet Seal Animator.controller
 - Assets/SubnauticaPets2/Textures/Pet DNA/Databank Textures/PetDnaDataBankMainImageTexture.png
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Subnautica/CaveCrawlerDnaStrandTexture.png
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Models/Walrus_LOD1.fbx
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/PengwingAdultDnaStrandTexture.png
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Subnautica/CrabSquidDnaStrandTexture.png
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Materials/M_Walrus.mat
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Models/Rabbit_LOD0.fbx
 - Assets/SubnauticaPets2/Textures/Pet Console/Icon/PetConsoleRotatingIconTexture.png
+- Assets/SubnauticaPets2/Audio/DogBark.wav
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/TrivalveBlueTexture.png
+- Assets/SubnauticaPets2/Prefabs/Pets/PetRabbit.prefab
 - Assets/SubnauticaPets2/Textures/UI/CustomButtonTexture.png
+- Assets/SubnauticaPets2/Animations/PetCat/Cat_Animations.fbx
 - Assets/SubnauticaPets2/Textures/Pet Fabriactor/Mesh Texture/PetFabricatorDamagedTexture.png
+- Assets/SubnauticaPets2/Prefabs/Pets/PetFox.prefab
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Models/SeaLion_LOD0.fbx
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Pets Vol.1/Materials/M_Cat.mat
 - Assets/SubnauticaPets2/Textures/Pet Console/Databank Textures/PetConsoleDataBankMainImageTexture.png
+- Assets/SubnauticaPets2/Prefabs/Pets/PetDog.prefab
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Forest Vol.1/Animations/Fox_Animations.fbx
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Textures/T_Walrus.png
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/SnowstalkerBabyDnaStrandTexture.png
 - Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Below Zero/TrivalveYellowTexture.png
-- Assets/SubnauticaPets2/Textures/Pet DNA/Icon/Icons Custom/CatTexture.png
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Models/SeaLion_LOD3.fbx
+- Assets/SubnauticaPets2/Textures/Pet Fabriactor/Icon/CatTexture.png
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Materials/M_ArcticFox.mat
+- Assets/Quirky Series Ultimate/Quirky Series Vol.1/Arctic Vol.1/Models/Walrus_LOD3.fbx
 Dependencies: []

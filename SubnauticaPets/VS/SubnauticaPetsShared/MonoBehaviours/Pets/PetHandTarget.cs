@@ -80,7 +80,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
             LogUtils.LogDebug(LogArea.MonoPets, "PetHandTarget: In OnHandClick");
 
-            if (!hand.IsFreeToInteract())
+            if (!hand.IsFreeToInteract() || _pet.IsDead)
             {
                 return;
             }

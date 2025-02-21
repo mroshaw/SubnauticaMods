@@ -105,6 +105,8 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             {
                 LogUtils.LogError(LogArea.MonoBaseParts, "PetFabricator: Spawned Pet has no Pet component!");
             }
+            // Rotate to face the player
+            newPetGameObject.transform.LookAt(Player.main.transform.position);
             newPetGameObject.SetActive(true);
             newPet.LoadPetData();
         }

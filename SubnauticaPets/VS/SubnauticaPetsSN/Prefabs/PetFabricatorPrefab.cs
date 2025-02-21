@@ -33,6 +33,20 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                 .AddCraftNode(PetPrefabs.CaveCrawlerPrefab.Info.TechType)
                 .AddCraftNode(PetPrefabs.CrabSquidPrefab.Info.TechType);
 
+            // If enabled, add the "bonus pets" to the fabricator
+            if (SubnauticaPetsPlugin.ModConfig.EnableBonusPets)
+            {
+                fabGadget
+
+                .AddCraftNode(CustomPetPrefabs.CatPetPrefab.Info.TechType)
+                .AddCraftNode(CustomPetPrefabs.DogPetPrefab.Info.TechType)
+                .AddCraftNode(CustomPetPrefabs.RabbitPetPrefab.Info.TechType)
+                .AddCraftNode(CustomPetPrefabs.SealPetPrefab.Info.TechType)
+                .AddCraftNode(CustomPetPrefabs.WalrusPetPrefab.Info.TechType)
+                .AddCraftNode(CustomPetPrefabs.FoxPetPrefab.Info.TechType)
+                ;
+            }
+
             FabricatorTemplate fabPrefab = new FabricatorTemplate(Info, treeType)
             {
                 FabricatorModel = FabricatorTemplate.Model.Workbench,

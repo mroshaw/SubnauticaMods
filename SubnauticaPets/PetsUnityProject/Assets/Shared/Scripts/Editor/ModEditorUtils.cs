@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
-using System.IO;
-using PlasticGui;
-using Debug = UnityEngine.Debug;
 
 namespace DaftAppleGames.SubnauticaModsProject.Editor
 {
     public static class ModEditorUtils
     {
-        private const string ModFolder = "E:\\Dev\\DAG\\SubnauticaPets\\VisualStudioSolution\\SubnauticaPetsShared\\Assets";
+        private const string ModFolder = "E:\\Dev\\DAG\\Subnautica Mods\\SubnauticaPets\\VS\\SubnauticaPetsShared\\Assets";
         private const string BundleAssetFolder = "Assets/AssetBundles";
 
         public static void BuildAssetBundle(string bundleName, string modProjectFolderName)

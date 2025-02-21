@@ -19,11 +19,19 @@ namespace DaftAppleGames.SubnauticaPets
         private const string AboutGameObjectName = "AboutCanvas";
         private static GameObject AboutGameObject = null;
 
+
         /// <summary>
-        /// For initial release, the "Cat Pet" can be enabled for testing purposes.
+        /// Used to enable the "bonus pets" (cat, dog, seal, etc)
         /// </summary>
-        // [Toggle("Enable Cat Pet (requires restart)")][Tooltip("The pet cat is EXPERIMENTAL! Use at your own risk! Miaow!")] public bool EnableCat = false;
-        [Toggle("Detailed logging")][Tooltip("Use this to produce a detailed log when reporting bugs.")] public bool DetailedLogging = false;
+        [Toggle("Enable Bonus Pets (Restart Required)")]
+        public bool EnableBonusPets = true;
+
+        /// <summary>
+        /// Enable detailed logging
+        /// </summary>
+        [Toggle("Detailed logging")]
+        [Tooltip("Use this to produce a detailed log when reporting bugs.")]
+        public bool DetailedLogging = false;
 
         /// <summary>
         /// Allows the player to select "Adventure" mode, where they must find parts and DNA samples, cloning pets costs DNA.
@@ -40,6 +48,7 @@ namespace DaftAppleGames.SubnauticaPets
         {
             InitAboutUi();
             AboutGameObject.SetActive(true);
+            AboutGameObject.GetComponentInChildren<AudioSource>().Play();
         }
 
         /// <summary>
@@ -52,6 +61,8 @@ namespace DaftAppleGames.SubnauticaPets
                 AboutGameObject = ModUtils.GetGameObjectInstanceFromAssetBundle(AboutGameObjectName, true);
                 AboutGameObject.AddComponent<CloseOnAnyInput>();
                 AboutGameObject.AddComponent<ApplySnFont>();
+                Vector2 newSizeDelta = new Vector2(-1000, -400);
+                AboutGameObject.GetComponentInChildren<CanvasRenderer>(true).GetComponent<RectTransform>().sizeDelta = newSizeDelta;
             }
         }
     }
