@@ -14,6 +14,10 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         [HarmonyPostfix]
         public static void IsValidPlatform_Postfix(GroundMotor __instance, GameObject go, ref bool __result)
         {
+            if (!go.transform.parent)
+            {
+                return;
+            }
             if (go.transform.parent.TryGetComponent<Pet>(out Pet pet))
             {
                 __result = false;
