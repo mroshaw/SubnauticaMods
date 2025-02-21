@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using static DaftAppleGames.SeaglideSpeedMod_BZ.SeaglideSpeedModPluginBz;
 
 namespace DaftAppleGames.SeaglideSpeedMod_BZ
 {
@@ -21,17 +22,7 @@ namespace DaftAppleGames.SeaglideSpeedMod_BZ
             [HarmonyPostfix]
             public static void Start_Postfix(Seaglide __instance)
             {
-                SeaglideSpeedModPluginBz.Log.LogInfo($"Seaglide_Start: ({__instance.name})");
-
-                // Get current modifier
-                float forceModifier = SeaglideSpeedModPluginBz.SeaglideModifier.Value;
-
-                // Add to our list of instances to allow ad-hoc changes to the config settings
-                SeaglideHistoryItem newSeaGlide = new SeaglideHistoryItem(__instance);
-                SeaglideSpeedModPluginBz.SeaglideHistory.Add(newSeaGlide);
-
-                // Update the Seaglide force
-                SeaglideUtils.UpdateSeaglide(__instance, forceModifier);
+                SeaglideHistory.AddSeaglide(__instance);
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace DaftAppleGames.SeaglideSpeedMod_BZ
+﻿using static DaftAppleGames.SeaglideSpeedMod_BZ.SeaglideSpeedModPluginBz;
+
+namespace DaftAppleGames.SeaglideSpeedMod_BZ
 {
     /// <summary>
     /// Class to allow us to maintain a list of patches Seaglides
@@ -6,28 +8,29 @@
     internal class SeaglideHistoryItem
     {
         // Public properties
-        public Seaglide SeaglideInstance;
-        public float SeaglideForce;
+        private readonly Seaglide _seaglideInstance;
+        private readonly float _originalSeaglideForce;
+
+        internal Seaglide SeaglideInstance => _seaglideInstance;
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="seaglideInstance"></param>
-        /// <param name="seaglideForce"></param>
-        public SeaglideHistoryItem(Seaglide seaglideInstance, float seaglideForce)
+        public SeaglideHistoryItem(Seaglide seaglideInstance)
         {
-            SeaglideInstance = seaglideInstance;
-            SeaglideForce = seaglideForce;
+            _seaglideInstance = seaglideInstance;
+            _originalSeaglideForce = seaglideInstance.powerGlideForce;
+
+            ApplySpeedMultiplier(ConfigFile.SpeedBoostMultiplier);
         }
 
         /// <summary>
-        /// Constructor with implicit force from instance
+        /// Apply a multiplier to the seaglide speed
         /// </summary>
-        /// <param name="seaglideInstance"></param>
-        public SeaglideHistoryItem(Seaglide seaglideInstance)
+        internal void ApplySpeedMultiplier(float multiplier)
         {
-            SeaglideInstance = seaglideInstance;
-            SeaglideForce = seaglideInstance.powerGlideForce;
+            _seaglideInstance.powerGlideForce = _originalSeaglideForce * multiplier;
+            Log.LogInfo($"Updated Seaglide. Force multiplier: {multiplier}, from: {_originalSeaglideForce} to: {_originalSeaglideForce * multiplier}");
         }
     }
 }
