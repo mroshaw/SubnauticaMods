@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static DaftAppleGames.CuddlefishRecall_SN.CuddlefishRecallPlugin;
 
 namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
 {
@@ -10,7 +11,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
         /// <summary>
         /// Initialise the component
         /// </summary>
-        public void Start()
+        private void Start()
         {
             _liveMixin = GetComponent<LiveMixin>();
         }
@@ -18,7 +19,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
         /// <summary>
         /// Slowly regenerate health over time
         /// </summary>
-        public void Update()
+        private void Update()
         {
             IncreaseHealth();
         }
@@ -28,7 +29,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
         /// </summary>
         private void IncreaseHealth()
         {
-            _liveMixin.AddHealth(CuddlefishRecallPlugin.HealthRegenModifier.Value);
+            _liveMixin.AddHealth(ConfigFile.HealthRegenModifier);
         }
     }
 }

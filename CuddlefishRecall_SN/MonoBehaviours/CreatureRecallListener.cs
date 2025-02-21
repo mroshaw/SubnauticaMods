@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using static DaftAppleGames.CuddlefishRecall_SN.CuddlefishRecallPlugin;
 
 namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
 {
@@ -12,29 +13,28 @@ namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
         private SwimRandom _swimRandom;
 
         // Parameters for the "Swim To" function
-        private Vector3 _currentTarget;
         private bool _isBeingRecalled = false;
 
         /// <summary>
         /// Initialise the component
         /// </summary>
-        public void Start()
+        private void Start()
         {
-            CuddlefishRecallPlugin.Log.LogDebug("Finding SwimBehaviour...");
+            Log.LogDebug("Finding SwimBehaviour...");
             _swimBehaviour = GetComponent<SwimBehaviour>();
             _swimRandom = GetComponent<SwimRandom>();
-
         }
 
         /// <summary>
         /// Used to call the SwimTo behaviour, if enabled
         /// </summary>
-        public void Update()
+        private void Update()
         {
             if (!_isBeingRecalled)
             {
                 return;
             }
+
             // Check to see if we've arrived
             if (Vector3.Distance(transform.position, Player.main.transform.position) < 2.0f)
             {
@@ -44,21 +44,20 @@ namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
             }
 
             // Swim to target
-            _swimBehaviour.SwimTo(Player.main.transform.position, CuddlefishRecallPlugin.RecallSwimVelocity.Value);
+            _swimBehaviour.SwimTo(Player.main.transform.position, ConfigFile.RecallSwimVelocity);
         }
 
         /// <summary>
         /// Public method to recall the creature to the target transform
         /// </summary>
-        /// <param name="targetPosition"></param>
-        public void RecallCreature(float buffer)
+        internal void RecallCreature(float buffer)
         {
             // Teleport method
-            if (CuddlefishRecallPlugin.RecallMethod.Value == RecallMoveMethod.Teleport)
+            if (ConfigFile.RecallMoveMethod == RecallMoveMethod.Teleport)
             {
                 Vector3 targetPosition = Player.main.transform.position + (Vector3.forward * buffer);
                 CuddlefishRecallPlugin.Log.LogDebug($"Teleporting GameObject to: {targetPosition}");
- 
+
                 if (Player.main.GetBiomeString().StartsWith("precursor", StringComparison.OrdinalIgnoreCase))
                 {
                     ErrorMessage.AddMessage(CantRecallMessage);
@@ -81,7 +80,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
             }
 
             // Swim to method
-            if (CuddlefishRecallPlugin.RecallMethod.Value == RecallMoveMethod.SwimTo)
+            if (CuddlefishRecallPlugin.ConfigFile.RecallMoveMethod == RecallMoveMethod.SwimTo)
             {
                 CuddlefishRecallPlugin.Log.LogDebug($"Swimming to Player position");
                 _isBeingRecalled = true;

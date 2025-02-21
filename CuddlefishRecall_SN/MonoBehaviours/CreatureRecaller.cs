@@ -9,11 +9,6 @@ namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
     {
         private CreatureRecallListener[] _allCreatureRecallListeners;
 
-        public void Start()
-        {
-
-        }
-
         /// <summary>
         /// Refresh the list of Recall Listeners
         /// </summary>
@@ -27,7 +22,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
         /// <summary>
         /// Public method to recall all Listeners to current transform location
         /// </summary>
-        public void RecallAllCreatures()
+        internal void RecallAllCreatures()
         {
             RefreshCreatureRecallListeners();
             CuddlefishRecallPlugin.Log.LogDebug($"Recalling all RecallCreatureListeners ({_allCreatureRecallListeners.Length})");
