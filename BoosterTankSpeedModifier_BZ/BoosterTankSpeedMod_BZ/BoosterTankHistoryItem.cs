@@ -14,7 +14,6 @@ namespace DaftAppleGames.BoosterTankSpeedMod_BZ
         private readonly float _originalOxygenConsumption;
 
         internal SuitBoosterTank BoosterInstance => _boosterInstance;
-
         /// <summary>
         /// Default constructor
         /// </summary>

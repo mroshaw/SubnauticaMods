@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <LangVersion>9</LangVersion>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -225,11 +226,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir "E:\Games\Steam\steamapps\common\Subnautica\BepInEx\plugins\$(TargetName)"
-mkdir "E:\Games\Steam\steamapps\common\Subnautica\BepInEx\plugins\$(TargetName)\Assets"
-mkdir "E:\Games\Steam\steamapps\common\Subnautica\BepInEx\plugins\$(TargetName)\Localization"
-xcopy /q/y/i "$(TargetPath)" "E:\Games\Steam\steamapps\common\Subnautica\BepInEx\plugins\$(TargetName)" /E /H /C
-xcopy /q/y/i "$(TargetDir)\Assets" "E:\Games\Steam\steamapps\common\Subnautica\BepInEx\plugins\$(TargetName)\Assets\*.*" /E /H /C
-xcopy /q/y/i "$(TargetDir)\Localization" "E:\Games\Steam\steamapps\common\Subnautica\BepInEx\plugins\$(TargetName)\Localization\*.*" /E /H /C</PostBuildEvent>
+    <PostBuildEvent>"E:\Dev\DAG\Subnautica Mods\DeployTools\deploypets.bat" SN "$(TargetName)" "$(TargetPath)" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

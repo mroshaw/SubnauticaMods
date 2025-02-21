@@ -98,7 +98,6 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir "E:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\plugins\$(TargetName)"
-xcopy /q/y/i "$(TargetPath)" "E:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\plugins\$(TargetName)" /E /H /C</PostBuildEvent>
+    <PostBuildEvent>"E:\Dev\DAG\Subnautica Mods\DeployTools\deploy.bat" BZ "$(TargetName)" "$(TargetPath)" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
