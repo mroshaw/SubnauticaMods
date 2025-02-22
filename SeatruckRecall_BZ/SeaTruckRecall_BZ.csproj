@@ -16,11 +16,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,14 +36,17 @@
     <Reference Include="0Harmony">
       <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass_publicized">
-      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\publicized_assemblies\Assembly-CSharp-firstpass_publicized.dll</HintPath>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\..\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp_publicized">
-      <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll</HintPath>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\..\..\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\publicized_assemblies\Assembly-CSharp-firstpass_publicized.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
       <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\core\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="Nautilus">
+      <HintPath>..\..\..\..\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\plugins\Nautilus\Nautilus.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -76,26 +80,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoPilot\AutoPilots.cs" />
     <Compile Include="AutoPilot\SeaTruckAutoPilot.cs" />
+    <Compile Include="Config\ModConfigFile.cs" />
+    <Compile Include="DockRecaller\DockRecallers.cs" />
+    <Compile Include="DockRecaller\SeaTruckDockRecallerUi.cs" />
+    <Compile Include="Navigation\NavMovement.cs" />
     <Compile Include="Navigation\TeleportNavMovement.cs" />
     <Compile Include="Navigation\TransformNavMovement.cs" />
     <Compile Include="Navigation\Waypoint.cs" />
     <Compile Include="Navigation\WaypointNavigation.cs" />
     <Compile Include="DockRecaller\SeaTruckDockRecaller.cs" />
-    <Compile Include="DockRecaller\Ui\SeaTruckDockRecallerUi.cs" />
     <Compile Include="AutoPilot\BaseAutoPilot.cs" />
-    <Compile Include="Navigation\BaseNavMovement.cs" />
-    <Compile Include="Navigation\INavMovement.cs" />
     <Compile Include="Navigation\RigidbodyNavMovement.cs" />
-    <Compile Include="Common\Utils\GlobalUtils.cs" />
     <Compile Include="Patches\MoonpoolExpansionManagerPatches.cs" />
     <Compile Include="Patches\SeaTruckSegmentPatches.cs" />
     <Compile Include="SeaTruckDockRecallPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\ModUtils.cs" />
-    <Compile Include="Common\Ui\UiUtils.cs" />
+    <Compile Include="Utils\GlobalUtils.cs" />
+    <Compile Include="Utils\UiUtils.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Common\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"E:\Dev\DAG\Subnautica Mods\DeployTools\deploy.bat" BZ "$(TargetName)" "$(TargetPath)" "$(TargetDir)"</PostBuildEvent>

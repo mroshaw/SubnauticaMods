@@ -1,6 +1,4 @@
-﻿using Plugin = DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
-
-namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
+﻿namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
 {
     /// <summary>
     /// MonoBehavior implementing SeaTruck specific AutoPilot behavior
@@ -8,9 +6,5 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
     /// </summary>
     internal class SeaTruckAutoPilot : BaseAutoPilot
     {
-        internal override void Start()
-        {
-            base.Start();
-        }
     }
 }

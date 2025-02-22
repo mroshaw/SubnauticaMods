@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using DaftAppleGames.Common.Ui;
-using DaftAppleGames.Common.Utils;
 using DaftAppleGames.SeatruckRecall_BZ.AutoPilot;
 using DaftAppleGames.SeatruckRecall_BZ.Navigation;
+using DaftAppleGames.SeatruckRecall_BZ.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Plugin = DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
+using static DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller.Ui
 {
@@ -75,31 +74,30 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller.Ui
         // SeatruckRecaller component
         private SeaTruckDockRecaller _seatruckRecaller;
 
-        /// <summary>
-        /// Initialise the component
-        /// </summary>
-        internal void Start()
+        private void OnEnable()
         {
             _seatruckRecaller = GetComponentInParent<SeaTruckDockRecaller>();
-            if (!_seatruckRecaller)
-            {
-                Plugin.Log.LogDebug("Couldn't find SeaTruckRecaller component?!");
-            }
 
+            // Subscribe to recaller status update
+            _seatruckRecaller.OnDockingStateChanged.AddListener(DockStateChangedHandler);
+            _seatruckRecaller.OnAutoPilotStateChanged.AddListener(AutoPilotStateChangedHandler);
+            _seatruckRecaller.OnDockingWaypointChanged.AddListener(WaypointChangedHandler);
+        }
+
+        private void OnDisable()
+        {
+            _seatruckRecaller.OnDockingStateChanged.RemoveListener(DockStateChangedHandler);
+            _seatruckRecaller.OnAutoPilotStateChanged.RemoveListener(AutoPilotStateChangedHandler);
+            _seatruckRecaller.OnDockingWaypointChanged.RemoveListener(WaypointChangedHandler);
+        }
+
+        private void Awake()
+        {
             _expansionTerminal = GetComponent<MoonpoolExpansionTerminal>();
-            if (!_expansionTerminal)
-            {
-                Plugin.Log.LogDebug("Couldn't find ExpansionTerminal component?!");
-            }
-
             _editScreenGo = GlobalUtils.GetNamedGameObject(gameObject, "EditScreen");
             _activeScreenGo = GlobalUtils.GetNamedGameObject(_editScreenGo, "Active");
             _inactiveScreenGo = GlobalUtils.GetNamedGameObject(_editScreenGo, "Inactive");
-
             CreateUi();
-
-            // Subscribe to recaller status update
-            _seatruckRecaller.OnRecallStateChanged.AddListener(UpdateStatusHandler);
         }
 
         /// <summary>
@@ -107,7 +105,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller.Ui
         /// </summary>
         private void CreateUi()
         {
-            Plugin.Log.LogDebug("Creating UI...");
+            Log.LogDebug("SeaTruckDockRecallerUi: Creating UI...");
 
             // Get the InfoPanel so we can parent things nice
             TextMeshProUGUI infoPanel = _expansionTerminal.infoPanel;
@@ -132,12 +130,12 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller.Ui
             UiUtils.CloneButton(existingButton, _inactiveScreenGo.transform, "AbortButton", AbortButtonDisplayText,
                 250.0f, 20.0f, 3, out _abortRecallButtonGo, out _abortRecallButton);
 
-            Plugin.Log.LogDebug("Setting up button handlers...");
+            Log.LogDebug("SeaTruckDockRecallerUi: Setting up button handlers...");
             _recallButton.onClick.AddListener(RecallButtonHandler);
             _recallButtonGo.SetActive(true);
             _abortRecallButton.onClick.AddListener(AbortButtonHandler);
             _abortRecallButtonGo.SetActive(false);
-            Plugin.Log.LogDebug("Button handler setup complete!");
+            Log.LogDebug("SeaTruckDockRecallerUi: Button handler setup complete!");
         }
 
 
@@ -164,7 +162,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller.Ui
         /// </summary>
         private void RecallButtonHandler()
         {
-            Plugin.Log.LogDebug("Recall button clicked!");
+            Log.LogDebug("SeaTruckDockRecallerUi: Recall button clicked!");
             _seatruckRecaller.RecallClosestSeatruck();
         }
 
@@ -173,36 +171,15 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller.Ui
         /// </summary>
         private void AbortButtonHandler()
         {
-            Plugin.Log.LogDebug("Abort button clicked!");
+            Log.LogDebug("SeaTruckDockRecallerUi: Abort button clicked!");
             _seatruckRecaller.AbortRecall();
         }
 
-        /// <summary>
-        /// Handle the Recall status updates in the GUI
-        /// </summary>
-        /// <param name="dockRecallState"></param>
-        private void UpdateStatusHandler(DockRecallState dockRecallState, AutoPilotState autoPilotState, Waypoint waypoint)
+        private void DockStateChangedHandler(DockRecallState dockRecallState)
         {
             // Update the UI
-            if (waypoint != null)
-            {
-                Plugin.Log.LogDebug($"Updating UI...: {dockRecallState.ToString()}, {autoPilotState.ToString()}, {waypoint.Name}");
-            }
-            else
-            {
-                Plugin.Log.LogDebug($"Updating UI...: {dockRecallState.ToString()}, {autoPilotState.ToString()}");
-            }
-
+            Log.LogDebug($"SeaTruckDockRecallerUi: Updating UI with DockRecallState: {dockRecallState.ToString()}");
             _dockingStatusText.text = $"{RecallDisplayText}{_dockRecallDisplayStateTextDict[dockRecallState]}";
-            _autoPilotStatusText.text = $"{AutoPilotDisplayText}{_autoPilotStateDisplayTextDict[autoPilotState]}";
-            if (waypoint != null)
-            {
-                _waypointText.text = $"{WayPointDisplayText}{waypoint.Name}";
-            }
-            else
-            {
-                _waypointText.text = "";
-            }
 
             // Enable or disable UI components
             switch (dockRecallState)
@@ -217,6 +194,24 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller.Ui
                     RecallInProgressUi();
                     break;
             }
+        }
+
+        private void AutoPilotStateChangedHandler(AutoPilotState autoPilotState)
+        {
+            Log.LogDebug($"SeaTruckDockRecallerUi: Updating UI with AutoPilotState: {autoPilotState.ToString()}");
+            _autoPilotStatusText.text = $"{AutoPilotDisplayText}{_autoPilotStateDisplayTextDict[autoPilotState]}";
+        }
+
+        private void WaypointChangedHandler(Waypoint waypoint)
+        {
+            if (waypoint == null)
+            {
+                Log.LogDebug($"SeaTruckDockRecallerUi: Updating UI with NONE Waypoint");
+                _waypointText.text = $"{WayPointDisplayText}NONE";
+                return;
+            }
+            Log.LogDebug($"SeaTruckDockRecallerUi: Updating UI with Waypoint: {waypoint.Name}");
+            _waypointText.text = $"{WayPointDisplayText}{waypoint.Name}";
         }
     }
 }

@@ -2,9 +2,9 @@
 using System.IO;
 using System;
 using UnityEngine;
-using Plugin = DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
+using static DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
-namespace DaftAppleGames.Common.Utils
+namespace DaftAppleGames.SeatruckRecall_BZ.Utils
 {
     /// <summary>
     /// Class of global useful static mod utilities
@@ -41,11 +41,12 @@ namespace DaftAppleGames.Common.Utils
         {
             foreach (Transform child in parent.GetComponentsInChildren<Transform>(true))
             {
-                if (child.gameObject.name == childName)
+                if (child.gameObject.name != childName)
                 {
-                    Plugin.Log.LogDebug($"Found {childName} GameObject...");
-                    return child.gameObject;
+                    continue;
                 }
+                Log.LogDebug($"GetNamedObject: Found {childName} GameObject...");
+                return child.gameObject;
             }
             return null;
         }

@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using Plugin = DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
+using static DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 {
@@ -17,26 +18,31 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         Arrived,
         WaypointBlocked,
         RouteBlocked,
-    };
+    }
 
     /// <summary>
     /// WaypointNavigation component, manages moving an object with a rigid body
     /// between a number of Transforms
     /// the game.
     /// </summary>
-    internal class WaypointNavigation : MonoBehaviour
+    internal abstract class WaypointNavigation : NavMovement
     {
-        internal class NavStateChangedEvent : UnityEvent<NavState, Waypoint>
+        internal class NavStateChangedEvent : UnityEvent<NavState>
         {
         }
 
-        // Public properties
-        internal List<Waypoint> Waypoints { get; set; }
-        internal INavMovement NavMovement { get; set; }
+        internal class NavWaypointChangedEvent : UnityEvent<Waypoint>
+        {
+        }
+
 
         // Events to publish current state of Navigation
         internal NavStateChangedEvent OnNavStateChanged = new NavStateChangedEvent();
-        internal int StartingWaypointIndex = 0;
+        internal NavWaypointChangedEvent OnWaypointChanged = new NavWaypointChangedEvent();
+
+        protected int StartingWaypointIndex { get; set; } = 0;
+
+        private List<Waypoint> _waypoints;
 
         // Internal tracking fields
         private int _currentWaypointIndex;
@@ -50,168 +56,113 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         private NavState _currentNavState = NavState.None;
         private NavState _previousNavState;
 
-        private bool _currentMoveComplete;
-        private bool _currentRotateComplete;
-
-        /// <summary>
-        /// Unity Start method
-        /// </summary>
-        public void Start()
+        private void Start()
         {
-            // Get the NavMovement component
-            NavMovement = GetComponent<INavMovement>();
-            ResetState();
+            Reset();
+        }
+
+        internal void SetWayPoints(List<Waypoint> waypoints)
+        {
+            _waypoints = waypoints;
+            _totalWaypoints = _waypoints.Count;
         }
 
         /// <summary>
         /// Reset the state to beginning
         /// </summary>
-        private void ResetState()
+        private void Reset()
         {
-            _currentWaypointIndex = 0;
-            _currentNavState = NavState.None;
+            _currentWaypointIndex = StartingWaypointIndex - 1;
+            SetWaypoint(null);
+            SetNavState(NavState.None);
         }
 
         /// <summary>
-        /// Unity Awake method. Runs every frame so remove this if not required.
-        /// Runs frequently, so remove if not required.
+        /// Manage state changes, let listeners know
         /// </summary>
-        internal void Update()
+        /// <param name="newState"></param>
+        private void SetNavState(NavState newState)
         {
-            SetNextState();
-            CheckState();
+            if (newState == _currentNavState)
+            {
+                return;
+            }
+            OnNavStateChanged?.Invoke(newState);
         }
 
-        /// <summary>
-        /// Unity Physics Update (FixedUpdate) method.
-        /// Runs frequently, so remove if not required.
-        /// </summary>
-        internal void FixedUpdate()
+        private void SetWaypoint(Waypoint newWaypoint)
         {
-            ManageMoveUpdate();
+            if (newWaypoint == _currentWaypoint)
+            {
+                return;
+            }
+            _previousWaypoint = _currentWaypoint;
+            _currentWaypoint = newWaypoint;
+            OnWaypointChanged?.Invoke(newWaypoint);
         }
 
         /// <summary>
         /// Handles the state transitions
         /// </summary>
-        private void SetNextState()
+        protected override void MoveComplete()
         {
-            switch (_currentNavState)
+            if (!NextWaypoint())
             {
-                case NavState.Stopped:
-                case NavState.Arrived:
-                case NavState.None:
-                    return;
-
-                case NavState.WaypointReached:
-                    if (!NoMoreWaypoints())
-                    {
-                        Plugin.Log.LogDebug("Moving to next waypoint.");
-                        NextWaypoint();
-                        _currentNavState = NavState.Moving;
-                    }
-                    else
-                    {
-                        Plugin.Log.LogDebug("Final Waypoint Reached.");
-                        StopNavigation();
-                        _currentNavState = NavState.Arrived;
-                    }
-                    break;
-
-                default:
-                    return;
+                // If no more waypoints, we've arrived
+                SetNavState(NavState.Arrived);
+                WaypointNavComplete();
             }
         }
 
-        /// <summary>
-        /// Manage Move state functions in 
-        /// </summary>
-        private void ManageMoveUpdate()
-        {
-            switch (_currentNavState)
-            {
-                case NavState.Moving:
-                    MoveToWaypointUpdate();
-                    break;
-
-                default:
-                    return;
-            }
-        }
-
-        /// <summary>
-        /// Public method to start navigating waypoint list
-        /// </summary>
-        internal void StartNavigation()
-        {
-            ResetState();
-            _totalWaypoints = Waypoints.Count;
-            _currentWaypointIndex = StartingWaypointIndex -1;
-            _currentNavState = NavState.Moving;
-            Plugin.Log.LogDebug("Starting Waypoint Navigation...");
-            NavMovement.PreNavigate();
-            NextWaypoint();
-        }
+        protected abstract void WaypointNavComplete();
 
         /// <summary>
         /// Public method to pause navigation. Can be restarted
         /// </summary>
-        internal void PauseNavigation()
+        internal void PauseWaypointNavigation()
         {
             if (_currentNavState == NavState.Moving)
             {
-                _currentNavState = NavState.Paused;
+                SetNavState(NavState.Paused);
             }
         }
 
-        /// <summary>
-        /// Check for changes in status and trigger event
-        /// </summary>
-        private void CheckState()
+        protected internal virtual void StartWaypointNavigation(Action preNavigateDelegate = null)
         {
-            if (_currentNavState != _previousNavState)
-            {
-                _previousNavState = _currentNavState;
-                StateOrWaypointChanged();
-            }
-        }
-
-        /// <summary>
-        /// Handle a change to Event State or Waypoints
-        /// </summary>
-        private void StateOrWaypointChanged()
-        {
-            if (OnNavStateChanged != null)
-            {
-                OnNavStateChanged.Invoke(_currentNavState, _currentWaypoint);
-            }
+            Reset();
+            preNavigateDelegate?.Invoke();
+            SetNavState(NavState.Moving);
+            Log.LogDebug("Starting Waypoint Navigation...");
+            NextWaypoint();
         }
 
         /// <summary>
         /// Public method to restart navigation.
         /// </summary>
-        internal void RestartNavigation()
+        internal void RestartWaypointNavigation()
         {
-            StartNavigation();
+            if (_currentNavState != NavState.Moving)
+            {
+                SetNavState(NavState.Moving);
+            }
         }
 
-        /// <summary>
-        /// Public method to stop navigation.
-        /// </summary>
-        internal void StopNavigation()
+        internal void StopWaypointNavigation()
         {
-            ResetState();
-            _currentNavState = NavState.Stopped;
-            NavMovement.PostNavigate();
+            if (_currentNavState == NavState.Moving)
+            {
+                SetNavState(NavState.Stopped);
+                Reset();
+            }
         }
 
         /// <summary>
         /// Returns true if there are no more waypoints to process
         /// </summary>
         /// <returns></returns>
-        private bool NoMoreWaypoints()
+        private bool IsMoreWaypoints()
         {
-            return _currentWaypointIndex == _totalWaypoints;
+            return _currentWaypointIndex < _totalWaypoints;
         }
 
         /// <summary>
@@ -221,98 +172,17 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         private bool NextWaypoint()
         {
             _currentWaypointIndex++;
-            if (NoMoreWaypoints())
+            if (!IsMoreWaypoints())
             {
-                return false;
+               SetWaypoint(null);
+               return false;
             }
 
             // Update waypoint
-            _previousWaypoint = _currentWaypoint;
-            _currentWaypoint = Waypoints[_currentWaypointIndex];
+            SetWaypoint(_waypoints[_currentWaypointIndex]);
+            StartNavigation(_currentWaypoint.Transform);
 
-            // Publish Waypoint change event
-            StateOrWaypointChanged();
-
-            // Reset Waypoint nav status
-            _currentMoveComplete = false;
-            _currentRotateComplete = false;
-
-            /*
-            if (!IsWaypointClear(_currentWaypoint, 25.0f))
-            {
-                _currentNavState = NavState.WaypointBlocked;
-                return false;
-            }
-
-            if (!IsPathToWaypointClear(gameObject.transform, _currentWaypoint, 25.0f))
-            {
-                _currentNavState = NavState.RouteBlocked;
-                return false;
-            }
-            */
             return true;
-        }
-
-        /// <summary>
-        /// Physics update to move and rotate the transform towards the target
-        /// </summary>
-        private void MoveToWaypointUpdate()
-        {
-            if (_currentMoveComplete && _currentRotateComplete)
-            {
-                Plugin.Log.LogDebug($"Waypoint {_currentWaypointIndex} complete.");
-                _currentNavState = NavState.WaypointReached;
-            }
-
-            // Move to current waypoint
-            // Wait until rotation is complete first, if that's the current Waypoint action
-            if (!_currentMoveComplete && (_currentWaypoint.Action == WaypointAction.RotateOnMove ||
-                                          _currentWaypoint.Action == WaypointAction.RotateBeforeMove && _currentRotateComplete))
-            {
-                MoveUpdate();
-            }
-
-            // Rotate towards waypoint
-            if (!_currentRotateComplete)
-            {
-                RotateUpdate();
-            }
-        }
-
-        /// <summary>
-        /// Handles the physics movement to the current waypoint
-        /// </summary>
-        private void MoveUpdate()
-        {
-            if (_currentMoveComplete)
-            {
-                return;
-            }
-
-            // Move and check if we've arrived
-            if (NavMovement.MoveUpdate(_currentWaypoint.Transform))
-            {
-                Plugin.Log.LogDebug($"Waypoint {_currentWaypointIndex} reached.");
-                _currentMoveComplete = true;
-            }
-        }
-
-        /// <summary>
-        /// Handles the physics rotation to current Waypoint
-        /// </summary>
-        private void RotateUpdate()
-        {
-            if (_currentRotateComplete)
-            {
-                return;
-            }
-
-            // Rotate and check if we're now facing the target
-            if (NavMovement.RotateUpdate(_currentWaypoint.Transform))
-            {
-                Plugin.Log.LogDebug($"Waypoint {_currentWaypointIndex} rotation complete.");
-                _currentRotateComplete = true;
-            }
         }
 
         /// <summary>
@@ -326,25 +196,15 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             Collider[] allColliders = Physics.OverlapSphere(position, radius);
             foreach (Collider collider in allColliders)
             {
-                Plugin.Log.LogInfo($"Found this Collider in waypoint radius: {collider.gameObject.name}");
+                Log.LogInfo($"Found this Collider in waypoint radius: {collider.gameObject.name}");
             }
 
-            /*
-            GameObject testSphereGo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            testSphereGo.name = "WaypointSphere";
-            testSphereGo.transform.position = position;
-            testSphereGo.transform.localScale = new Vector3(25.0f, 25.0f, 25.0f);
-            */
             return true;
         }
 
         /// <summary>
         /// Uses a SphereCast to see if the path between two waypoints is clear
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
-        /// <param name="radius"></param>
-        /// <returns></returns>
         private bool IsPathToWaypointClear(Transform source, Waypoint targetWaypoint, float radius)
         {
             float distance = Vector3.Distance(source.position, targetWaypoint.Transform.position);
@@ -352,9 +212,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
             if (Physics.SphereCast(source.position, radius, direction, out RaycastHit hit, distance))
             {
-                Plugin.Log.LogInfo($"Found this Collider from current position to this Waypoint {targetWaypoint.Name}: {hit.collider.gameObject.name}");
+                Log.LogInfo($"Found this Collider from current position to this Waypoint {targetWaypoint.Name}: {hit.collider.gameObject.name}");
             }
-
             return true;
         }
     }
