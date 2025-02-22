@@ -16,8 +16,6 @@ namespace DaftAppleGames.SeaTruckFishScoopMod_BZ.Patches
         /// Creature by the SeaTruck cab.
         /// For context, "taker" is the object taking damage, "dealer" is the object dealing damage.
         /// </summary>
-        /// <param name="__instance"></param>
-        /// <param name="dealer"></param>
         [HarmonyPatch(nameof(LiveMixin.TakeDamage))]
         [HarmonyPrefix]
         public static bool TakeDamage_Prefix(LiveMixin __instance, GameObject dealer = null)
@@ -65,11 +63,9 @@ namespace DaftAppleGames.SeaTruckFishScoopMod_BZ.Patches
                 bool scoopSuccess = fishScoop.Scoop(rootTaker);
                 return !scoopSuccess;
             }
-            else
-            {
-                SeaTruckFishScoopPluginBz.Log.LogDebug("No FishScoop found. No Scoop.");
-                return false;
-            }
+
+            SeaTruckFishScoopPluginBz.Log.LogDebug("No FishScoop found. No Scoop.");
+            return false;
         }
     }
 }

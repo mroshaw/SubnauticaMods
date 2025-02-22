@@ -1,8 +1,7 @@
 ﻿using BepInEx;
-using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
-using UnityEngine;
+using Nautilus.Handlers;
 
 namespace DaftAppleGames.SeaTruckFishScoopMod_BZ
 {
@@ -12,52 +11,15 @@ namespace DaftAppleGames.SeaTruckFishScoopMod_BZ
         // Plugin properties
         private const string MyGuid = "com.mroshaw.seatruckfishscoopmodbz";
         private const string PluginName = "Sea Truck Fish Scoop Mod BZ";
-        private const string VersionString = "2.0.0";
+        private const string VersionString = "2.1.0";
 
-        // Config properties
-        private const string EnableConfigKey = "Enable Fish Scoop";
-        private const string ScoopWhileStaticKey = "Scoop While Static";
-        private const string ScoopWhilePilotingKey = "Scoop While Piloting";
-        private const string ToggleScoopKeyboardKey = "Scoop Toggle Keyboard Shortcut";
-        private const string ReleaseAllKeyboardKey = "Release All Fish Keyboard Shortcut";
-
-        // Static config settings
-        public static ConfigEntry<bool> EnableFishScoop;
-        public static ConfigEntry<bool> ScoopWhileStatic;
-        public static ConfigEntry<bool> ScoopWhileNotPiloting;
-        public static ConfigEntry<KeyboardShortcut> ToggleScoopKeyboardShortcut;
-        public static ConfigEntry<KeyboardShortcut> ReleaseAllKeyboardShortcut;
-
+        // Config file / UI initialisation
+        internal static ModConfigFile ConfigFile = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();
         private static readonly Harmony Harmony = new Harmony(MyGuid);
-
         public static ManualLogSource Log;
 
         private void Awake()
         {
-            // Modifier config
-            EnableFishScoop = Config.Bind("General",
-                EnableConfigKey,
-                true,
-                "Enable fish scoop.");
-
-            ScoopWhileStatic = Config.Bind("General",
-                ScoopWhileStaticKey,
-                true,
-                "Scoop while static.");
-
-            ScoopWhileNotPiloting = Config.Bind("General",
-                ScoopWhilePilotingKey,
-                true,
-                "Scoop while piloting.");
-
-            ToggleScoopKeyboardShortcut = Config.Bind("General",
-                ToggleScoopKeyboardKey,
-                new KeyboardShortcut(KeyCode.Delete));
-
-            ReleaseAllKeyboardShortcut = Config.Bind("General",
-                ReleaseAllKeyboardKey,
-                new KeyboardShortcut(KeyCode.Insert));
-
             // Patch in our MOD
             Logger.LogInfo(PluginName + " " + VersionString + " " + "loading...");
             Harmony.PatchAll();
@@ -66,4 +28,3 @@ namespace DaftAppleGames.SeaTruckFishScoopMod_BZ
         }
     }
 }
-

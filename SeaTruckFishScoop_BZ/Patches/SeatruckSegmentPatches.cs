@@ -21,11 +21,11 @@ namespace DaftAppleGames.SeaTruckFishScoopMod_BZ.Patches
         {
             if (__instance.isMainCab)
             {
-                SeaTruckFishScoopPluginBz.Log.LogDebug("Adding SeaTruckFishScoopComponent...");
+                SeaTruckFishScoopPluginBz.Log.LogDebug("Adding SeaTruckFishScoop components...");
                 __instance.gameObject.AddComponent<SeaTruckFishScoop>();
-                SeaTruckFishScoopPluginBz.Log.LogDebug("SeaTruckFishScoopComponent added.");
+                __instance.gameObject.AddComponent<ModInputManager>();
+                SeaTruckFishScoopPluginBz.Log.LogDebug("SeaTruckFishScoop components added.");
             }
         }
     }
 }
-
