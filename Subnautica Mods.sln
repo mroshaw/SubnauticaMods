@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeaglideSpeedMod_BZ", "Seag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CuddlefishRecall_SN", "CuddlefishRecall_SN\CuddlefishRecall_SN.csproj", "{669BCD3F-84E8-4E3F-B436-3A8541EB19EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeaTruckRecall_BZ", "SeatruckRecall_BZ\SeaTruckRecall_BZ.csproj", "{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityModTemplate", "UnityModTemplate\UnityModTemplate.csproj", "{C81D9969-6E8C-4353-8C10-3A97111295AF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubnauticaCheater_BZ", "SubnauticaCheater_BZ\SubnauticaCheater_BZ.csproj", "{C9CB7209-33AC-40CF-8E73-5AFCC9123676}"
@@ -28,6 +26,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubnauticaPetsBZ", "SubnauticaPets\VS\SubnauticaPetsBZ\SubnauticaPetsBZ.csproj", "{60B899F8-B771-4D3C-810D-314F0407362A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubnauticaPetsSN", "SubnauticaPets\VS\SubnauticaPetsSN\SubnauticaPetsSN.csproj", "{329286E0-E105-4828-B0C2-1ADA3D10C431}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeaTruckRecall_BZ", "SeaTruckRecall\VS\SeatruckRecall_BZ\SeaTruckRecall_BZ.csproj", "{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,14 +85,6 @@ Global
 		{669BCD3F-84E8-4E3F-B436-3A8541EB19EC}.Subnautica|Any CPU.Build.0 = Release|Any CPU
 		{669BCD3F-84E8-4E3F-B436-3A8541EB19EC}.SubnauticaZero|Any CPU.ActiveCfg = Release|Any CPU
 		{669BCD3F-84E8-4E3F-B436-3A8541EB19EC}.SubnauticaZero|Any CPU.Build.0 = Release|Any CPU
-		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Subnautica|Any CPU.ActiveCfg = Release|Any CPU
-		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Subnautica|Any CPU.Build.0 = Release|Any CPU
-		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.SubnauticaZero|Any CPU.ActiveCfg = Release|Any CPU
-		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.SubnauticaZero|Any CPU.Build.0 = Release|Any CPU
 		{C81D9969-6E8C-4353-8C10-3A97111295AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C81D9969-6E8C-4353-8C10-3A97111295AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C81D9969-6E8C-4353-8C10-3A97111295AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -133,14 +125,22 @@ Global
 		{329286E0-E105-4828-B0C2-1ADA3D10C431}.Subnautica|Any CPU.Build.0 = Debug|Any CPU
 		{329286E0-E105-4828-B0C2-1ADA3D10C431}.SubnauticaZero|Any CPU.ActiveCfg = Debug|Any CPU
 		{329286E0-E105-4828-B0C2-1ADA3D10C431}.SubnauticaZero|Any CPU.Build.0 = Debug|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Subnautica|Any CPU.ActiveCfg = Debug|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.Subnautica|Any CPU.Build.0 = Debug|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.SubnauticaZero|Any CPU.ActiveCfg = Debug|Any CPU
+		{EADFFD38-4F5C-4FD3-A251-5AE0091DE5E8}.SubnauticaZero|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DAF74111-BA59-4F12-9B63-549EB0B8F5D5}
-		        SolutionGuid = {3DC6A6DD-22CC-45F9-9AC2-ACD7DC8CCBD7}
-		            SolutionGuid = {B7C207F6-0B63-4258-B838-FA393F8CEA5F}
-		    SolutionGuid = {F75DB666-86C3-40EC-BB33-11B2BCDD7844}
+										SolutionGuid = {3DC6A6DD-22CC-45F9-9AC2-ACD7DC8CCBD7}
+														SolutionGuid = {B7C207F6-0B63-4258-B838-FA393F8CEA5F}
+						SolutionGuid = {F75DB666-86C3-40EC-BB33-11B2BCDD7844}
 	EndGlobalSection
 EndGlobal
