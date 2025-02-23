@@ -80,10 +80,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoPilot\AutoPilots.cs" />
+    <Compile Include="AutoPilot\AllAutoPilots.cs" />
     <Compile Include="AutoPilot\SeaTruckAutoPilot.cs" />
     <Compile Include="Config\ModConfigFile.cs" />
-    <Compile Include="DockRecaller\DockRecallers.cs" />
+    <Compile Include="DockRecaller\AllSeaTruckDockRecallers.cs" />
     <Compile Include="DockRecaller\SeaTruckDockRecallerUi.cs" />
     <Compile Include="Navigation\NavMovement.cs" />
     <Compile Include="Navigation\TeleportNavMovement.cs" />
@@ -91,7 +91,7 @@
     <Compile Include="Navigation\Waypoint.cs" />
     <Compile Include="Navigation\WaypointNavigation.cs" />
     <Compile Include="DockRecaller\SeaTruckDockRecaller.cs" />
-    <Compile Include="AutoPilot\BaseAutoPilot.cs" />
+    <Compile Include="AutoPilot\AutoPilot.cs" />
     <Compile Include="Navigation\RigidbodyNavMovement.cs" />
     <Compile Include="Patches\MoonpoolExpansionManagerPatches.cs" />
     <Compile Include="Patches\SeaTruckSegmentPatches.cs" />

@@ -29,7 +29,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
                     // Add the new AutoPilot component
                     Log.LogInfo("Adding SeaTruckAutopilot component...");
                     SeaTruckAutoPilot newAutoPilot = __instance.gameObject.AddComponent<SeaTruckAutoPilot>();
-                    AutoPilots.AddInstance(newAutoPilot);
+                    AllAutoPilots.AddInstance(newAutoPilot);
                     Log.LogInfo(
                     $"Added SeaTruckAutopilot component to {__instance.gameObject.name}!");
 
@@ -79,7 +79,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
             SeaTruckAutoPilot autoPilot = __instance.GetComponent<SeaTruckAutoPilot>();
             if (autoPilot)
             {
-                AutoPilots.RemoveInstance(autoPilot);
+                AllAutoPilots.RemoveInstance(autoPilot);
             }
         }
 

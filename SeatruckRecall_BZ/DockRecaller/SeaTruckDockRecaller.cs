@@ -239,7 +239,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
             }
 
             Plugin.Log.LogDebug("Finding closest Seatruck...");
-            _currentRecallAutoPilot = AutoPilots.GetClosestAutoPilot(transform.position, MaxRange);
+            _currentRecallAutoPilot = AllAutoPilots.GetClosestAutoPilot(transform.position, MaxRange);
             if (_currentRecallAutoPilot == null)
             {
                 // Couldn't find a closest Seatruck

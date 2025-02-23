@@ -34,17 +34,17 @@ namespace DaftAppleGames.SeatruckRecall_BZ
         /// </summary>
         private void RangeChangeHandler(SliderChangedEventArgs newRangeArgs)
         {
-            DockRecallers.UpdateAllDockRange(newRangeArgs.Value);
+            AllSeaTruckDockRecallers.UpdateAllDockRange(newRangeArgs.Value);
         }
 
         private void SpeedChangeHandler(SliderChangedEventArgs newSpeedArgs)
         {
-            AutoPilots.UpdateAllSpeed(newSpeedArgs.Value);
+            AllAutoPilots.UpdateAllSpeed(newSpeedArgs.Value);
         }
 
         private void RotateChangeHandler(SliderChangedEventArgs newRotateArgs)
         {
-            AutoPilots.UpdateAllRotation(newRotateArgs.Value);
+            AllAutoPilots.UpdateAllRotation(newRotateArgs.Value);
         }
     }
 }

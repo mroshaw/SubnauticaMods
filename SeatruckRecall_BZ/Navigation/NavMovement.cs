@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using static DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
@@ -69,8 +70,17 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         {
             if (_rigidbody)
             {
-                _rigidbody.velocity = gameObject.transform.forward * velocity;
+                StartCoroutine(NudgeAsync(velocity));
             }
+        }
+
+        private IEnumerator NudgeAsync(float velocity)
+        {
+            _rigidbody.velocity = gameObject.transform.forward * velocity;
+            yield return new WaitForSeconds(0.2f);
+            _rigidbody.velocity = (gameObject.transform.forward*-1) * velocity;
+            yield return new WaitForSeconds(0.2f);
+            _rigidbody.velocity = gameObject.transform.forward * velocity;
         }
 
         private void CheckRotationStatus()
@@ -129,6 +139,16 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         {
             float distanceToCurrentTarget = Vector3.Distance(transform.position, _currentTarget.position);
             return distanceToCurrentTarget < MoveTolerance;
+        }
+
+        /// <summary>
+        /// Aligns the transform to that of the target, such that they are 'facing'
+        /// the same direction.
+        /// </summary>
+        protected void AlignRotation(Transform targetTransform)
+        {
+            Quaternion newRotation = Quaternion.LookRotation(targetTransform.forward, Vector3.up);
+            transform.rotation = newRotation;
         }
     }
 }

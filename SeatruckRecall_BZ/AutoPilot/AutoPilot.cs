@@ -24,7 +24,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
     /// <summary>
     /// MonoBehavior implementing AutoPilot behaviour
     /// </summary>
-    internal class BaseAutoPilot : MonoBehaviour
+    internal class AutoPilot : MonoBehaviour
     {
         // Unity Event to publish AutoPilot state changes
         internal class AutopilotStateChangedEvent : UnityEvent<AutoPilotState>

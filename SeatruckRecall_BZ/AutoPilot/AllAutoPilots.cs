@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
 {
-    internal static class AutoPilots
+    internal static class AllAutoPilots
     {
-        private static readonly List<SeaTruckAutoPilot> AllAutoPilots;
-        private static int Count => AllAutoPilots.Count;
+        private static readonly List<SeaTruckAutoPilot> AllAutoPilotsList;
+        private static int Count => AllAutoPilotsList.Count;
 
-        static AutoPilots()
+        static AllAutoPilots()
         {
-            AllAutoPilots = new List<SeaTruckAutoPilot>();
+            AllAutoPilotsList = new List<SeaTruckAutoPilot>();
         }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
         /// </summary>
         internal static void AddInstance(SeaTruckAutoPilot autoPilot)
         {
-            AllAutoPilots.Add(autoPilot);
+            AllAutoPilotsList.Add(autoPilot);
             Log.LogDebug($"AutoPilot: Registered new instance: {autoPilot.gameObject.name} with MoveMethod: {ConfigFile.RecallMoveMethod.ToString()}");
         }
 
@@ -29,7 +29,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
         /// </summary>
         internal static void RemoveInstance(SeaTruckAutoPilot autoPilot)
         {
-            AllAutoPilots.Remove(autoPilot);
+            AllAutoPilotsList.Remove(autoPilot);
             Log.LogDebug($"DockRecaller: Removed instance: {autoPilot.gameObject.name}");
         }
 
@@ -38,7 +38,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
         /// </summary>
         internal static void UpdateAllSpeed(float speed)
         {
-            foreach (SeaTruckAutoPilot autoPilot in AllAutoPilots)
+            foreach (SeaTruckAutoPilot autoPilot in AllAutoPilotsList)
             {
                 autoPilot.GetComponent<WaypointNavigation>().MoveSpeed = speed;
             }
@@ -49,7 +49,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
         /// </summary>
         internal static void UpdateAllRotation(float rotation)
         {
-            foreach (SeaTruckAutoPilot autoPilot in AllAutoPilots)
+            foreach (SeaTruckAutoPilot autoPilot in AllAutoPilotsList)
             {
                 autoPilot.GetComponent<WaypointNavigation>().RotateSpeed = rotation;
             }
@@ -67,7 +67,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
             }
 
             // Loop through each seatruck, find out which is closest
-            foreach (SeaTruckAutoPilot seatruck in AllAutoPilots)
+            foreach (SeaTruckAutoPilot seatruck in AllAutoPilotsList)
             {
                 // Check if already docked
                 SeaTruckSegment segment = seatruck.GetComponent<SeaTruckSegment>();

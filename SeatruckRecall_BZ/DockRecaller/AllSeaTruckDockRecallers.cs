@@ -3,14 +3,14 @@ using static DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
 {
-    public static class DockRecallers
+    public static class AllSeaTruckDockRecallers
     {
-        private static readonly List<SeaTruckDockRecaller> AllDockRecallers;
-        private static int Count => AllDockRecallers.Count;
+        private static readonly List<SeaTruckDockRecaller> AllDockRecallersList;
+        private static int Count => AllDockRecallersList.Count;
 
-        static DockRecallers()
+        static AllSeaTruckDockRecallers()
         {
-            AllDockRecallers = new List<SeaTruckDockRecaller>();
+            AllDockRecallersList = new List<SeaTruckDockRecaller>();
         }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         {
             dockRecaller.MaxRange = ConfigFile.MaximumRange;
             Log.LogDebug($"DockRecaller: Registered new instance: {dockRecaller.gameObject.name} with Range: {dockRecaller.MaxRange}");
-            AllDockRecallers.Add(dockRecaller);
+            AllDockRecallersList.Add(dockRecaller);
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         /// </summary>
         internal static void RemoveInstance(SeaTruckDockRecaller dockRecaller)
         {
-            AllDockRecallers.Remove(dockRecaller);
+            AllDockRecallersList.Remove(dockRecaller);
             Log.LogDebug($"DockRecaller: Removed instance: {dockRecaller.gameObject.name}");
         }
 
@@ -38,7 +38,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         internal static void UpdateAllDockRange(float recallRange)
         {
             Log.LogDebug($"DockRecaller: Updating range to {recallRange} for {Count} DockRecallers");
-            foreach (SeaTruckDockRecaller dockRecaller in AllDockRecallers)
+            foreach (SeaTruckDockRecaller dockRecaller in AllDockRecallersList)
             {
                 dockRecaller.MaxRange = recallRange;
             }

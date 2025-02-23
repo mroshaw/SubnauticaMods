@@ -21,7 +21,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
         {
             // Add the SeatruckRecall component
             SeaTruckDockRecaller newDockRecaller = __instance.gameObject.EnsureComponent<SeaTruckDockRecaller>();
-            DockRecallers.AddInstance(newDockRecaller);
+            AllSeaTruckDockRecallers.AddInstance(newDockRecaller);
 
             Log.LogDebug("Finding terminal...");
             MoonpoolExpansionTerminal terminal = __instance.GetComponentInChildren<MoonpoolExpansionTerminal>();
@@ -48,7 +48,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
             SeaTruckDockRecaller dockRecaller = __instance.GetComponent<SeaTruckDockRecaller>();
             if (dockRecaller)
             {
-                DockRecallers.RemoveInstance(dockRecaller);
+                AllSeaTruckDockRecallers.RemoveInstance(dockRecaller);
             }
         }
 

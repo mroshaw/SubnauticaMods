@@ -4,7 +4,7 @@
     /// MonoBehavior implementing SeaTruck specific AutoPilot behavior
     /// the game.
     /// </summary>
-    internal class SeaTruckAutoPilot : BaseAutoPilot
+    internal class SeaTruckAutoPilot : AutoPilot
     {
     }
 }
