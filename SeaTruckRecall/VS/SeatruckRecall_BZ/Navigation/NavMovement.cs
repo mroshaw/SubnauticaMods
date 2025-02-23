@@ -63,6 +63,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             if ((_rotateBeforeMoving && _isFacingTarget) || !_rotateBeforeMoving)
             {
                 MoveUpdate(_currentTarget);
+                RotateUpdate(_currentTarget);
             }
             CheckMoveStatus();
         }
@@ -70,7 +71,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// <summary>
         /// Nudge object forward with RigidBody, if present
         /// </summary>
-        protected void Nudge(float velocity)
+        protected void Nudge(float velocity, bool backAndForth = true)
         {
             if (_rigidbody)
             {
@@ -78,9 +79,14 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             }
         }
 
-        private IEnumerator NudgeAsync(float velocity)
+        private IEnumerator NudgeAsync(float velocity, bool backAndForth = true)
         {
             _rigidbody.velocity = gameObject.transform.forward * velocity;
+            if (!backAndForth)
+            {
+                yield break;
+            }
+
             yield return new WaitForSeconds(0.2f);
             _rigidbody.velocity = (gameObject.transform.forward * -1) * velocity;
             yield return new WaitForSeconds(0.2f);
