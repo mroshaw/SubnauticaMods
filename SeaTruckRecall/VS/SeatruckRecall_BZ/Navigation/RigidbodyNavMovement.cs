@@ -86,7 +86,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// </summary>
         protected internal override void NavComplete()
         {
-            Nudge(10, false);
+            base.NavComplete();
+            Log.LogDebug("Restoring SeaTruck Rigidbodies");
             RestoreRigidBodies();
         }
 

@@ -56,19 +56,27 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
         /// Patch the AllowedToDock method, to allow an un-piloted SeaTruck to dock
         /// </summary>
         [HarmonyPatch(nameof(MoonpoolExpansionManager.AllowedToDock))]
-        [HarmonyPostfix]
-        internal static void AllowedToDockPostfix(MoonpoolExpansionManager __instance, Dockable dockable, ref bool __result)
+        [HarmonyPrefix]
+        internal static bool AllowedToDockPrefix(MoonpoolExpansionManager __instance, Dockable dockable, ref bool __result)
         {
             SeaTruckDockRecaller dockRecaller = __instance.GetComponent<SeaTruckDockRecaller>();
             if (!dockRecaller)
             {
-                return;
+                return true;
             }
-            __result = !(dockable == null) && !(dockable.truckSegment == null) && !__instance.IsOccupied() && !(__instance.exitingTruck != null)
-                       && !__instance.DockingBlockersInTheWay() &&
-                       (__instance.isLoading || __instance.IsPowered())
-                       && (__instance.isLoading || !__instance.CheckIfSeatruckModulePresent(__instance.tailDockingPosition.position));
-            Log.LogDebug(__result ? "Allowed to dock is true." : "Allowed to dock is false.");
+
+            Log.LogDebug($"IsAllowedToDock: exitingSeaTruck==null is {__instance.exitingTruck == null}");
+            Log.LogDebug($"IsAllowedToDock: DockingBlockersInTheWay is {__instance.DockingBlockersInTheWay()}");
+            Log.LogDebug($"IsAllowedToDock: isLoading is {__instance.isLoading}");
+            Log.LogDebug($"IsAllowedToDock: IsPowered is {__instance.IsPowered()}");
+            Log.LogDebug($"IsAllowedToDock: CheckIfSeatruckModulePresent is {__instance.CheckIfSeatruckModulePresent(__instance.tailDockingPosition.position)}");
+
+            __result = __instance.exitingTruck == null &&
+                       !__instance.DockingBlockersInTheWay() &&
+                       (__instance.isLoading || __instance.IsPowered()) &&
+                       (__instance.isLoading || __instance.CheckIfSeatruckModulePresent(__instance.tailDockingPosition.position));
+            Log.LogDebug($"IsAllowedToDock is: {__result}");
+            return false;
         }
 
         /// <summary>

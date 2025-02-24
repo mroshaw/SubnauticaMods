@@ -34,10 +34,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// </summary>
         protected internal override void NavComplete()
         {
-            // Force docking
-            Log.LogInfo("Teleport Movement: Nudging...");
-            Nudge(10.0f);
-            Log.LogInfo("Teleport Movement: Nudged.");
+            base.NavComplete();
         }
     }
 }

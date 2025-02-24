@@ -49,7 +49,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
         internal AutopilotStateChangedEvent OnAutopilotStateChanged = new AutopilotStateChangedEvent();
         internal AutopilotWaypointChangedEvent OnAutopilotWaypointChanged = new AutopilotWaypointChangedEvent();
 
-
         /// <summary>
         /// Initialise the component
         /// </summary>
@@ -146,6 +145,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
                     break;
 
                 case NavState.Arrived:
+                    SetAutopilotState(AutoPilotState.Arrived);
                     SetAutopilotState(AutoPilotState.Ready);
                     break;
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using static DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
@@ -71,7 +72,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// <summary>
         /// Nudge object forward with RigidBody, if present
         /// </summary>
-        protected void Nudge(float velocity, bool backAndForth = true)
+        protected void Nudge(float velocity, bool backAndForth = true, Action callback = null)
         {
             if (_rigidbody)
             {
@@ -79,18 +80,19 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             }
         }
 
-        private IEnumerator NudgeAsync(float velocity, bool backAndForth = true)
+        private IEnumerator NudgeAsync(float velocity, bool backAndForth = true, Action callback = null)
         {
             _rigidbody.velocity = gameObject.transform.forward * velocity;
             if (!backAndForth)
             {
+                yield return new WaitForSeconds(1f);
+                callback?.Invoke();
                 yield break;
             }
-
-            yield return new WaitForSeconds(0.2f);
             _rigidbody.velocity = (gameObject.transform.forward * -1) * velocity;
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(1f);
             _rigidbody.velocity = gameObject.transform.forward * velocity;
+            callback?.Invoke();
         }
 
         private void CheckRotationStatus()

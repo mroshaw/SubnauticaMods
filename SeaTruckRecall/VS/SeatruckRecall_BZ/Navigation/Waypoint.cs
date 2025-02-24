@@ -18,11 +18,10 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
         // Waypoint name for useful feedback
         internal string Name { get; }
-
+        
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="transform"></param>
         internal Waypoint(Transform transform, bool rotateBeforeMoving, string name)
         {
             Transform = transform;

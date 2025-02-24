@@ -28,7 +28,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller.Ui
             { DockRecallState.Aborted, "ABORTED" },
             { DockRecallState.Recalling , "IN PROGRESS..." },
             { DockRecallState.Docked,"READY" },
-            { DockRecallState.PirateDetected, "PIRATE DETECTED!" }
+            { DockRecallState.PirateDetected, "PIRATE DETECTED!" },
+            {DockRecallState.Parking, "PARKING"}
         };
 
         // Autopilot state text

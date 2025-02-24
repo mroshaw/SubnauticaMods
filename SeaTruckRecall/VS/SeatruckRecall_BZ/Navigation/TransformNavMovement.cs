@@ -7,8 +7,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
     {
 
         // Movement properties for this method of navigation
-        protected override float RotateSpeed => 3.0f;
-        protected override float MoveSpeed => 0.8f;
+        protected override float RotateSpeed => 2.0f;
+        protected override float MoveSpeed => 0.7f;
 
         /// <summary>
         /// Implement the MoveUpdate interface method, using the Rigidbody to move the Source transform
@@ -49,18 +49,14 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
         /// <summary>
         /// Re-enable rigid bodies on all Seatrucks
-        /// Apply a small force to push the teleported vehicle into the docking trigger
         /// </summary>
         protected internal override void NavComplete()
         {
-            Log.LogDebug("Resetting SeaTruck Rigidbodies");
+            base.NavComplete();
 
             // Reset rigidbodies
+            Log.LogDebug("Resetting SeaTruck Rigidbodies");
             UWE.Utils.SetIsKinematicAndUpdateInterpolation(gameObject, false, true);
-            // Force docking
-            Log.LogInfo("Teleport Movement: Nudging...");
-            Nudge(10.0f);
-            Log.LogInfo("Teleport Movement: Nudged.");
         }
     }
 }
