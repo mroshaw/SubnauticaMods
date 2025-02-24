@@ -7,7 +7,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
     internal class RigidbodyNavMovement : WaypointNavigation
     {
         // Movement properties for this method of navigation
-        protected override float RotateSpeed => 250.0f;
+        protected override float RotateSpeed => 25.0f;
         protected override float MoveSpeed => 10.0f;
         protected override float RotateThreshold => 0.5f;
 
@@ -16,7 +16,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         private Vector3 _currentDirection;
         private float _distanceToTarget;
 
-        private float _stoppingDistance = 0.5f;
+        private float _stoppingDistance = 5.0f;
         private float _moveForce = 1000.0f;
 
         private Rigidbody _mainTruckRigidbody;
@@ -29,6 +29,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         protected override void Awake()
         {
             base.Awake();
+            InitRigidBodies();
         }
 
         private void InitRigidBodies()
@@ -38,46 +39,43 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             _mainTruckRigidbody = GetComponent<Rigidbody>();
             Rigidbody[] allRigidBodies = gameObject.GetComponentsInChildren<Rigidbody>(true);
 
-            foreach (Rigidbody curRb in allRigidBodies)
+            for (int curRb = 0; curRb < allRigidBodies.Length; curRb++)
             {
-                if (curRb != _mainTruckRigidbody)
+                if (allRigidBodies[curRb] != _mainTruckRigidbody)
                 {
-                    _rigidBodyBackups.Add(new RigidBodyBackup(curRb));
+                    _rigidBodyBackups.Add(new RigidBodyBackup(allRigidBodies[curRb]));
                 }
             }
 
             _numChildRigidBodies = _rigidBodyBackups.Count;
-            Log.LogDebug($"Found {_numChildRigidBodies} rigidbodies in parent: {gameObject.name}");
         }
 
         /// <summary>
         /// Implement the MoveUpdate interface method, using the Rigidbody to move the Source transform
         /// </summary>
-        protected override void MoveUpdate(Transform targetTransform)
+        protected override void MoveUpdate(Vector3 targetPosition)
         {
-            Vector3 force = ComputeMovementForce(targetTransform);
+            Vector3 force = ComputeMovementForce(targetPosition);
             _mainTruckRigidbody.AddForce(force, ForceMode.Force);
         }
 
         /// <summary>
         /// Implement the RotateUpdate interface method, using the Rigidbody to move the Source transform
         /// </summary>
-        protected override void RotateUpdate(Transform targetTransform)
+        protected override void RotateUpdate(Vector3 targetPosition)
         {
-            Vector3 torque = ComputeRotationTorque(targetTransform);
+            Vector3 torque = ComputeRotationTorque(targetPosition);
             _mainTruckRigidbody.AddTorque(torque, ForceMode.Impulse);
         }
 
         protected internal override void WaypointReached()
         {
             base.WaypointReached();
-            _mainTruckRigidbody.angularVelocity = Vector3.zero;
             _mainTruckRigidbody.velocity = Vector3.zero;
         }
 
         protected internal override void NavStarted()
         {
-            InitRigidBodies();
             ConfigureRigidBodies();
         }
 
@@ -86,8 +84,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// </summary>
         protected internal override void NavComplete()
         {
-            base.NavComplete();
-            Log.LogDebug("Restoring SeaTruck Rigidbodies");
+            _mainTruckRigidbody.angularVelocity = Vector3.zero;
+            _mainTruckRigidbody.velocity = Vector3.zero;
             RestoreRigidBodies();
         }
 
@@ -101,6 +99,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             {
                 backup.Restore();
             }
+
             UWE.Utils.SetIsKinematicAndUpdateInterpolation(_mainTruckRigidbody, true, true);
         }
 
@@ -114,12 +113,13 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             {
                 backup.Zero();
             }
+
             UWE.Utils.SetIsKinematicAndUpdateInterpolation(_mainTruckRigidbody, false, false);
         }
 
-        private Vector3 ComputeMovementForce(Transform targetTransform)
+        private Vector3 ComputeMovementForce(Vector3 targetPosition)
         {
-            _directionToTarget = (targetTransform.position - transform.position);
+            _directionToTarget = (targetPosition - transform.position);
             _distanceToTarget = _directionToTarget.magnitude;
 
             // Normalize direction
@@ -134,17 +134,16 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             Vector3 force = velocityChange * _moveForce;
 
             return force;
-
         }
 
         /// <summary>
         /// Calculate the amount of torque to apply to rotate
         /// between current and target transforms
         /// </summary>
-        private Vector3 ComputeRotationTorque(Transform targetTransform)
+        private Vector3 ComputeRotationTorque(Vector3 targetPosition)
         {
             // Compute direction to target
-            Vector3 direction = targetTransform.position - transform.position;
+            Vector3 direction = targetPosition - transform.position;
             if (direction.sqrMagnitude < Mathf.Epsilon) return Vector3.zero; // Prevent errors
 
             // Compute the desired rotation
@@ -182,11 +181,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
             internal void Zero()
             {
-
                 _rigidBody.drag = 0;
                 _rigidBody.mass = 0;
                 UWE.Utils.SetIsKinematicAndUpdateInterpolation(_rigidBody, true, false);
-
             }
 
             internal void Restore()

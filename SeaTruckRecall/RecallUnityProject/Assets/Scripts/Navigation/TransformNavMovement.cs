@@ -12,18 +12,18 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// <summary>
         /// Implement the MoveUpdate interface method, using the Rigidbody to move the Source transform
         /// </summary>
-        protected override void MoveUpdate(Transform targetTransform)
+        protected override void MoveUpdate(Vector3 targetPosition)
         {
             // Implement Transform based move on Update
-            transform.position = Vector3.Lerp(transform.position, targetTransform.position, Time.deltaTime * MoveSpeed);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * MoveSpeed);
         }
 
         /// <summary>
         /// Implement the RotateUpdate interface method, using the Rigidbody to move the Source transform
         /// </summary>
-        protected override void RotateUpdate(Transform targetTransform)
+        protected override void RotateUpdate(Vector3 targetPosition)
         {
-            Vector3 dirToTarget = targetTransform.position - transform.position;
+            Vector3 dirToTarget = targetPosition - transform.position;
             Quaternion targetRotation = Quaternion.LookRotation(dirToTarget);
 
             // Implement Transform based rotate on Update
@@ -31,7 +31,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             {
                 // If they are, set the rotation without Lerp
                 Log.LogDebug("Target Position is same as Source Transform. Setting rotation manually.");
-                transform.LookAt(targetTransform);
+                transform.LookAt(targetPosition);
                 return;
             }
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * RotateSpeed);

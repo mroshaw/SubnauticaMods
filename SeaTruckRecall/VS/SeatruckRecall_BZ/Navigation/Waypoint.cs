@@ -11,27 +11,30 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
     internal class Waypoint
     {
         // Target transform
-        internal Transform Transform { get; }
+        internal Vector3 Position { get; }
+        internal Quaternion Rotation { get; }
 
         // Whether to rotate while moving or before moving
         internal bool RotateBeforeMoving { get; }
 
         // Waypoint name for useful feedback
         internal string Name { get; }
-        
+
         /// <summary>
         /// Default constructor
         /// </summary>
-        internal Waypoint(Transform transform, bool rotateBeforeMoving, string name)
+        /// <param name="transform"></param>
+        internal Waypoint(Vector3 position, Quaternion rotation, bool rotateBeforeMoving, string name)
         {
-            Transform = transform;
+            Position = position;
+            Rotation = rotation;
             RotateBeforeMoving = rotateBeforeMoving;
             Name = name;
         }
 
         public override string ToString()
         {
-            return $"{Name}:, Pos: {Transform.position}, Rot: {Transform.rotation}";
+            return $"{Name}:, Pos: {Position}, Rot: {Rotation}";
         }
     }
 }

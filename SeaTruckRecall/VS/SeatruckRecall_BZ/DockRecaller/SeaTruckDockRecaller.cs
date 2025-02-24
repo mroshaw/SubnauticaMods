@@ -62,8 +62,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         // If not docked within the timeout, abandon
         private Vector3 _parkingDockConnection;
         private const float ParkingTimeout = 5.0f;
-        private const float ParkingMoveSpeed = 2.0f;
-        private const float ParkingRotateSpeed = 2.0f;
+        private const float ParkingMoveSpeed = 1.0f;
+        private const float ParkingRotateSpeed = 1.0f;
 
         // Internal fields
         private List<Waypoint> _dockingWaypoints;
@@ -120,7 +120,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
                     position = gameObject.transform.position + (-gameObject.transform.right * 30.0f) + (gameObject.transform.up * 10.0f)
                 }
             };
-            _dockingWaypoints.Add(new Waypoint(aboveDockingTubeWaypoint.transform,
+            _dockingWaypoints.Add(new Waypoint(aboveDockingTubeWaypoint.transform.position,
+                Quaternion.identity,
                 true,
                 MoveToBaseText));
 
@@ -134,7 +135,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
                     position = gameObject.transform.position + (-gameObject.transform.right * 50.0f)
                 }
             };
-            _dockingWaypoints.Add(new Waypoint(endOfDockTubeWaypoint.transform,
+            _dockingWaypoints.Add(new Waypoint(endOfDockTubeWaypoint.transform.position,
+                Quaternion.identity,
                 true,
                 AlignToDockText));
 
@@ -148,7 +150,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
                     position = gameObject.transform.position + (-gameObject.transform.right * 15.0f)
                 }
             };
-            _dockingWaypoints.Add(new Waypoint(dockingWaypoint.transform,
+            _dockingWaypoints.Add(new Waypoint(dockingWaypoint.transform.position,
+                Quaternion.identity,
                 true,
                 MovingToDockText));
 
@@ -222,6 +225,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
                     SetDockState(DockRecallState.Ready);
                     break;
             }
+
             OnAutoPilotStateChanged.Invoke(autoPilotState);
         }
 
@@ -231,6 +235,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
             {
                 return;
             }
+
+            Log.LogDebug($"SeaTruckRecaller.SetDockState: state changed from {_currentRecallState} to {newRecallState}.");
             _currentRecallState = newRecallState;
             OnDockingStateChanged?.Invoke(newRecallState);
         }
@@ -306,11 +312,14 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
                 if (dockTime > ParkingTimeout)
                 {
                     Log.LogDebug("Parking timed out!");
+                    SetDockState(DockRecallState.Stuck);
                     yield break;
                 }
+
                 yield return null;
             }
-            Log.LogDebug("Parking Complete!");
+
+            Log.LogDebug("Docked state set: Parking Complete!");
         }
     }
 }

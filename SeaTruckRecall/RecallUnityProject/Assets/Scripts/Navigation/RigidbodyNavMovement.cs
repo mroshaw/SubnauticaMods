@@ -6,8 +6,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
     internal class RigidbodyNavMovement : WaypointNavigation
     {
         // Movement properties for this method of navigation
-        protected override float RotateSpeed => 20.0f;
-        protected override float MoveSpeed => 7.0f;
+        protected override float RotateSpeed => 25.0f;
+        protected override float MoveSpeed => 10.0f;
         protected override float RotateThreshold => 0.5f;
 
         // Private fields
@@ -52,18 +52,18 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// <summary>
         /// Implement the MoveUpdate interface method, using the Rigidbody to move the Source transform
         /// </summary>
-        protected override void MoveUpdate(Transform targetTransform)
+        protected override void MoveUpdate(Vector3 targetPosition)
         {
-            Vector3 force = ComputeMovementForce(targetTransform);
+            Vector3 force = ComputeMovementForce(targetPosition);
             _mainTruckRigidbody.AddForce(force, ForceMode.Force);
         }
 
         /// <summary>
         /// Implement the RotateUpdate interface method, using the Rigidbody to move the Source transform
         /// </summary>
-        protected override void RotateUpdate(Transform targetTransform)
+        protected override void RotateUpdate(Vector3 targetPosition)
         {
-            Vector3 torque = ComputeRotationTorque(targetTransform);
+            Vector3 torque = ComputeRotationTorque(targetPosition);
             _mainTruckRigidbody.AddTorque(torque, ForceMode.Impulse);
         }
 
@@ -114,9 +114,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             UWE.Utils.SetIsKinematicAndUpdateInterpolation(_mainTruckRigidbody, false, false);
         }
 
-        private Vector3 ComputeMovementForce(Transform targetTransform)
+        private Vector3 ComputeMovementForce(Vector3 targetPosition)
         {
-            _directionToTarget = (targetTransform.position - transform.position);
+            _directionToTarget = (targetPosition - transform.position);
             _distanceToTarget = _directionToTarget.magnitude;
 
             // Normalize direction
@@ -138,10 +138,10 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// Calculate the amount of torque to apply to rotate
         /// between current and target transforms
         /// </summary>
-        private Vector3 ComputeRotationTorque(Transform targetTransform)
+        private Vector3 ComputeRotationTorque(Vector3 targetPosition)
         {
             // Compute direction to target
-            Vector3 direction = targetTransform.position - transform.position;
+            Vector3 direction = targetPosition - transform.position;
             if (direction.sqrMagnitude < Mathf.Epsilon) return Vector3.zero; // Prevent errors
 
             // Compute the desired rotation

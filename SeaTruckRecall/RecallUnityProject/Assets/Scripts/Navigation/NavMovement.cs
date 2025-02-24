@@ -14,8 +14,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         protected virtual float MoveTolerance => 0.2f;
 
         protected bool IsMoving { get; private set; }
+        protected bool HasTarget { get; private set; }
 
-        private Transform _currentTarget;
+        private Vector3 _currentTarget;
         private bool _isFacingTarget;
         private bool _rotateBeforeMoving;
 
@@ -25,27 +26,28 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             IsMoving = false;
         }
 
-        protected void StartNavigation(Transform targetTransform, bool rotateBeforeMoving = true)
+        protected void StartNavigation(Vector3 targetPosition, bool rotateBeforeMoving = true)
         {
             Log.LogDebug("Nav Movement Start");
-            _currentTarget = targetTransform;
+            _currentTarget = targetPosition;
+            HasTarget = true;
             _isFacingTarget = false;
             _rotateBeforeMoving = rotateBeforeMoving;
             IsMoving = true;
-            Log.LogDebug($"StartNavigation: Moving to {targetTransform}");
+            Log.LogDebug($"StartNavigation: Moving to {targetPosition}");
         }
 
         protected void StopNavigation()
         {
             Log.LogDebug("Nav Movement Stop");
             IsMoving = false;
-            _currentTarget = null;
+            HasTarget = false;
         }
 
         // Moves the source towards the target in an Update or FixedUpdate.
-        protected abstract void MoveUpdate(Transform targetTransform);
+        protected abstract void MoveUpdate(Vector3 targetPosition);
         // Rotates the source towards the target in an Update or FixedUpdate.
-        protected abstract void RotateUpdate(Transform targetTransform);
+        protected abstract void RotateUpdate(Vector3 targetPosition);
 
         private void Update()
         {
@@ -116,7 +118,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// <summary>
         /// Called when Rotation is complete
         /// </summary>
-        public virtual void RotationCompleted(Transform targetTransform)
+        public virtual void RotationCompleted()
         {
             Log.LogDebug($"Rotation Completed.");
         }
@@ -126,7 +128,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// </summary>
         protected virtual bool IsRotationComplete()
         {
-            Vector3 dirToTarget = _currentTarget.position - transform.position;
+            Vector3 dirToTarget = _currentTarget - transform.position;
             Quaternion targetRotation = Quaternion.LookRotation(dirToTarget);
 
             // Return true if source is "looking" at target
@@ -147,7 +149,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// </summary>
         protected virtual bool IsMoveComplete()
         {
-            float distanceToCurrentTarget = Vector3.Distance(transform.position, _currentTarget.position);
+            float distanceToCurrentTarget = Vector3.Distance(transform.position, _currentTarget);
             bool moveComplete = distanceToCurrentTarget < MoveTolerance;
             if (moveComplete)
             {

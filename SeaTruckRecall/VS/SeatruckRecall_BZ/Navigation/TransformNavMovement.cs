@@ -5,26 +5,25 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 {
     internal class TransformNavMovement : WaypointNavigation
     {
-
         // Movement properties for this method of navigation
-        protected override float RotateSpeed => 2.0f;
-        protected override float MoveSpeed => 0.7f;
+        protected override float RotateSpeed => 3.0f;
+        protected override float MoveSpeed => 0.8f;
 
         /// <summary>
         /// Implement the MoveUpdate interface method, using the Rigidbody to move the Source transform
         /// </summary>
-        protected override void MoveUpdate(Transform targetTransform)
+        protected override void MoveUpdate(Vector3 targetPosition)
         {
             // Implement Transform based move on Update
-            transform.position = Vector3.Lerp(transform.position, targetTransform.position, Time.deltaTime * MoveSpeed);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * MoveSpeed);
         }
 
         /// <summary>
         /// Implement the RotateUpdate interface method, using the Rigidbody to move the Source transform
         /// </summary>
-        protected override void RotateUpdate(Transform targetTransform)
+        protected override void RotateUpdate(Vector3 targetPosition)
         {
-            Vector3 dirToTarget = targetTransform.position - transform.position;
+            Vector3 dirToTarget = targetPosition - transform.position;
             Quaternion targetRotation = Quaternion.LookRotation(dirToTarget);
 
             // Implement Transform based rotate on Update
@@ -32,9 +31,10 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             {
                 // If they are, set the rotation without Lerp
                 Log.LogDebug("Target Position is same as Source Transform. Setting rotation manually.");
-                transform.LookAt(targetTransform);
+                transform.LookAt(targetPosition);
                 return;
             }
+
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * RotateSpeed);
         }
 
@@ -49,14 +49,18 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
         /// <summary>
         /// Re-enable rigid bodies on all Seatrucks
+        /// Apply a small force to push the teleported vehicle into the docking trigger
         /// </summary>
         protected internal override void NavComplete()
         {
-            base.NavComplete();
+            Log.LogDebug("Resetting SeaTruck Rigidbodies");
 
             // Reset rigidbodies
-            Log.LogDebug("Resetting SeaTruck Rigidbodies");
             UWE.Utils.SetIsKinematicAndUpdateInterpolation(gameObject, false, true);
+            // Force docking
+            Log.LogInfo("Teleport Movement: Nudging...");
+            Nudge(10.0f);
+            Log.LogInfo("Teleport Movement: Nudged.");
         }
     }
 }

@@ -19,11 +19,11 @@ public class TestUI : MonoBehaviour
     {
         List<Waypoint> waypoints = new List<Waypoint>();
 
-        waypoints.Add(new Waypoint(waypoint1, true, "Waypoint 1"));
-        waypoints.Add(new Waypoint(waypoint2, true, "Waypoint 2"));
-        waypoints.Add(new Waypoint(waypoint3, true, "Waypoint 3"));
-        waypoints.Add(new Waypoint(waypoint4, true, "Waypoint 4"));
-        waypoints.Add(new Waypoint(waypoint5, true, "Waypoint 5"));
+        waypoints.Add(new Waypoint(waypoint1.position, waypoint1.rotation, true, "Waypoint 1"));
+        waypoints.Add(new Waypoint(waypoint2.position, waypoint2.rotation, true, "Waypoint 2"));
+        waypoints.Add(new Waypoint(waypoint3.position, waypoint3.rotation, true, "Waypoint 3"));
+        waypoints.Add(new Waypoint(waypoint4.position, waypoint4.rotation, true, "Waypoint 4"));
+        waypoints.Add(new Waypoint(waypoint5.position, waypoint5.rotation, true, "Waypoint 5"));
 
         navSystem.SetWayPoints(waypoints);
         navSystem.StartWaypointNavigation();

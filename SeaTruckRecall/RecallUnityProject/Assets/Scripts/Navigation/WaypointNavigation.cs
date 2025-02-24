@@ -210,7 +210,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             // Update waypoint
             SetWaypoint(_waypoints[_currentWaypointIndex]);
             WaypointNavStarted();
-            StartNavigation(_currentWaypoint.Transform, _currentWaypoint.RotateBeforeMoving);
+            StartNavigation(_currentWaypoint.Position, _currentWaypoint.RotateBeforeMoving);
 
             return true;
         }
@@ -222,7 +222,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// <returns></returns>
         private bool IsWaypointClear(Waypoint waypoint, float radius)
         {
-            Vector3 position = waypoint.Transform.position;
+            Vector3 position = waypoint.Position;
             Collider[] allColliders = Physics.OverlapSphere(position, radius);
             foreach (Collider collider in allColliders)
             {
@@ -237,8 +237,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// </summary>
         private bool IsPathToWaypointClear(Transform source, Waypoint targetWaypoint, float radius)
         {
-            float distance = Vector3.Distance(source.position, targetWaypoint.Transform.position);
-            Vector3 direction = (targetWaypoint.Transform.position - source.position).normalized;
+            float distance = Vector3.Distance(source.position, targetWaypoint.Position);
+            Vector3 direction = (targetWaypoint.Position - source.position).normalized;
 
             if (Physics.SphereCast(source.position, radius, direction, out RaycastHit hit, distance))
             {
