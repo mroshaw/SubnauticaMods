@@ -12,7 +12,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ
         Fixed
     };
 
-
     internal class SeaTruckDockRecallPlugin
     {
         // Plugin properties
@@ -20,18 +19,29 @@ namespace DaftAppleGames.SeatruckRecall_BZ
         private const string PluginName = "Sea Truck Recall Mod BZ";
         private const string VersionString = "1.1.0";
 
+        public static Logger Log = new Logger();
     }
 
-    internal static class Log
+    internal class Logger
     {
-        public static void LogDebug(string message)
+        public void LogDebug(string message)
         {
             Debug.Log(message);
         }
 
-        public static void LogInfo(string message)
+        public void LogInfo(string message)
         {
             Debug.Log(message);
+        }
+
+        public void LogWarning(string message)
+        {
+            Debug.LogWarning(message);
+        }
+
+        public void LogError(string message)
+        {
+            Debug.LogError(message);
         }
     }
 }

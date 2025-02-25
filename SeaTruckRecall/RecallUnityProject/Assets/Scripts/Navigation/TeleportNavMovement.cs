@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 {

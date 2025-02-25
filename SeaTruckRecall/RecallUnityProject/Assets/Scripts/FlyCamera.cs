@@ -16,12 +16,15 @@ public class FlyCamera : MonoBehaviour
 
     private void Update()
     {
-        _angles.x -= Input.GetAxis("Mouse Y") * mouseSpeed;
-        _angles.y += Input.GetAxis("Mouse X") * mouseSpeed;
-        transform.eulerAngles = _angles;
-        float moveSpeed = Input.GetKey(KeyCode.LeftShift) ? fastSpeed : speed;
-        transform.position +=
-            Input.GetAxis("Horizontal") * moveSpeed * transform.right +
-            Input.GetAxis("Vertical") * moveSpeed * transform.forward;
+        if (Input.GetMouseButton(1) || Input.GetMouseButton(0))
+        {
+            _angles.x -= Input.GetAxis("Mouse Y") * mouseSpeed;
+            _angles.y += Input.GetAxis("Mouse X") * mouseSpeed;
+            transform.eulerAngles = _angles;
+            float moveSpeed = Input.GetKey(KeyCode.LeftShift) ? fastSpeed : speed;
+            transform.position +=
+                Input.GetAxis("Horizontal") * moveSpeed * transform.right +
+                Input.GetAxis("Vertical") * moveSpeed * transform.forward;
+        }
     }
 }

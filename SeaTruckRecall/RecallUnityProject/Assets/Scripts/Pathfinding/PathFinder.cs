@@ -1,79 +1,114 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using static DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 {
-
     internal class PathFinder : MonoBehaviour
     {
-        public Transform targetTransform;
+        [SerializeField] private Transform targetTransformOverride;
 
-        public List<Vector3> waypointPositions;
-        public List<Waypoint> waypoints;
-
-        public float cellSize = 5.0f;
-        public int cellExtends = 10;
-
+        [SerializeField] private float navGridCellSizeOverride = 10f;
+        [SerializeField] private int navGridCellExtendsOverride = 5;
+        [SerializeField] private bool navGridDebugOverride = true;
         private NavGrid _navGrid;
+        private GenerateStatus _waypointStatus;
+        internal List<Waypoint> Waypoints { get; private set; }
+
+        internal NavGrid.GridStatusChangedEvent OnGridStatusChanged = new NavGrid.GridStatusChangedEvent();
+        internal NavGrid.PathingStatusChangedEvent OnPathingStatusChanged = new NavGrid.PathingStatusChangedEvent();
+        internal WaypointsStatusChangedEvent OnWaypointStatusChanged = new WaypointsStatusChangedEvent();
+
+        internal class WaypointsStatusChangedEvent : UnityEvent<GenerateStatus>
+        {
+        }
+
+        private void OnEnable()
+        {
+            if (_navGrid == null)
+            {
+                _navGrid = new NavGrid();
+            }
+            _navGrid.OnPathingStatusChanged.AddListener(PathingStatusChangedHandler);
+            _navGrid.OnGridStatusChanged.AddListener(GridStatusChangedHandler);
+            _navGrid.OnPathingStatusChanged.AddListener(PathingStatusChangedHandler);
+        }
+
+        private void OnDisable()
+        {
+            _navGrid.OnPathingStatusChanged.RemoveListener(PathingStatusChangedHandler);
+            _navGrid.OnGridStatusChanged.RemoveListener(GridStatusChangedHandler);
+            _navGrid.OnPathingStatusChanged.RemoveListener(PathingStatusChangedHandler);
+        }
 
         private void Start()
         {
-            _navGrid = new NavGrid();
+            SetWaypointsStatus(GenerateStatus.Idle);
         }
 
-        public void GenerateNavGrid()
+        private void SetWaypointsStatus(GenerateStatus newStatus)
         {
-
-        }
-
-        public void Nav()
-        {
-            GetComponent<WaypointNavigation>().SetWayPoints(waypoints);
-            GetComponent<WaypointNavigation>().StartWaypointNavigation();
-        }
-
-        public void GeneratePositionWaypoints()
-        {
-            waypointPositions = new List<Vector3>();
-            List<NavCell> navCells = _navGrid.GetPath(transform,  targetTransform,  cellSize, cellExtends);
-
-            if (navCells.Count == 0)
+            if (_waypointStatus == newStatus)
             {
-                Debug.Log("No route found!");
+                return;
             }
+            _waypointStatus = newStatus;
+            OnWaypointStatusChanged.Invoke(newStatus);
+        }
 
-            foreach (NavCell navCell in navCells)
+        private void GridStatusChangedHandler(GenerateStatus status)
+        {
+            OnGridStatusChanged.Invoke(status);
+        }
+
+        private void PathingStatusChangedHandler(GenerateStatus status)
+        {
+            OnPathingStatusChanged?.Invoke(status);
+            if (status == GenerateStatus.Success)
             {
-                waypointPositions.Add(navCell.Position);
-                GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                sphere.transform.position = navCell.Position;
-                sphere.transform.localScale = new Vector3(1f, 1f, 1f);
-                sphere.GetComponent<Renderer>().material.color = Color.yellow;
+                SetWaypointsFromPath(_navGrid.NavPath);
+                SetWaypointsStatus(GenerateStatus.Success);
+            }
+            if(status == GenerateStatus.Failed)
+            {
+                SetWaypointsStatus(GenerateStatus.Failed);
             }
         }
 
-        public void GenerateWaypoints()
+        internal void GenerateWaypoints(Vector3 sourcePosition, Vector3 targetPosition, float cellSize, int cellExtends, bool debug = false)
         {
-            waypoints = new List<Waypoint>();
+            SetWaypointsStatus(GenerateStatus.Generating);
+            StartCoroutine(_navGrid.GetPathAsync(sourcePosition, targetPosition, cellSize, cellExtends, debug));
+        }
 
-            List<NavCell> navCells = _navGrid.GetPath(transform,  targetTransform,  cellSize, cellExtends);
+        /// <summary>
+        /// Overload to use Unity serialized values for testing
+        /// </summary>
+        /// <returns></returns>
+        internal void GenerateWaypoints()
+        {
+            GenerateWaypoints(transform.position, targetTransformOverride.position, navGridCellSizeOverride, navGridCellExtendsOverride, navGridDebugOverride);
+        }
 
+        /// <summary>
+        /// Try to establish a path from source to target, return as a list of Waypoints
+        /// </summary>
+        private void SetWaypointsFromPath(NavPath navPath, bool debug = false)
+        {
+            Waypoints = new List<Waypoint>();
             int curWaypoint = 1;
-
-            foreach (NavCell navCell in navCells)
+            foreach (NavCell navCell in navPath)
             {
-                Waypoint newWaypoint = new Waypoint(navCell.Position, Quaternion.identity, true, $"Waypoint: {curWaypoint}");
-                waypoints.Add(newWaypoint);
+                Waypoints.Add(CreateWaypointFromNavCell(navCell, curWaypoint));
                 curWaypoint++;
-
-                GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                Destroy(sphere.GetComponent<Collider>());
-                sphere.transform.localPosition =navCell.Position;
-                sphere.transform.localScale = new Vector3(2, 2, 2);
-
-                sphere.GetComponent<Renderer>().material.color = Color.yellow;
-
             }
+        }
+
+        private Waypoint CreateWaypointFromNavCell(NavCell navCell, int waypointIndex)
+        {
+            Waypoint newWaypoint = new Waypoint(navCell.Position, Quaternion.identity, true, $"Waypoint: {waypointIndex}");
+            return newWaypoint;
         }
     }
 }

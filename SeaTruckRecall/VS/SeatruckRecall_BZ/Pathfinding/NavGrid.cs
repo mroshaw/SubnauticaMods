@@ -32,16 +32,12 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
                     for (int z = -numCellsSide / 2; z <= numCellsSide / 2; z++)
                     {
                         Vector3 cellPosition = sourceTransform.position + (direction * x * cellSize) + (up * y * cellSize) + (right * z * cellSize);
-
                         bool hasCollider = Physics.CheckBox(cellPosition, Vector3.one * (cellSize * 0.5f));
-
                         string cellName = $"(X:{x}, Y:{y + numCellsVertical / 2}, Z:{z + numCellsSide / 2}";
-
                         grid[x, y + numCellsVertical / 2, z + numCellsSide / 2] = new NavCell { Position = cellPosition, hasColliders = hasCollider, Name = cellName };
                     }
                 }
             }
-
             return grid;
         }
 
@@ -65,8 +61,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
             while (openSet.Count > 0)
             {
-                // Debug.Log($"Openset: {openSet.Count}");
-
                 NavCell current = GetLowestFScore(openSet, fScore);
 
                 if (current.Position == targetCell.Position)
@@ -142,7 +136,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             sphere.transform.localScale = new Vector3(2f, 2f, 2f);
             sphere.GetComponent<Renderer>().material.color = Color.blue;
 
-
             return foundWalkable ? closest : grid[-1, -1, -1]; // Fallback to first cell if no walkable found
         }
 
@@ -165,7 +158,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
                     best = cell;
                 }
             }
-
             return best;
         }
 
@@ -202,7 +194,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
                         neighbors.Add(neighbor);
                 }
             }
-
             return neighbors;
         }
 

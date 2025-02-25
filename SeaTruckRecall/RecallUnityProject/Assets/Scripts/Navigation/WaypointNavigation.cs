@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using static DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 {
@@ -155,8 +156,24 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             }
         }
 
+        protected internal virtual void StartWaypointNavigation(List<Waypoint> waypoints)
+        {
+            if (waypoints == null || waypoints.Count == 0)
+            {
+                Log.LogDebug("StartWaypointNavigation: No waypoints provided!");
+                return;
+            }
+            SetWayPoints(waypoints);
+            StartWaypointNavigation();
+        }
+
         protected internal virtual void StartWaypointNavigation()
         {
+            if (_waypoints == null || _waypoints.Count == 0)
+            {
+                Log.LogDebug("StartWaypointNavigation: No waypoints set!");
+                return;
+            }
             Reset();
             NavStarted();
             SetNavState(NavState.Moving);

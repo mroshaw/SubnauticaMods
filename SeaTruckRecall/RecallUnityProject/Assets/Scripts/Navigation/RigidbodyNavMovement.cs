@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using static DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 {
     internal class RigidbodyNavMovement : WaypointNavigation
     {
         // Movement properties for this method of navigation
-        protected override float RotateSpeed => 25.0f;
-        protected override float MoveSpeed => 10.0f;
+        protected override float RotateSpeed => 45.0f;
+        protected override float MoveSpeed => 20.0f;
         protected override float RotateThreshold => 0.5f;
 
         // Private fields
