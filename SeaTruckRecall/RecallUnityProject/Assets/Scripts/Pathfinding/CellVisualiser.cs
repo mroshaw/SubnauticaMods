@@ -12,12 +12,16 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
         private GameObject _visualiserSphere;
 
-        internal void CreateOrUpdate(NavCell newNavCell, CellType cellType)
+        internal void CreateOrUpdate(NavCell newNavCell, CellType cellType, Transform parentContainer)
         {
             _cellType = cellType;
             _navCell = newNavCell;
             CreateOrUpdateVisualiserSphere();
             transform.position = newNavCell.Position;
+            if (parentContainer)
+            {
+                gameObject.transform.SetParent(parentContainer, true);
+            }
         }
 
         private void CreateOrUpdateVisualiserSphere()

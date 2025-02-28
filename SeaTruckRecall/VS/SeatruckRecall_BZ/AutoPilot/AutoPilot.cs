@@ -49,20 +49,32 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
         internal AutopilotStateChangedEvent OnAutopilotStateChanged = new AutopilotStateChangedEvent();
         internal AutopilotWaypointChangedEvent OnAutopilotWaypointChanged = new AutopilotWaypointChangedEvent();
 
-        /// <summary>
-        /// Initialise the component
-        /// </summary>
-        internal virtual void Start()
+        protected virtual void OnEnable()
         {
-            // Get the WaypointNavigation component
-            _waypointNav = GetComponent<WaypointNavigation>();
-
-            // Set default state
-            SetAutopilotState(AutoPilotState.Ready);
+            if (!_waypointNav)
+            {
+                _waypointNav = GetComponent<WaypointNavigation>();
+            }
 
             // Subscribe to Waypoint changed event
             _waypointNav.OnNavStateChanged.AddListener(NavStateChangedHandler);
             _waypointNav.OnWaypointChanged.AddListener(NavWaypointChangedHandler);
+
+        }
+
+        protected virtual void OnDisable()
+        {
+            _waypointNav.OnNavStateChanged.RemoveListener(NavStateChangedHandler);
+            _waypointNav.OnWaypointChanged.RemoveListener(NavWaypointChangedHandler);
+        }
+
+        /// <summary>
+        /// Initialise the component
+        /// </summary>
+        protected virtual void Start()
+        {
+            // Set default state
+            SetAutopilotState(AutoPilotState.Ready);
         }
 
         internal bool IsReady()
@@ -73,7 +85,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
         /// <summary>
         /// Method to call the Seatruck to the given dock
         /// </summary>
-        internal bool BeginNavigation(List<Waypoint> waypoints)
+        internal virtual bool BeginNavigation(List<Waypoint> waypoints)
         {
             // Abort, if already being recalled
             if (_currentAutoPilotState != AutoPilotState.Ready)

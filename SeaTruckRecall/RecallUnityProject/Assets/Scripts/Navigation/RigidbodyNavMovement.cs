@@ -7,8 +7,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
     internal class RigidbodyNavMovement : WaypointNavigation
     {
         // Movement properties for this method of navigation
-        protected override float RotateSpeed => 45.0f;
-        protected override float MoveSpeed => 20.0f;
+        protected override float RotateSpeed => 25.0f;
+        protected override float MoveSpeed => 10.0f;
         protected override float RotateThreshold => 0.5f;
 
         // Private fields
@@ -99,6 +99,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             {
                 backup.Restore();
             }
+
             UWE.Utils.SetIsKinematicAndUpdateInterpolation(_mainTruckRigidbody, true, true);
         }
 
@@ -112,6 +113,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             {
                 backup.Zero();
             }
+
             UWE.Utils.SetIsKinematicAndUpdateInterpolation(_mainTruckRigidbody, false, false);
         }
 
@@ -132,7 +134,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             Vector3 force = velocityChange * _moveForce;
 
             return force;
-
         }
 
         /// <summary>
@@ -180,11 +181,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
             internal void Zero()
             {
-
                 _rigidBody.drag = 0;
                 _rigidBody.mass = 0;
                 UWE.Utils.SetIsKinematicAndUpdateInterpolation(_rigidBody, true, false);
-
             }
 
             internal void Restore()

@@ -20,43 +20,44 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
         [HarmonyPostfix]
         internal static void StartPostfix(SeaTruckSegment __instance)
         {
-            // Check to see if this is the "main" truck segment
-            if (__instance.isMainCab)
+            if (!__instance.gameObject.activeSelf)
             {
-                // Add the SeatruckRecallListener component
-                if (!__instance.gameObject.GetComponent<SeaTruckAutoPilot>())
-                {
-                    // Add the new AutoPilot component
-                    Log.LogInfo("Adding SeaTruckAutopilot component...");
-                    SeaTruckAutoPilot newAutoPilot = __instance.gameObject.AddComponent<SeaTruckAutoPilot>();
-                    AllAutoPilots.AddInstance(newAutoPilot);
-                    Log.LogInfo(
-                    $"Added SeaTruckAutopilot component to {__instance.gameObject.name}!");
-
-                    // Add and configure the MoveMethod
-                    WaypointNavigation navMovement;
-
-                    switch (ConfigFile.RecallMoveMethod)
-                    {
-                        case RecallMoveMethod.Smooth:
-                            navMovement = __instance.gameObject.AddComponent<RigidbodyNavMovement>();
-                            navMovement.SlowDistance = 2.0f;
-                            break;
-
-                        case RecallMoveMethod.Fixed:
-                            navMovement = __instance.gameObject.AddComponent<TransformNavMovement>();
-                           break;
-
-                        case RecallMoveMethod.Teleport:
-                            navMovement = __instance.gameObject.AddComponent<TeleportNavMovement>();
-                            break;
-                        default:
-                            navMovement = __instance.gameObject.AddComponent<TeleportNavMovement>();
-                            break;
-                    }
-                }
+                return;
             }
+
+            // Add the new AutoPilot component
+            Log.LogInfo("Adding SeaTruckAutopilot components...");
+
+            // Add and configure the MoveMethod
+            WaypointNavigation navMovement;
+
+            switch (ConfigFile.RecallMoveMethod)
+            {
+                case RecallMoveMethod.Smooth:
+                    navMovement = __instance.gameObject.EnsureComponent<RigidbodyNavMovement>();
+                    navMovement.SlowDistance = 2.0f;
+                    break;
+
+                case RecallMoveMethod.Fixed:
+                    navMovement = __instance.gameObject.EnsureComponent<TransformNavMovement>();
+                    break;
+
+                case RecallMoveMethod.Teleport:
+                    navMovement = __instance.gameObject.EnsureComponent<TeleportNavMovement>();
+                    break;
+                default:
+                    navMovement = __instance.gameObject.EnsureComponent<TeleportNavMovement>();
+                    break;
+            }
+
+            PathFinder pathFinder = __instance.gameObject.EnsureComponent<PathFinder>();
+
+            SeaTruckAutoPilot newAutoPilot = __instance.gameObject.EnsureComponent<SeaTruckAutoPilot>();
+            AllAutoPilots.AddInstance(newAutoPilot);
+
+            Log.LogInfo($"Added SeaTruckAutopilot components to {__instance.gameObject.name}!");
         }
+
 
         /// <summary>
         /// Patch the OnDestroy method, to remove
@@ -94,6 +95,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
                     return false;
                 }
             }
+
             return true;
         }
     }

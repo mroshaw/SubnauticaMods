@@ -7,7 +7,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 {
     public class TestUI : MonoBehaviour
     {
-
         [SerializeField] private TMP_Text gridStatusText;
         [SerializeField] private TMP_Text pathingStatusText;
         [SerializeField] private TMP_Text waypointStatusText;
@@ -22,6 +21,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         [SerializeField] private Transform waypoint3;
         [SerializeField] private Transform waypoint4;
         [SerializeField] private Transform waypoint5;
+
+        private List<Waypoint> _waypoints;
 
         public void NavigateInternalWaypoints()
         {
@@ -51,11 +52,48 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             pathFinder.OnPathingStatusChanged.RemoveListener(PathingStatusChangedHandler);
         }
 
-        public void Navigate()
+        public void GenerateGridPathAndNavigate()
         {
-            pathFinder.GenerateWaypoints();
+            pathFinder.GenerateWaypoints(WaypointsReady);
         }
 
+        public void StartNav()
+        {
+            navSystem.StartWaypointNavigation(_waypoints);
+        }
+
+        public void RefreshGrid()
+        {
+            pathFinder.RefreshNavGrid();
+        }
+
+        public void RefreshPath()
+        {
+            pathFinder.GenerateWaypoints(SetWaypoints);
+        }
+
+        private void SetWaypoints(GenerateStatus waypointStatus, List<Waypoint> waypoints)
+        {
+            if (waypointStatus != GenerateStatus.Success)
+            {
+                Log.LogError("Failed to generate waypoints!");
+                return;
+            }
+
+            _waypoints = waypoints;
+        }
+
+        private void WaypointsReady(GenerateStatus waypointStatus, List<Waypoint> waypoints)
+        {
+            if (waypointStatus != GenerateStatus.Success)
+            {
+                Log.LogError("Failed to generate waypoints!");
+                return;
+            }
+            navSystem.StartWaypointNavigation(waypoints);
+        }
+
+        #region UI state handlers
         private void GridStatusChangedHandler(GenerateStatus status)
         {
             gridStatusText.text = status.ToString();
@@ -69,18 +107,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         private void WaypointStatusChangedHandler(GenerateStatus status)
         {
             waypointStatusText.text = status.ToString();
-
-            if (status == GenerateStatus.Success)
-            {
-                navSystem.StartWaypointNavigation(pathFinder.Waypoints);
-            }
-
-            if (status == GenerateStatus.Failed)
-            {
-                Log.LogError("Waypoint generation failed!");
-            }
         }
-
+        #endregion
+        #region Utility methods
         public void ApplyForce()
         {
             float forceToApply = float.Parse(forceText.text);
@@ -102,5 +131,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             RigidbodyNavMovement rbNav = navSystem as RigidbodyNavMovement;
             rbNav.RestoreRigidBodies();
         }
+        #endregion
     }
 }

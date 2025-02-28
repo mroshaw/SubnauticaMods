@@ -5,7 +5,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 {
     internal class TransformNavMovement : WaypointNavigation
     {
-
         // Movement properties for this method of navigation
         protected override float RotateSpeed => 3.0f;
         protected override float MoveSpeed => 0.8f;
@@ -35,6 +34,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
                 transform.LookAt(targetPosition);
                 return;
             }
+
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * RotateSpeed);
         }
 

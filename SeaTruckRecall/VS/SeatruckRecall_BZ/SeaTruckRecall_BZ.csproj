@@ -80,24 +80,48 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\Navigation\NavMovement.cs">
+      <Link>Navigation\NavMovement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\Navigation\RigidbodyNavMovement.cs">
+      <Link>Navigation\RigidbodyNavMovement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\Navigation\TeleportNavMovement.cs">
+      <Link>Navigation\TeleportNavMovement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\Navigation\TransformNavMovement.cs">
+      <Link>Navigation\TransformNavMovement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\Navigation\Waypoint.cs">
+      <Link>Navigation\Waypoint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\Navigation\WaypointNavigation.cs">
+      <Link>Navigation\WaypointNavigation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\Pathfinding\CellVisualiser.cs">
+      <Link>Pathfinding\CellVisualiser.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\Pathfinding\NavCell.cs">
+      <Link>Pathfinding\NavCell.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\Pathfinding\NavGrid.cs">
+      <Link>Pathfinding\NavGrid.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\Pathfinding\NavPath.cs">
+      <Link>Pathfinding\NavPath.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\Pathfinding\PathFinder.cs">
+      <Link>Pathfinding\PathFinder.cs</Link>
+    </Compile>
     <Compile Include="AutoPilot\AllAutoPilots.cs" />
     <Compile Include="AutoPilot\SeaTruckAutoPilot.cs" />
     <Compile Include="Config\ModConfigFile.cs" />
     <Compile Include="DockRecaller\AllSeaTruckDockRecallers.cs" />
     <Compile Include="DockRecaller\SeaTruckDockRecallerUi.cs" />
-    <Compile Include="Navigation\NavMovement.cs" />
-    <Compile Include="Navigation\TeleportNavMovement.cs" />
-    <Compile Include="Navigation\TransformNavMovement.cs" />
-    <Compile Include="Navigation\Waypoint.cs" />
-    <Compile Include="Navigation\WaypointNavigation.cs" />
     <Compile Include="DockRecaller\SeaTruckDockRecaller.cs" />
     <Compile Include="AutoPilot\AutoPilot.cs" />
-    <Compile Include="Navigation\RigidbodyNavMovement.cs" />
     <Compile Include="Patches\MoonpoolExpansionManagerPatches.cs" />
     <Compile Include="Patches\SeaTruckSegmentPatches.cs" />
-    <Compile Include="Pathfinding\NavCell.cs" />
-    <Compile Include="Pathfinding\NavGrid.cs" />
-    <Compile Include="Pathfinding\PathFinder.cs" />
     <Compile Include="SeaTruckDockRecallPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\GlobalUtils.cs" />

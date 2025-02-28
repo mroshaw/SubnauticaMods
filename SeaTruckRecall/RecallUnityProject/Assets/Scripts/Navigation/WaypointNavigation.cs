@@ -156,24 +156,18 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             }
         }
 
-        protected internal virtual void StartWaypointNavigation(List<Waypoint> waypoints)
-        {
-            if (waypoints == null || waypoints.Count == 0)
-            {
-                Log.LogDebug("StartWaypointNavigation: No waypoints provided!");
-                return;
-            }
-            SetWayPoints(waypoints);
-            StartWaypointNavigation();
-        }
-
         protected internal virtual void StartWaypointNavigation()
         {
-            if (_waypoints == null || _waypoints.Count == 0)
-            {
-                Log.LogDebug("StartWaypointNavigation: No waypoints set!");
-                return;
-            }
+            Reset();
+            NavStarted();
+            SetNavState(NavState.Moving);
+            Log.LogDebug("Starting Waypoint Navigation...");
+            NextWaypoint();
+        }
+
+        protected internal virtual void StartWaypointNavigation(List<Waypoint> waypoints)
+        {
+            SetWayPoints(waypoints);
             Reset();
             NavStarted();
             SetNavState(NavState.Moving);
