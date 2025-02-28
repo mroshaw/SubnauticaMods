@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using static DaftAppleGames.SubnauticaCheater.SubnauticaCheaterPlugin;
 
 namespace DaftAppleGames.SubnauticaCheater.Patches
 {
@@ -11,9 +12,14 @@ namespace DaftAppleGames.SubnauticaCheater.Patches
         /// <param name="__instance"></param>
         [HarmonyPatch(nameof(Oxygen.RemoveOxygen))]
         [HarmonyPrefix]
-        public static bool RemoveOxygen_Prefix(Oxygen __instance)
+        public static bool RemoveOxygen_Prefix(Oxygen __instance, ref float __result)
         {
-            return false;
+            if (ConfigFile.OxygenCheat)
+            {
+                __result = __instance.oxygenAvailable;
+                return false;
+            }
+            return true;
         }
     }
 }

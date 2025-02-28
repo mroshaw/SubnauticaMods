@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using static DaftAppleGames.SubnauticaCheater_BZ.SubnauticaCheater_BZPlugin;
+using HarmonyLib;
 
 namespace DaftAppleGames.SubnauticaCheater_BZ.Patches
 {
@@ -21,7 +22,7 @@ namespace DaftAppleGames.SubnauticaCheater_BZ.Patches
         [HarmonyPrefix]
         public static bool AddCold_Prefix(Player __instance)
         {
-            return false;
+            return !ConfigFile.OxygenCheat;
         }
     }
 }

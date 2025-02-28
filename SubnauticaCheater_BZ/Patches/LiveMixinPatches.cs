@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using static DaftAppleGames.SubnauticaCheater_BZ.SubnauticaCheater_BZPlugin;
 
 namespace DaftAppleGames.SubnauticaCheater_BZ.Patches
 {
@@ -23,7 +24,7 @@ namespace DaftAppleGames.SubnauticaCheater_BZ.Patches
         {
             if (__instance.gameObject.GetComponent<Player>())
             {
-                return false;
+                return !ConfigFile.DamageCheat;
             }
             return true;
         }

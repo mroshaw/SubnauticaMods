@@ -43,6 +43,9 @@
     <Reference Include="BepInEx">
       <HintPath>E:\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
+    <Reference Include="Nautilus">
+      <HintPath>..\..\..\..\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\plugins\Nautilus\Nautilus.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -71,17 +74,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\ModConfigFile.cs" />
     <Compile Include="Mono\GroundPlacer.cs" />
     <Compile Include="Patches\LiveMixinPatches.cs" />
     <Compile Include="Patches\OxygenPatches.cs" />
     <Compile Include="Patches\BodyTemperaturePatches.cs" />
     <Compile Include="Patches\PlayerPatches.cs" />
-    <Compile Include="Patches\SuitBoosterTankPatches.cs" />
     <Compile Include="SubnauticaCheater_BZPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Config\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

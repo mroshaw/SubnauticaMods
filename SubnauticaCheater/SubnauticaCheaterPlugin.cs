@@ -1,26 +1,21 @@
 ﻿using BepInEx;
-using BepInEx.Configuration;
 using BepInEx.Logging;
+using DaftAppleGames.SubnauticaCheater.Config;
 using HarmonyLib;
-using UnityEngine;
+using Nautilus.Handlers;
 
 namespace DaftAppleGames.SubnauticaCheater
 {
-    // TODO Review this file and update to your own requirements.
-
     [BepInPlugin(MyGUID, PluginName, VersionString)]
     public class SubnauticaCheaterPlugin : BaseUnityPlugin
     {
-        // Mod specific details. MyGUID should be unique, and follow the reverse domain pattern
-        // e.g.
-        // com.mynameororg.pluginname
-        // Version should be a valid version string.
-        // e.g.
-        // 1.0.0
+        // Mod  details
         private const string MyGUID = "com.mrosh.SubnauticaCheater";
         private const string PluginName = "SubnauticaCheater";
         private const string VersionString = "1.0.0";
 
+        // Config file / UI initialisation
+        internal static ModConfigFile ConfigFile = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();
         private static readonly Harmony Harmony = new Harmony(MyGUID);
         public static ManualLogSource Log = new ManualLogSource(PluginName);
 
