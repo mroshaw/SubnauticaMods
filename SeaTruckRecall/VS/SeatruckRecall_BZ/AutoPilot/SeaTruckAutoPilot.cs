@@ -12,7 +12,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
     {
         private PathFinder _pathFinder;
         private List<Waypoint> _recallWaypoints;
-        private LayerMask _ignoreLayerMask;
+        // Lists the layers to INCLUDE in collision avoidance
+        private LayerMask _collisionLayerMask;
 
         private Transform _debugContainer;
 
@@ -24,10 +25,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
                 _pathFinder = GetComponent<PathFinder>();
             }
 
-            // _pathFinder.OnPathingStatusChanged.AddListener(PathingChangedHandler);
 
-            // Ignore layers for obstacle detection
-            _ignoreLayerMask = ~LayerMask.GetMask("Vehicle");
+            // Include layers for obstacle detection
+            _collisionLayerMask = LayerMask.GetMask("TerrainCollider", "Default");
         }
 
         protected override void OnDisable()
@@ -38,6 +38,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
 
         protected override void Start()
         {
+            base.Start();
             GameObject debugGameObject = new GameObject("NAVGRID");
             _debugContainer = debugGameObject.transform;
         }
@@ -50,8 +51,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
             _recallWaypoints = waypoints;
 
             // Creates a grid of cells 10.0 units square, 5 squares to the left, right, top and bottom from the SeaTruck to the target.
-            // OnPathingStatusChanged will tell us when the waypoints are ready
-            _pathFinder.GenerateWaypoints(transform.position, targetPosition, 15.0f, 3, _ignoreLayerMask, null, null, WaypointsCompleteHandler, true, _debugContainer);
+            SetAutopilotState(AutoPilotState.CalculatingRoute);
+            _pathFinder.GenerateWaypoints(transform.position, targetPosition, 5.0f, 5, _collisionLayerMask, null, null, WaypointsCompleteHandler, true, _debugContainer);
 
             return true;
         }
@@ -65,12 +66,13 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
             if (status == GenerateStatus.Success)
             {
                 // Append the remaining dock recall waypoints
-                for (int i = 1; i < _recallWaypoints.Count; i++)
+                for (int i = 0; i < _recallWaypoints.Count; i++)
                 {
                     waypoints.Add(_recallWaypoints[i]);
                 }
 
                 // Begin moving through the waypoints
+                SetAutopilotState(AutoPilotState.Ready);
                 base.BeginNavigation(waypoints);
             }
         }

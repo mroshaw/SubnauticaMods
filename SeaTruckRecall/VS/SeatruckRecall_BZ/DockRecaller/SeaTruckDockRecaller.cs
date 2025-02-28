@@ -58,6 +58,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller
         private DockRecallState _previousRecallState;
         private SeaTruckAutoPilot _currentRecallAutoPilot;
 
+        internal bool IsReady => _currentRecallState != DockRecallState.Recalling && _currentRecallState != DockRecallState.Parking &&
+                                 _currentRecallState != DockRecallState.Docked;
+
         // Transform within the dock, that the recall will pull the SeaTruck into it's final docking place
         // If not docked within the timeout, abandon
         private Vector3 _parkingDockConnection;

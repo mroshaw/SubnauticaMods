@@ -38,6 +38,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         private bool IsBusy => _gridStatus == GenerateStatus.Generating || _pathStatus == GenerateStatus.Generating;
         internal bool IsPathingReady => _gridStatus == GenerateStatus.Success && _pathStatus == GenerateStatus.Success;
         internal bool HasPathingFailed => _gridStatus == GenerateStatus.Failed || _pathStatus == GenerateStatus.Failed;
+        internal bool IsGridReady => _gridStatus == GenerateStatus.Success;
 
         internal GridStatusChangedEvent OnGridStatusChanged = new GridStatusChangedEvent();
         internal PathingStatusChangedEvent OnPathingStatusChanged = new PathingStatusChangedEvent();
@@ -86,7 +87,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         // Only used in debugging. Keeps a list of cells so we can tweak the visualisers
         private Dictionary<NavCell, CellVisualiser> _debugCellVisualisers = new Dictionary<NavCell, CellVisualiser>();
 
-        internal IEnumerator GetPathAsync(Vector3 sourcePosition, Vector3 targetPosition, float cellSize, int numCellExtends, LayerMask ignoreLayerMask,
+        internal IEnumerator GenerateNavGridAndPathAsync(Vector3 sourcePosition, Vector3 targetPosition, float cellSize, int numCellExtends, LayerMask colliderLayerMask,
             Action<GenerateStatus> gridCompleteAction = null, Action<GenerateStatus> pathCompleteAction = null,
             bool debug = false, Transform debugContainer = null)
         {
@@ -104,12 +105,12 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
                 yield break;
             }
 
-            yield return GenerateNavGridAsync(sourcePosition, targetPosition, cellSize, numCellExtends, ignoreLayerMask, gridCompleteAction,
+            yield return GenerateNavGridAsync(sourcePosition, targetPosition, cellSize, numCellExtends, colliderLayerMask, gridCompleteAction,
                 debug, debugContainer);
 
             if (_gridStatus == GenerateStatus.Success)
             {
-                yield return FindPathAsync(sourcePosition, targetPosition, pathCompleteAction, debug, debugContainer);
+                yield return GeneratePathAsync(sourcePosition, targetPosition, pathCompleteAction, debug, debugContainer);
             }
             else
             {
@@ -143,7 +144,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             return newContainer.transform;
         }
 
-        internal IEnumerator GenerateNavGridAsync(Vector3 sourcePosition, Vector3 targetPosition, float cellSize, int numCellExtends, LayerMask ignoreLayerMask,
+        internal IEnumerator GenerateNavGridAsync(Vector3 sourcePosition, Vector3 targetPosition, float cellSize, int numCellExtends, LayerMask colliderLayerMask,
             Action<GenerateStatus> gridCompleteAction = null,
            bool debug = false,  Transform debugContainer = null)
         {
@@ -163,6 +164,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
             float genTime = Time.time;
             Log.LogDebug($"Started Grid Generation: {genTime}");
+            Log.LogDebug($"Ocean Level is: {Ocean.GetOceanLevel()}");
             SetGridStatus(GenerateStatus.Generating);
 
             if (sourcePosition == targetPosition)
@@ -194,11 +196,14 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
                     {
                         Vector3 cellPosition = sourcePosition + (direction * (x * cellSize)) + (up * (y * cellSize)) + (right * (z * cellSize));
 
+
                         // bool hasCollider = Physics.CheckBox(cellPosition, Vector3.one * (cellSize * 0.5f), Quaternion.identity, ~ignoreLayerMask);
                         // Check for colliders inside grid box
                         // RaycastHit[] hits = Physics.BoxCastAll(cellPosition, Vector3.one * (cellSize * 0.5f), Vector3.zero, Quaternion.identity, 0f, ~ignoreLayerMask, QueryTriggerInteraction.Ignore);
-                        int numColliderHits = Physics.OverlapBoxNonAlloc(cellPosition, Vector3.one * (cellSize * 0.5f), _colliderHitCache, Quaternion.identity, ~ignoreLayerMask, QueryTriggerInteraction.Ignore);
-                        bool hasCollider = HasValidColliders(numColliderHits, _colliderHitCache);
+                        int numColliderHits = Physics.OverlapBoxNonAlloc(cellPosition, Vector3.one * (cellSize * 0.5f), _colliderHitCache, Quaternion.identity, colliderLayerMask, QueryTriggerInteraction.Ignore);
+
+                        // If the cell is above sea level, mark as "invalid"
+                        bool hasCollider = cellPosition.y > Ocean.GetOceanLevel() - 2.0f || HasValidColliders(numColliderHits, _colliderHitCache);
 
                         int cellYIndex = y + numCellExtends;
                         int cellZIndex = z + numCellExtends;
@@ -254,7 +259,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             return false;
         }
 
-        internal IEnumerator FindPathAsync(Vector3 startPos, Vector3 endPos,
+        internal IEnumerator GeneratePathAsync(Vector3 startPos, Vector3 endPos,
             Action<GenerateStatus> pathCompleteAction = null,
             bool debug = false, Transform debugContainer = null)
         {
@@ -309,7 +314,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
                     SetPathingStatus(GenerateStatus.Success);
                     pathCompleteAction?.Invoke(GenerateStatus.Success);
-                    Log.LogDebug($"Finished Path Generation: {Time.time}. Time taken: {Time.time - genTime}");
+                    Log.LogDebug($"Finished Path Generation: {Time.time}. Time taken: {Time.time - genTime}.  Number of path cells: {_navPath.Count}");
                     yield break;
                 }
 
@@ -338,7 +343,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             }
 
             // No path found
-            Log.LogDebug($"Finished Path Generation: {Time.time}. Time taken: {Time.time - genTime}");
+            Log.LogDebug($"Finished Path Generation: {Time.time}. Time taken: {Time.time - genTime}. No path found.");
             SetPathingStatus(GenerateStatus.Failed);
             pathCompleteAction?.Invoke(GenerateStatus.Failed);
         }

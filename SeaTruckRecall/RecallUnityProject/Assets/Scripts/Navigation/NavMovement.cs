@@ -57,6 +57,15 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
                 return;
             }
 
+            // DEBUG every 5 seconds
+            if (Time.frameCount % (60 * 5) == 0)
+            {
+                Log.LogDebug($"NavMovement: IsFacingTarget={_isFacingTarget}");
+                Log.LogDebug($"NavMovement: IsMoveComplete={IsMoveComplete()}");
+                Log.LogDebug($"NavMovement: IsMoving={IsMoving}");
+            }
+
+
             if (!_isFacingTarget)
             {
                 RotateUpdate(_currentTarget);
@@ -82,16 +91,16 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
         private IEnumerator NudgeAsync(float velocity)
         {
-            _rigidbody.velocity = gameObject.transform.forward * velocity;
+            _rigidbody.velocity = transform.forward * velocity;
             yield return new WaitForSeconds(0.2f);
-            _rigidbody.velocity = (gameObject.transform.forward * -1) * velocity;
+            _rigidbody.velocity = transform.forward * (-1 * velocity);
             yield return new WaitForSeconds(0.2f);
-            _rigidbody.velocity = gameObject.transform.forward * velocity;
+            _rigidbody.velocity = transform.forward * velocity;
         }
 
         private void CheckRotationStatus()
         {
-            if (IsRotationComplete())
+            if (IsRotationComplete() || IsMoveComplete())
             {
                 _isFacingTarget = true;
             }
@@ -109,6 +118,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
             if (_isFacingTarget && IsMoveComplete())
             {
+                Log.LogDebug($"NavMovement: MoveComplete");
                 IsMoving = false;
                 NavMoveComplete();
             }

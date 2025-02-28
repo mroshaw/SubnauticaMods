@@ -23,21 +23,22 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller.Ui
         private const string RecallDisplayText = "RECALL: ";
         private readonly Dictionary<DockRecallState, string> _dockRecallDisplayStateTextDict = new Dictionary<DockRecallState, string>()
         {
-            { DockRecallState.None, " INITIALISING..." },
+            { DockRecallState.None, "INITIALISING..." },
             { DockRecallState.Ready, "READY" },
             { DockRecallState.Aborted, "ABORTED" },
             { DockRecallState.Recalling , "IN PROGRESS..." },
             { DockRecallState.Docked,"READY" },
             { DockRecallState.PirateDetected, "PIRATE DETECTED!" },
-            {DockRecallState.Parking, "PARKING"}
+            { DockRecallState.Parking, "PARKING"}
         };
 
         // Autopilot state text
         private const string AutoPilotDisplayText = "AUTOPILOT: ";
         private readonly Dictionary<AutoPilotState, string> _autoPilotStateDisplayTextDict = new Dictionary<AutoPilotState, string>()
         {
-            { AutoPilotState.None, "NOT CONNECTED" },
+            { AutoPilotState.Idle, "NOT CONNECTED" },
             { AutoPilotState.Ready, "READY" },
+            { AutoPilotState.CalculatingRoute, "CALCULATING ROUTE" },
             { AutoPilotState.Moving, "MOVING" },
             { AutoPilotState.Arrived , "READY" },
             { AutoPilotState.RouteBlocked, "ROUTE BLOCKED!" },
@@ -164,7 +165,16 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller.Ui
         private void RecallButtonHandler()
         {
             Log.LogDebug("SeaTruckDockRecallerUi: Recall button clicked!");
-            _seatruckRecaller.RecallClosestSeatruck();
+            if (_seatruckRecaller.IsReady)
+            {
+                Log.LogDebug("SeaTruckDockRecallerUi: Recalling closest SeaTruck");
+                RecallInProgressUi();
+                _seatruckRecaller.RecallClosestSeatruck();
+            }
+            else
+            {
+                Log.LogDebug("SeaTruckDockRecallerUi: Recaller is busy!");
+            }
         }
 
         /// <summary>

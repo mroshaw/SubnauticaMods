@@ -93,17 +93,28 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             bool debug = false, Transform debugContainer = null)
         {
             SetWaypointsStatus(GenerateStatus.Generating);
-            yield return _navGrid.GetPathAsync(sourcePosition, targetPosition, cellSize, cellExtends, ignoreLayerMask, gridCompleteAction, pathCompleteAction,
-                debug, debugContainer);
-            if (_navGrid.IsPathingReady)
+
+            if (!_navGrid.IsGridReady)
             {
-                SetWaypointsFromPath(_navGrid.NavPath);
-                waypointsCompleteAction?.Invoke(GenerateStatus.Success, Waypoints);
+                yield return _navGrid.GenerateNavGridAsync(sourcePosition, targetPosition, cellSize, cellExtends, ignoreLayerMask, gridCompleteAction,
+                    debug, debugContainer);
             }
-            else
+
+            if (!_navGrid.IsGridReady)
             {
+                Log.LogError("Waypoint Generation failed. NavGrid is not ready.");
                 waypointsCompleteAction?.Invoke(GenerateStatus.Failed, null);
             }
+
+            yield return _navGrid.GeneratePathAsync(sourcePosition, targetPosition, pathCompleteAction, debug, debugContainer);
+            if (!_navGrid.IsPathingReady)
+            {
+
+                Log.LogError("Waypoint Generation failed. NavGrid failed to find a path.");
+                waypointsCompleteAction?.Invoke(GenerateStatus.Failed, null);
+            }
+            SetWaypointsFromPath(_navGrid.NavPath);
+            waypointsCompleteAction?.Invoke(GenerateStatus.Success, Waypoints);
         }
 
         internal void RefreshNavGrid()
@@ -128,7 +139,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         private void RefreshPath(Vector3 sourcePosition, Vector3 targetPosition, float cellSize, int cellExtends, LayerMask ignoreLayerMask,
             bool debug = false, Transform debugContainer = null)
         {
-            StartCoroutine(_navGrid.FindPathAsync(sourcePosition, targetPosition, null, debug, debugContainer));
+            StartCoroutine(_navGrid.GeneratePathAsync(sourcePosition, targetPosition, null, debug, debugContainer));
         }
 
         /// <summary>
@@ -158,7 +169,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
         private Waypoint CreateWaypointFromNavCell(NavCell navCell, int waypointIndex)
         {
-            Waypoint newWaypoint = new Waypoint(navCell.Position, Quaternion.identity, true, $"Waypoint: {waypointIndex}");
+            Waypoint newWaypoint = new Waypoint(navCell.Position, Quaternion.identity, false, $"Waypoint: {waypointIndex}");
             return newWaypoint;
         }
     }

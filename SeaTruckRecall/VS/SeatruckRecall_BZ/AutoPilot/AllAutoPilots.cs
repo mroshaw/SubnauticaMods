@@ -44,25 +44,25 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
             }
 
             // Loop through each seatruck, find out which is closest
-            foreach (SeaTruckAutoPilot seatruck in AllAutoPilotsList)
+            foreach (SeaTruckAutoPilot autoPilot in AllAutoPilotsList)
             {
                 // Check if already docked
-                SeaTruckSegment segment = seatruck.GetComponent<SeaTruckSegment>();
-                if (segment.isDocked || !seatruck.IsReady())
+                SeaTruckSegment segment = autoPilot.GetComponent<SeaTruckSegment>();
+                if (segment.isDocked || segment.IsDocking() || !autoPilot.IsAvailable())
                 {
-                    Log.LogDebug($"Seatruck {seatruck.gameObject.name} is already docking or docked. Skipping...");
+                    Log.LogDebug($"Seatruck {autoPilot.gameObject.name} is already docking or docked. Skipping...");
                     continue;
                 }
 
-                Log.LogDebug($"Checking distance to {seatruck.gameObject.name}...");
-                float currDistance = Vector3.Distance(sourcePosition, seatruck.gameObject.transform.position);
+                Log.LogDebug($"Checking distance to {autoPilot.gameObject.name}...");
+                float currDistance = Vector3.Distance(sourcePosition, autoPilot.gameObject.transform.position);
                 {
                     Log.LogDebug($"Distance is: {currDistance}, closest so far is: {closestDistance}");
                     if ((closestDistance == 0 || currDistance < closestDistance) && currDistance <= maxDistance)
                     {
                         Log.LogDebug("New closest Seatruck found!");
                         closestDistance = currDistance;
-                        closestSeaTruck = seatruck;
+                        closestSeaTruck = autoPilot;
                     }
                 }
             }

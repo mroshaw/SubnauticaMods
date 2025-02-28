@@ -7,8 +7,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
     internal class RigidbodyNavMovement : WaypointNavigation
     {
         // Movement properties for this method of navigation
-        protected override float RotateSpeed => 25.0f;
-        protected override float MoveSpeed => 10.0f;
+        protected override float RotateSpeed => 20.0f;
+        protected override float MoveSpeed => 15.0f;
         protected override float RotateThreshold => 0.5f;
 
         // Private fields
@@ -16,7 +16,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         private Vector3 _currentDirection;
         private float _distanceToTarget;
 
-        private float _stoppingDistance = 5.0f;
+        // private float _stoppingDistance = 5.0f;
         private float _moveForce = 1000.0f;
 
         private Rigidbody _mainTruckRigidbody;
@@ -126,8 +126,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             _directionToTarget.Normalize();
 
             // Scale force based on distance (slows down when close)
-            float speedFactor = Mathf.Clamp01(_distanceToTarget / _stoppingDistance);
-            Vector3 desiredVelocity = _directionToTarget * speedFactor * MoveSpeed;
+            // float speedFactor = Mathf.Clamp01(_distanceToTarget / _stoppingDistance);
+            float speedFactor = 1.0f;
+            Vector3 desiredVelocity = _directionToTarget * (speedFactor * MoveSpeed);
 
             // Compute required force to reach the desired velocity
             Vector3 velocityChange = desiredVelocity - _mainTruckRigidbody.velocity;
@@ -144,7 +145,10 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         {
             // Compute direction to target
             Vector3 direction = targetPosition - transform.position;
-            if (direction.sqrMagnitude < Mathf.Epsilon) return Vector3.zero; // Prevent errors
+            if (direction.sqrMagnitude < Mathf.Epsilon)
+            {
+                return Vector3.zero; // Prevent errors
+            }
 
             // Compute the desired rotation
             Quaternion targetRotation = Quaternion.LookRotation(direction);
@@ -181,6 +185,11 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
             internal void Zero()
             {
+                if (!_rigidBody)
+                {
+                    Log.LogDebug("Backup RigidBody is null!");
+                    return;
+                }
                 _rigidBody.drag = 0;
                 _rigidBody.mass = 0;
                 UWE.Utils.SetIsKinematicAndUpdateInterpolation(_rigidBody, true, false);
@@ -188,6 +197,11 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
             internal void Restore()
             {
+                if (!_rigidBody)
+                {
+                    Log.LogDebug("Backup RigidBody is null!");
+                    return;
+                }
                 _rigidBody.mass = _mass;
                 _rigidBody.drag = _drag;
                 UWE.Utils.SetIsKinematicAndUpdateInterpolation(_rigidBody, false, true);

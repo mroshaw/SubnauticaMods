@@ -20,11 +20,10 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
         [HarmonyPostfix]
         internal static void StartPostfix(SeaTruckSegment __instance)
         {
-            if (!__instance.gameObject.activeSelf)
+            if (!__instance.isMainCab)
             {
                 return;
             }
-
             // Add the new AutoPilot component
             Log.LogInfo("Adding SeaTruckAutopilot components...");
 

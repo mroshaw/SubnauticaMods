@@ -6,8 +6,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
     internal class TransformNavMovement : WaypointNavigation
     {
         // Movement properties for this method of navigation
-        protected override float RotateSpeed => 3.0f;
-        protected override float MoveSpeed => 0.8f;
+        protected override float RotateSpeed => 120.0f;
+        protected override float MoveSpeed => 10.0f;
 
         /// <summary>
         /// Implement the MoveUpdate interface method, using the Rigidbody to move the Source transform
@@ -15,7 +15,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         protected override void MoveUpdate(Vector3 targetPosition)
         {
             // Implement Transform based move on Update
-            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * MoveSpeed);
+            // transform.position = Vector3.Lerp(front.position, targetPosition, Time.deltaTime * MoveSpeed);
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, MoveSpeed * Time.deltaTime);
         }
 
         /// <summary>
@@ -35,7 +36,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
                 return;
             }
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * RotateSpeed);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, RotateSpeed * Time.deltaTime);
+
+            // front.rotation = Quaternion.Slerp(front.rotation, targetRotation, Time.deltaTime * RotateSpeed);
         }
 
         /// <summary>

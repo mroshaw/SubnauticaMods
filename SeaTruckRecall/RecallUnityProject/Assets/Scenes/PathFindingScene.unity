@@ -1032,7 +1032,7 @@ MonoBehaviour:
   pathingStatusText: {fileID: 1943749548}
   waypointStatusText: {fileID: 2074972860}
   forceText: {fileID: 0}
-  navSystem: {fileID: 1440857471}
+  navSystem: {fileID: 0}
   pathFinder: {fileID: 1440857472}
   waypoint1: {fileID: 0}
   waypoint2: {fileID: 0}
@@ -4213,8 +4213,8 @@ GameObject:
   - component: {fileID: 1440857465}
   - component: {fileID: 1440857470}
   - component: {fileID: 1440857469}
-  - component: {fileID: 1440857471}
   - component: {fileID: 1440857472}
+  - component: {fileID: 1440857471}
   m_Layer: 0
   m_Name: SeaTruckMain
   m_TagString: Untagged
@@ -4352,11 +4352,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTransformOverride: {fileID: 75158153}
-  navGridCellSizeOverride: 10
+  navGridCellSizeOverride: 15
   navGridCellExtendsOverride: 5
   navGridOverrideIgnoreLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   navGridDebugOverride: 1
   navGridDebugContainerOverride: {fileID: 1456602582}
 --- !u!1 &1456602581

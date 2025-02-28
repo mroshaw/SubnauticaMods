@@ -9,8 +9,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
     // AutoPilot states
     internal enum AutoPilotState
     {
-        None,
+        Idle,
         Ready,
+        CalculatingRoute,
         Moving,
         Paused,
         Stopped,
@@ -37,7 +38,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
 
         // Autopilot state
         public AutoPilotState AutoPilotState => _currentAutoPilotState;
-        private AutoPilotState _currentAutoPilotState = AutoPilotState.None;
+        private AutoPilotState _currentAutoPilotState;
         private AutoPilotState _previousAutoPilotState;
         private NavState _currentNavState;
 
@@ -74,12 +75,12 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
         protected virtual void Start()
         {
             // Set default state
-            SetAutopilotState(AutoPilotState.Ready);
+            SetAutopilotState(AutoPilotState.Idle);
         }
 
-        internal bool IsReady()
+        internal bool IsAvailable()
         {
-            return _currentAutoPilotState == AutoPilotState.Ready;
+            return _currentAutoPilotState == AutoPilotState.Idle;
         }
 
         /// <summary>
@@ -117,7 +118,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.AutoPilot
         /// <summary>
         /// Used to set the AutoPilot state, and inform listeners
         /// </summary>
-        private void SetAutopilotState(AutoPilotState newState)
+        protected void SetAutopilotState(AutoPilotState newState)
         {
             if (_currentAutoPilotState == newState)
             {

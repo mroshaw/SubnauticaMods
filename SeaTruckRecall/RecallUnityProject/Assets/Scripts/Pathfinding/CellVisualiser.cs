@@ -7,8 +7,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
     internal class CellVisualiser : MonoBehaviour
     {
-        private NavCell _navCell;
-        private CellType _cellType;
+        [SerializeField] NavCell _navCell;
+        [SerializeField] private CellType _cellType;
 
         private GameObject _visualiserSphere;
 
@@ -38,7 +38,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             switch (_cellType)
             {
                 case CellType.Start:
-                    _visualiserSphere = CreateSphere(3.0f, Color.white);
+                    _visualiserSphere = CreateSphere(3.0f, Color.yellow);
                     break;
                 case CellType.End:
                     _visualiserSphere = CreateSphere(3.0f, Color.blue);

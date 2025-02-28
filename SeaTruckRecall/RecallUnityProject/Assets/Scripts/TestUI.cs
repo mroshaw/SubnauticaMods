@@ -13,7 +13,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
         [SerializeField] TMP_InputField forceText;
 
-        [SerializeField] private WaypointNavigation navSystem;
         [SerializeField] private PathFinder pathFinder;
 
         [SerializeField] private Transform waypoint1;
@@ -23,7 +22,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         [SerializeField] private Transform waypoint5;
 
         private List<Waypoint> _waypoints;
-
+        private WaypointNavigation _navSystem;
         public void NavigateInternalWaypoints()
         {
             List<Waypoint> waypoints = new List<Waypoint>();
@@ -34,8 +33,8 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             waypoints.Add(new Waypoint(waypoint4.position, waypoint4.rotation, true, "Waypoint 4"));
             waypoints.Add(new Waypoint(waypoint5.position, waypoint5.rotation, true, "Waypoint 5"));
 
-            navSystem.SetWayPoints(waypoints);
-            navSystem.StartWaypointNavigation();
+            _navSystem.SetWayPoints(waypoints);
+            _navSystem.StartWaypointNavigation();
         }
 
         private void OnEnable()
@@ -52,6 +51,11 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             pathFinder.OnPathingStatusChanged.RemoveListener(PathingStatusChangedHandler);
         }
 
+        private void Awake()
+        {
+            _navSystem = pathFinder.GetComponent<WaypointNavigation>();
+        }
+
         public void GenerateGridPathAndNavigate()
         {
             pathFinder.GenerateWaypoints(WaypointsReady);
@@ -59,7 +63,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
         public void StartNav()
         {
-            navSystem.StartWaypointNavigation(_waypoints);
+            _navSystem.StartWaypointNavigation(_waypoints);
         }
 
         public void RefreshGrid()
@@ -90,7 +94,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
                 Log.LogError("Failed to generate waypoints!");
                 return;
             }
-            navSystem.StartWaypointNavigation(waypoints);
+            _navSystem.StartWaypointNavigation(waypoints);
         }
 
         #region UI state handlers
@@ -113,7 +117,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         public void ApplyForce()
         {
             float forceToApply = float.Parse(forceText.text);
-            Rigidbody rigidBody = navSystem.GetComponent<Rigidbody>();
+            Rigidbody rigidBody = _navSystem.GetComponent<Rigidbody>();
 
             Vector3 forwardForce = rigidBody.transform.forward * forceToApply;
 
@@ -122,13 +126,13 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
         public void ConfigureRigidBodies()
         {
-            RigidbodyNavMovement rbNav = navSystem as RigidbodyNavMovement;
+            RigidbodyNavMovement rbNav = _navSystem as RigidbodyNavMovement;
             rbNav.ConfigureRigidBodies();
         }
 
         public void RestoreRigidBodies()
         {
-            RigidbodyNavMovement rbNav = navSystem as RigidbodyNavMovement;
+            RigidbodyNavMovement rbNav = _navSystem as RigidbodyNavMovement;
             rbNav.RestoreRigidBodies();
         }
         #endregion

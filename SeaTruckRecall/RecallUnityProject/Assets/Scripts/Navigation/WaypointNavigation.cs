@@ -34,7 +34,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         {
         }
 
-
         // Events to publish current state of Navigation
         internal NavStateChangedEvent OnNavStateChanged = new NavStateChangedEvent();
         internal NavWaypointChangedEvent OnWaypointChanged = new NavWaypointChangedEvent();
