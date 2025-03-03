@@ -12,8 +12,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
     /// </summary>
     internal static class PrefabConfigUtilsPlatform
     {
-
-        public static void RegisterCustomPet(PrefabInfo prefabInfo, string classId, string bundlePrefabName, TechType techType, TechType dnaTechType)
+        public static void RegisterCustomPet(PrefabInfo prefabInfo, string classId, string bundlePrefabName, TechType techType, TechType dnaTechType, bool includeDnaTechType = false)
         {
             CustomPrefab prefab = new CustomPrefab(prefabInfo);
 
@@ -28,17 +27,10 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             PrefabUtils.AddConstructable(prefabGameObject, prefabInfo.TechType, ConstructableFlags.Base, model);
             PrefabUtils.AddVFXFabricating(prefabGameObject, "model", -0.2f, 0.9f, new Vector3(0.0f, 0.0f, 0.0f), 0.7f, new Vector3(0.0f, 0.0f, 0.0f));
 
-            OnSurfaceTracker onSurfaceTracker = prefabGameObject.EnsureComponent<OnSurfaceTracker>();
-            WorldForces worldForces = prefabGameObject.EnsureComponent<WorldForces>();
-            worldForces.useRigidbody = prefabGameObject.GetComponent<Rigidbody>();
-            LiveMixin liveMixin = prefabGameObject.EnsureComponent<LiveMixin>();
-            liveMixin.data = ScriptableObject.CreateInstance<LiveMixinData>();
-            liveMixin.data.maxHealth = 50;
-            liveMixin.health = 50;
-
             prefabGameObject.GetComponent<LargeWorldEntity>().enabled = false;
             MaterialUtils.ApplySNShaders(prefabGameObject);
             PrefabConfigUtils.AddPetComponent(prefabGameObject);
+            PrefabConfigUtils.AddCustomPetComponents(prefabGameObject);
             PrefabConfigUtils.AddPetHandTarget(prefabGameObject);
             prefab.SetGameObject(prefabGameObject);
 
@@ -46,11 +38,21 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             RecipeData recipe = null;
             if (SubnauticaPetsPlugin.ModConfig.ModMode == ModMode.Adventure)
             {
-                recipe = new RecipeData(
-                new Ingredient(TechType.Gold, 1),
-                new Ingredient(TechType.JellyPlant, 1),
-                new Ingredient(TechType.Salt, 1),
-                new Ingredient(dnaTechType, 3));
+                if (includeDnaTechType)
+                {
+                    recipe = new RecipeData(
+                        new Ingredient(TechType.Gold, 1),
+                        new Ingredient(TechType.Titanium, 1),
+                        new Ingredient(TechType.Salt, 1),
+                        new Ingredient(dnaTechType, 2));
+                }
+                else
+                {
+                    recipe = new RecipeData(
+                        new Ingredient(TechType.Gold, 1),
+                        new Ingredient(TechType.Titanium, 1),
+                        new Ingredient(TechType.Salt, 1));
+                }
             }
             else
             {
