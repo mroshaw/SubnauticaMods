@@ -16,7 +16,6 @@ namespace DaftAppleGames.PrawnSuitRepairAndCharge_BZ
         // Config file / UI initialisation
         internal static ModConfigFile ConfigFile = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();
         private static readonly Harmony Harmony = new Harmony(MyGuid);
-
         public static ManualLogSource Log;
 
         private void Awake()

@@ -3,7 +3,8 @@ using Nautilus.Options.Attributes;
 using UnityEngine;
 
 namespace DaftAppleGames.PrawnSuitRepairAndCharge_BZ
-{    /// <summary>
+{
+    /// <summary>
     /// Nautilus mod config class
     /// </summary>
     [Menu("Prawn Suit Repair And Charge")]
