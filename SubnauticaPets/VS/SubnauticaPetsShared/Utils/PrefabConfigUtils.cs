@@ -15,6 +15,26 @@ namespace DaftAppleGames.SubnauticaPets.Utils
 
         }
 
+        public static void AddCustomPetComponents(GameObject targetGameObject)
+        {
+            OnSurfaceTracker onSurfaceTracker = targetGameObject.EnsureComponent<OnSurfaceTracker>();
+            WorldForces worldForces = targetGameObject.EnsureComponent<WorldForces>();
+            worldForces.useRigidbody = targetGameObject.GetComponent<Rigidbody>();
+            LiveMixin liveMixin = targetGameObject.EnsureComponent<LiveMixin>();
+            liveMixin.data = ScriptableObject.CreateInstance<LiveMixinData>();
+            liveMixin.data.maxHealth = 50;
+            liveMixin.health = 50;
+
+            CustomPet customPet = targetGameObject.EnsureComponent<CustomPet>();
+            customPet.babyScaleSize = 1.0f;
+            CustomPetAnimator customPetAnimator = targetGameObject.EnsureComponent<CustomPetAnimator>();
+            CreatureDeath creatureDeath = targetGameObject.EnsureComponent<CreatureDeath>();
+            creatureDeath.liveMixin = liveMixin;
+            creatureDeath.respawn = false;
+            creatureDeath.useRigidbody = targetGameObject.GetComponent<Rigidbody>();
+
+        }
+
         /// <summary>
         /// Adds the specified child pet class component to the given creature GameObject
         /// based on the given PetCreatureType
@@ -24,7 +44,6 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         public static void AddPetComponent(GameObject targetGameObject)
         {
             Pet pet = targetGameObject.EnsureComponent<Pet>();
-            CustomPetAnimator customPetAnimator = targetGameObject.EnsureComponent<CustomPetAnimator>();
         }
 
         public static void ConfigureLargeWorldEntity(GameObject targetGameObject, bool state)

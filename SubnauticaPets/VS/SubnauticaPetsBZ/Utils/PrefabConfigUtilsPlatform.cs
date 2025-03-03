@@ -13,7 +13,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
     internal static class PrefabConfigUtilsPlatform
     {
 
-        public static void RegisterCustomPet(PrefabInfo prefabInfo, string classId, string bundlePrefabName, TechType techType, TechType dnaTechType)
+        public static void RegisterCustomPet(PrefabInfo prefabInfo, string classId, string bundlePrefabName, TechType techType, TechType dnaTechType, bool includeDna = false)
         {
             CustomPrefab prefab = new CustomPrefab(prefabInfo);
 
@@ -46,6 +46,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             prefabGameObject.GetComponent<LargeWorldEntity>().enabled = false;
             MaterialUtils.ApplySNShaders(prefabGameObject);
             PrefabConfigUtils.AddPetComponent(prefabGameObject);
+            PrefabConfigUtils.AddCustomPetComponents(prefabGameObject);
             PrefabConfigUtils.AddPetHandTarget(prefabGameObject);
             prefab.SetGameObject(prefabGameObject);
 

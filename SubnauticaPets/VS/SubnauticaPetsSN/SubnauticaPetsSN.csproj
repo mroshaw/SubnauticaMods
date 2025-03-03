@@ -116,6 +116,9 @@
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\BaseParts\PetFabricatorFragment.cs">
       <Link>MonoBehaviours\BaseParts\PetFabricatorFragment.cs</Link>
     </Compile>
+    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\CustomPet.cs">
+      <Link>MonoBehaviours\Pets\CustomPet.cs</Link>
+    </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\CustomPetAnimator.cs">
       <Link>MonoBehaviours\Pets\CustomPetAnimator.cs</Link>
     </Compile>

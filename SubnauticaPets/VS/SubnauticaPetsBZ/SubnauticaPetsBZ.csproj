@@ -117,6 +117,9 @@
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\BaseParts\PetFabricatorFragment.cs">
       <Link>MonoBehaviours\BaseParts\PetFabricatorFragment.cs</Link>
     </Compile>
+    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\CustomPet.cs">
+      <Link>MonoBehaviours\Pets\CustomPet.cs</Link>
+    </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\CustomPetAnimator.cs">
       <Link>MonoBehaviours\Pets\CustomPetAnimator.cs</Link>
     </Compile>
@@ -186,8 +189,8 @@
     <Compile Include="Config\ModConfigFile.cs" />
     <Compile Include="Patches\GhostCrafterPatches.cs" />
     <Compile Include="Patches\LandCreatureGravityPatches.cs" />
-    <Compile Include="Patches\LargeWorldEntityPatches.cs" />
     <Compile Include="Patches\MoveOnSurfacePatches.cs" />
+    <Compile Include="Patches\PenguinBabyPatches.cs" />
     <Compile Include="Patches\TrivalvePatches.cs" />
     <Compile Include="Patches\TrivalvePlayerInteractionPatches.cs" />
     <Compile Include="Patches\uGUIMapRoomResourceNodePatches.cs" />
