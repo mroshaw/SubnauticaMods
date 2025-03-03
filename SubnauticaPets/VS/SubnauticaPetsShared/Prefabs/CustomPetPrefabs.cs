@@ -15,6 +15,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             FoxPetPrefab.Register();
         }
 
+        // Cat
         internal static class CatPetPrefab
         {
             // Init PrefabInfo
@@ -28,7 +29,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                 Info = PrefabInfo
                     .WithTechType("CatPet", null, null, unlockAtStart: true)
                     .WithIcon(ModUtils.GetSpriteFromAssetBundle("CatTexture"));
-                PrefabConfigUtilsPlatform.RegisterCustomPet(Info, "PetCat", "PetCat", Info.TechType, PetDnaPrefabs.CatDnaPrefab.Info.TechType);
+                PrefabConfigUtilsPlatform.RegisterCustomPet(Info, "PetCat", "PetCat", Info.TechType, PetDnaPrefabs.CatDnaPrefab.Info.TechType, true);
             }
         }
 
@@ -89,7 +90,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             internal static PrefabInfo Info;
 
             /// <summary>
-            /// Register Cat
+            /// Register Walrus
             /// </summary>
             internal static void Register()
             {
@@ -100,6 +101,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             }
         }
 
+        // Fox
         internal static class FoxPetPrefab
         {
             // Init PrefabInfo

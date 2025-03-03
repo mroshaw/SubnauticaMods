@@ -37,6 +37,8 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         private int _numBodyAnims;
         private int _numFaceAnims;
 
+        private static readonly int DeadAnim = Animator.StringToHash("Dead");
+
         private static readonly int EyesDead = Animator.StringToHash("Eyes_Dead");
         private static readonly int EyesSleep= Animator.StringToHash("Eyes_Sleep");
         private static readonly int EyesEcstatic = Animator.StringToHash("Eyes_Excited");
@@ -74,6 +76,11 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 return;
             }
 
+            if (_pet.IsDead)
+            {
+                _animator.SetBool(DeadAnim, true);
+                return;
+            }
             if (!_inRandomAnim)
             {
                 SetFaceAnimState();
@@ -82,6 +89,10 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
         public void PlayRandomBodyAnim()
         {
+            if(!_animator || _bodyAnimHashKeys == null || _bodyAnimHashKeys.Length == 0)
+            {
+                return;
+            }
             int animIndex = Random.Range(0, _numBodyAnims);
             LogUtils.LogDebug(LogArea.MonoPets, $"Playing random body anim at index: {animIndex}");
             _animator.SetTrigger(_bodyAnimHashKeys[animIndex]);
@@ -94,6 +105,10 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
         public void PlayRandomFaceAnim()
         {
+            if(!_animator || _faceAnimHashKeys == null || _faceAnimHashKeys.Length == 0)
+            {
+                return;
+            }
             int animIndex = Random.Range(0, _numFaceAnims);
             LogUtils.LogDebug(LogArea.MonoPets, $"Playing random face anim at index: {animIndex}");
             _animator.Play(_faceAnimHashKeys[animIndex]);
