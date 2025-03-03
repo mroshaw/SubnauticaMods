@@ -52,7 +52,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     obj.SetActive(false);
                     PrefabConfigUtils.AddTechTag(obj, Info.TechType);
                     GameObject modelGameObject = obj.GetComponentInChildren<Animator>(true).gameObject;
-                    PrefabConfigUtils.AddVFXFabricating(obj, null, -0.2f, 0.5f, new Vector3(0.0f, 0.0f, 0.0f), 1.0f, new Vector3(0.0f, 0.0f, 0.0f));
+                    PrefabConfigUtils.AddVFXFabricating(obj, null, -0.2f, 0.8f, new Vector3(0.0f, 0.0f, 0.0f), 1.0f, new Vector3(0.0f, 0.0f, 0.0f));
                     PrefabUtils.AddConstructable(obj, Info.TechType, ConstructableFlags.Inside, modelGameObject);
                     obj.DestroyComponentsInChildren<Pickupable>();
                     PrefabConfigUtils.AddPetHandTarget(obj);
@@ -110,7 +110,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     obj.SetActive(false);
                     PrefabConfigUtils.AddTechTag(obj, Info.TechType);
                     GameObject modelGameObject = obj.GetComponentInChildren<Animator>(true).gameObject;
-                    PrefabConfigUtils.AddVFXFabricating(obj, null, -0.2f, 0.5f, new Vector3(0.0f, 0.0f, 0.0f), 1.0f, new Vector3(0.0f, 0.0f, 0.0f));
+                    PrefabConfigUtils.AddVFXFabricating(obj, null, -0.2f, 1.2f, new Vector3(0.0f, 0.0f, 0.0f), 1.0f, new Vector3(0.0f, 0.0f, 0.0f));
                     PrefabUtils.AddConstructable(obj, Info.TechType, ConstructableFlags.Inside, modelGameObject);
                     PrefabConfigUtils.UpdatePickupable(obj, false);
                     PrefabConfigUtils.AddPetHandTarget(obj);
@@ -168,7 +168,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     obj.SetActive(false);
                     PrefabConfigUtils.AddTechTag(obj, Info.TechType);
                     GameObject modelGameObject = obj.GetComponentInChildren<Animator>(true).gameObject;
-                    PrefabConfigUtils.AddVFXFabricating(obj, null, -0.2f, 0.5f, new Vector3(0.0f, 0.0f, 0.0f), 1.0f, new Vector3(0.0f, 0.0f, 0.0f));
+                    PrefabConfigUtils.AddVFXFabricating(obj, null, -0.2f, 0.6f, new Vector3(0.0f, 0.0f, 0.0f), 1.0f, new Vector3(0.0f, 0.0f, 0.0f));
                     PrefabUtils.AddConstructable(obj, Info.TechType, ConstructableFlags.Inside, modelGameObject);
                     obj.DestroyComponentsInChildren<Pickupable>();
                     PrefabConfigUtils.AddPetHandTarget(obj);
@@ -226,7 +226,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     obj.SetActive(false);
                     PrefabConfigUtils.AddTechTag(obj, Info.TechType);
                     GameObject modelGameObject = obj.GetComponentInChildren<Animator>(true).gameObject;
-                    PrefabConfigUtils.AddVFXFabricating(obj, null, -0.2f, 0.8f, new Vector3(0.0f, 0.0f, 0.0f), 1.0f, new Vector3(0.0f, 0.0f, 0.0f));
+                    PrefabConfigUtils.AddVFXFabricating(obj, null, -0.2f, 1.0f, new Vector3(0.0f, 0.0f, 0.0f), 1.0f, new Vector3(0.0f, 0.0f, 0.0f));
                     PrefabUtils.AddConstructable(obj, Info.TechType, ConstructableFlags.Inside, modelGameObject);
                     obj.DestroyComponentsInChildren<Pickupable>();
                     PrefabConfigUtils.AddPetHandTarget(obj);
@@ -264,7 +264,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             obj.SetActive(false);
             PrefabConfigUtils.AddTechTag(obj, Info.TechType);
             GameObject modelGameObject = obj.GetComponentInChildren<Animator>(true).gameObject;
-            PrefabConfigUtils.AddVFXFabricating(obj, null, -0.2f, 0.5f, new Vector3(0.0f, 0.0f, 0.0f), 1.0f, new Vector3(0.0f, 0.0f, 0.0f));
+            PrefabConfigUtils.AddVFXFabricating(obj, null, -0.2f, 0.8f, new Vector3(0.0f, 0.0f, 0.0f), 1.0f, new Vector3(0.0f, 0.0f, 0.0f));
             PrefabUtils.AddConstructable(obj, Info.TechType, ConstructableFlags.Inside, modelGameObject);
             obj.DestroyComponentsInChildren<Pickupable>();
             // obj.DisableComponentsInChildren<LargeWorldEntity>();
