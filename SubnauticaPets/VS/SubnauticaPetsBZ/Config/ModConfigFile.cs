@@ -56,7 +56,7 @@ namespace DaftAppleGames.SubnauticaPets
         {
             if (AboutGameObject == null)
             {
-                AboutGameObject = ModUtils.GetGameObjectInstanceFromAssetBundle(AboutGameObjectName, true);
+                AboutGameObject = CustomAssetBundleUtils.GetPrefabInstanceFromAssetBundle(AboutGameObjectName, true);
                 AboutGameObject.AddComponent<CloseOnAnyInput>();
                 AboutGameObject.AddComponent<ApplySnFont>();
                 Vector2 newSizeDelta = new Vector2(-1000, -400);

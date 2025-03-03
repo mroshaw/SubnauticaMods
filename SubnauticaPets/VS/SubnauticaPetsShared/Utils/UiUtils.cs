@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DaftAppleGames.SubnauticaPets.Utils
+namespace DaftAppleGames.SubnauticaPets
 {
     /// <summary>
     /// Utilities class to help construct custom UIs
@@ -181,7 +181,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         public static void CreateScrollView(GameObject sourceUi,
             GameObject targetUi, string scrollViewName, Vector3 localPosition, Vector2 size, out GameObject scrollViewContent)
         {
-            GameObject scrollView = ModUtils.GetGameObjectInstanceFromAssetBundle(ScrollViewObject, true);
+            GameObject scrollView = CustomAssetBundleUtils.GetPrefabInstanceFromAssetBundle(ScrollViewObject, true);
             scrollView.name = scrollViewName;
             scrollView.transform.SetParent(targetUi.transform);
             scrollView.transform.localPosition = localPosition;

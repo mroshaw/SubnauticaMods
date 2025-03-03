@@ -46,6 +46,9 @@
     <Reference Include="BepInEx">
       <HintPath>..\..\..\..\..\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
+    <Reference Include="FMODUnity">
+      <HintPath>..\..\..\..\..\..\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\FMODUnity.dll</HintPath>
+    </Reference>
     <Reference Include="Nautilus">
       <HintPath>..\..\..\..\..\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\plugins\Nautilus\Nautilus.dll</HintPath>
     </Reference>
@@ -174,6 +177,12 @@
     <Compile Include="..\SubnauticaPetsShared\Prefabs\PetFabricatorFragmentPrefab.cs">
       <Link>Prefabs\PetFabricatorFragmentPrefab.cs</Link>
     </Compile>
+    <Compile Include="..\SubnauticaPetsShared\Utils\CustomAssetBundleUtils.cs">
+      <Link>Utils\CustomAssetBundleUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\SubnauticaPetsShared\Utils\CustomAudioUtils.cs">
+      <Link>Utils\CustomAudioUtils.cs</Link>
+    </Compile>
     <Compile Include="..\SubnauticaPetsShared\Utils\LogUtils.cs">
       <Link>Utils\LogUtils.cs</Link>
     </Compile>
@@ -203,7 +212,6 @@
     <Compile Include="Utils\PrefabConfigUtilsPlatform.cs" />
     <Compile Include="Utils\UnlockUtils.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="..\SubnauticaPetsShared\Assets\subnauticapets2assetbundle">
       <Link>Assets\subnauticapets2assetbundle</Link>

@@ -39,7 +39,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 Info = PrefabInfo
                     .WithTechType("AlienRobotPet", null, null, unlockAtStart: true)
-                    .WithIcon(ModUtils.GetSpriteFromAssetBundle("AlienRobotTexture"));
+                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("AlienRobotTexture") as Sprite);
 
                 CustomPrefab prefab = new CustomPrefab(Info);
                 CloneTemplate cloneTemplate = new CloneTemplate(Info, "4fae8fa4-0280-43bd-bcf1-f3cba97eed77");
@@ -102,7 +102,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 Info = PrefabInfo
                     .WithTechType("BloodCrawlerPet", null, null, unlockAtStart: true)
-                    .WithIcon(ModUtils.GetSpriteFromAssetBundle("BloodCrawlerTexture"));
+                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("BloodCrawlerTexture") as Sprite);
 
                 CustomPrefab prefab = new CustomPrefab(Info);
                 CloneTemplate cloneTemplate = new CloneTemplate(Info, "830a8fa0-d92d-4683-a193-7531e6968042");
@@ -164,7 +164,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 Info = PrefabInfo
                     .WithTechType("CaveCrawlerPet", null, null, unlockAtStart: true)
-                    .WithIcon(ModUtils.GetSpriteFromAssetBundle("CaveCrawlerTexture"));
+                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("CaveCrawlerTexture") as Sprite);
 
                 CustomPrefab prefab = new CustomPrefab(Info);
                 CloneTemplate cloneTemplate = new CloneTemplate(Info, "3e0a11f1-e2b2-4c4f-9a8e-0b0a77dcc065");
@@ -225,7 +225,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 Info = PrefabInfo
                     .WithTechType("CrabSquidPet", null, null, unlockAtStart: true)
-                    .WithIcon(ModUtils.GetSpriteFromAssetBundle("CrabSquidTexture"));
+                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("CrabSquidTexture") as Sprite);
 
                 CustomPrefab prefab = new CustomPrefab(Info);
                 CloneTemplate cloneTemplate = new CloneTemplate(Info, "4c2808fe-e051-44d2-8e64-120ddcdc8abb");

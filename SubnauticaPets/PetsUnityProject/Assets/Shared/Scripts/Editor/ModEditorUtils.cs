@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using FMODUnity;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,7 +21,9 @@ namespace DaftAppleGames.SubnauticaModsProject.Editor
             }
 
             UnityEngine.Debug.Log("Building asset bundles...");
+            // EventManager.CopyToStreamingAssets(BuildTarget.StandaloneWindows); // 1
             AssetBundleManifest manifest = BuildAssetBundleByName(bundleName, BundleAssetFolder);
+            // EventManager.UpdateBankStubAssets(BuildTarget.StandaloneWindows);
             UnityEngine.Debug.Log("Building asset bundle... Done.");
 
             UnityEngine.Debug.Log("Deploying asset bundle...");

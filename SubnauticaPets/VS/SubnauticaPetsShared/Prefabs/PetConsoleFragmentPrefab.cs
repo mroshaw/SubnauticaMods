@@ -36,7 +36,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     obj.SetActive(false);
 
                     GameObject damagedConsoleGameObject =
-                        ModUtils.GetGameObjectInstanceFromAssetBundle("PetConsoleDamaged", true);
+                        CustomAssetBundleUtils.GetPrefabInstanceFromAssetBundle("PetConsoleDamaged", true);
                     GameObject newModelGameObject = damagedConsoleGameObject.FindChild("newmodel");
 
                     if (!newModelGameObject)

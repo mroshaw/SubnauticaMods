@@ -1,12 +1,10 @@
 ﻿using DaftAppleGames.SubnauticaPets.Pets;
-using DaftAppleGames.SubnauticaPets.Utils;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static DaftAppleGames.SubnauticaPets.Utils.UiUtils;
 using Button = UnityEngine.UI.Button;
 
 namespace DaftAppleGames.SubnauticaPets.BaseParts
@@ -258,7 +256,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         public void UpdatePetList()
         {
             // Get button background
-            Sprite backgroundSprite = ModUtils.GetSpriteFromAssetBundle(CustomButtonTexture);
+            Sprite backgroundSprite = CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(UiUtils.CustomButtonTexture) as Sprite;
 
             // Clear the current UI objects
             LogUtils.LogDebug(LogArea.MonoBaseParts, "CreatePetList: Clearing existing buttons...");

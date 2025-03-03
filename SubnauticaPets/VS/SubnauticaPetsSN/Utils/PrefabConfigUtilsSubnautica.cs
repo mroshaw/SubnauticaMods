@@ -1,4 +1,4 @@
-﻿namespace DaftAppleGames.SubnauticaPets.Utils
+﻿namespace DaftAppleGames.SubnauticaPets
 {
     internal class PrefabConfigUtilsSubnautica
     {

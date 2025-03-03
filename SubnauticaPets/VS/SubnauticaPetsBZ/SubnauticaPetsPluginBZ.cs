@@ -9,6 +9,7 @@ using Nautilus.Json;
 using Nautilus.Json.Attributes;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace DaftAppleGames.SubnauticaPets
 {
@@ -38,6 +39,9 @@ namespace DaftAppleGames.SubnauticaPets
 
         // Mod Config
         internal static ModConfigFile ModConfig = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();
+
+        // Setup Asset Bundle
+        internal static AssetBundle ModAssetBundle;
 
         private static readonly Harmony Harmony = new Harmony(MyGUID);
         internal static ManualLogSource Log = new ManualLogSource(PluginName);

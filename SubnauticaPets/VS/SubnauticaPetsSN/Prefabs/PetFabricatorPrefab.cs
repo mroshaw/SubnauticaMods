@@ -4,6 +4,7 @@ using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Crafting;
+using UnityEngine;
 
 namespace DaftAppleGames.SubnauticaPets.Prefabs
 {
@@ -23,7 +24,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             // Unlock at start if in Creative mode
             Info = PrefabInfo
                 .WithTechType("PetFabricator", null, null, unlockAtStart: false)
-                .WithIcon(ModUtils.GetSpriteFromAssetBundle("PetFabricatorIconTexture"));
+                .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("PetFabricatorIconTexture") as Sprite);
 
             CustomPrefab fabricatorPrefab = new CustomPrefab(Info);
 
@@ -86,11 +87,11 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             // Set up the scanning and fragment unlocks
             fabricatorPrefab.SetUnlock(Info.TechType, 3)
                 .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule)
-                .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle("PetFabricatorDataBankPopupImageTexture"), null,
+                .WithAnalysisTech(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("PetFabricatorDataBankPopupImageTexture") as Sprite, null,
                     null)
                 .WithEncyclopediaEntry("Tech/Habitats",
-                    ModUtils.GetSpriteFromAssetBundle("PetFabricatorDataBankPopupImageTexture"),
-                    ModUtils.GetTexture2DFromAssetBundle("PetFabricatorDataBankMainImageTexture"));
+                    CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("PetFabricatorDataBankPopupImageTexture") as Sprite,
+                    CustomAssetBundleUtils.GetObjectFromAssetBundle<Texture2D>("PetFabricatorDataBankMainImageTexture") as Texture2D);
             fabricatorPrefab.Register();
         }
     }

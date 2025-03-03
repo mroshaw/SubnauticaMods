@@ -41,7 +41,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 Info = PrefabInfo
                     .WithTechType("PenglingBabyPet", null, null, unlockAtStart: true)
-                    .WithIcon(ModUtils.GetSpriteFromAssetBundle("PenglingBabyTexture"));
+                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("PenglingBabyTexture") as Sprite);
 
                 CustomPrefab prefab = new CustomPrefab(Info);
                 CloneTemplate cloneTemplate = new CloneTemplate(Info, "807fbbb3-aced-45cd-aba8-db3fb1188f1f");
@@ -99,7 +99,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 Info = PrefabInfo
                     .WithTechType("PengwingAdultPet", null, null, unlockAtStart: true)
-                    .WithIcon(ModUtils.GetSpriteFromAssetBundle("PengwingAdultTexture"));
+                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("PengwingAdultTexture") as Sprite);
 
                 CustomPrefab prefab = new CustomPrefab(Info);
                 CloneTemplate cloneTemplate = new CloneTemplate(Info, "74ded0e7-d394-4703-9e53-4384b37f9433");
@@ -157,7 +157,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 Info = PrefabInfo
                     .WithTechType("PinnacaridPet", null, null, unlockAtStart: true)
-                    .WithIcon(ModUtils.GetSpriteFromAssetBundle("PinnacaridTexture"));
+                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("PinnacaridTexture") as Sprite);
 
                 CustomPrefab prefab = new CustomPrefab(Info);
                 CloneTemplate cloneTemplate = new CloneTemplate(Info, "f9eccfe2-a06f-4c06-bc57-01c2e50ffbe8");
@@ -215,7 +215,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 Info = PrefabInfo
                     .WithTechType("SnowstalkerBabyPet", null, null, unlockAtStart: true)
-                    .WithIcon(ModUtils.GetSpriteFromAssetBundle("SnowstalkerBabyTexture"));
+                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("SnowstalkerBabyTexture") as Sprite);
 
                 CustomPrefab prefab = new CustomPrefab(Info);
                 CloneTemplate cloneTemplate = new CloneTemplate(Info, "78d3dbce-856f-4eba-951c-bd99870554e2");
@@ -294,7 +294,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 Info = PrefabInfo
                     .WithTechType("TrivalveBluePet", null, null, unlockAtStart: true)
-                    .WithIcon(ModUtils.GetSpriteFromAssetBundle("TrivalveBlueTexture"));
+                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("TrivalveBlueTexture") as Sprite);
 
                 CustomPrefab prefab = new CustomPrefab(Info);
                 CloneTemplate cloneTemplate = new CloneTemplate(Info, "f5a2317f-6116-4fc6-8e81-824fd8ba9684");
@@ -339,7 +339,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             {
                 Info = PrefabInfo
                     .WithTechType("TrivalveYellowPet", null, null, unlockAtStart: true)
-                    .WithIcon(ModUtils.GetSpriteFromAssetBundle("TrivalveYellowTexture"));
+                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("TrivalveYellowTexture") as Sprite);
 
                 CustomPrefab prefab = new CustomPrefab(Info);
                 CloneTemplate cloneTemplate = new CloneTemplate(Info, "e8f2bfd4-49c6-45d1-a029-489b492515a9");

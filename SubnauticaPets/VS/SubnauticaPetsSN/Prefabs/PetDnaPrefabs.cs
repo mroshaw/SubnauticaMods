@@ -16,10 +16,10 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         /// <summary>
         /// Register all prefabs
         /// </summary>
-        public static void RegisterAll()
+        internal static void RegisterAll()
         {
             // Get the DNA model prefab from the Asset Bundle
-            GameObject dnaModelPrefab = ModUtils.GetGameObjectPrefabFromAssetBundle("DNASampleTube");
+            GameObject dnaModelPrefab = CustomAssetBundleUtils.GetObjectFromAssetBundle<GameObject>("DNASampleTube") as GameObject;
             MaterialUtils.ApplySNShaders(dnaModelPrefab);
 
             // Register DNA spawn prefabs
@@ -35,9 +35,9 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         /// <summary>
         /// Cat DNA Prefab
         /// </summary>
-        public static class CatDnaPrefab
+        internal static class CatDnaPrefab
         {
-            public static PrefabInfo Info;
+            internal static PrefabInfo Info;
             private const int FindCount = 1;
             private const float FindProbability = 0.3f;
 
@@ -45,7 +45,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             /// Register Cat DNA
             /// </summary>
             /// <param name="dnaModelGameObject"></param>
-            public static void Register(GameObject dnaModelGameObject)
+            internal static void Register(GameObject dnaModelGameObject)
             {
                 Info = RegisterDnaPrefab("CatPetDna", null, null, "CatTexture", Color.grey,
                     new LootDistributionData.BiomeData[]
@@ -67,9 +67,9 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         /// <summary>
         /// Alien Robot DNA
         /// </summary>
-        public static class AlienRobotDnaPrefab
+        internal static class AlienRobotDnaPrefab
         {
-            public static PrefabInfo Info;
+            internal static PrefabInfo Info;
             private const int FindCount = 1;
             private const float FindProbability = 0.3f;
 
@@ -77,7 +77,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             /// Register Alien Robot DNA
             /// </summary>
             /// <param name="dnaModelGameObject"></param>
-            public static void Register(GameObject dnaModelGameObject)
+            internal static void Register(GameObject dnaModelGameObject)
             {
                 Info = RegisterDnaPrefab("AlienRobotPetDna", null, null, "AlienRobotDnaStrandTexture", Color.grey,
                     new LootDistributionData.BiomeData[] {
@@ -107,9 +107,9 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         /// <summary>
         /// Blood Crawler DNA
         /// </summary>
-        public static class BloodCrawlerDnaPrefab
+        internal static class BloodCrawlerDnaPrefab
         {
-            public static PrefabInfo Info;
+            internal static PrefabInfo Info;
             private const int FindCount = 1;
             private const float FindProbability = 0.3f;
 
@@ -117,7 +117,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             /// Register Blood Crawler DNA
             /// </summary>
             /// <param name="dnaModelGameObject"></param>
-            public static void Register(GameObject dnaModelGameObject)
+            internal static void Register(GameObject dnaModelGameObject)
             {
                 Info = RegisterDnaPrefab("BloodCrawlerPetDna", null, null, "BloodCrawlerDnaStrandTexture", Color.red,
                     new LootDistributionData.BiomeData[] {
@@ -140,12 +140,12 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             }
         }
 
-        public static class CaveCrawlerDnaPrefab
+        internal static class CaveCrawlerDnaPrefab
         {
-            public static PrefabInfo Info;
+            internal static PrefabInfo Info;
             private const int FindCount = 1;
             private const float FindProbability = 0.3f;
-            public static void Register(GameObject dnaModelGameObject)
+            internal static void Register(GameObject dnaModelGameObject)
             {
                 Info = RegisterDnaPrefab("CaveCrawlerPetDna", null, null, "CaveCrawlerDnaStrandTexture", Color.cyan,
                     new LootDistributionData.BiomeData[] {
@@ -173,9 +173,9 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         /// <summary>
         /// Crab Squid DNA
         /// </summary>
-        public static class CrabSquidDnaPrefab
+        internal static class CrabSquidDnaPrefab
         {
-            public static PrefabInfo Info;
+            internal static PrefabInfo Info;
             private const int FindCount = 1;
             private const float FindProbability = 0.3f;
 
@@ -183,7 +183,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             /// Register Crab Squid DNA
             /// </summary>
             /// <param name="dnaModelGameObject"></param>
-            public static void Register(GameObject dnaModelGameObject)
+            internal static void Register(GameObject dnaModelGameObject)
             {
                 Info = RegisterDnaPrefab("CrabSquidPetDna", null, null, "CrabSquidDnaStrandTexture", Color.blue,
                     new LootDistributionData.BiomeData[] {
@@ -217,7 +217,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
 
             PrefabInfo prefabInfo = PrefabInfo
                 .WithTechType(classId, displayName, description, unlockAtStart: true)
-                .WithIcon(ModUtils.GetSpriteFromAssetBundle(textureName));
+                .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(textureName) as Sprite);
 
             CustomPrefab clonePrefab = new CustomPrefab(prefabInfo);
 
@@ -264,16 +264,14 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         /// <summary>
         /// Adds all DataBank entries
         /// </summary>
-        public static void ConfigureDataBank()
+        private static void ConfigureDataBank()
         {
             ModUtils.ConfigureDatabankEntry("PetDna", "Lifeforms/Fauna", "PetDnaDataBankMainImageTexture", "PetDnaDataBankPopupImageTexture");
-
             Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal("PetDna", Story.GoalType.Encyclopedia, CatDnaPrefab.Info.TechType);
             Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal("PetDna", Story.GoalType.Encyclopedia, AlienRobotDnaPrefab.Info.TechType);
             Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal("PetDna", Story.GoalType.Encyclopedia, BloodCrawlerDnaPrefab.Info.TechType);
             Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal("PetDna", Story.GoalType.Encyclopedia, CaveCrawlerDnaPrefab.Info.TechType);
             Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal("PetDna", Story.GoalType.Encyclopedia, CrabSquidDnaPrefab.Info.TechType);
-
         }
     }
 }

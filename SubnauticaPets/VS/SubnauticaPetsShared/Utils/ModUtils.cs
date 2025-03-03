@@ -3,25 +3,27 @@ using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Handlers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using FMOD.Studio;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
-namespace DaftAppleGames.SubnauticaPets.Utils
+namespace DaftAppleGames.SubnauticaPets
 {
     /// <summary>
     /// Static LogUtils.LogDebug(LogArea.Utilities, LogArea.Utilities,  class for common functions and properties to be used within your mod code
     /// </summary>
     internal static class ModUtils
     {
-        // Static array of objects loaded from the mod Asset Bundle
-        public static Object[] ModAssetBundleObjects;
+        static ModUtils()
+        {
 
-        // The name of the mods Asset Bundle
-        private const string AssetBundleName = "subnauticapets2assetbundle";
+        }
 
         // Pirate check statics
         internal static string SteamApi => "steam_api64.dll";
@@ -45,21 +47,9 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             "chuj.cdx",
         };
 
-
-        /// <summary>
-        /// Example static method to return Players current location / transform
-        /// </summary>
-        /// <returns></returns>
-        internal static Transform GetPlayerTransform()
-        {
-            return Player.main.transform;
-        }
-
         /// <summary>
         /// Sets up coordinated spawns at all listed positions for given TechType
         /// </summary>
-        /// <param name="prefab"></param>
-        /// <param name="spawnLocations"></param>
         internal static void SetupCoordinatedSpawn(CustomPrefab prefab, SpawnLocation[] spawnLocations)
         {
             LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: CoordinatedSpawns spawning {prefab.Info.TechType} in {spawnLocations.Length} locations...");
@@ -71,7 +61,6 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <summary>
         /// Destroys all child components of a given type
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         internal static void DestroyComponentsInChildren<T>(this GameObject gameObject)
         {
             LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Destroying all components of type: {typeof(T)}");
@@ -85,14 +74,13 @@ namespace DaftAppleGames.SubnauticaPets.Utils
                 Object.Destroy(component as Object);
                 LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Destroyed: {component.GetType()}");
             }
+
             LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Destroying all components of type: {typeof(T)}. Done.");
         }
 
         /// <summary>
         /// Disables all components of given type
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="gameObject"></param>
         internal static void DisableComponentsInChildren<T>(this GameObject gameObject)
         {
             var components = gameObject.GetComponentsInChildren<Behaviour>(true);
@@ -105,6 +93,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
                     component.enabled = false;
                 }
             }
+
             LogUtils.LogDebug(LogArea.Utilities, $"ModUtils: Disabling all components of type: {typeof(T)}. Done.");
         }
 
@@ -113,136 +102,27 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// So the above becomes "Camel Case".
         /// Used to "prettify" enum strings, for example.
         /// </summary>
-        /// <param name="enumString"></param>
-        /// <returns></returns>
         internal static string AddSpacesInCamelCase(this string enumString)
         {
             return string.IsNullOrEmpty(enumString) ? "" : Regex.Replace(enumString, "([A-Z])", " $1").Trim();
         }
 
         /// <summary>
-        /// Gets a Texture2D from the mod's Asset Bundle and returns it as a Sprite
-        /// </summary>
-        /// <param name="textureName"></param>
-        /// <returns></returns>
-        public static Sprite GetSpriteFromAssetBundle(string textureName)
-        {
-            Texture2D texture = GetTexture2DFromAssetBundle(textureName);
-            return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-        }
-
-        /// <summary>
-        /// Gets a Texture 2D from within the mod's Asset Bundle
-        /// </summary>
-        /// <param name="textureName"></param>
-        /// <returns></returns>
-        public static Texture2D GetTexture2DFromAssetBundle(string textureName)
-        {
-            Object obj = GetObjectFromAssetBundle(textureName, typeof(Texture2D));
-            if (obj == null)
-            {
-                LogUtils.LogError(LogArea.Utilities, $"ModUtils: Couldn't find Texture named {textureName} in Asset Bundle.");
-                return null;
-            }
-            return Object.Instantiate(obj) as Texture2D;
-        }
-
-        /// <summary>
-        /// Gets an instance of a GameObject from a prefab named, within the mod's Asset Bundle
-        /// </summary>
-        /// <param name="objectName"></param>
-        /// <returns></returns>
-        public static GameObject GetGameObjectInstanceFromAssetBundle(string objectName, bool activeState)
-        {
-            GameObject obj = GetObjectFromAssetBundle(objectName, typeof(GameObject)) as GameObject;
-            if (obj == null)
-            {
-                LogUtils.LogError(LogArea.Utilities, $"ModUtils: Couldn't find GameObject named {objectName} in Asset Bundle.");
-                return null;
-            }
-            obj.SetActive(activeState);
-            return GameObject.Instantiate(obj) as GameObject;
-        }
-
-        /// <summary>
-        /// Gets a prefab from the Asset Bundle
-        /// </summary>
-        /// <param name="objectName"></param>
-        /// <returns></returns>
-        public static GameObject GetGameObjectPrefabFromAssetBundle(string objectName)
-        {
-            Object obj = GetObjectFromAssetBundle(objectName, typeof(GameObject));
-            if (obj == null)
-            {
-                LogUtils.LogError(LogArea.Utilities, $"ModUtils: Couldn't find GameObject named {objectName} in Asset Bundle.");
-                return null;
-            }
-
-            return obj as GameObject;
-        }
-
-        public static GameObject GetPrefabFromAssetBundle(string objectName)
-        {
-            string modPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            AssetBundle modAssetBundle = AssetBundle.LoadFromFile(Path.Combine(modPath, $"Assets/{AssetBundleName}"));
-            return modAssetBundle.LoadAsset<GameObject>(objectName);
-        }
-
-        /// <summary>
-        /// Loads a given Game Object from Asset Bundles shipped in the Mod folder
-        /// </summary>
-        /// <param name="objectName"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static Object GetObjectFromAssetBundle(string objectName, System.Type type)
-        {
-            string modPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-            // Load the Asset Bundle, if it hasn't been loaded already
-            if (ModAssetBundleObjects == null)
-            {
-                if (modPath != null)
-                {
-                    AssetBundle modAssetBundle = AssetBundle.LoadFromFile(Path.Combine(modPath, $"Assets/{AssetBundleName}"));
-
-                    // Check we've loaded the Asset Bundle
-                    if (modAssetBundle == null)
-                    {
-                        LogUtils.LogError(LogArea.Utilities, "Failed to load AssetBundle!");
-                        return null;
-                    }
-                    ModAssetBundleObjects = modAssetBundle.LoadAllAssets();
-                }
-            }
-
-            // Iterate over loaded objects to find what we want
-            if (ModAssetBundleObjects != null)
-                foreach (Object currObject in ModAssetBundleObjects)
-                {
-                    // Check if this is what we're looking for
-                    if (currObject.ToString().Contains(objectName) && currObject.GetType() == type)
-                    {
-                        return currObject;
-                    }
-                }
-
-            LogUtils.LogError(LogArea.Utilities, $"ModUiUtils: Couldn't find object named {objectName}!");
-            return null;
-        }
-
-        /// <summary>
         /// Sets up a PDA Databank entry
         /// </summary>
-        /// <param name="encyKey"></param>
-        /// <param name="encyPath"></param>
-        /// <param name="mainImageTextureName"></param>
-        /// <param name="popupImageTextureName"></param>
         public static void ConfigureDatabankEntry(string encyKey, string encyPath, string mainImageTextureName,
             string popupImageTextureName)
         {
+            Texture2D mainImage = CustomAssetBundleUtils.GetObjectFromAssetBundle<Texture2D>(mainImageTextureName) as Texture2D;
+            Sprite popupImageSprite = CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(popupImageTextureName) as Sprite;
+            if (!popupImageSprite)
+            {
+                Texture2D popupImageTexture = CustomAssetBundleUtils.GetObjectFromAssetBundle<Texture2D>(popupImageTextureName) as Texture2D;
+                popupImageSprite = CustomAssetBundleUtils.GetSpriteFromTexture(popupImageTexture);
+            }
+
             PDAHandler.AddEncyclopediaEntry(encyKey, encyPath, null, null,
-                ModUtils.GetTexture2DFromAssetBundle(mainImageTextureName),
-                ModUtils.GetSpriteFromAssetBundle(popupImageTextureName));
+                mainImage, popupImageSprite);
         }
 
         /// <summary>
@@ -254,7 +134,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         public static void SetMaterialTexture(GameObject go, string oldTextureName, string bundleTextureName)
         {
             Renderer[] renderers = go.GetComponentsInChildren<Renderer>(true);
-            Texture texture = ModUtils.GetTexture2DFromAssetBundle(bundleTextureName);
+            Texture texture = CustomAssetBundleUtils.GetObjectFromAssetBundle<Texture>(bundleTextureName) as Texture;
 
             foreach (Renderer renderer in renderers)
             {
@@ -268,16 +148,13 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <summary>
         /// Applies a texture to the material on a GameObject
         /// </summary>
-        /// <param name="targetGameObject"></param>
-        /// <param name="textureName"></param>
-        /// <param name="gameObjectNameHint"></param>
         public static void ApplyNewMeshTexture(GameObject targetGameObject, string textureName, string gameObjectNameHint)
         {
             Renderer[] renderers = targetGameObject.GetComponentsInChildren<Renderer>();
 
             if (gameObjectNameHint == "")
             {
-                renderers[0].material.mainTexture = ModUtils.GetTexture2DFromAssetBundle(textureName);
+                renderers[0].material.mainTexture = CustomAssetBundleUtils.GetObjectFromAssetBundle<Texture2D>(textureName) as Texture2D;
             }
             else
             {
@@ -285,7 +162,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
                 {
                     if (renderer.gameObject.name == gameObjectNameHint)
                     {
-                        renderer.material.mainTexture = ModUtils.GetTexture2DFromAssetBundle(textureName);
+                        renderer.material.mainTexture = CustomAssetBundleUtils.GetObjectFromAssetBundle<Texture2D>(textureName) as Texture2D;
                     }
                 }
             }

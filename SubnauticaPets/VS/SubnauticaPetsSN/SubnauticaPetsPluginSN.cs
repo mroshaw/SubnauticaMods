@@ -9,6 +9,9 @@ using Nautilus.Json;
 using Nautilus.Json.Attributes;
 using System;
 using System.Collections.Generic;
+using FMODUnity;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace DaftAppleGames.SubnauticaPets
 {
@@ -23,6 +26,8 @@ namespace DaftAppleGames.SubnauticaPets
         private const string VersionString = "2.6.2";
 
         private static Version LatestSaveDataVersion = new Version(1, 0, 0, 0);
+
+        internal static ManualLogSource Log = new ManualLogSource(PluginName);
 
         // Public PetSaver as a persistent list of active pets
         internal static PetSaver PetSaver;
@@ -40,7 +45,10 @@ namespace DaftAppleGames.SubnauticaPets
         internal static ModConfigFile ModConfig = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();
 
         private static readonly Harmony Harmony = new Harmony(MyGUID);
-        internal static ManualLogSource Log = new ManualLogSource(PluginName);
+
+        // For debugging
+        private static Object[] _debugAssetBundle = CustomAssetBundleUtils.AllAssets;
+
         /// <summary>
         /// Initialise the configuration settings and patch methods
         /// </summary>
@@ -48,8 +56,6 @@ namespace DaftAppleGames.SubnauticaPets
         {
             // Init Localisation
             LanguageHandler.RegisterLocalizationFolder();
-
-            // Add PetLoadFixer for Subnautica: Below Zero
 
             // Create PetSaver instance
             PetSaver = gameObject.AddComponent<PetSaver>();
@@ -81,7 +87,6 @@ namespace DaftAppleGames.SubnauticaPets
                 PetSaver.Init();
                 LogUtils.LogDebug(LogArea.Main, "Finished Loading Data... Done.");
             };
-
             // Apply all of our patches
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loading...");
             Harmony.PatchAll();

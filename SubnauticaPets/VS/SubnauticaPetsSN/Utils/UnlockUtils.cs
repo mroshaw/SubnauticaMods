@@ -1,7 +1,7 @@
 ﻿using DaftAppleGames.SubnauticaPets.Prefabs;
 using Story;
 
-namespace DaftAppleGames.SubnauticaPets.Utils
+namespace DaftAppleGames.SubnauticaPets
 {
     internal static class UnlockUtils
     {

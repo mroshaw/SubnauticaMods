@@ -1,9 +1,12 @@
 ﻿using DaftAppleGames.SubnauticaPets.Pets;
 using Nautilus.Utility;
 using System.Collections.Generic;
+using DaftAppleGames.SubnauticaPets.Utils;
+using FMOD;
 using UnityEngine;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
-namespace DaftAppleGames.SubnauticaPets.Utils
+namespace DaftAppleGames.SubnauticaPets
 {
     internal static class PrefabConfigUtils
     {
@@ -15,7 +18,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
 
         }
 
-        public static void AddCustomPetComponents(GameObject targetGameObject)
+        public static void AddCustomPetComponents(GameObject targetGameObject, string audioClipName, string audioSoundId)
         {
             OnSurfaceTracker onSurfaceTracker = targetGameObject.EnsureComponent<OnSurfaceTracker>();
             WorldForces worldForces = targetGameObject.EnsureComponent<WorldForces>();
@@ -33,6 +36,20 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             creatureDeath.respawn = false;
             creatureDeath.useRigidbody = targetGameObject.GetComponent<Rigidbody>();
 
+            Log.LogDebug("Setting up FMOD Emitter");
+            FMOD_CustomEmitter customEmitter = targetGameObject.EnsureComponent<FMOD_CustomEmitter>();
+            CustomAudioUtils.ConfigureEmitter(customEmitter, audioClipName, audioSoundId);
+
+            /*
+            if (!string.IsNullOrEmpty(audioAssetName))
+            {
+                // Get AudioClip and create a new FMOD_Asset
+                AudioClip audioClip = ModUtils.GetObjectFromAssetBundle<AudioClip>(audioAssetName) as AudioClip;
+                FMODAsset fmodAsset = ScriptableObject.CreateInstance<FMODAsset>();
+                fmodAsset.name = audioAssetName;
+                fmodAsset.path = audioClip.;
+            }
+            */
         }
 
         /// <summary>

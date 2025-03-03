@@ -5,18 +5,20 @@ using Nautilus.Crafting;
 using Nautilus.Utility;
 using UnityEngine;
 using static CraftData;
-namespace DaftAppleGames.SubnauticaPets.Utils
+namespace DaftAppleGames.SubnauticaPets
 {
     /// <summary>
     /// Static utilities class for common functions and properties to be used within your mod code
     /// </summary>
     internal static class PrefabConfigUtilsPlatform
     {
-        public static void RegisterCustomPet(PrefabInfo prefabInfo, string classId, string bundlePrefabName, TechType techType, TechType dnaTechType, bool includeDnaTechType = false)
+        public static void RegisterCustomPet(PrefabInfo prefabInfo, string classId, string bundlePrefabName,
+            string audioClipName, string audioSoundId,
+            TechType techType, TechType dnaTechType, bool includeDnaTechType = false)
         {
             CustomPrefab prefab = new CustomPrefab(prefabInfo);
 
-            GameObject prefabGameObject = ModUtils.GetGameObjectPrefabFromAssetBundle(bundlePrefabName);
+            GameObject prefabGameObject = CustomAssetBundleUtils.GetObjectFromAssetBundle<GameObject>(bundlePrefabName) as GameObject;
 
             GameObject model = prefabGameObject.transform.Find("model").gameObject;
             Transform petEyes = prefabGameObject.transform.Find("Eyes");
@@ -30,7 +32,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             prefabGameObject.GetComponent<LargeWorldEntity>().enabled = false;
             MaterialUtils.ApplySNShaders(prefabGameObject);
             PrefabConfigUtils.AddPetComponent(prefabGameObject);
-            PrefabConfigUtils.AddCustomPetComponents(prefabGameObject);
+            PrefabConfigUtils.AddCustomPetComponents(prefabGameObject, audioClipName, audioSoundId);
             PrefabConfigUtils.AddPetHandTarget(prefabGameObject);
             prefab.SetGameObject(prefabGameObject);
 

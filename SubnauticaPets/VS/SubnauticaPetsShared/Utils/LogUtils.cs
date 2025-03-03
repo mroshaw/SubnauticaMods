@@ -1,6 +1,6 @@
 ﻿using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
-namespace DaftAppleGames.SubnauticaPets.Utils
+namespace DaftAppleGames.SubnauticaPets
 {
     public enum LogArea { Main, MonoBaseParts, MonoPets, Prefabs, MonoUtils, Utilities, Patches, PetConfigUtils }
 

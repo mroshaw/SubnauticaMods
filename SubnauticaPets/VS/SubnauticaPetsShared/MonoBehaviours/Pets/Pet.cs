@@ -72,7 +72,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         private SimpleMovement _simpleMovement;
         private Animator _animator;
         private CustomPetAnimator _customPetAnimator;
-        private AudioSource _audioSource;
+        private FMOD_CustomEmitter _fmodEmitter;
         private TechTag _techTag;
         private PrefabIdentifier _prefabIdentifier;
         private SkyApplier _skyApplier;
@@ -104,7 +104,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             _prefabIdentifier = GetComponent<PrefabIdentifier>();
             _liveMixin = GetComponent<LiveMixin>();
             _skyApplier = GetComponent<SkyApplier>();
-            _audioSource = GetComponent<AudioSource>();
+            _fmodEmitter = GetComponent<FMOD_CustomEmitter>();
             _rigidBody = GetComponent<Rigidbody>();
             _customPetAnimator = GetComponent<CustomPetAnimator>();
         }
@@ -306,9 +306,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 LogUtils.LogError(LogArea.MonoPets, "Pet: No animator found, so can't play animation.");
             }
 
-            if (_audioSource)
+            if (_fmodEmitter)
             {
-                _audioSource.Play();
+                _fmodEmitter.Play();
             }
         }
 
@@ -361,6 +361,11 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         public void OnKill()
         {
+            if (IsDead)
+            {
+                return;
+            }
+
             IsDead = true;
             _rigidBody.isKinematic = true;
             if (_simpleMovement)

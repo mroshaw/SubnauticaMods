@@ -19,7 +19,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         public static void RegisterAll()
         {
             // Get the DNA model prefab from the Asset Bundle
-            GameObject dnaModelPrefab = ModUtils.GetGameObjectPrefabFromAssetBundle("DNASampleTube");
+            GameObject dnaModelPrefab = CustomAssetBundleUtils.GetObjectFromAssetBundle<GameObject>("DNASampleTube") as GameObject;
             MaterialUtils.ApplySNShaders(dnaModelPrefab);
 
             // Register DNA spawn prefabs
@@ -275,7 +275,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
 
             PrefabInfo prefabInfo = PrefabInfo
                 .WithTechType(classId, displayName, description, unlockAtStart: true)
-                .WithIcon(ModUtils.GetSpriteFromAssetBundle(textureName));
+                .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(textureName) as Sprite);
 
             CustomPrefab clonePrefab = new CustomPrefab(prefabInfo);
 

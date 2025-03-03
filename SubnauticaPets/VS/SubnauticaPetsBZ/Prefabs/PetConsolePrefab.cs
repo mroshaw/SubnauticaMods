@@ -22,7 +22,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             // Unlock at start if in Creative mode
             Info = PrefabInfo
                 .WithTechType("PetConsole", null, null, unlockAtStart: false)
-                .WithIcon(ModUtils.GetSpriteFromAssetBundle("PetConsoleIconTexture"));
+                .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("PetConsoleIconTexture") as Sprite);
             CustomPrefab consolePrefab = new CustomPrefab(Info);
 
             // We'll use the PictureFrame as a template
@@ -56,12 +56,12 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             consolePrefab.SetRecipe(recipe);
 
             consolePrefab.SetUnlock(Info.TechType)
-                .WithAnalysisTech(ModUtils.GetSpriteFromAssetBundle("PetConsoleDataBankPopupImageTexture"), null,
+                .WithAnalysisTech(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("PetConsoleDataBankPopupImageTexture") as Sprite, null,
                     null)
                 .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule)
                 .WithEncyclopediaEntry("Tech/Habitats",
-                    ModUtils.GetSpriteFromAssetBundle("PetConsoleDataBankPopupImageTexture"),
-                    ModUtils.GetTexture2DFromAssetBundle("PetConsoleDataBankMainImageTexture"));
+                    CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("PetConsoleDataBankPopupImageTexture") as Sprite,
+                    CustomAssetBundleUtils.GetObjectFromAssetBundle<Texture2D>("PetConsoleDataBankMainImageTexture") as Texture2D);
 
             consolePrefab.Register();
         }
@@ -212,7 +212,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             iconGameObject.transform.SetParent(targetGameObject.transform);
 
             Image iconImage = iconGameObject.AddComponent<Image>();
-            iconImage.sprite = ModUtils.GetSpriteFromAssetBundle("PetConsoleRotatingIconTexture");
+            iconImage.sprite = CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>("PetConsoleRotatingIconTexture") as Sprite;
             RotateIcon iconRotate = iconGameObject.AddComponent<RotateIcon>();
 
         }
