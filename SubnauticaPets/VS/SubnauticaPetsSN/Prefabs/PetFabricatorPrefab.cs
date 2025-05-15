@@ -1,5 +1,5 @@
 ﻿using DaftAppleGames.SubnauticaPets.BaseParts;
-using DaftAppleGames.SubnauticaPets.Utils;
+using DaftAppleGames.SubnauticaPets.Extensions;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Assets.PrefabTemplates;
@@ -55,7 +55,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                 {
                     obj.SetActive(false);
                     obj.AddComponent<PetFabricator>();
-                    ModUtils.ApplyNewMeshTexture(obj, "PetFabricatorTexture", "");
+                    obj.ApplyNewMeshTexture("PetFabricatorTexture", "");
                     obj.SetActive(false);
                 }
             };

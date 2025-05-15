@@ -1,5 +1,4 @@
-﻿using DaftAppleGames.SubnauticaPets.Utils;
-using System;
+﻿using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -38,10 +37,12 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         [SerializeField] private float groundHeight;
 
         // Cached objects to save on garbage
+        private Vector3 _detectionOrigin;
         private RaycastHit[] _cachedHits = new RaycastHit[10];
         private Ray _cachedRay = new Ray();
         private Vector3 _cachedHitPosition;
         private GameObject _cachedHitGameObject;
+        private Vector3 _cachedBoxExtents;
 
         /// <summary>
         /// Public setter for IsMoving
@@ -69,6 +70,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 Eyes = transform.Find("Eyes").transform;
             }
 
+            // Calculate dimension and position of collision detection boxcase
+            CalcDetectionParameters();
+
             // Start off idle
             ToIdle();
         }
@@ -78,7 +82,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         private void Update()
         {
-
             if (isStopped)
             {
                 return;
@@ -105,6 +108,21 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                     ToMoving();
                 }
             }
+        }
+
+        /// <summary>
+        /// Determines the parameters to use for collision detection
+        /// </summary>
+        private void CalcDetectionParameters()
+        {
+            // We want this to be a little forward of the transform
+            _detectionOrigin = transform.position + (transform.forward * 0.5f);
+
+            // And a little above the base of the transform
+            _detectionOrigin += transform.up * 0.25f;
+
+            // Box extends to be a little off the ground
+            _cachedBoxExtents = new Vector3(0.3f, 0.2f, 0.3f);
         }
 
         /// <summary>
@@ -267,17 +285,14 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
         private bool CheckForObstacles(out Vector3 hitPosition, out GameObject hitGameObject)
         {
-            bool hitObstacle = RaycastColliderCheck(Eyes.transform.position, Eyes.transform.forward, obstacleDetectionRange, out hitPosition, out hitGameObject);
+            bool hitObstacle = RaycastColliderCheck(_detectionOrigin, transform.forward, obstacleDetectionRange, out hitPosition, out hitGameObject);
             return hitObstacle;
         }
 
         private void CheckForGround()
         {
-            Vector3 rayOrigin = transform.position + (transform.forward * -1 * groundDetectionOffset);
-
-            if (RaycastColliderCheck(Eyes.transform.position + (Eyes.transform.forward * -1 * groundDetectionOffset), transform.up * -1, groundDetectionRange, out _cachedHitPosition, out _cachedHitGameObject))
+            if (RaycastColliderCheck(_detectionOrigin, transform.up * -1, groundDetectionRange, out _cachedHitPosition, out _cachedHitGameObject))
             {
-                // LogUtils.LogDebug(LogArea.MonoPets, $"Ground detected: {_cachedHitGameObject}");
                 groundHeight = _cachedHitPosition.y;
             }
         }
@@ -295,35 +310,53 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             }
         }
 
+        private void FindClosestHit(RaycastHit[] hits, int numHits, out Vector3 hitPosition, out GameObject hitGameObject)
+        {
+            int closestHitIndex = 0;
+            float closestHitDistance = float.MaxValue;
+
+            for (int curHit = 0; curHit < numHits; curHit++)
+            {
+                // Check we haven't hit ourselves
+                if ((!_cachedHits[curHit].collider.transform.parent) || (_cachedHits[curHit].collider.transform.parent && _cachedHits[curHit].collider.transform.parent.gameObject != gameObject))
+                {
+                    float hitDistance = Vector3.Distance(transform.position, _cachedHits[curHit].point);
+                    if (hitDistance < closestHitDistance)
+                    {
+                        closestHitDistance = hitDistance;
+                        closestHitIndex = curHit;
+                    }
+                }
+            }
+            hitPosition = _cachedHits[closestHitIndex].point;
+            hitGameObject = _cachedHits[closestHitIndex].collider.gameObject;
+        }
+
+        private bool BoxCastColliderCheck(Vector3 origin, Vector3 direction, float maxDistance, out Vector3 hitPosition, out GameObject hitGameObject)
+        {
+            int numHits = Physics.BoxCastNonAlloc(_detectionOrigin, _cachedBoxExtents, transform.forward, _cachedHits, Quaternion.identity, maxDistance);
+
+            if (numHits > 0)
+            {
+                FindClosestHit(_cachedHits, numHits, out hitPosition, out hitGameObject);
+                return true;
+            }
+
+            hitPosition = Vector3.zero;
+            hitGameObject = null;
+            return false;
+        }
+
         private bool RaycastColliderCheck(Vector3 origin, Vector3 direction, float maxDistance, out Vector3 hitPosition, out GameObject hitGameObject)
         {
-            _cachedRay.direction = direction;
-            _cachedRay.origin = origin;
-
-            Debug.DrawLine(origin, origin + direction * maxDistance);
+            _cachedRay.direction = transform.forward;
+            _cachedRay.origin = _detectionOrigin;
 
             int numHits = Physics.RaycastNonAlloc(_cachedRay, _cachedHits, maxDistance);
 
             if (numHits > 0)
             {
-                int closestHitIndex = 0;
-                float closestHitDistance = float.MaxValue;
-
-                for (int curHit = 0; curHit < numHits; curHit++)
-                {
-                    // Check we haven't hit ourselves
-                    if ((!_cachedHits[curHit].collider.transform.parent) || (_cachedHits[curHit].collider.transform.parent && _cachedHits[curHit].collider.transform.parent.gameObject != gameObject))
-                    {
-                        float hitDistance = Vector3.Distance(transform.position, _cachedHits[curHit].point);
-                        if (hitDistance < closestHitDistance)
-                        {
-                            closestHitDistance = hitDistance;
-                            closestHitIndex = curHit;
-                        }
-                    }
-                }
-                hitPosition = _cachedHits[closestHitIndex].point;
-                hitGameObject = _cachedHits[closestHitIndex].collider.gameObject;
+                FindClosestHit(_cachedHits, numHits, out hitPosition, out hitGameObject);
                 return true;
             }
 

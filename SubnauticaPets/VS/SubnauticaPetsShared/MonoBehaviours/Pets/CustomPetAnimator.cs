@@ -1,5 +1,4 @@
 using System.Collections;
-using DaftAppleGames.SubnauticaPets.Utils;
 using UnityEngine;
 
 namespace DaftAppleGames.SubnauticaPets.Pets

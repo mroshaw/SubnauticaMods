@@ -2,15 +2,12 @@
 using BepInEx.Logging;
 using DaftAppleGames.SubnauticaPets.Pets;
 using DaftAppleGames.SubnauticaPets.Prefabs;
-using DaftAppleGames.SubnauticaPets.Utils;
 using HarmonyLib;
 using Nautilus.Handlers;
 using Nautilus.Json;
 using Nautilus.Json.Attributes;
 using System;
 using System.Collections.Generic;
-using FMODUnity;
-using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace DaftAppleGames.SubnauticaPets
@@ -23,7 +20,7 @@ namespace DaftAppleGames.SubnauticaPets
         // Mod specific details. MyGUID should be unique, and follow the reverse domain pattern
         private const string MyGUID = "com.daftapplegames.subnauticapets2";
         private const string PluginName = "SubnauticaPets2";
-        private const string VersionString = "2.6.2";
+        private const string VersionString = "2.6.3";
 
         private static Version LatestSaveDataVersion = new Version(1, 0, 0, 0);
 

@@ -1,8 +1,9 @@
 ﻿using DaftAppleGames.SubnauticaPets.Pets;
 using Nautilus.Utility;
 using System.Collections.Generic;
+using DaftAppleGames.SubnauticaPets.Extensions;
 using DaftAppleGames.SubnauticaPets.Utils;
-using FMOD;
+using Nautilus.Handlers;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
@@ -15,10 +16,12 @@ namespace DaftAppleGames.SubnauticaPets
         /// </summary>
         public static void AddBasicPetComponents()
         {
-
         }
 
-        public static void AddCustomPetComponents(GameObject targetGameObject, string audioClipName, string audioSoundId)
+        /// <summary>
+        /// Adds and configures components for Custom Pets
+        /// </summary>
+        public static void AddCustomPetComponents(GameObject targetGameObject, string audioClipName, string busPath, float audioVolume)
         {
             OnSurfaceTracker onSurfaceTracker = targetGameObject.EnsureComponent<OnSurfaceTracker>();
             WorldForces worldForces = targetGameObject.EnsureComponent<WorldForces>();
@@ -38,26 +41,12 @@ namespace DaftAppleGames.SubnauticaPets
 
             Log.LogDebug("Setting up FMOD Emitter");
             FMOD_CustomEmitter customEmitter = targetGameObject.EnsureComponent<FMOD_CustomEmitter>();
-            CustomAudioUtils.ConfigureEmitter(customEmitter, audioClipName, audioSoundId);
-
-            /*
-            if (!string.IsNullOrEmpty(audioAssetName))
-            {
-                // Get AudioClip and create a new FMOD_Asset
-                AudioClip audioClip = ModUtils.GetObjectFromAssetBundle<AudioClip>(audioAssetName) as AudioClip;
-                FMODAsset fmodAsset = ScriptableObject.CreateInstance<FMODAsset>();
-                fmodAsset.name = audioAssetName;
-                fmodAsset.path = audioClip.;
-            }
-            */
+            CustomAudioUtils.ConfigureEmitter(customEmitter, audioClipName, busPath, audioVolume);
         }
 
         /// <summary>
         /// Adds the specified child pet class component to the given creature GameObject
         /// based on the given PetCreatureType
-        /// </summary>
-        /// <param name="targetGameObject"></param>
-        /// <returns></returns>
         public static void AddPetComponent(GameObject targetGameObject)
         {
             Pet pet = targetGameObject.EnsureComponent<Pet>();
@@ -86,7 +75,6 @@ namespace DaftAppleGames.SubnauticaPets
         /// <summary>
         /// Adds a Capsule Collider to DNA prefab
         /// </summary>
-        /// <param name="targetGameObject"></param>
         public static void AddDnaCapsuleCollider(GameObject targetGameObject)
         {
             LogUtils.LogDebug(LogArea.PetConfigUtils, "AddDnaCapsuleCollider started...");
@@ -119,8 +107,6 @@ namespace DaftAppleGames.SubnauticaPets
         /// <summary>
         /// Adds the ScaleOnStart component
         /// </summary>
-        /// <param name="targetGameObject"></param>
-        /// <param name="scaleFactor"></param>
         public static void AddScaleOnStart(GameObject targetGameObject, float scaleFactor)
         {
             LogUtils.LogDebug(LogArea.PetConfigUtils, "AddScaleOnStart started...");
@@ -132,13 +118,6 @@ namespace DaftAppleGames.SubnauticaPets
         /// <summary>
         /// Add VFX Fabricator component
         /// </summary>
-        /// <param name="targetGameObject"></param>
-        /// <param name="pathToModel"></param>
-        /// <param name="minY"></param>
-        /// <param name="maxY"></param>
-        /// <param name="posOffset"></param>
-        /// <param name="scaleFactor"></param>
-        /// <param name="eulerOffset"></param>
         public static void AddVFXFabricating(GameObject targetGameObject, string pathToModel, float minY, float maxY, Vector3 posOffset, float scaleFactor, Vector3 eulerOffset)
         {
             LogUtils.LogDebug(LogArea.PetConfigUtils, "AddVFXFabricating started...");
@@ -154,7 +133,6 @@ namespace DaftAppleGames.SubnauticaPets
         /// <summary>
         /// Adds a Prefab Identifier component
         /// </summary>
-        /// <param name="targetGameObject"></param>
         public static void AddPrefabIdentifier(GameObject targetGameObject)
         {
             LogUtils.LogDebug(LogArea.PetConfigUtils, "AddPrefabIdentifier started...");
@@ -169,9 +147,6 @@ namespace DaftAppleGames.SubnauticaPets
         /// <summary>
         /// Sets all Mesh Renderers to the given colour
         /// </summary>
-        /// <param name="targetGameObject"></param>
-        /// <param name="modelGameObjectName"></param>
-        /// <param name="color"></param>
         public static void SetMeshRenderersColor(GameObject targetGameObject, string modelGameObjectName, Color color)
         {
             LogUtils.LogDebug(LogArea.PetConfigUtils, "SetMeshRenderersColor started...");
@@ -431,9 +406,6 @@ namespace DaftAppleGames.SubnauticaPets
         /// <summary>
         /// Remove the given behaviour from the behavior array
         /// </summary>
-        /// <param name="array"></param>
-        /// <param name="typeToRemove"></param>
-        /// <returns></returns>
         private static Behaviour[] RemoveBehaviourItem(Behaviour[] array, System.Type typeToRemove)
         {
             LogUtils.LogDebug(LogArea.PetConfigUtils, "RemoveBehaviourItem started...");
@@ -442,6 +414,24 @@ namespace DaftAppleGames.SubnauticaPets
             behaviourList.Remove(behaviorToRemove);
             LogUtils.LogDebug(LogArea.PetConfigUtils, "RemoveBehaviourItem done.");
             return behaviourList.ToArray();
+        }
+
+        /// <summary>
+        /// Sets up a PDA Databank entry
+        /// </summary>
+        public static void ConfigureDatabankEntry(string encyKey, string encyPath, string mainImageTextureName,
+            string popupImageTextureName)
+        {
+            Texture2D mainImage = CustomAssetBundleUtils.GetObjectFromAssetBundle<Texture2D>(mainImageTextureName) as Texture2D;
+            Sprite popupImageSprite = CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(popupImageTextureName) as Sprite;
+            if (!popupImageSprite)
+            {
+                Texture2D popupImageTexture = CustomAssetBundleUtils.GetObjectFromAssetBundle<Texture2D>(popupImageTextureName) as Texture2D;
+                popupImageSprite = CustomAssetBundleUtils.GetSpriteFromTexture(popupImageTexture);
+            }
+
+            PDAHandler.AddEncyclopediaEntry(encyKey, encyPath, null, null,
+                mainImage, popupImageSprite);
         }
     }
 }

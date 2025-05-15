@@ -1,6 +1,4 @@
 ﻿
-using DaftAppleGames.SubnauticaPets.Utils;
-
 namespace DaftAppleGames.SubnauticaPets.Pets
 {
     /// <summary>

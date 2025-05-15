@@ -4,6 +4,10 @@ namespace DaftAppleGames.SubnauticaPets
 {
     public enum LogArea { Main, MonoBaseParts, MonoPets, Prefabs, MonoUtils, Utilities, Patches, PetConfigUtils }
 
+    /// <summary>
+    /// Static Log methods, to standardise logging and allow for granular log areas to be reported.
+    /// Driven by the "Detailed Logging" mod option
+    /// </summary>
     internal static class LogUtils
     {
         /// <summary>

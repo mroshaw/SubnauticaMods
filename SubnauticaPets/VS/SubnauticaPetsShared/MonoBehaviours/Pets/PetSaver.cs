@@ -1,5 +1,4 @@
-﻿using DaftAppleGames.SubnauticaPets.Utils;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;

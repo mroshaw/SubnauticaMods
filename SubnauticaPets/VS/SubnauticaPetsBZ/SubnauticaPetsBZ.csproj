@@ -17,7 +17,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -105,6 +105,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SubnauticaPetsShared\Extensions\GameObjectExtensions.cs">
+      <Link>Extensions\GameObjectExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\SubnauticaPetsShared\Extensions\StringExtensions.cs">
+      <Link>Extensions\StringExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\BaseParts\PetConsole.cs">
       <Link>MonoBehaviours\BaseParts\PetConsole.cs</Link>
     </Compile>
@@ -190,7 +196,7 @@
       <Link>Utils\ModUtils.cs</Link>
     </Compile>
     <Compile Include="..\SubnauticaPetsShared\Utils\PrefabConfigUtils.cs">
-      <Link>Utils\PrefabConfigUtils.cs</Link>
+      <Link>Prefabs\PrefabConfigUtils.cs</Link>
     </Compile>
     <Compile Include="..\SubnauticaPetsShared\Utils\UiUtils.cs">
       <Link>Utils\UiUtils.cs</Link>
@@ -207,9 +213,10 @@
     <Compile Include="Prefabs\PetDnaPrefabs.cs" />
     <Compile Include="Prefabs\PetFabricatorPrefab.cs" />
     <Compile Include="Prefabs\PetPrefabs.cs" />
+    <Compile Include="Prefabs\PrefabConfigUtilsPlatform.cs" />
     <Compile Include="SubnauticaPetsPluginBZ.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\PrefabConfigUtilsPlatform.cs" />
+    <Compile Include="Utils\PlatformUtils.cs" />
     <Compile Include="Utils\UnlockUtils.cs" />
   </ItemGroup>
   <ItemGroup>

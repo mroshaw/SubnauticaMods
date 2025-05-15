@@ -3,7 +3,6 @@ using Nautilus.Json;
 using Nautilus.Options;
 using Nautilus.Options.Attributes;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace DaftAppleGames.SubnauticaPets
 {

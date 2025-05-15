@@ -1,3 +1,4 @@
+using FMOD;
 using Nautilus.Handlers;
 using Nautilus.Extensions;
 using Nautilus.Utility;
@@ -6,56 +7,24 @@ using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets
 {
+    /// <summary>
+    /// Static wrapper methods around the FMOD classes
+    /// </summary>
     internal static class CustomAudioUtils
     {
-        private static bool _isFmodReady = false;
-        private const string MasterBankAssetName = "PetsBank";
-        private const string MasterBankStringAssetName = "PetsBank.strings";
-
-        private static void InitAllFmodBanks()
+        internal static void ConfigureEmitter(FMOD_CustomEmitter emitter, string audioClipName, string busPath, float volume)
         {
-            if (_isFmodReady)
-            {
-                return;
-            }
-
-            InitFmodBank(MasterBankAssetName);
-            InitFmodBank(MasterBankStringAssetName);
-        }
-
-        private static void InitFmodBank(string bankName)
-        {
-            Log.LogDebug($"Loading FMOD Bank from {bankName}...");
-            FMOD.Debug.Initialize(FMOD.DEBUG_FLAGS.LOG, FMOD.DEBUG_MODE.TTY, null, null);
-            TextAsset bankAsset = CustomAssetBundleUtils.GetObjectFromAssetBundle<TextAsset>(bankName) as TextAsset;
-            if (bankAsset == null)
-            {
-                Log.LogError($"Failed to load {bankName}!");
-                return;
-            }
-            Log.LogDebug($"Loaded {bankName} as {bankAsset.name}");
-            FMODUnity.RuntimeManager.LoadBank(bankAsset, true);
-            Log.LogDebug($"FMOD Bank Loaded!");
-            FMODUnity.RuntimeManager.StudioSystem.getBank($"bank:/bankName", out FMOD.Studio.Bank bank);
-            if (!bank.isValid())
-            {
-                Log.LogError($"The bank {bankName} is not valid!");
-            }
-            _isFmodReady = true;
-        }
-
-        internal static void ConfigureEmitter(FMOD_CustomEmitter emitter, string audioClip, string audioSoundId)
-        {
-            RegisterSound(audioSoundId, audioClip, Nautilus.Utility.AudioUtils.BusPaths.SurfaceCreatures, 0.1f, 5.0f, 0);
-            FMODAsset newAsset = AudioUtils.GetFmodAsset(audioSoundId);
+            RegisterSound(audioClipName, busPath, 0.1f, 15.0f, 0);
+            FMODAsset newAsset = AudioUtils.GetFmodAsset(audioClipName);
             emitter.SetAsset(newAsset);
+            SetEmitterVolume(emitter, volume);
         }
 
-        private static void RegisterSound(string id, string clipName, string bus, float minDistance = 10f,
+        private static void RegisterSound(string clipName, string bus, float minDistance = 10f,
             float maxDistance = 200f, float fadeDuration = 0)
         {
-            var sound = Nautilus.Utility.AudioUtils.CreateSound(CustomAssetBundleUtils.GetObjectFromAssetBundle<AudioClip>(clipName) as AudioClip,
-                maxDistance >= 0 ? Nautilus.Utility.AudioUtils.StandardSoundModes_3D : Nautilus.Utility.AudioUtils.StandardSoundModes_2D);
+            var sound = AudioUtils.CreateSound(CustomAssetBundleUtils.GetObjectFromAssetBundle<AudioClip>(clipName) as AudioClip,
+                maxDistance >= 0 ? AudioUtils.StandardSoundModes_3D : AudioUtils.StandardSoundModes_2D);
             if (maxDistance >= 0)
                 sound.set3DMinMaxDistance(minDistance, maxDistance);
 
@@ -63,12 +32,29 @@ namespace DaftAppleGames.SubnauticaPets
             {
                 sound.AddFadeOut(fadeDuration);
             }
-
-            CustomSoundHandler.RegisterCustomSound(id, sound, bus);
+            CustomSoundHandler.RegisterCustomSound(clipName, sound, bus);
         }
 
-        internal static void GetFMODVersion()
+        private static void SetEmitterVolume(FMOD_CustomEmitter emitter, float volume)
         {
+            if (!emitter.evt.hasHandle())
+            {
+                emitter.CacheEventInstance();
+            }
+
+            if (!emitter.evt.hasHandle())
+            {
+                Log.LogDebug($"FMOD Emitter has no handle!");
+                return;
+            }
+
+            RESULT result = emitter.evt.getVolume(out float currentVolume, out float finalVolume);
+            Log.LogDebug($"Result of GetVolume is: {result.ToString()}");
+            Log.LogDebug($"Emitter current volume is: {currentVolume}, final volume is: {finalVolume}. Setting volume to: {volume}");
+            result = emitter.evt.setVolume(volume);
+            Log.LogDebug($"Result of SetVolume is: {result.ToString()}");
+            emitter.evt.getVolume(out currentVolume, out finalVolume);
+            Log.LogDebug($"Emitter new volume is: {currentVolume}, final volume is: {finalVolume}");
 
         }
     }

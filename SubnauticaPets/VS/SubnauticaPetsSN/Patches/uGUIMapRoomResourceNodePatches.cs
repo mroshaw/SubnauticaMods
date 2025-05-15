@@ -1,5 +1,4 @@
 ﻿using DaftAppleGames.SubnauticaPets.Prefabs;
-using DaftAppleGames.SubnauticaPets.Utils;
 using HarmonyLib;
 
 namespace DaftAppleGames.SubnauticaPets.Patches

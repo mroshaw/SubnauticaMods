@@ -398,8 +398,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.19
-  m_Height: 0.54
+  m_Radius: 0.25
+  m_Height: 0.73
   m_Direction: 2
   m_Center: {x: 0, y: 0.23, z: -0.06}
 --- !u!1 &3665317231327009981
@@ -853,7 +853,7 @@ LODGroup:
   serializedVersion: 2
   m_LocalReferencePoint: {x: 0, y: 0.40408438, z: -0.23613602}
   m_Size: 1.2838202
-  m_FadeMode: 0
+  m_FadeMode: 1
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
   m_LODs:
@@ -869,7 +869,7 @@ LODGroup:
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 9173004687187551138}
-  - screenRelativeHeight: 0.05
+  - screenRelativeHeight: 0
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 3407717935409119676}

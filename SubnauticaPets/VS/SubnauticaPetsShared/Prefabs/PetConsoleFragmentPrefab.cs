@@ -1,5 +1,4 @@
 ﻿using DaftAppleGames.SubnauticaPets.BaseParts;
-using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Assets.PrefabTemplates;

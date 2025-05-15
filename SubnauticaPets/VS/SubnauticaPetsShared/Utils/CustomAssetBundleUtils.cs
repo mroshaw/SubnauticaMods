@@ -1,20 +1,15 @@
-using DaftAppleGames.SubnauticaPets.Pets;
-using Nautilus.Assets;
-using Nautilus.Assets.Gadgets;
-using Nautilus.Handlers;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text.RegularExpressions;
-using FMOD.Studio;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets
 {
+    /// <summary>
+    /// Wrappers around the AssetBundle Unity methods
+    /// Used to fetch assets while managing some error handling and logging
+    /// </summary>
     internal static class CustomAssetBundleUtils
     {
         private static bool _isAssetBundleReady = false;
@@ -24,7 +19,7 @@ namespace DaftAppleGames.SubnauticaPets
 
         internal static Object[] AllAssets => AssetBundle.LoadAllAssets();
 
-        internal static AssetBundle AssetBundle
+        private static AssetBundle AssetBundle
         {
             get
             {
@@ -90,6 +85,9 @@ namespace DaftAppleGames.SubnauticaPets
             return obj;
         }
 
+        /// <summary>
+        /// Instantiates an instance of a Prefab taken from the asset bundle
+        /// </summary>
         public static GameObject GetPrefabInstanceFromAssetBundle(string objectName, bool activeState)
         {
             GameObject obj = GetObjectFromAssetBundle<GameObject>(objectName) as GameObject;

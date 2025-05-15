@@ -28,7 +28,7 @@ SET targetdir=%~4
 ECHO Deploying mod %targetname% from %targetpath%...
 mkdir "%gamepath%\BepInEx\plugins\%targetname%"
 mkdir "%gamepath%\BepInEx\plugins\%targetname%\Assets"
-mkdir "%gamepath%\BepInEx\plugins\$%targetname%\Localization"
+mkdir "%gamepath%\BepInEx\plugins\%targetname%\Localization"
 
 mkdir "%deploypath%"
 mkdir "%deploypath%\%targetname%"
@@ -38,6 +38,12 @@ mkdir "%deploypath%\%targetname%\plugins\%targetname%\Assets"
 mkdir "%deploypath%\%targetname%\plugins\%targetname%\Localization"
 
 ECHO Deploy to game folder...
+
+rem Deploy debub symbols, if they exist
+SET debugsymbols=%targetname%.pdb
+ECHO Checking for Debug Symbols at "%targetdir%%debugsymbols%"
+IF EXIST "%targetdir%%debugsymbols%" xcopy /q/y/i "%targetdir%%debugsymbols%" "%gamepath%\BepInEx\plugins\%targetname%"
+
 xcopy /q/y/i "%targetpath%" "%gamepath%\BepInEx\plugins\%targetname%"
 xcopy /q/y/i "%targetdir%\Assets" "%gamepath%\BepInEx\plugins\%targetname%\Assets\*.*"
 xcopy /q/y/i "%targetdir%\Localization" "%gamepath%\BepInEx\plugins\%targetname%\Localization\*.*"

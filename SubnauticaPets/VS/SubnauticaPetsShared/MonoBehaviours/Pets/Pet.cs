@@ -1,5 +1,5 @@
-﻿using DaftAppleGames.SubnauticaPets.Utils;
-using System.Collections;
+﻿using System.Collections;
+using DaftAppleGames.SubnauticaPets.Extensions;
 using UnityEngine;
 
 namespace DaftAppleGames.SubnauticaPets.Pets
@@ -16,10 +16,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         internal PetHappiness Happiness { get; private set; }
         internal string BaseId => Base != null ? Base.GetComponent<PrefabIdentifier>().Id : "NO BASE!";
 
-        internal float timeBeforePetNeutral = 60.0f;
-        internal float timeBeforePetSad = 120.0f;
-        internal float timeBeforePetDevastated = 180.0f;
-        internal float timeBeforePetDead = 360.0f;
+        internal float timeBeforePetNeutral = 1800.0f;
+        internal float timeBeforePetSad = 3600.0f;
+        internal float timeBeforePetDevastated = 5400.0f;
 
         private float _timeSinceLastInteraction;
 
@@ -143,17 +142,18 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             if (_timeSinceLastInteraction < timeBeforePetNeutral)
             {
                 Happiness = PetHappiness.Happy;
-            } else if (_timeSinceLastInteraction < timeBeforePetSad)
+            }
+            else if (_timeSinceLastInteraction < timeBeforePetSad)
+            {
+                Happiness = PetHappiness.Neutral;
+            }
+            else if (_timeSinceLastInteraction < timeBeforePetDevastated)
             {
                 Happiness = PetHappiness.Sad;
-            } else if (_timeSinceLastInteraction < timeBeforePetDevastated)
-            {
-                Happiness = PetHappiness.Devastated;
             }
             else
             {
-                Happiness = PetHappiness.Dead;
-                Kill();
+                Happiness = PetHappiness.Devastated;
             }
         }
 
@@ -287,10 +287,18 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             }
         }
 
+        internal void PlaySound()
+        {
+            if (_fmodEmitter)
+            {
+                _fmodEmitter.Play();
+            }
+        }
+
         /// <summary>
         /// Play a pet animation
         /// </summary>
-        public void PlayAnimation()
+        internal void PlayAnimation()
         {
             if (!_customPetAnimator && _animator)
             {
@@ -306,10 +314,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 LogUtils.LogError(LogArea.MonoPets, "Pet: No animator found, so can't play animation.");
             }
 
-            if (_fmodEmitter)
-            {
-                _fmodEmitter.Play();
-            }
+            PlaySound();
         }
 
         /// <summary>

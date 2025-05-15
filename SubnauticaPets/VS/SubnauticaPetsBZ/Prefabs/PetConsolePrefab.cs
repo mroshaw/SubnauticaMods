@@ -1,4 +1,5 @@
 ﻿using DaftAppleGames.SubnauticaPets.BaseParts;
+using DaftAppleGames.SubnauticaPets.Extensions;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
@@ -69,8 +70,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
         private static void ConfigurePrefab(GameObject prefabGameObject)
         {
             prefabGameObject.SetActive(false);
-            ModUtils.ApplyNewMeshTexture(prefabGameObject, "PetConsoleTexture", "submarine_Picture_Frame");
-
+            prefabGameObject.ApplyNewMeshTexture("PetConsoleTexture", "submarine_Picture_Frame");
             prefabGameObject.DestroyComponentsInChildren<PictureFrame>();
 
             // Set up the UI
