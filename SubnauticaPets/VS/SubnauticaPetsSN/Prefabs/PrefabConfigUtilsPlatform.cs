@@ -24,7 +24,6 @@ namespace DaftAppleGames.SubnauticaPets
             GameObject model = prefabGameObject.transform.Find("model").gameObject;
             Transform petEyes = prefabGameObject.transform.Find("Eyes");
             SimpleMovement simpleMovement = prefabGameObject.AddComponent<SimpleMovement>();
-            simpleMovement.Eyes = petEyes;
 
             // Standard components
             PrefabUtils.AddBasicComponents(prefabGameObject, classId, prefabInfo.TechType, LargeWorldEntity.CellLevel.Medium);

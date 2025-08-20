@@ -8,6 +8,8 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         private Animator _animator;
         private Pet _pet;
         private bool _inRandomAnim = false;
+        
+        private static readonly int IsMovingAnimParameter = Animator.StringToHash("IsMoving");
         private static readonly string[] BodyAnims = { "Sit", "Spin", "Roll", "Flinch" };
         private static readonly string[] FaceAnims =  { "Eyes_Annoyed",
                                                 "Eyes_Blink",
@@ -144,6 +146,14 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                     _animator.Play(EyesHappy);
                     break;
             }
+        }
+        
+        /// <summary>
+        /// Controls movement animation
+        /// </summary>
+        public void SetMoving(bool isMoving)
+        {
+            _animator.SetBool(IsMovingAnimParameter, isMoving);
         }
     }
 }

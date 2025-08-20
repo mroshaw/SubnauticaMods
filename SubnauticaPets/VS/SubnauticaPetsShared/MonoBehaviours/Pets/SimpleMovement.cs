@@ -6,131 +6,248 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 {
     internal class SimpleMovement : MonoBehaviour
     {
-        public float idleCoolDown = 2.0f;
-        public float moveRadius = 5.0f;
-        public float moveSpeed = 0.5f;
-        public float dropSpeed = 1.5f;
-        public float rotateSpeed = 5.0f;
-        public float moveSmoothTime = 0.5f;
-        public int moveProbabilty = 20;
-        public float idleTimer = 0.0f;
-        public float obstacleDetectionRange = 0.3f;
-        public float groundDetectionRange = 2.0f;
-        public float groundDetectionOffset = 0.4f;
-
-        public Transform Eyes { get; set; }
-
-        public float minTravelDistance = 2.0f;
-        public float maxTravelDistance = 5.0f;
+        private const string ObstacleDetector = "ObstacleDetector";
+        private const string GroundDetector = "GroundDetector";
+        
+        [Header("Movement")] public float idleCoolDown = 5.0f;
+        public float moveSpeed = 0.8f;
+        public float rotateSpeed = 4.0f;
+        public int moveProbability = 20;
+        public float minTravelDistance = 3.0f;
+        public float maxTravelDistance = 10.0f;
         public float minTravelAngle = 30.0f;
-        public float maxTravelAngle = 150.0f;
+        public float maxTravelAngle = 140.0f;
+        public float arrivedTolerance = 0.2f;
 
+        [Header("Ground")] public float fallSpeed = 5f;
+        public float fallForwardStep = 0.2f;
+        public float fallStep = 0.9f;
+        public float groundCheckTolerance = 0.1f;
+        public float groundedDetectionRange = 0.2f;
+
+        [Header("Obstacles")] public float collisionCastRadius = 0.15f;
+        public float obstacleDetectionRange = 0.0f;
+        public float rotateToTargetTolerance = 5.0f;
+        
+        // Debugging in Unity inspector
+        [Header("Debug Movement")] [SerializeField] private Transform targetMarker;
+        [SerializeField] private float idleTimer;
         [SerializeField] private Vector3 moveTarget;
-        [SerializeField] private bool isMoving = false;
-        [SerializeField] private bool isObstacleDetected = false;
-        [SerializeField] private bool isRotatingFromObstacle = false;
-        [SerializeField] private bool isFalling = false;
-        [SerializeField] private bool isStopped = false;
-        private Animator _animator;
-        private Vector3 _velocity;
+        [SerializeField] private float distanceToDestination;
+        [SerializeField] private bool isMoving;
+        [SerializeField] private bool isStopped;
 
-        [SerializeField] private float groundHeight;
+        [Header("Debug Obstacles")] [SerializeField] private bool isObstacleDetected;
+        [SerializeField] private GameObject lastCollisionObstacle;
+        [SerializeField] private bool isRotatingFromObstacle;
+        [SerializeField] private float angleToTarget;
+        [SerializeField] private Vector3 rotateFromObstaclePosition;
+        
+        [Header("Debug Grounded")] [SerializeField] private float distanceToGround;
+        [SerializeField] private bool isGrounded;
+        [SerializeField] private bool isFalling;
+        [SerializeField] private GameObject groundObstacle;
+        [SerializeField] private Vector3 groundPosition;
+
+        private Transform _obstacleDetectorOrigin;
+        private Transform _groundDetectorOrigin;
 
         // Cached objects to save on garbage
-        private Vector3 _detectionOrigin;
-        private RaycastHit[] _cachedHits = new RaycastHit[10];
-        private Ray _cachedRay = new Ray();
+        private readonly RaycastHit[] _cachedHits = new RaycastHit[10];
         private Vector3 _cachedHitPosition;
         private GameObject _cachedHitGameObject;
-        private Vector3 _cachedBoxExtents;
+        private Vector3 _newVelocity = Vector3.zero;
+
+        private CustomPetAnimator _petAnimator;
+        private Rigidbody _rigidBody;
 
         /// <summary>
-        /// Public setter for IsMoving
+        /// Private setter for IsMoving
         /// </summary>
-        public bool IsMoving
+        private bool IsMoving
         {
             get => isMoving;
             set
             {
                 isMoving = value;
-                _animator.SetBool(IsMovingAnimParameter, value);
+                _petAnimator.SetMoving(value);
             }
         }
 
-        private static readonly int IsMovingAnimParameter = Animator.StringToHash("IsMoving");
+        private void Awake()
+        {
+            _rigidBody = GetComponent<Rigidbody>();
+            _petAnimator = GetComponent<CustomPetAnimator>();
 
-        // Start is called before the first frame update
+            // Calculate dimension and position of collision detection boxes
+            ConfigureDetectors();
+        }
+
         private void Start()
         {
-            _animator = GetComponent<Animator>();
-
-            // Set the eyes, if not set already
-            if (!Eyes)
-            {
-                Eyes = transform.Find("Eyes").transform;
-            }
-
-            // Calculate dimension and position of collision detection boxcase
-            CalcDetectionParameters();
+            ConfigureRigidBody();
 
             // Start off idle
             ToIdle();
         }
+
 
         /// <summary>
         /// Determine state and action
         /// </summary>
         private void Update()
         {
-            if (isStopped)
-            {
-                return;
-            }
-
-            // Perform action
-            if (isMoving)
-            {
-                Move();
-            }
-            else
-            {
-                Idle();
-            }
-
+            CheckIsGrounded();
             HandleFalling();
+            HandleMovement();
 
             // Are we ready to move again?
             if (CanMove())
             {
                 // Decide if we want to move
-                if (MakeDecision(moveProbabilty))
+                if (MakeDecision(moveProbability))
                 {
-                    ToMoving();
+                    StartMoving();
                 }
             }
         }
 
         /// <summary>
-        /// Determines the parameters to use for collision detection
+        /// Run in Update/FixedUpdate to move the Pet around
         /// </summary>
-        private void CalcDetectionParameters()
+        private void HandleMovement()
         {
-            // We want this to be a little forward of the transform
-            _detectionOrigin = transform.position + (transform.forward * 0.5f);
+            if (isStopped)
+            {
+                return;
+            }
 
-            // And a little above the base of the transform
-            _detectionOrigin += transform.up * 0.25f;
+            if (!IsMoving)
+            {
+                UpdateIdleTimer();
+                return;
+            }
 
-            // Box extends to be a little off the ground
-            _cachedBoxExtents = new Vector3(0.3f, 0.2f, 0.3f);
+            // Remove height from the move target
+            Vector3 flatTarget = new Vector3(moveTarget.x, transform.position.y, moveTarget.z);
+
+            // Don't move while we're turning from obstacles
+            if (!isRotatingFromObstacle)
+            {
+                MoveToTransform(flatTarget);
+
+                // See if there's anything blocking our way
+                isObstacleDetected = CheckForObstacles(out _cachedHitPosition, out _cachedHitGameObject,
+                    obstacleDetectionRange);
+                if (isObstacleDetected && IsMoving && !isRotatingFromObstacle)
+                {
+                    ToIdle();
+                }
+            }
+
+            // See how far we've got left to go
+            distanceToDestination = Vector3.Distance(transform.position, flatTarget);
+
+            // We've arrived
+            if (distanceToDestination <= arrivedTolerance)
+            {
+                ToIdle();
+                return;
+            }
+
+            if (isObstacleDetected && !isRotatingFromObstacle)
+            {
+                rotateFromObstaclePosition = transform.position + (transform.forward * -1);
+                isRotatingFromObstacle = true;
+            }
+
+            // Rotate away from obstacle before moving again
+            if (isRotatingFromObstacle)
+            {
+                // Calculate the direction vector from the selfObject to the targetObject
+                Vector3 directionToTarget = (rotateFromObstaclePosition - transform.position).normalized;
+
+                // Calculate the angle between the forward direction and the direction to the target
+                angleToTarget = Math.Abs(Vector3.Angle(transform.forward, directionToTarget));
+
+                if (angleToTarget < rotateToTargetTolerance)
+                {
+                    // We're facing away now and can resume
+                    isRotatingFromObstacle = false;
+                }
+            }
+            
+            if (isRotatingFromObstacle)
+            {
+                RotateToTransform(rotateFromObstaclePosition);
+            }
+            else
+            {
+                RotateToTransform(flatTarget);
+            }
+        }
+        #region Transform Move Code
+
+        private void MoveToTransform(Vector3 targetPosition)
+        {
+            Vector3 currentVelocity = _rigidBody.velocity;
+
+            // Prevent SmoothDamp from dropping the character
+            float currentHeight = transform.position.y;
+            Vector3 newPosition =
+                Vector3.SmoothDamp(transform.position, targetPosition, ref _newVelocity, 0.5f, moveSpeed);
+            newPosition.y = currentHeight;
+            transform.position = newPosition;
+        }
+
+        private void RotateToTransform(Vector3 targetPosition)
+        {
+            Vector3 direction = (targetPosition - transform.position).normalized;
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
+            }
+        }
+
+        private void FallTransform()
+        {
+            Vector3 fallingPosition =
+                new Vector3(transform.position.x, transform.position.y - fallStep, transform.position.z);
+            fallingPosition += transform.forward * fallForwardStep;
+            transform.position =
+                Vector3.SmoothDamp(transform.position, fallingPosition, ref _newVelocity, 0.5f, fallSpeed);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Set up the RigidBody based on the movement type
+        /// </summary>
+        private void ConfigureRigidBody()
+        {
+            _rigidBody.isKinematic = true;
+            _rigidBody.useGravity = true;
+            _rigidBody.collisionDetectionMode = CollisionDetectionMode.Discrete;
+            _rigidBody.interpolation = RigidbodyInterpolation.Interpolate;
+            _rigidBody.constraints = RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX;
         }
 
         /// <summary>
-        /// Public method to set the target destination
+        /// Determines the parameters to use for collision detection
         /// </summary>
-        /// <param name="newMoveTarget"></param>
+        private void ConfigureDetectors()
+        {
+            _obstacleDetectorOrigin = transform.Find(ObstacleDetector);
+            _groundDetectorOrigin = transform.Find(GroundDetector);
+        }
+
+        /// <summary>
+        /// Public method to set a new target destination
+        /// </summary>
         internal void SetDestination(Vector3 newMoveTarget)
         {
+            isRotatingFromObstacle = false;
             moveTarget = newMoveTarget;
             IsMoving = true;
         }
@@ -138,11 +255,10 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// <summary>
         /// Are we ready to move?
         /// </summary>
-        /// <returns></returns>
         private bool CanMove()
         {
             // If we're already moving, not ready to move again
-            if (isMoving)
+            if (isMoving || isStopped || isFalling)
             {
                 return false;
             }
@@ -154,7 +270,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// <summary>
         /// Make a random decision based on probability
         /// </summary>
-        /// <returns></returns>
         private bool MakeDecision(int probability)
         {
             System.Random rand = new System.Random();
@@ -163,55 +278,38 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         }
 
         /// <summary>
-        /// Carry out Move action
+        /// Simulate gravity when not grounded
         /// </summary>
-        private void Move()
+        private void HandleFalling()
         {
-            if (!isMoving)
+            // Grounded and not falling, do nothing
+            if (isGrounded && !isFalling)
             {
                 return;
             }
 
-            Vector3 adjustedMoveTarget = new Vector3(moveTarget.x, transform.position.y, moveTarget.z);
-
-            // Rotate away from obstacle before moving again
-            if (isObstacleDetected && !isRotatingFromObstacle)
+            // Check to see if we've landed
+            if (isGrounded && isFalling)
             {
-                isRotatingFromObstacle = true;
+                Debug.Log($"{gameObject.name} has stopped falling");
+                transform.position = new Vector3(transform.position.x, groundPosition.y, transform.position.z);
+                isFalling = false;
+                Resume();
             }
 
-            if (!isRotatingFromObstacle)
+            // If we've started to fall
+            if (!isGrounded && !isFalling)
             {
-                transform.position = Vector3.SmoothDamp(transform.position, adjustedMoveTarget, ref _velocity, moveSmoothTime, moveSpeed);
+                Debug.Log($"{gameObject.name} has started falling");
+                Stop();
+                isFalling = true;
             }
 
-            // Rotate to target
-            Vector3 direction = (adjustedMoveTarget - transform.position).normalized;
-            if (direction != Vector3.zero)
+            // While we're falling, adjust vertical position
+            if (isFalling)
             {
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
-            }
-
-            // See how far we've got left to go
-            float distanceToTarget = Vector3.Distance(transform.position, adjustedMoveTarget);
-
-            // See if there's anything blocking our way
-            isObstacleDetected = CheckForObstacles(out _cachedHitPosition, out _cachedHitGameObject);
-            if (isObstacleDetected && !isRotatingFromObstacle)
-            {
-                LogUtils.LogDebug(LogArea.MonoPets, $"We've hit an object: {_cachedHitGameObject.name}");
-                ToIdle();
-            }
-            else
-            {
-                isRotatingFromObstacle = false;
-            }
-
-            // We've arrived
-            if (distanceToTarget <= 0.01f)
-            {
-                ToIdle();
+                // FallKinematic();
+                FallTransform();
             }
         }
 
@@ -222,48 +320,43 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         {
             idleTimer = 0.0f;
             IsMoving = false;
-        }
-
-        internal void Stop()
-        {
-            isStopped = true;
-        }
-
-        internal void Restart()
-        {
-            isStopped = false;
+            _rigidBody.velocity = Vector3.zero;
+            _rigidBody.angularVelocity = Vector3.zero;
         }
 
         /// <summary>
         /// Go to the Moving state
         /// </summary>
-        private void ToMoving()
+        private void StartMoving()
         {
             // Get target in range
-            if (isObstacleDetected)
-            {
-                moveTarget = GetNewTargetPosition(-transform.forward);
-            }
-            else
-            {
-                moveTarget = GetNewTargetPosition(transform.forward);
-            }
-
+            moveTarget = isObstacleDetected
+                ? GetNewTargetPosition(-transform.forward)
+                : GetNewTargetPosition(transform.forward);
             IsMoving = true;
-
         }
 
         /// <summary>
         /// Carry out Idle action
         /// </summary>
-        private void Idle()
+        private void UpdateIdleTimer()
         {
             // Reset the action timer
             idleTimer += Time.deltaTime;
         }
 
+        private void Resume()
+        {
+            isStopped = false;
+        }
 
-        public Vector3 GetNewTargetPosition(Vector3 direction)
+        internal void Stop()
+        {
+            IsMoving = false;
+            isStopped = true;
+        }
+
+        private Vector3 GetNewTargetPosition(Vector3 direction)
         {
             // Get a random distance within the defined range
             float distance = Random.Range(minTravelDistance, maxTravelDistance);
@@ -271,7 +364,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             // Get a random angle within the defined range
             float angle = Random.Range(minTravelAngle, maxTravelAngle) * Mathf.Deg2Rad;
 
-            // Randomly decide left or right deviation from directly behind
+            // Randomly decide left or right deviation
             float sign = Random.value < 0.5f ? -1f : 1f;
 
             // Calculate direction relative to the transform
@@ -280,65 +373,108 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
             // Compute final position
             Vector3 newTargetPosition = transform.position + targetDirection * distance;
+            newTargetPosition.y = 0;
+            if (targetMarker)
+            {
+                targetMarker.position = newTargetPosition;
+            }
+
             return newTargetPosition;
         }
 
-        private bool CheckForObstacles(out Vector3 hitPosition, out GameObject hitGameObject)
+        /// <summary>
+        /// Uses a Raycast to determine grounded state
+        /// </summary>
+        private void CheckIsGrounded()
         {
-            bool hitObstacle = RaycastColliderCheck(_detectionOrigin, transform.forward, obstacleDetectionRange, out hitPosition, out hitGameObject);
+            bool isHit = RaycastColliderCheck(_groundDetectorOrigin.position, transform.up * -1, groundedDetectionRange,
+                out _cachedHitPosition, out _cachedHitGameObject, true);
+
+            groundObstacle = _cachedHitGameObject;
+            groundPosition = _cachedHitPosition;
+            distanceToGround = isHit ? transform.position.y - groundPosition.y : 0;
+
+            bool isNowGrounded = isHit && distanceToGround <= groundCheckTolerance;
+
+            if (!isGrounded && isNowGrounded)
+            {
+                Debug.Log($"{gameObject.name} is now grounded on {groundObstacle.name}");
+                Debug.Log($"Ground position is: {groundPosition}");
+            }
+
+            if (isGrounded && !isNowGrounded)
+            {
+                Debug.Log($"{gameObject.name} is no longer grounded!");
+            }
+
+            isGrounded = isNowGrounded;
+        }
+
+        /// <summary>
+        /// Uses a Raycast to check for obstacles in front
+        /// </summary>
+        private bool CheckForObstacles(out Vector3 hitPosition, out GameObject hitGameObject, float detectionRange)
+        {
+            // bool hitObstacle = RaycastColliderCheck(_frontDetectionOrigin.position, _frontDetectionOrigin.forward, detectionRange, out hitPosition, out hitGameObject, true);
+            bool hitObstacle = SphereColliderCheck(_obstacleDetectorOrigin.position, collisionCastRadius,
+                _obstacleDetectorOrigin.forward, detectionRange, out hitPosition, out hitGameObject, false);
+            lastCollisionObstacle = hitGameObject;
+            if (hitObstacle)
+            {
+                if (hitGameObject.transform.parent && hitGameObject.transform.parent.transform.parent)
+                {
+                    Debug.Log(
+                        $"{gameObject.name} has hit {hitGameObject.name} on {hitGameObject.transform.parent.name} on {hitGameObject.transform.parent.transform.parent.name}");
+                }
+                else if (hitGameObject.transform.parent)
+                {
+                    Debug.Log(
+                        $"{gameObject.name} has hit {hitGameObject.name} on {hitGameObject.transform.parent.name}");
+                }
+                else
+                {
+                    Debug.Log($"{gameObject.name} has hit {hitGameObject.name}");
+                }
+            }
+
             return hitObstacle;
         }
 
-        private void CheckForGround()
+        private bool SphereColliderCheck(Vector3 origin, float radius, Vector3 direction, float maxDistance,
+            out Vector3 hitPosition, out GameObject hitGameObject, bool debug = false)
         {
-            if (RaycastColliderCheck(_detectionOrigin, transform.up * -1, groundDetectionRange, out _cachedHitPosition, out _cachedHitGameObject))
+            if (debug)
             {
-                groundHeight = _cachedHitPosition.y;
+                Debug.DrawLine(origin, origin + direction.normalized * maxDistance, Color.yellow);
+                // Draw start/end spheres (to show the volume swept out)
+                DrawSphere(origin, radius, Color.cyan);
+                DrawSphere(origin + direction.normalized * maxDistance, radius, Color.cyan);
             }
-        }
 
-        private void HandleFalling()
-        {
-            CheckForGround();
-            isFalling = (Math.Abs(transform.position.y - groundHeight) >= 0.00001);
-            // _isFalling = _groundHeight < transform.position.y;
+            int hitCount = Physics.SphereCastNonAlloc(origin, radius, direction, _cachedHits, maxDistance,
+                Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
 
-            if (isFalling)
+            // See if any hits are on anything but self
+            bool isRealHit = false;
+            int hitIndex = 0;
+
+            for (int i = 0; i < hitCount; i++)
             {
-                Vector3 adjustedMoveTarget = new Vector3(transform.position.x, groundHeight, transform.position.z);
-                transform.position = Vector3.SmoothDamp(transform.position, adjustedMoveTarget, ref _velocity, moveSmoothTime, dropSpeed);
-            }
-        }
-
-        private void FindClosestHit(RaycastHit[] hits, int numHits, out Vector3 hitPosition, out GameObject hitGameObject)
-        {
-            int closestHitIndex = 0;
-            float closestHitDistance = float.MaxValue;
-
-            for (int curHit = 0; curHit < numHits; curHit++)
-            {
-                // Check we haven't hit ourselves
-                if ((!_cachedHits[curHit].collider.transform.parent) || (_cachedHits[curHit].collider.transform.parent && _cachedHits[curHit].collider.transform.parent.gameObject != gameObject))
+                // Check if we've hit ourselves
+                if (_cachedHits[i].rigidbody && _cachedHits[i].rigidbody.gameObject == gameObject)
                 {
-                    float hitDistance = Vector3.Distance(transform.position, _cachedHits[curHit].point);
-                    if (hitDistance < closestHitDistance)
-                    {
-                        closestHitDistance = hitDistance;
-                        closestHitIndex = curHit;
-                    }
+                    continue;
                 }
+
+                isRealHit = true;
+                hitIndex = i;
+                break;
             }
-            hitPosition = _cachedHits[closestHitIndex].point;
-            hitGameObject = _cachedHits[closestHitIndex].collider.gameObject;
-        }
 
-        private bool BoxCastColliderCheck(Vector3 origin, Vector3 direction, float maxDistance, out Vector3 hitPosition, out GameObject hitGameObject)
-        {
-            int numHits = Physics.BoxCastNonAlloc(_detectionOrigin, _cachedBoxExtents, transform.forward, _cachedHits, Quaternion.identity, maxDistance);
-
-            if (numHits > 0)
+            if (isRealHit)
             {
-                FindClosestHit(_cachedHits, numHits, out hitPosition, out hitGameObject);
+                hitPosition = _cachedHits[hitIndex].point;
+                hitGameObject = _cachedHits[hitIndex].collider.gameObject;
                 return true;
             }
 
@@ -347,16 +483,52 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             return false;
         }
 
-        private bool RaycastColliderCheck(Vector3 origin, Vector3 direction, float maxDistance, out Vector3 hitPosition, out GameObject hitGameObject)
+        void DrawSphere(Vector3 pos, float r, Color c)
         {
-            _cachedRay.direction = transform.forward;
-            _cachedRay.origin = _detectionOrigin;
+            var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            Destroy(sphere.GetComponent<Collider>());
+            var renderer = sphere.GetComponent<Renderer>();
+            renderer.material.color = c;
+            sphere.transform.position = pos;
+            sphere.transform.localScale = Vector3.one * r * 2f;
+            Destroy(sphere, Time.deltaTime); // auto-cleanup after a frame
+        }
 
-            int numHits = Physics.RaycastNonAlloc(_cachedRay, _cachedHits, maxDistance);
-
-            if (numHits > 0)
+        /// <summary>
+        /// Generic Raycast routine using NonAlloc
+        /// </summary>
+        private bool RaycastColliderCheck(Vector3 origin, Vector3 direction, float maxDistance,
+            out Vector3 hitPosition, out GameObject hitGameObject, bool debug = false)
+        {
+            if (debug)
             {
-                FindClosestHit(_cachedHits, numHits, out hitPosition, out hitGameObject);
+                Debug.DrawRay(origin, direction * maxDistance, Color.red);
+            }
+
+            int hitCount = Physics.RaycastNonAlloc(origin, direction, _cachedHits, maxDistance, ~0,
+                QueryTriggerInteraction.Ignore);
+
+            // See if any hits are on anything but self
+            bool isRealHit = false;
+            int hitIndex = 0;
+
+            for (int i = 0; i < hitCount; i++)
+            {
+                // Check if we've hit ourselves
+                if (_cachedHits[i].rigidbody && _cachedHits[i].rigidbody.gameObject == gameObject)
+                {
+                    continue;
+                }
+
+                isRealHit = true;
+                hitIndex = i;
+                break;
+            }
+
+            if (isRealHit)
+            {
+                hitPosition = _cachedHits[hitIndex].point;
+                hitGameObject = _cachedHits[hitIndex].collider.gameObject;
                 return true;
             }
 
