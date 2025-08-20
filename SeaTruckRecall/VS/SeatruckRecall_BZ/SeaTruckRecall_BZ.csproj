@@ -80,6 +80,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\AutoPilot\AllAutoPilots.cs">
+      <Link>AutoPilot\AllAutoPilots.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\AutoPilot\AutoPilotBase.cs">
+      <Link>AutoPilot\AutoPilotBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\AutoPilot\SeaTruckAutoPilot.cs">
+      <Link>AutoPilot\SeaTruckAutoPilot.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\DockRecaller\AllSeaTruckDockRecallers.cs">
+      <Link>DockRecaller\AllSeaTruckDockRecallers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\DockRecaller\SeaTruckDockRecaller.cs">
+      <Link>DockRecaller\SeaTruckDockRecaller.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RecallUnityProject\Assets\Scripts\Navigation\InstantNavigation.cs">
+      <Link>Navigation\InstantNavigation.cs</Link>
+    </Compile>
     <Compile Include="..\..\RecallUnityProject\Assets\Scripts\Navigation\NavMovement.cs">
       <Link>Navigation\NavMovement.cs</Link>
     </Compile>
@@ -113,13 +131,8 @@
     <Compile Include="..\..\RecallUnityProject\Assets\Scripts\Pathfinding\PathFinder.cs">
       <Link>Pathfinding\PathFinder.cs</Link>
     </Compile>
-    <Compile Include="AutoPilot\AllAutoPilots.cs" />
-    <Compile Include="AutoPilot\SeaTruckAutoPilot.cs" />
     <Compile Include="Config\ModConfigFile.cs" />
-    <Compile Include="DockRecaller\AllSeaTruckDockRecallers.cs" />
     <Compile Include="DockRecaller\SeaTruckDockRecallerUi.cs" />
-    <Compile Include="DockRecaller\SeaTruckDockRecaller.cs" />
-    <Compile Include="AutoPilot\AutoPilot.cs" />
     <Compile Include="Patches\MoonpoolExpansionManagerPatches.cs" />
     <Compile Include="Patches\SeaTruckSegmentPatches.cs" />
     <Compile Include="SeaTruckDockRecallPlugin.cs" />

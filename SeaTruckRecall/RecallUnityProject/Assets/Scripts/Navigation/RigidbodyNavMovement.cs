@@ -7,17 +7,10 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
     internal class RigidbodyNavMovement : WaypointNavigation
     {
         // Movement properties for this method of navigation
-        protected override float RotateSpeed => 20.0f;
-        protected override float MoveSpeed => 15.0f;
-        protected override float RotateThreshold => 0.5f;
-
-        // Private fields
-        private Vector3 _directionToTarget;
-        private Vector3 _currentDirection;
-        private float _distanceToTarget;
-
-        // private float _stoppingDistance = 5.0f;
-        private float _moveForce = 1000.0f;
+        [SerializeField] private float rotateSpeed = 50.0f;
+        [SerializeField] private float moveSpeed = 10.0f;
+        [SerializeField] private float slowDistance = 1.0f;
+        [SerializeField] private float slowingAngle = 10f;
 
         private Rigidbody _mainTruckRigidbody;
         private List<RigidBodyBackup> _rigidBodyBackups;
@@ -50,13 +43,33 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             _numChildRigidBodies = _rigidBodyBackups.Count;
         }
 
+        protected override UpdateMode GetUpdateMode()
+        {
+            return UpdateMode.FixedUpdate;
+        }
+
         /// <summary>
         /// Implement the MoveUpdate interface method, using the Rigidbody to move the Source transform
         /// </summary>
         protected override void MoveUpdate(Vector3 targetPosition)
         {
-            Vector3 force = ComputeMovementForce(targetPosition);
-            _mainTruckRigidbody.AddForce(force, ForceMode.Force);
+            Vector3 direction = targetPosition - _mainTruckRigidbody.position;
+            float distance = direction.magnitude;
+
+            if (distance < 0.01f)
+            {
+                _mainTruckRigidbody.velocity = Vector3.zero;
+                return;
+            }
+
+            // Normalize direction for consistent speed
+            Vector3 normalizedDirection = direction / distance;
+
+            // Calculate speed scaling: 1 when far, 0 when very close
+            float scaleFactor = Mathf.Clamp01(distance / slowDistance);
+            float scaledSpeed = moveSpeed * scaleFactor;
+
+            _mainTruckRigidbody.velocity = normalizedDirection * scaledSpeed;
         }
 
         /// <summary>
@@ -64,17 +77,36 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// </summary>
         protected override void RotateUpdate(Vector3 targetPosition)
         {
-            Vector3 torque = ComputeRotationTorque(targetPosition);
-            _mainTruckRigidbody.AddTorque(torque, ForceMode.Impulse);
+            // Calculate the desired rotation
+            Vector3 direction = targetPosition - _mainTruckRigidbody.position;
+            if (direction == Vector3.zero) return; // Avoid zero direction
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+            // Calculate the angle difference
+            float angleDiff = Quaternion.Angle(_mainTruckRigidbody.rotation, targetRotation);
+
+            // Scale rotation speed based on how close we are to the target
+            float rotateFactor = Mathf.Clamp01(angleDiff / slowingAngle); // 1 = far, 0 = close
+            float scaledSpeed = rotateSpeed * rotateFactor;
+
+            // Compute the new rotation with scaled speed
+            Quaternion newRotation = Quaternion.RotateTowards(
+                _mainTruckRigidbody.rotation,
+                targetRotation,
+                scaledSpeed * Time.fixedDeltaTime
+            );
+
+            // Apply it using physics-friendly method
+            _mainTruckRigidbody.MoveRotation(newRotation);
         }
 
-        protected internal override void WaypointReached()
+        protected override void WaypointReached()
         {
             base.WaypointReached();
             _mainTruckRigidbody.velocity = Vector3.zero;
         }
 
-        protected internal override void NavStarted()
+        protected override void NavStarted()
         {
             ConfigureRigidBodies();
         }
@@ -82,7 +114,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// <summary>
         /// Implement WaypointNavComplete to set the position and reset Rigidbody velocity
         /// </summary>
-        protected internal override void NavComplete()
+        protected override void NavComplete()
         {
             _mainTruckRigidbody.angularVelocity = Vector3.zero;
             _mainTruckRigidbody.velocity = Vector3.zero;
@@ -115,59 +147,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             }
 
             UWE.Utils.SetIsKinematicAndUpdateInterpolation(_mainTruckRigidbody, false, false);
-        }
-
-        private Vector3 ComputeMovementForce(Vector3 targetPosition)
-        {
-            _directionToTarget = (targetPosition - transform.position);
-            _distanceToTarget = _directionToTarget.magnitude;
-
-            // Normalize direction
-            _directionToTarget.Normalize();
-
-            // Scale force based on distance (slows down when close)
-            // float speedFactor = Mathf.Clamp01(_distanceToTarget / _stoppingDistance);
-            float speedFactor = 1.0f;
-            Vector3 desiredVelocity = _directionToTarget * (speedFactor * MoveSpeed);
-
-            // Compute required force to reach the desired velocity
-            Vector3 velocityChange = desiredVelocity - _mainTruckRigidbody.velocity;
-            Vector3 force = velocityChange * _moveForce;
-
-            return force;
-        }
-
-        /// <summary>
-        /// Calculate the amount of torque to apply to rotate
-        /// between current and target transforms
-        /// </summary>
-        private Vector3 ComputeRotationTorque(Vector3 targetPosition)
-        {
-            // Compute direction to target
-            Vector3 direction = targetPosition - transform.position;
-            if (direction.sqrMagnitude < Mathf.Epsilon)
-            {
-                return Vector3.zero; // Prevent errors
-            }
-
-            // Compute the desired rotation
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-
-            // Get the rotation difference
-            Quaternion rotationDifference = targetRotation * Quaternion.Inverse(transform.rotation);
-
-            // Convert quaternion difference to axis-angle representation
-            rotationDifference.ToAngleAxis(out float angle, out Vector3 axis);
-
-            if (angle > 180f)
-            {
-                angle -= 360f; // Normalize angle range (-180 to 180)
-            }
-
-            // Calculate torque
-            Vector3 torque = axis * (RotateSpeed * Mathf.Deg2Rad * angle); // Convert angle to radians
-
-            return torque;
         }
 
         internal class RigidBodyBackup

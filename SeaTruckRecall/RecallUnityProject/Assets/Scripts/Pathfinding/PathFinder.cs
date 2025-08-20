@@ -18,8 +18,11 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
         private NavGrid _navGrid;
         private GenerateStatus _waypointStatus;
-        internal List<Waypoint> Waypoints { get; private set; }
+        private List<Waypoint> Waypoints { get; set; }
 
+        /// <summary>
+        /// Subscribe to these events to be notified of the status of various async processes
+        /// </summary>
         internal NavGrid.GridStatusChangedEvent OnGridStatusChanged = new NavGrid.GridStatusChangedEvent();
         internal NavGrid.PathingStatusChangedEvent OnPathingStatusChanged = new NavGrid.PathingStatusChangedEvent();
         internal WaypointsStatusChangedEvent OnWaypointStatusChanged = new WaypointsStatusChangedEvent();
@@ -132,11 +135,11 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
         internal void RefreshPath()
         {
-            RefreshPath(transform.position, targetTransformOverride.position, navGridCellSizeOverride, navGridCellExtendsOverride,navGridOverrideIgnoreLayerMask,
+            RefreshPath(transform.position, targetTransformOverride.position,
                 navGridDebugOverride, navGridDebugContainerOverride);
         }
 
-        private void RefreshPath(Vector3 sourcePosition, Vector3 targetPosition, float cellSize, int cellExtends, LayerMask ignoreLayerMask,
+        private void RefreshPath(Vector3 sourcePosition, Vector3 targetPosition,
             bool debug = false, Transform debugContainer = null)
         {
             StartCoroutine(_navGrid.GeneratePathAsync(sourcePosition, targetPosition, null, debug, debugContainer));

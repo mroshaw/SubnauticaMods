@@ -98,7 +98,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
                 return;
             }
             Log.LogDebug("Recall Dock docking noted as complete.");
-            dockRecaller.Docked();
+            dockRecaller.CurrentSeaTruckDocked();
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
                 return;
             }
             Log.LogDebug("Recall Dock Undocking noted as complete.");
-            dockRecaller.Undocked();
+            dockRecaller.ReleaseCurrentlyDocked();
         }
     }
 }

@@ -4,55 +4,78 @@ using static DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 {
+    public enum UpdateMode { Update, FixedUpdate }
+
     internal abstract class NavMovement : MonoBehaviour
     {
-        protected virtual float RotateSpeed => 20.0f;
-        protected virtual float MoveSpeed => 5.0f;
-        protected internal float SlowDistance { get; set; }
+        // Used to nudge
         private Rigidbody _rigidbody;
 
         protected virtual float RotateThreshold => 0.0001f;
         protected virtual float MoveTolerance => 0.2f;
 
-        protected bool IsMoving { get; private set; }
-        protected bool HasTarget { get; private set; }
+        private bool _isMoving;
 
         private Vector3 _currentTarget;
         private bool _isFacingTarget;
         private bool _rotateBeforeMoving;
 
+        private UpdateMode _updateMode;
+
         protected virtual void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
-            IsMoving = false;
+            _isMoving = false;
+            _updateMode = GetUpdateMode();
         }
 
-        protected void StartNavigation(Vector3 targetPosition, bool rotateBeforeMoving = true)
+        protected virtual void StartNavigation(Vector3 targetPosition, bool rotateBeforeMoving = true)
         {
             Log.LogDebug("Nav Movement Start");
             _currentTarget = targetPosition;
-            HasTarget = true;
             _isFacingTarget = false;
             _rotateBeforeMoving = rotateBeforeMoving;
-            IsMoving = true;
+            _isMoving = true;
             Log.LogDebug($"StartNavigation: Moving to {targetPosition}");
         }
 
-        protected void StopNavigation()
+        protected virtual void StopNavigation()
         {
             Log.LogDebug("Nav Movement Stop");
-            IsMoving = false;
-            HasTarget = false;
+            _isMoving = false;
         }
+
+        protected abstract UpdateMode GetUpdateMode();
 
         // Moves the source towards the target in an Update or FixedUpdate.
         protected abstract void MoveUpdate(Vector3 targetPosition);
+
         // Rotates the source towards the target in an Update or FixedUpdate.
         protected abstract void RotateUpdate(Vector3 targetPosition);
 
+        private void FixedUpdate()
+        {
+            if (_updateMode != UpdateMode.FixedUpdate)
+            {
+                return;
+            }
+
+            Move();
+        }
+
         private void Update()
         {
-            if (!IsMoving)
+            if (_updateMode != UpdateMode.Update)
+            {
+                return;
+            }
+
+            Move();
+        }
+
+        private void Move()
+        {
+            if (!_isMoving)
             {
                 return;
             }
@@ -60,9 +83,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             // DEBUG every 5 seconds
             if (Time.frameCount % (60 * 5) == 0)
             {
-                Log.LogDebug($"NavMovement: IsFacingTarget={_isFacingTarget}");
-                Log.LogDebug($"NavMovement: IsMoveComplete={IsMoveComplete()}");
-                Log.LogDebug($"NavMovement: IsMoving={IsMoving}");
+                // Log.LogDebug($"NavMovement: IsFacingTarget={_isFacingTarget}");
+                // Log.LogDebug($"NavMovement: IsMoveComplete={IsMoveComplete()}");
+                // Log.LogDebug($"NavMovement: IsMoving={IsMoving}");
             }
 
 
@@ -111,7 +134,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// </summary>
         public virtual void CheckMoveStatus()
         {
-            if (!IsMoving)
+            if (!_isMoving)
             {
                 return;
             }
@@ -119,7 +142,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             if (_isFacingTarget && IsMoveComplete())
             {
                 Log.LogDebug($"NavMovement: MoveComplete");
-                IsMoving = false;
+                _isMoving = false;
                 NavMoveComplete();
             }
         }

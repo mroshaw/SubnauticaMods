@@ -27,29 +27,35 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Patches
             // Add the new AutoPilot component
             Log.LogInfo("Adding SeaTruckAutopilot components...");
 
-            // Add and configure the MoveMethod
-            WaypointNavigation navMovement;
-
-            switch (ConfigFile.RecallMoveMethod)
+            // If Instant Movement is selected, add the component
+            if (ConfigFile.RecallMoveMethod == RecallMoveMethod.Instant)
             {
-                case RecallMoveMethod.Smooth:
-                    navMovement = __instance.gameObject.EnsureComponent<RigidbodyNavMovement>();
-                    navMovement.SlowDistance = 2.0f;
-                    break;
-
-                case RecallMoveMethod.Fixed:
-                    navMovement = __instance.gameObject.EnsureComponent<TransformNavMovement>();
-                    break;
-
-                case RecallMoveMethod.Teleport:
-                    navMovement = __instance.gameObject.EnsureComponent<TeleportNavMovement>();
-                    break;
-                default:
-                    navMovement = __instance.gameObject.EnsureComponent<TeleportNavMovement>();
-                    break;
+                __instance.gameObject.EnsureComponent<InstantNavigation>();
             }
+            else
+            {
+                // Add and configure the MoveMethod
+                switch (ConfigFile.RecallMoveMethod)
+                {
+                    case RecallMoveMethod.Smooth:
+                        __instance.gameObject.EnsureComponent<RigidbodyNavMovement>();
+                        break;
 
-            PathFinder pathFinder = __instance.gameObject.EnsureComponent<PathFinder>();
+                    case RecallMoveMethod.Fixed:
+                        __instance.gameObject.EnsureComponent<TransformNavMovement>();
+                        break;
+
+                    case RecallMoveMethod.Teleport:
+                        __instance.gameObject.EnsureComponent<TeleportNavMovement>();
+                        break;
+                    default:
+                        __instance.gameObject.EnsureComponent<TeleportNavMovement>();
+                        break;
+                }
+
+                __instance.gameObject.EnsureComponent<PathFinder>();
+
+            }
 
             SeaTruckAutoPilot newAutoPilot = __instance.gameObject.EnsureComponent<SeaTruckAutoPilot>();
             AllAutoPilots.AddInstance(newAutoPilot);

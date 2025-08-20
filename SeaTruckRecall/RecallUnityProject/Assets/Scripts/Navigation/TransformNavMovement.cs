@@ -6,8 +6,13 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
     internal class TransformNavMovement : WaypointNavigation
     {
         // Movement properties for this method of navigation
-        protected override float RotateSpeed => 120.0f;
-        protected override float MoveSpeed => 10.0f;
+        protected virtual float RotateSpeed => 120.0f;
+        protected virtual float MoveSpeed => 10.0f;
+
+        protected override UpdateMode GetUpdateMode()
+        {
+            return UpdateMode.Update;
+        }
 
         /// <summary>
         /// Implement the MoveUpdate interface method, using the Rigidbody to move the Source transform
@@ -44,7 +49,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// <summary>
         /// Disable RigidBody on all SeaTrucks
         /// </summary>
-        protected internal override void NavStarted()
+        protected override void NavStarted()
         {
             Log.LogDebug($"Setting SeaTruck Rigidbody to IsKinematic: {gameObject.name}");
             UWE.Utils.SetIsKinematicAndUpdateInterpolation(gameObject, true, false);
@@ -54,7 +59,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// Re-enable rigid bodies on all Seatrucks
         /// Apply a small force to push the teleported vehicle into the docking trigger
         /// </summary>
-        protected internal override void NavComplete()
+        protected override void NavComplete()
         {
             Log.LogDebug("Resetting SeaTruck Rigidbodies");
 

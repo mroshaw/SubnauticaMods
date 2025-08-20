@@ -9,7 +9,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
     internal enum NavState
     {
         None,
-        Idle,
         Moving,
         Paused,
         Stopped,
@@ -30,15 +29,11 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         {
         }
 
-        internal class NavWaypointChangedEvent : UnityEvent<Waypoint>
-        {
-        }
-
         // Events to publish current state of Navigation
         internal NavStateChangedEvent OnNavStateChanged = new NavStateChangedEvent();
-        internal NavWaypointChangedEvent OnWaypointChanged = new NavWaypointChangedEvent();
+        internal WaypointChangedEvent OnWaypointChanged = new WaypointChangedEvent();
 
-        protected int StartingWaypointIndex { get; set; } = 0;
+        private int _startingWaypointIndex = 0;
 
         private List<Waypoint> _waypoints;
 
@@ -47,12 +42,14 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         private int _totalWaypoints;
 
         // Waypoint tracking
-        private Waypoint _previousWaypoint;
         private Waypoint _currentWaypoint;
 
         // Navigation state
         private NavState _currentNavState = NavState.None;
-        private NavState _previousNavState;
+
+        // Sphere Cast cache
+        private const int ColliderCacheSize = 20;
+        private Collider[] _colliderCache =  new Collider[ColliderCacheSize];
 
         private void Start()
         {
@@ -70,7 +67,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// </summary>
         private void Reset()
         {
-            _currentWaypointIndex = StartingWaypointIndex - 1;
+            _currentWaypointIndex = _startingWaypointIndex - 1;
             SetWaypoint(null);
             SetNavState(NavState.None);
         }
@@ -97,7 +94,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             }
 
             Log.LogDebug($"Setting new Waypoint: {newWaypoint}");
-            _previousWaypoint = _currentWaypoint;
             _currentWaypoint = newWaypoint;
             OnWaypointChanged?.Invoke(newWaypoint);
         }
@@ -119,29 +115,30 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// <summary>
         /// Override this to execute code before waypoint nav begins
         /// </summary>
-        protected internal virtual void NavStarted()
+        protected virtual void NavStarted()
         {
         }
 
         /// <summary>
         /// Override this to execute code after last waypoint has been reached
         /// </summary>
-        protected internal virtual void NavComplete()
+        protected virtual void NavComplete()
         {
         }
 
         /// <summary>
         /// Override this to execute code before each Waypoint
         /// </summary>
-        protected internal virtual void WaypointNavStarted()
+        protected virtual void WaypointNavStarted()
         {
         }
 
         /// <summary>
         /// Override this to execute code after a Waypoint is reached
         /// </summary>
-        protected internal virtual void WaypointReached()
+        protected virtual void WaypointReached()
         {
+            SetNavState(NavState.WaypointReached);
         }
 
         /// <summary>
@@ -187,12 +184,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 
         internal void StopWaypointNavigation()
         {
-            if (_currentNavState == NavState.Moving)
-            {
-                SetNavState(NavState.Stopped);
-                NavComplete();
-                Reset();
-            }
+            SetNavState(NavState.Stopped);
+            NavComplete();
+            Reset();
         }
 
         /// <summary>
@@ -226,20 +220,13 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         }
 
         /// <summary>
-        /// Uses an OverlapSphere to see if there is enough room in front of the dock
-        /// for the autopilot to manoeuvre
+        /// Uses an OverlapSphere to see if there is enough room to reach the target
         /// </summary>
-        /// <returns></returns>
         private bool IsWaypointClear(Waypoint waypoint, float radius)
         {
             Vector3 position = waypoint.Position;
-            Collider[] allColliders = Physics.OverlapSphere(position, radius);
-            foreach (Collider collider in allColliders)
-            {
-                Log.LogInfo($"Found this Collider in waypoint radius: {collider.gameObject.name}");
-            }
-
-            return true;
+            int numColliders = Physics.OverlapSphereNonAlloc(position, radius, _colliderCache);
+            return numColliders != 0;
         }
 
         /// <summary>
@@ -253,9 +240,9 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             if (Physics.SphereCast(source.position, radius, direction, out RaycastHit hit, distance))
             {
                 Log.LogInfo($"Found this Collider from current position to this Waypoint {targetWaypoint.Name}: {hit.collider.gameObject.name}");
+                return true;
             }
-
-            return true;
+            return false;
         }
     }
 }

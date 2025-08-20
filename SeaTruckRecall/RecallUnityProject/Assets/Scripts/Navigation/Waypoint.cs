@@ -1,8 +1,16 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
 {
+
+    /// <summary>
+    /// Wrapper class for a Waypoint based UnityEvent
+    /// </summary>
+    internal class WaypointChangedEvent : UnityEvent<Waypoint>
+    {
+    }
 
     /// <summary>
     /// Internal Waypoint class definition.
@@ -23,7 +31,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="transform"></param>
         internal Waypoint(Vector3 position, Quaternion rotation, bool rotateBeforeMoving, string name)
         {
             Position = position;

@@ -46,7 +46,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         // Cached RayCastHits for collider checks
         private Collider[] _colliderHitCache;
         private int _colliderHitCacheSize = 100;
-        private bool _isGridReady;
 
         internal NavGrid()
         {

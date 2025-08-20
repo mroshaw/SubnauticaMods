@@ -6,8 +6,13 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
     internal class TeleportNavMovement : WaypointNavigation
     {
         // Movement properties for this method of navigation
-        protected override float RotateSpeed => 20.0f;
-        protected override float MoveSpeed => 5.0f;
+        protected virtual float RotateSpeed => 20.0f;
+        protected virtual float MoveSpeed => 5.0f;
+
+        protected override UpdateMode GetUpdateMode()
+        {
+            return UpdateMode.Update;
+        }
 
         /// <summary>
         /// Implement the MoveUpdate abstract method, using direct setting
@@ -20,7 +25,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         }
 
         /// <summary>
-        /// Implement the RotateUpdate interface method, using the Rigidbody to move the Source transform
+        /// Implement the RotateUpdate interface method, using LookAt to move the Source transform
         /// </summary>
         protected override void RotateUpdate(Vector3 targetPosition)
         {
@@ -32,7 +37,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         /// <summary>
         /// Apply a small force to push the teleported vehicle into the docking trigger
         /// </summary>
-        protected internal override void NavComplete()
+        protected override void NavComplete()
         {
             // Force docking
             Log.LogInfo("Teleport Movement: Nudging...");

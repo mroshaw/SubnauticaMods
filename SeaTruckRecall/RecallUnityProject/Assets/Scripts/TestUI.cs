@@ -1,5 +1,7 @@
 ﻿using static DaftAppleGames.SeatruckRecall_BZ.SeaTruckDockRecallPlugin;
 using System.Collections.Generic;
+using DaftAppleGames.SeatruckRecall_BZ.AutoPilot;
+using DaftAppleGames.SeatruckRecall_BZ.DockRecaller;
 using TMPro;
 using UnityEngine;
 
@@ -10,70 +12,89 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         [SerializeField] private TMP_Text gridStatusText;
         [SerializeField] private TMP_Text pathingStatusText;
         [SerializeField] private TMP_Text waypointStatusText;
+        [SerializeField] private TMP_Text autopilotStatusText;
+        [SerializeField] private TMP_Text dockRecallStatusText;
 
         [SerializeField] TMP_InputField forceText;
 
-        [SerializeField] private PathFinder pathFinder;
-
-        [SerializeField] private Transform waypoint1;
-        [SerializeField] private Transform waypoint2;
-        [SerializeField] private Transform waypoint3;
-        [SerializeField] private Transform waypoint4;
-        [SerializeField] private Transform waypoint5;
+        [SerializeField] private SeaTruckSegment seaTruck;
+        [SerializeField] private SeaTruckDockRecaller seaTruckDockRecaller;
 
         private List<Waypoint> _waypoints;
         private WaypointNavigation _navSystem;
-        public void NavigateInternalWaypoints()
-        {
-            List<Waypoint> waypoints = new List<Waypoint>();
-
-            waypoints.Add(new Waypoint(waypoint1.position, waypoint1.rotation, true, "Waypoint 1"));
-            waypoints.Add(new Waypoint(waypoint2.position, waypoint2.rotation, true, "Waypoint 2"));
-            waypoints.Add(new Waypoint(waypoint3.position, waypoint3.rotation, true, "Waypoint 3"));
-            waypoints.Add(new Waypoint(waypoint4.position, waypoint4.rotation, true, "Waypoint 4"));
-            waypoints.Add(new Waypoint(waypoint5.position, waypoint5.rotation, true, "Waypoint 5"));
-
-            _navSystem.SetWayPoints(waypoints);
-            _navSystem.StartWaypointNavigation();
-        }
+        private SeaTruckAutoPilot _autoPilot;
+        private PathFinder _pathFinder;
 
         private void OnEnable()
         {
-            pathFinder.OnWaypointStatusChanged.AddListener(WaypointStatusChangedHandler);
-            pathFinder.OnGridStatusChanged.AddListener(GridStatusChangedHandler);
-            pathFinder.OnPathingStatusChanged.AddListener(PathingStatusChangedHandler);
+            if (!_pathFinder)
+            {
+                _pathFinder = seaTruck.GetComponent<PathFinder>();
+            }
+
+            if (!_autoPilot)
+            {
+                _autoPilot = seaTruck.GetComponent<SeaTruckAutoPilot>();
+            }
+
+            seaTruckDockRecaller.OnDockingStateChanged.AddListener(DockingStateChangedHandler);
+
+            _pathFinder.OnWaypointStatusChanged.AddListener(WaypointStatusChangedHandler);
+            _pathFinder.OnGridStatusChanged.AddListener(GridStatusChangedHandler);
+            _pathFinder.OnPathingStatusChanged.AddListener(PathingStatusChangedHandler);
+
+            _autoPilot.OnAutopilotStateChanged.AddListener(AutoPilotStateChangedHandler);
         }
 
         private void OnDisable()
         {
-            pathFinder.OnWaypointStatusChanged.RemoveListener(WaypointStatusChangedHandler);
-            pathFinder.OnGridStatusChanged.RemoveListener(GridStatusChangedHandler);
-            pathFinder.OnPathingStatusChanged.RemoveListener(PathingStatusChangedHandler);
+            if (!_pathFinder)
+            {
+                _pathFinder = seaTruck.GetComponent<PathFinder>();
+            }
+
+            if (!_autoPilot)
+            {
+                _autoPilot = seaTruck.GetComponent<SeaTruckAutoPilot>();
+            }
+
+            _pathFinder.OnWaypointStatusChanged.RemoveListener(WaypointStatusChangedHandler);
+            _pathFinder.OnGridStatusChanged.RemoveListener(GridStatusChangedHandler);
+            _pathFinder.OnPathingStatusChanged.RemoveListener(PathingStatusChangedHandler);
+
+            _autoPilot.OnAutopilotStateChanged.AddListener(AutoPilotStateChangedHandler);
+
+            seaTruckDockRecaller.OnDockingStateChanged.RemoveListener(DockingStateChangedHandler);
+
         }
 
         private void Awake()
         {
-            _navSystem = pathFinder.GetComponent<WaypointNavigation>();
+            _autoPilot = seaTruck.GetComponent<SeaTruckAutoPilot>();
+
+            AllAutoPilots.GetAllActiveAutoPilots();
         }
 
         public void GenerateGridPathAndNavigate()
         {
-            pathFinder.GenerateWaypoints(WaypointsReady);
+            _pathFinder.GenerateWaypoints(WaypointsReady);
         }
 
         public void StartNav()
         {
-            _navSystem.StartWaypointNavigation(_waypoints);
+            // _navSystem.StartWaypointNavigation(_waypoints);
+            // _autoPilot.BeginNavigation(_waypoints);
+            seaTruckDockRecaller.RecallClosestSeatruck();
         }
 
         public void RefreshGrid()
         {
-            pathFinder.RefreshNavGrid();
+            _pathFinder.RefreshNavGrid();
         }
 
         public void RefreshPath()
         {
-            pathFinder.GenerateWaypoints(SetWaypoints);
+            _pathFinder.GenerateWaypoints(SetWaypoints);
         }
 
         private void SetWaypoints(GenerateStatus waypointStatus, List<Waypoint> waypoints)
@@ -96,8 +117,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             }
             _navSystem.StartWaypointNavigation(waypoints);
         }
-
-        #region UI state handlers
         private void GridStatusChangedHandler(GenerateStatus status)
         {
             gridStatusText.text = status.ToString();
@@ -112,8 +131,17 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
         {
             waypointStatusText.text = status.ToString();
         }
-        #endregion
-        #region Utility methods
+
+        private void AutoPilotStateChangedHandler(AutoPilotState state)
+        {
+            autopilotStatusText.text = state.ToString();
+        }
+
+        private void DockingStateChangedHandler(DockRecallState state)
+        {
+            dockRecallStatusText.text = state.ToString();
+        }
+
         public void ApplyForce()
         {
             float forceToApply = float.Parse(forceText.text);
@@ -135,6 +163,5 @@ namespace DaftAppleGames.SeatruckRecall_BZ.Navigation
             RigidbodyNavMovement rbNav = _navSystem as RigidbodyNavMovement;
             rbNav.RestoreRigidBodies();
         }
-        #endregion
     }
 }

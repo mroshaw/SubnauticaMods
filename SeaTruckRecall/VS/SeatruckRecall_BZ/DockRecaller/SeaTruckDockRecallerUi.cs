@@ -28,7 +28,6 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller.Ui
             { DockRecallState.Aborted, "ABORTED" },
             { DockRecallState.Recalling , "IN PROGRESS..." },
             { DockRecallState.Docked,"READY" },
-            { DockRecallState.PirateDetected, "PIRATE DETECTED!" },
             { DockRecallState.Parking, "PARKING"}
         };
 
@@ -36,15 +35,11 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller.Ui
         private const string AutoPilotDisplayText = "AUTOPILOT: ";
         private readonly Dictionary<AutoPilotState, string> _autoPilotStateDisplayTextDict = new Dictionary<AutoPilotState, string>()
         {
-            { AutoPilotState.Idle, "NOT CONNECTED" },
             { AutoPilotState.Ready, "READY" },
             { AutoPilotState.CalculatingRoute, "CALCULATING ROUTE" },
             { AutoPilotState.Moving, "MOVING" },
             { AutoPilotState.Arrived , "READY" },
-            { AutoPilotState.RouteBlocked, "ROUTE BLOCKED!" },
-            { AutoPilotState.WaypointBlocked, "WAYPOINT BLOCKED!" },
-            { AutoPilotState.Paused, "PAUSED" },
-            { AutoPilotState.Stopped , "STOPPED" },
+            { AutoPilotState.Blocked, "ROUTE BLOCKED!" },
             { AutoPilotState.Aborted , "READY" },
         };
 
@@ -165,7 +160,7 @@ namespace DaftAppleGames.SeatruckRecall_BZ.DockRecaller.Ui
         private void RecallButtonHandler()
         {
             Log.LogDebug("SeaTruckDockRecallerUi: Recall button clicked!");
-            if (_seatruckRecaller.IsReady)
+            if (_seatruckRecaller.IsDockReady())
             {
                 Log.LogDebug("SeaTruckDockRecallerUi: Recalling closest SeaTruck");
                 RecallInProgressUi();
