@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using DaftAppleGames.SubnauticaPets.Extensions;
+﻿using DaftAppleGames.SubnauticaPets.Extensions;
+using System.Collections;
 using UnityEngine;
 
 namespace DaftAppleGames.SubnauticaPets.Pets
@@ -19,6 +19,8 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         internal float timeBeforePetNeutral = 1800.0f;
         internal float timeBeforePetSad = 3600.0f;
         internal float timeBeforePetDevastated = 5400.0f;
+
+        internal Transform Eyes { get; private set; }
 
         private float _timeSinceLastInteraction;
 
@@ -106,6 +108,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             _fmodEmitter = GetComponent<FMOD_CustomEmitter>();
             _rigidBody = GetComponent<Rigidbody>();
             _customPetAnimator = GetComponent<CustomPetAnimator>();
+            Eyes = transform.Find("Eyes").transform;
         }
 
         /// <summary>

@@ -131,6 +131,12 @@
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\CustomPetAnimator.cs">
       <Link>MonoBehaviours\Pets\CustomPetAnimator.cs</Link>
     </Compile>
+    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\MoonPoolDetector.cs">
+      <Link>MonoBehaviours\Pets\MoonPoolDetector.cs</Link>
+    </Compile>
+    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\ObstacleDetector.cs">
+      <Link>MonoBehaviours\Pets\ObstacleDetector.cs</Link>
+    </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\Pet.cs">
       <Link>MonoBehaviours\Pets\Pet.cs</Link>
     </Compile>

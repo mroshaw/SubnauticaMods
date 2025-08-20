@@ -1,9 +1,9 @@
-﻿using DaftAppleGames.SubnauticaPets.Pets;
-using Nautilus.Utility;
-using System.Collections.Generic;
-using DaftAppleGames.SubnauticaPets.Extensions;
+﻿using DaftAppleGames.SubnauticaPets.Extensions;
+using DaftAppleGames.SubnauticaPets.Pets;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Handlers;
+using Nautilus.Utility;
+using System.Collections.Generic;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
@@ -47,9 +47,11 @@ namespace DaftAppleGames.SubnauticaPets
         /// <summary>
         /// Adds the specified child pet class component to the given creature GameObject
         /// based on the given PetCreatureType
+        /// </summary>
         public static void AddPetComponent(GameObject targetGameObject)
         {
             Pet pet = targetGameObject.EnsureComponent<Pet>();
+            // MoonPoolDetector moonPoolDetector = targetGameObject.EnsureComponent<MoonPoolDetector>();
         }
 
         public static void ConfigureLargeWorldEntity(GameObject targetGameObject, bool state)

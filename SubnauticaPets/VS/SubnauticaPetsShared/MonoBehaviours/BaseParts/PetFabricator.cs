@@ -1,4 +1,5 @@
 ﻿using DaftAppleGames.SubnauticaPets.Pets;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -67,17 +68,17 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         }
 
         /// <summary>
-        /// Spawn a Pet
+        /// Spawn a Pet. Optinal callback action is invoked, if provided, with the spawned GameObject
         /// </summary>
-        public void SpawnPet(TechType techType)
+        public void SpawnPet(TechType techType, Action<GameObject> callBack = null)
         {
-            StartCoroutine(SpawnPetAsync(techType));
+            StartCoroutine(SpawnPetAsync(techType, callBack));
         }
 
         /// <summary>
-        /// Spawn Pet Async version
+        /// Spawn Pet Async version. Optional callback is invoked at the end of the process, if provided.
         /// </summary>
-        private IEnumerator SpawnPetAsync(TechType techType)
+        private IEnumerator SpawnPetAsync(TechType techType, Action<GameObject> callback = null)
         {
             CoroutineTask<GameObject> task = CraftData.GetPrefabForTechTypeAsync(techType);
             yield return task;
@@ -108,6 +109,8 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             newPetGameObject.transform.LookAt(Player.main.transform.position);
             newPetGameObject.SetActive(true);
             newPet.LoadPetData();
+
+            callback?.Invoke(newPetGameObject);
         }
     }
 }
