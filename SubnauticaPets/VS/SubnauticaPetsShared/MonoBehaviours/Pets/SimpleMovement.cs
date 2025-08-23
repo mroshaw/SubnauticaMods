@@ -8,8 +8,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
     /// </summary>
     internal class SimpleMovement : MonoBehaviour
     {
-        private const string MoonPoolDetectorName = "MoonPoolDetector";
-        
         [Header("Movement Settings")]
         public float moveSpeed = 0.8f;
         public float rotateSpeed = 4.0f;
@@ -58,7 +56,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         {
             _charController = gameObject.GetComponent<CharacterController>();
             _petAnimator = GetComponent<PetAnimator>();
-            // ConfigureMoonPoolDetector();
         }
         
         private void Update()
@@ -75,25 +72,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             SetMoveDirection();
             MoveToTarget();
             RotateToTarget();
-        }
-
-        private void ConfigureMoonPoolDetector()
-        {
-            Transform detectorTransform = transform.Find(MoonPoolDetectorName);
-            if (!detectorTransform)
-            {
-                LogUtils.LogError(LogArea.MonoPets, $"No Moon Pool detector found on {gameObject.name}");
-                return;
-            }
-
-            MoonPoolDetector moonPoolDetector = detectorTransform.gameObject.EnsureComponent<MoonPoolDetector>();
-            moonPoolDetector.OnMoonPoolDetected.AddListener(MoonPoolDetected);
-        }
-
-        private void MoonPoolDetected()
-        {
-            LogUtils.LogDebug(LogArea.MonoPets, $"Moon Pool detected by {gameObject.name}");
-            OnHitObstacle?.Invoke(transform.forward * -1);
         }
         
         internal void MoveToNewTarget(Vector3 target)

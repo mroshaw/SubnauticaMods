@@ -129,9 +129,6 @@
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\CustomPet.cs">
       <Link>MonoBehaviours\Pets\CustomPet.cs</Link>
     </Compile>
-    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\MoonPoolDetector.cs">
-      <Link>MonoBehaviours\Pets\MoonPoolDetector.cs</Link>
-    </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\PetAnimator.cs">
       <Link>MonoBehaviours\Pets\PetAnimator.cs</Link>
     </Compile>
