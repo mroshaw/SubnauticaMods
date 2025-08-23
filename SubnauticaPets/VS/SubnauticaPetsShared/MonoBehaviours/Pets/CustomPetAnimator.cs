@@ -8,7 +8,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         private Animator _animator;
         private Pet _pet;
         private bool _inRandomAnim = false;
-        
+
         private static readonly int IsMovingAnimParameter = Animator.StringToHash("IsMoving");
         private static readonly string[] BodyAnims = { "Sit", "Spin", "Roll", "Flinch" };
         private static readonly string[] FaceAnims =  { "Eyes_Annoyed",
@@ -88,14 +88,20 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             }
         }
 
-        public void PlayRandomBodyAnim()
+        public void PlayRandomBodyAnim(bool playSound)
         {
             if(!_animator || _bodyAnimHashKeys == null || _bodyAnimHashKeys.Length == 0)
             {
                 return;
             }
             int animIndex = Random.Range(0, _numBodyAnims);
-            LogUtils.LogDebug(LogArea.MonoPets, $"Playing random body anim at index: {animIndex}");
+
+            if (_pet && playSound)
+            {
+                _pet.PlaySound();
+            }
+            
+            LogUtils.LogDebug(LogArea.MonoPets, $"{gameObject.name} is playing random body anim at index: {animIndex} ({BodyAnims[animIndex]})");
             _animator.SetTrigger(_bodyAnimHashKeys[animIndex]);
         }
 

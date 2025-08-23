@@ -1065,6 +1065,26 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 2756530625728841689, guid: f90d956b6264a0f43806b030c79a9c82,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729407628373145757, guid: f90d956b6264a0f43806b030c79a9c82,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729407628373145757, guid: f90d956b6264a0f43806b030c79a9c82,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729407628373145757, guid: f90d956b6264a0f43806b030c79a9c82,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6380748260795591123, guid: f90d956b6264a0f43806b030c79a9c82,
         type: 3}
       propertyPath: m_Name
@@ -1073,7 +1093,7 @@ PrefabInstance:
     - target: {fileID: 6380748260795591123, guid: f90d956b6264a0f43806b030c79a9c82,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6380748260795591125, guid: f90d956b6264a0f43806b030c79a9c82,
         type: 3}
@@ -1135,7 +1155,8 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.07
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4729407628373145757, guid: f90d956b6264a0f43806b030c79a9c82, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f90d956b6264a0f43806b030c79a9c82, type: 3}
 --- !u!1 &787758897 stripped
 GameObject:
@@ -1179,38 +1200,106 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba6707c6194f0e428a25ddbc2f4ab4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idleCoolDown: 2
   moveSpeed: 0.8
-  rotateSpeed: 4
-  moveProbability: 20
-  minTravelDistance: 2
-  maxTravelDistance: 5
+  rotateSpeed: 1.5
+  arrivalTolerance: 0.2
+  targetMarker: {fileID: 1672888547}
+  isGrounded: 0
+  moveDirection: {x: 0, y: 0, z: 0}
+  moveTarget: {x: 0, y: 0, z: 0}
+  distanceToTarget: 0
+  idleTimer: 0
+  isMoving: 0
+  onArrived:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!143 &787758901
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787758897}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 0.5
+  m_Radius: 0.21
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.25, z: 0}
+--- !u!114 &787758902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787758897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6885326cc395cab41a6810cf4b898793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &787758903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787758897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5fb88f3dc2067448a100edd4fb0c09b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &787758904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787758897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a837d4c51e2b1404bb1b3455bdf8ac9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movePosition: {x: 0, y: 0, z: 0}
+--- !u!114 &787758905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787758897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b222477b187cd540b1244174c3f96b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minTravelDistance: 0.5
+  maxTravelDistance: 2
   minTravelAngle: 30
   maxTravelAngle: 140
-  arrivedTolerance: 0.2
-  fallSpeed: 5
-  fallForwardStep: 0.2
-  fallStep: 0.9
-  groundCheckTolerance: 0.1
-  groundedDetectionRange: 0.2
-  collisionCastRadius: 0.15
-  obstacleDetectionRange: 0
-  rotateToTargetTolerance: 5
-  targetMarker: {fileID: 1672888547}
-  idleTimer: 0
-  moveTarget: {x: 0, y: 0, z: 0}
-  distanceToDestination: 0
-  isMoving: 0
-  isStopped: 0
-  isObstacleDetected: 0
-  lastCollisionObstacle: {fileID: 0}
-  isRotatingFromObstacle: 0
-  angleToTarget: 0
-  distanceToGround: 0
-  isGrounded: 0
-  isFalling: 0
-  groundObstacle: {fileID: 0}
-  groundPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &787758906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787758897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf2e4b57e74c7949bcc6d041bfb2db9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minIdleTime: 5
+  maxIdleTime: 10
+  chanceToPlayAnim: 10
+  idleCounter: 0
 --- !u!224 &944602174 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4893585378585211578, guid: 37bcec4a24a7a9549b35535a946488e3,
@@ -3308,6 +3397,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pet Walrus Test
       objectReference: {fileID: 0}
+    - target: {fileID: 7778273656137686284, guid: 72ef98a6b1dace146b336955b592590a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72ef98a6b1dace146b336955b592590a, type: 3}
 --- !u!1 &1839651571 stripped
@@ -3328,38 +3422,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ba6707c6194f0e428a25ddbc2f4ab4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idleCoolDown: 2
-  moveSpeed: 0.8
-  rotateSpeed: 4
-  moveProbability: 20
-  minTravelDistance: 2
-  maxTravelDistance: 5
-  minTravelAngle: 30
-  maxTravelAngle: 140
-  arrivedTolerance: 0.2
-  fallSpeed: 5
-  fallForwardStep: 0.2
-  fallStep: 0.9
-  groundCheckTolerance: 0.1
-  groundedDetectionRange: 0.2
-  collisionCastRadius: 0.15
-  obstacleDetectionRange: 0
-  rotateToTargetTolerance: 5
-  targetMarker: {fileID: 1672888547}
-  idleTimer: 0
-  moveTarget: {x: 0, y: 0, z: 0}
-  distanceToDestination: 0
-  isMoving: 0
-  isStopped: 0
-  isObstacleDetected: 0
-  lastCollisionObstacle: {fileID: 0}
-  isRotatingFromObstacle: 0
-  angleToTarget: 0
-  distanceToGround: 0
+  moveSpeed: 0
+  rotateSpeed: 0
+  arrivalTolerance: 0.2
+  targetMarker: {fileID: 0}
   isGrounded: 0
-  isFalling: 0
-  groundObstacle: {fileID: 0}
-  groundPosition: {x: 0, y: 0, z: 0}
+  moveDirection: {x: 0, y: 0, z: 0}
+  moveTarget: {x: 0, y: 0, z: 0}
+  distanceToTarget: 0
+  idleTimer: 0
+  isMoving: 0
+  onArrived:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1839651573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4058,6 +4133,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2756530625728841689, guid: f90d956b6264a0f43806b030c79a9c82,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6380748260795591123, guid: f90d956b6264a0f43806b030c79a9c82,
         type: 3}
       propertyPath: m_Name

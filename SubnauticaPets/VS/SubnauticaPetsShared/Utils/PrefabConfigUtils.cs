@@ -50,7 +50,14 @@ namespace DaftAppleGames.SubnauticaPets
         /// </summary>
         public static void AddPetComponent(GameObject targetGameObject)
         {
-            Pet pet = targetGameObject.EnsureComponent<Pet>();
+            targetGameObject.EnsureComponent<Pet>();
+            targetGameObject.EnsureComponent<PetStateController>();
+            targetGameObject.EnsureComponent<SimpleMovement>();
+            targetGameObject.EnsureComponent<IdleAction>();
+            targetGameObject.EnsureComponent<WanderAction>();
+            targetGameObject.EnsureComponent<MoveToAction>();
+            targetGameObject.EnsureComponent<KilledAction>();
+
             // MoonPoolDetector moonPoolDetector = targetGameObject.EnsureComponent<MoonPoolDetector>();
         }
 

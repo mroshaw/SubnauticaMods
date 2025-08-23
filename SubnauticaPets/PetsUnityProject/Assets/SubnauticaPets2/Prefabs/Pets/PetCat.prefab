@@ -645,7 +645,7 @@ Transform:
   - {fileID: 449743674}
   - {fileID: 1416149977}
   m_Father: {fileID: 6380748260795591125}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!205 &1786365287
 LODGroup:
@@ -807,6 +807,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0.246
       objectReference: {fileID: 0}
+    - target: {fileID: 4481705237739099486, guid: 8c66e9eeed324b34ba8a3635e942faf4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4683715473745279826, guid: 8c66e9eeed324b34ba8a3635e942faf4,
         type: 3}
       propertyPath: m_RootOrder
@@ -866,6 +871,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PetCat
+      objectReference: {fileID: 0}
+    - target: {fileID: 6471995898590915098, guid: 8c66e9eeed324b34ba8a3635e942faf4,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6982869091910408036, guid: 8c66e9eeed324b34ba8a3635e942faf4,
         type: 3}

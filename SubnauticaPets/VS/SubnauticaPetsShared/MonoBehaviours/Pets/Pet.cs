@@ -68,9 +68,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         public string PetName { set; get; }
 
         // Private components
+        private PetStateController _petStateController;
         private MoveOnSurface _moveOnSurface;
         private MoveOnGround _moveOnGround;
-        private SimpleMovement _simpleMovement;
         private Animator _animator;
         private CustomPetAnimator _customPetAnimator;
         private FMOD_CustomEmitter _fmodEmitter;
@@ -276,13 +276,13 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 LogUtils.LogDebug(LogArea.MonoPets, "Pet: No MoveOnGround component found.");
             }
 
-            _simpleMovement = GetComponent<SimpleMovement>();
-            if (!_simpleMovement)
+            _petStateController = GetComponent<PetStateController>();
+            if (!_petStateController)
             {
-                LogUtils.LogDebug(LogArea.MonoPets, "Pet: No SimpleMovement component found.");
+                LogUtils.LogDebug(LogArea.MonoPets, "Pet: No PetStateController component found.");
             }
 
-            _canMove = _moveOnGround || _moveOnSurface || _simpleMovement;
+            _canMove = _moveOnGround || _moveOnSurface || _petStateController;
 
             if (!_canMove)
             {
@@ -306,18 +306,17 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             if (!_customPetAnimator && _animator)
             {
                 _animator.SetTrigger("flinch");
+                PlaySound();
             }
             else if (_customPetAnimator)
             {
-                _customPetAnimator.PlayRandomBodyAnim();
+                _customPetAnimator.PlayRandomBodyAnim(true);
                 _customPetAnimator.PlayRandomFaceAnim();
             }
             else
             {
                 LogUtils.LogError(LogArea.MonoPets, "Pet: No animator found, so can't play animation.");
             }
-
-            PlaySound();
         }
 
         /// <summary>
@@ -345,9 +344,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 return;
             }
 
-            if (_simpleMovement)
+            if (_petStateController)
             {
-                _simpleMovement.SetDestination(Player.main.transform.position);
+                _petStateController.MoveToPosition(Player.main.transform.position);
             }
         }
 
@@ -376,9 +375,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
             IsDead = true;
             _rigidBody.isKinematic = true;
-            if (_simpleMovement)
+            if (_petStateController)
             {
-                _simpleMovement.Stop();
+                _petStateController.Kill();
             }
 
             Happiness = PetHappiness.Dead;
