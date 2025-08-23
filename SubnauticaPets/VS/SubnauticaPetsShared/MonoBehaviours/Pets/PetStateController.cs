@@ -49,7 +49,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             }
             
             // LogUtils.LogDebug(LogArea.MonoPets, $"{gameObject.name}: Changing state from: {_currState} to {newState}");
-            
+            _currState = newState;
             switch (newState)
             {
                 case PetState.Idle:

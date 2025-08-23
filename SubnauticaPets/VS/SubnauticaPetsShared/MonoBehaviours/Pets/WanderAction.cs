@@ -42,9 +42,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             ActionCompleted();
         }
 
-        private void HitObstacle(ControllerColliderHit hit)
+        private void HitObstacle(Vector3 direction)
         {
-            Vector3 newTarget = GetNewTargetPosition(hit.normal);
+            Vector3 newTarget = GetNewTargetPosition(direction);
             _simpleMovement.MoveToNewTarget(newTarget);
         }
         

@@ -1,5 +1,6 @@
 ﻿using DaftAppleGames.SubnauticaPets.Extensions;
 using DaftAppleGames.SubnauticaPets.Pets;
+using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
@@ -20,14 +21,16 @@ namespace DaftAppleGames.SubnauticaPets
             TechType techType, TechType dnaTechType)
         {
             CustomPrefab prefab = new CustomPrefab(prefabInfo);
-
             GameObject prefabGameObject = CustomAssetBundleUtils.GetObjectFromAssetBundle<GameObject>(bundlePrefabName) as GameObject;
 
             GameObject model = prefabGameObject.transform.Find("model").gameObject;
             Transform petEyes = prefabGameObject.transform.Find("Eyes");
 
+            LogUtils.LogDebug(LogArea.MonoPets, $"Configuring Components on {prefabInfo.TechType}");
+            
             // Standard components
             PrefabUtils.AddBasicComponents(prefabGameObject, classId, prefabInfo.TechType, LargeWorldEntity.CellLevel.Medium);
+
             PrefabUtils.AddConstructable(prefabGameObject, prefabInfo.TechType, ConstructableFlags.Base, model);
             PrefabUtils.AddVFXFabricating(prefabGameObject, "model", -0.2f, 0.9f, new Vector3(0.0f, 0.0f, 0.0f), 0.7f, new Vector3(0.0f, 0.0f, 0.0f));
             prefabGameObject.GetComponent<LargeWorldEntity>().enabled = false;
@@ -35,11 +38,13 @@ namespace DaftAppleGames.SubnauticaPets
 
             // Custom Pet Components
             PrefabConfigUtils.AddPetComponent(prefabGameObject);
+
             PrefabConfigUtils.AddCustomPetComponents(prefabGameObject, audioClipName, AudioUtils.BusPaths.PlayerSFXs, 10.0f);
             AddBelowZeroCustomPetComponents(prefabGameObject);
             PrefabConfigUtils.AddPetHandTarget(prefabGameObject);
+            
             prefab.SetGameObject(prefabGameObject);
-
+            
             // Set the recipe, depends on whether in "Adventure" or "Creative" mode.
             RecipeData recipe = null;
             if (ModConfig.ModMode == ModMode.Adventure)
@@ -133,16 +138,24 @@ namespace DaftAppleGames.SubnauticaPets
         {
             Log.LogDebug("Setting up Below Zero custom Pet components...");
 
+            targetGameObject.EnsureComponent<CleanUpSerializer>();
+            
+            /*
             Log.LogDebug("OnSurfaceTracker");
             OnSurfaceTracker onSurfaceTracker = targetGameObject.EnsureComponent<OnSurfaceTracker>();
             Log.LogDebug("WorldForces");
             WorldForces worldForces = targetGameObject.EnsureComponent<WorldForces>();
             worldForces.useRigidbody = targetGameObject.GetComponent<Rigidbody>();
+            */
+            
+            /*
             Log.LogDebug("LiveMixin");
             LiveMixin liveMixin = targetGameObject.EnsureComponent<LiveMixin>();
             liveMixin.data = ScriptableObject.CreateInstance<LiveMixinData>();
             liveMixin.data.maxHealth = 50;
             liveMixin.health = 50;
+            */
+            /*
             Log.LogDebug("LandCreatureGravity");
             LandCreatureGravity landGravity = targetGameObject.EnsureComponent<LandCreatureGravity>();
             landGravity.creatureRigidbody = targetGameObject.GetComponent<Rigidbody>();
@@ -150,7 +163,8 @@ namespace DaftAppleGames.SubnauticaPets
             landGravity.liveMixin = liveMixin;
             landGravity.onSurfaceTracker = onSurfaceTracker;
             landGravity.bodyCollider = targetGameObject.GetComponentInChildren<SphereCollider>(true);
-
+            */
+            
             Log.LogDebug("LargeWorldEntity");
             targetGameObject.GetComponent<LargeWorldEntity>().enabled = false;
         }

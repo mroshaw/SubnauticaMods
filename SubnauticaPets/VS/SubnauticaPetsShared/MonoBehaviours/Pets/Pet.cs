@@ -19,9 +19,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         internal float timeBeforePetNeutral = 1800.0f;
         internal float timeBeforePetSad = 3600.0f;
         internal float timeBeforePetDevastated = 5400.0f;
-
-        internal Transform Eyes { get; private set; }
-
+        
         private float _timeSinceLastInteraction;
 
         /// <summary>
@@ -72,7 +70,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         private MoveOnSurface _moveOnSurface;
         private MoveOnGround _moveOnGround;
         private Animator _animator;
-        private CustomPetAnimator _customPetAnimator;
+        private PetAnimator _petAnimator;
         private FMOD_CustomEmitter _fmodEmitter;
         private TechTag _techTag;
         private PrefabIdentifier _prefabIdentifier;
@@ -107,8 +105,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             _skyApplier = GetComponent<SkyApplier>();
             _fmodEmitter = GetComponent<FMOD_CustomEmitter>();
             _rigidBody = GetComponent<Rigidbody>();
-            _customPetAnimator = GetComponent<CustomPetAnimator>();
-            Eyes = transform.Find("Eyes").transform;
+            _petAnimator = GetComponent<PetAnimator>();
         }
 
         /// <summary>
@@ -132,12 +129,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             DeriveBase();
             SubnauticaPetsPlugin.PetSaver.RegisterPet(this);
         }
-
-        private void Update()
-        {
-            SetPetHappiness();
-        }
-
+        
         private void SetPetHappiness()
         {
             _timeSinceLastInteraction += Time.deltaTime;
@@ -267,19 +259,19 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             _moveOnSurface = GetComponent<MoveOnSurface>();
             if (!_moveOnSurface)
             {
-                LogUtils.LogDebug(LogArea.MonoPets, "Pet: No MoveOnSurface component found.");
+                // LogUtils.LogDebug(LogArea.MonoPets, "Pet: No MoveOnSurface component found.");
             }
 
             _moveOnGround = GetComponent<MoveOnGround>();
             if (!_moveOnGround)
             {
-                LogUtils.LogDebug(LogArea.MonoPets, "Pet: No MoveOnGround component found.");
+                // LogUtils.LogDebug(LogArea.MonoPets, "Pet: No MoveOnGround component found.");
             }
 
             _petStateController = GetComponent<PetStateController>();
             if (!_petStateController)
             {
-                LogUtils.LogDebug(LogArea.MonoPets, "Pet: No PetStateController component found.");
+                // LogUtils.LogDebug(LogArea.MonoPets, "Pet: No PetStateController component found.");
             }
 
             _canMove = _moveOnGround || _moveOnSurface || _petStateController;
@@ -303,15 +295,15 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal void PlayAnimation()
         {
-            if (!_customPetAnimator && _animator)
+            if (!_petAnimator && _animator)
             {
                 _animator.SetTrigger("flinch");
                 PlaySound();
             }
-            else if (_customPetAnimator)
+            else if (_petAnimator)
             {
-                _customPetAnimator.PlayRandomBodyAnim(true);
-                _customPetAnimator.PlayRandomFaceAnim();
+                _petAnimator.PlayRandomBodyAnim(true);
+                _petAnimator.PlayRandomFaceAnim();
             }
             else
             {

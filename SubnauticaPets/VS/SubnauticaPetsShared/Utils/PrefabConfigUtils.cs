@@ -12,20 +12,17 @@ namespace DaftAppleGames.SubnauticaPets
     internal static class PrefabConfigUtils
     {
         /// <summary>
-        /// Adds the basic components required for every Pet to function
-        /// </summary>
-        public static void AddBasicPetComponents()
-        {
-        }
-
-        /// <summary>
         /// Adds and configures components for Custom Pets
         /// </summary>
         public static void AddCustomPetComponents(GameObject targetGameObject, string audioClipName, string busPath, float audioVolume)
         {
-            OnSurfaceTracker onSurfaceTracker = targetGameObject.EnsureComponent<OnSurfaceTracker>();
-            WorldForces worldForces = targetGameObject.EnsureComponent<WorldForces>();
-            worldForces.useRigidbody = targetGameObject.GetComponent<Rigidbody>();
+            targetGameObject.EnsureComponent<PetStateController>();
+            targetGameObject.EnsureComponent<SimpleMovement>();
+            targetGameObject.EnsureComponent<IdleAction>();
+            targetGameObject.EnsureComponent<WanderAction>();
+            targetGameObject.EnsureComponent<MoveToAction>();
+            targetGameObject.EnsureComponent<KilledAction>();
+            
             LiveMixin liveMixin = targetGameObject.EnsureComponent<LiveMixin>();
             liveMixin.data = ScriptableObject.CreateInstance<LiveMixinData>();
             liveMixin.data.maxHealth = 50;
@@ -33,7 +30,7 @@ namespace DaftAppleGames.SubnauticaPets
 
             CustomPet customPet = targetGameObject.EnsureComponent<CustomPet>();
             customPet.babyScaleSize = 1.0f;
-            CustomPetAnimator customPetAnimator = targetGameObject.EnsureComponent<CustomPetAnimator>();
+            PetAnimator petAnimator = targetGameObject.EnsureComponent<PetAnimator>();
             CreatureDeath creatureDeath = targetGameObject.EnsureComponent<CreatureDeath>();
             creatureDeath.liveMixin = liveMixin;
             creatureDeath.respawn = false;
@@ -51,14 +48,6 @@ namespace DaftAppleGames.SubnauticaPets
         public static void AddPetComponent(GameObject targetGameObject)
         {
             targetGameObject.EnsureComponent<Pet>();
-            targetGameObject.EnsureComponent<PetStateController>();
-            targetGameObject.EnsureComponent<SimpleMovement>();
-            targetGameObject.EnsureComponent<IdleAction>();
-            targetGameObject.EnsureComponent<WanderAction>();
-            targetGameObject.EnsureComponent<MoveToAction>();
-            targetGameObject.EnsureComponent<KilledAction>();
-
-            // MoonPoolDetector moonPoolDetector = targetGameObject.EnsureComponent<MoonPoolDetector>();
         }
 
         public static void ConfigureLargeWorldEntity(GameObject targetGameObject, bool state)

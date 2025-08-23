@@ -129,8 +129,11 @@
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\CustomPet.cs">
       <Link>MonoBehaviours\Pets\CustomPet.cs</Link>
     </Compile>
-    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\CustomPetAnimator.cs">
-      <Link>MonoBehaviours\Pets\CustomPetAnimator.cs</Link>
+    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\MoonPoolDetector.cs">
+      <Link>MonoBehaviours\Pets\MoonPoolDetector.cs</Link>
+    </Compile>
+    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\PetAnimator.cs">
+      <Link>MonoBehaviours\Pets\PetAnimator.cs</Link>
     </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\IdleAction.cs">
       <Link>MonoBehaviours\Pets\IdleAction.cs</Link>
@@ -138,14 +141,8 @@
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\KilledAction.cs">
       <Link>MonoBehaviours\Pets\KilledAction.cs</Link>
     </Compile>
-    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\MoonPoolDetector.cs">
-      <Link>MonoBehaviours\Pets\MoonPoolDetector.cs</Link>
-    </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\MoveToAction.cs">
       <Link>MonoBehaviours\Pets\MoveToAction.cs</Link>
-    </Compile>
-    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\ObstacleDetector.cs">
-      <Link>MonoBehaviours\Pets\ObstacleDetector.cs</Link>
     </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\Pet.cs">
       <Link>MonoBehaviours\Pets\Pet.cs</Link>
@@ -176,6 +173,9 @@
     </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Utils\ApplySnFont.cs">
       <Link>MonoBehaviours\Utils\ApplySnFont.cs</Link>
+    </Compile>
+    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Utils\CleanUpSerializer.cs">
+      <Link>MonoBehaviours\Utils\CleanUpSerializer.cs</Link>
     </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Utils\CloseOnAnyInput.cs">
       <Link>MonoBehaviours\Utils\CloseOnAnyInput.cs</Link>
@@ -226,6 +226,7 @@
       <Link>Utils\UiUtils.cs</Link>
     </Compile>
     <Compile Include="Config\ModConfigFile.cs" />
+    <Compile Include="Patches\BaseFoundationPiecePatches.cs" />
     <Compile Include="Patches\GhostCrafterPatches.cs" />
     <Compile Include="Patches\LandCreatureGravityPatches.cs" />
     <Compile Include="Patches\MoveOnSurfacePatches.cs" />

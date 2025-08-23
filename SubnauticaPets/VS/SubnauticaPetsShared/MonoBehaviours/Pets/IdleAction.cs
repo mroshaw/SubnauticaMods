@@ -17,12 +17,12 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         [SerializeField] private float idleCounter;
         
         private SimpleMovement _simpleMovement;
-        private CustomPetAnimator _petAnimator;
+        private PetAnimator _petAnimator;
         
         internal override void Init()
         {
             _simpleMovement = GetComponent<SimpleMovement>();
-            _petAnimator = GetComponent<CustomPetAnimator>();
+            _petAnimator = GetComponent<PetAnimator>();
         }
 
         internal override void StartAction()

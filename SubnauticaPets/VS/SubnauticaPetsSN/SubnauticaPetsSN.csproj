@@ -128,17 +128,26 @@
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\CustomPet.cs">
       <Link>MonoBehaviours\Pets\CustomPet.cs</Link>
     </Compile>
-    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\CustomPetAnimator.cs">
-      <Link>MonoBehaviours\Pets\CustomPetAnimator.cs</Link>
-    </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\MoonPoolDetector.cs">
       <Link>MonoBehaviours\Pets\MoonPoolDetector.cs</Link>
     </Compile>
-    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\ObstacleDetector.cs">
-      <Link>MonoBehaviours\Pets\ObstacleDetector.cs</Link>
+    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\PetAnimator.cs">
+      <Link>MonoBehaviours\Pets\PetAnimator.cs</Link>
+    </Compile>
+    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\IdleAction.cs">
+      <Link>MonoBehaviours\Pets\IdleAction.cs</Link>
+    </Compile>
+    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\KilledAction.cs">
+      <Link>MonoBehaviours\Pets\KilledAction.cs</Link>
+    </Compile>
+    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\MoveToAction.cs">
+      <Link>MonoBehaviours\Pets\MoveToAction.cs</Link>
     </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\Pet.cs">
       <Link>MonoBehaviours\Pets\Pet.cs</Link>
+    </Compile>
+    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\PetAction.cs">
+      <Link>MonoBehaviours\Pets\PetAction.cs</Link>
     </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\PetDna.cs">
       <Link>MonoBehaviours\Pets\PetDna.cs</Link>
@@ -149,8 +158,14 @@
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\PetSaver.cs">
       <Link>MonoBehaviours\Pets\PetSaver.cs</Link>
     </Compile>
+    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\PetStateController.cs">
+      <Link>MonoBehaviours\Pets\PetStateController.cs</Link>
+    </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\SimpleMovement.cs">
       <Link>MonoBehaviours\Pets\SimpleMovement.cs</Link>
+    </Compile>
+    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\WanderAction.cs">
+      <Link>MonoBehaviours\Pets\WanderAction.cs</Link>
     </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Utils\AlignToFloorOnStart.cs">
       <Link>MonoBehaviours\Utils\AlignToFloorOnStart.cs</Link>

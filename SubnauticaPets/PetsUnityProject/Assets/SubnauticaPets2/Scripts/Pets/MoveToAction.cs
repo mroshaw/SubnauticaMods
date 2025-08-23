@@ -19,7 +19,8 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
         internal override void StartAction()
         {
-            // Pick a random target and move
+            _simpleMovement.onArrived.AddListener(ArrivedAtTarget);
+            _simpleMovement.OnHitObstacle.AddListener(HitObstacle);
             _simpleMovement.MoveToNewTarget(movePosition);
         }
 
@@ -34,7 +35,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             ActionCompleted();
         }
 
-        private void HitObstacle(ControllerColliderHit hit)
+        private void HitObstacle(Vector3 hit)
         {
             ActionCompleted();
         }

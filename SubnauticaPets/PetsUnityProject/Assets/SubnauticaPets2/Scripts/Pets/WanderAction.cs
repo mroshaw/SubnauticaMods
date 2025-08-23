@@ -4,12 +4,12 @@ using Random = UnityEngine.Random;
 namespace DaftAppleGames.SubnauticaPets.Pets
 {
     /// <summary>
-    /// Wander action
+    /// Simple movement using Unity CharacterController
     /// </summary>
     internal class WanderAction : PetAction
     {
         [Header("Action Settings")]
-        public float minTravelDistance = 3.0f;
+        public float minTravelDistance = 2.0f;
         public float maxTravelDistance = 10.0f;
         public float minTravelAngle = 30.0f;
         public float maxTravelAngle = 140.0f;
@@ -34,6 +34,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         {
             _simpleMovement.onArrived.RemoveListener(ArrivedAtTarget);
             _simpleMovement.OnHitObstacle.RemoveListener(HitObstacle);
+            _simpleMovement.Stop();
         }
         
         private void ArrivedAtTarget()
@@ -41,9 +42,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             ActionCompleted();
         }
 
-        private void HitObstacle(ControllerColliderHit hit)
+        private void HitObstacle(Vector3 direction)
         {
-            Vector3 newTarget = GetNewTargetPosition(hit.normal);
+            Vector3 newTarget = GetNewTargetPosition(direction);
             _simpleMovement.MoveToNewTarget(newTarget);
         }
         
