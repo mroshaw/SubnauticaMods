@@ -50,7 +50,7 @@
       <HintPath>..\..\..\..\..\..\Games\Steam\steamapps\common\SubnauticaZero\SubnauticaZero_Data\Managed\FMODUnity.dll</HintPath>
     </Reference>
     <Reference Include="Nautilus">
-      <HintPath>..\..\..\..\..\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\plugins\Nautilus\Nautilus.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Games\Steam\steamapps\common\SubnauticaZero\BepInEx\plugins\Nautilus\Nautilus.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -117,9 +117,6 @@
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\BaseParts\PetConsoleFragment.cs">
       <Link>MonoBehaviours\BaseParts\PetConsoleFragment.cs</Link>
     </Compile>
-    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\BaseParts\PetConsoleInput.cs">
-      <Link>MonoBehaviours\BaseParts\PetConsoleInput.cs</Link>
-    </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\BaseParts\PetFabricator.cs">
       <Link>MonoBehaviours\BaseParts\PetFabricator.cs</Link>
     </Compile>
@@ -128,9 +125,6 @@
     </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\CustomPet.cs">
       <Link>MonoBehaviours\Pets\CustomPet.cs</Link>
-    </Compile>
-    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\PetAnimator.cs">
-      <Link>MonoBehaviours\Pets\PetAnimator.cs</Link>
     </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\IdleAction.cs">
       <Link>MonoBehaviours\Pets\IdleAction.cs</Link>
@@ -147,11 +141,11 @@
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\PetAction.cs">
       <Link>MonoBehaviours\Pets\PetAction.cs</Link>
     </Compile>
+    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\PetAnimator.cs">
+      <Link>MonoBehaviours\Pets\PetAnimator.cs</Link>
+    </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\PetDna.cs">
       <Link>MonoBehaviours\Pets\PetDna.cs</Link>
-    </Compile>
-    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\PetHandTarget.cs">
-      <Link>MonoBehaviours\Pets\PetHandTarget.cs</Link>
     </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Pets\PetSaver.cs">
       <Link>MonoBehaviours\Pets\PetSaver.cs</Link>
@@ -171,9 +165,6 @@
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Utils\ApplySnFont.cs">
       <Link>MonoBehaviours\Utils\ApplySnFont.cs</Link>
     </Compile>
-    <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Utils\CleanUpSerializer.cs">
-      <Link>MonoBehaviours\Utils\CleanUpSerializer.cs</Link>
-    </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Utils\CloseOnAnyInput.cs">
       <Link>MonoBehaviours\Utils\CloseOnAnyInput.cs</Link>
     </Compile>
@@ -188,6 +179,9 @@
     </Compile>
     <Compile Include="..\SubnauticaPetsShared\MonoBehaviours\Utils\ScaleOnStart.cs">
       <Link>MonoBehaviours\Utils\ScaleOnStart.cs</Link>
+    </Compile>
+    <Compile Include="..\SubnauticaPetsShared\Patches\BaseFoundationPiecePatches.cs">
+      <Link>Patches\BaseFoundationPiecePatches.cs</Link>
     </Compile>
     <Compile Include="..\SubnauticaPetsShared\Patches\GroundMotorPatches.cs">
       <Link>Patches\GroundMotorPatches.cs</Link>
@@ -223,7 +217,9 @@
       <Link>Utils\UiUtils.cs</Link>
     </Compile>
     <Compile Include="Config\ModConfigFile.cs" />
-    <Compile Include="Patches\BaseFoundationPiecePatches.cs" />
+    <Compile Include="MonoBehaviours\BaseParts\PetConsoleInput.cs" />
+    <Compile Include="MonoBehaviours\Pets\PetHandTarget.cs" />
+    <Compile Include="MonoBehaviours\Utils\CleanUpSerializer.cs" />
     <Compile Include="Patches\GhostCrafterPatches.cs" />
     <Compile Include="Patches\LandCreatureGravityPatches.cs" />
     <Compile Include="Patches\MoveOnSurfacePatches.cs" />

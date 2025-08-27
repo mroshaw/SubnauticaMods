@@ -402,5 +402,17 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             yield return new WaitForSeconds(DelayBeforeDestroy);
             Destroy(this.gameObject);
         }
+        
+        /// <summary>
+        /// Find and Kill all pets. For use to clear out all pets in case
+        /// of some sort of catastrophic failure.
+        /// </summary>
+        public static void KillAllPets()
+        {
+            foreach (Pet pet in GameObject.FindObjectsOfType<Pet>())
+            {
+                pet.Kill();
+            }
+        }
     }
 }

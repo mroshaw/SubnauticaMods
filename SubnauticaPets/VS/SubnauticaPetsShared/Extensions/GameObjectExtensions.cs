@@ -86,5 +86,22 @@ namespace DaftAppleGames.SubnauticaPets.Extensions
             }
         }
 
+        /// <summary>
+        /// Sets the Layer of the GameObject, and it's children if isIncludeChildren is true
+        /// </summary>
+        public static void SetLayer(this GameObject targetGameObject, string layerName, bool includeChildren)
+        {
+            LogUtils.LogDebug(LogArea.Prefabs, $"Layer of {targetGameObject} is currently {LayerMask.LayerToName(targetGameObject.layer)}");
+            LogUtils.LogDebug(LogArea.Prefabs, $"Setting Layer of {targetGameObject} to {layerName}");
+            targetGameObject.layer = LayerMask.NameToLayer(layerName);
+            if (includeChildren)
+            {
+                foreach (Transform child in targetGameObject.GetComponentsInChildren<Transform>(true))
+                {
+                    child.gameObject.layer = LayerMask.NameToLayer("Vehicle");
+                }
+            }
+            LogUtils.LogDebug(LogArea.Prefabs, $"Layer of {targetGameObject} is now {LayerMask.LayerToName(targetGameObject.layer)}");
+        }
     }
 }

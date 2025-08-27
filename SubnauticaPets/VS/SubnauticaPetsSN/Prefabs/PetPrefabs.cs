@@ -59,6 +59,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     PrefabConfigUtils.ConfigureSkyApplier(obj);
                     PrefabConfigUtils.ConfigureAnimator(obj, false);
                     PrefabConfigUtils.AddPetComponent(obj);
+                    PrefabConfigUtilsPlatform.AddSubnauticaPetComponents(obj);
                     obj.name = "AlienRobotPet";
                     obj.SetActive(false);
                     LogUtils.LogDebug(LogArea.Prefabs, $"Done modifying {Info.TechType}");
@@ -71,15 +72,15 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                 if (SubnauticaPetsPlugin.ModConfig.ModMode == ModMode.Adventure)
                 {
                     recipe = new RecipeData(
-                    new CraftData.Ingredient(TechType.Gold, 1),
-                    new CraftData.Ingredient(TechType.CopperWire, 1),
-                    new CraftData.Ingredient(TechType.ComputerChip, 1),
-                    new CraftData.Ingredient(TechType.Titanium, 2),
-                    new CraftData.Ingredient(PetDnaPrefabs.AlienRobotDnaPrefab.Info.TechType, 3));
+                    new Ingredient(TechType.Gold, 1),
+                    new Ingredient(TechType.CopperWire, 1),
+                    new Ingredient(TechType.ComputerChip, 1),
+                    new Ingredient(TechType.Titanium, 2),
+                    new Ingredient(PetDnaPrefabs.AlienRobotDnaPrefab.Info.TechType, 3));
                 }
                 else
                 {
-                    recipe = new RecipeData(new CraftData.Ingredient(TechType.Titanium, 1));
+                    recipe = new RecipeData(new Ingredient(TechType.Titanium, 1));
                 }
 
                 CraftingGadget crafting = prefab.SetRecipe(recipe);
@@ -123,6 +124,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     PrefabConfigUtils.ConfigureSkyApplier(obj);
                     PrefabConfigUtils.ConfigureAnimator(obj, false);
                     PrefabConfigUtils.AddPetComponent(obj);
+                    PrefabConfigUtilsPlatform.AddSubnauticaPetComponents(obj);
                     obj.name = "BloodCrawlerPet";
                     obj.SetActive(false);
                     LogUtils.LogDebug(LogArea.Prefabs, $"Done modifying {Info.TechType}");
@@ -135,14 +137,14 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                 if (SubnauticaPetsPlugin.ModConfig.ModMode == ModMode.Adventure)
                 {
                     recipe = new RecipeData(
-                    new CraftData.Ingredient(TechType.Gold, 1),
-                    new CraftData.Ingredient(TechType.AcidMushroom, 1),
-                    new CraftData.Ingredient(TechType.Salt, 1),
-                    new CraftData.Ingredient(PetDnaPrefabs.BloodCrawlerDnaPrefab.Info.TechType, 3));
+                    new Ingredient(TechType.Gold, 1),
+                    new Ingredient(TechType.AcidMushroom, 1),
+                    new Ingredient(TechType.Salt, 1),
+                    new Ingredient(PetDnaPrefabs.BloodCrawlerDnaPrefab.Info.TechType, 3));
                 }
                 else
                 {
-                    recipe = new RecipeData(new CraftData.Ingredient(TechType.Titanium, 1));
+                    recipe = new RecipeData(new Ingredient(TechType.Titanium, 1));
                 }
                 CraftingGadget crafting = prefab.SetRecipe(recipe);
                 prefab.Register();
@@ -184,6 +186,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     PrefabConfigUtils.ConfigureSkyApplier(obj);
                     PrefabConfigUtils.ConfigureAnimator(obj, false);
                     PrefabConfigUtils.AddPetComponent(obj);
+                    PrefabConfigUtilsPlatform.AddSubnauticaPetComponents(obj);
                     obj.name = "CaveCrawlerPet";
                     obj.SetActive(false);
                     LogUtils.LogDebug(LogArea.Prefabs, $"Done modifying {Info.TechType}");
@@ -196,14 +199,14 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                 if (SubnauticaPetsPlugin.ModConfig.ModMode == ModMode.Adventure)
                 {
                     recipe = new RecipeData(
-                    new CraftData.Ingredient(TechType.Gold, 1),
-                    new CraftData.Ingredient(TechType.Sulphur, 1),
-                    new CraftData.Ingredient(TechType.Salt, 1),
-                    new CraftData.Ingredient(PetDnaPrefabs.CaveCrawlerDnaPrefab.Info.TechType, 3));
+                    new Ingredient(TechType.Gold, 1),
+                    new Ingredient(TechType.Sulphur, 1),
+                    new Ingredient(TechType.Salt, 1),
+                    new Ingredient(PetDnaPrefabs.CaveCrawlerDnaPrefab.Info.TechType, 3));
                 }
                 else
                 {
-                    recipe = new RecipeData(new CraftData.Ingredient(TechType.Titanium, 1));
+                    recipe = new RecipeData(new Ingredient(TechType.Titanium, 1));
                 }
                 CraftingGadget crafting = prefab.SetRecipe(recipe);
                 prefab.Register();
@@ -250,6 +253,7 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                     PrefabConfigUtils.AddScaleOnStart(obj, 0.07f);
                     PrefabConfigUtils.ConfigureAnimator(obj, false);
                     PrefabConfigUtils.AddPetComponent(obj);
+                    PrefabConfigUtilsPlatform.AddSubnauticaPetComponents(obj);
                     obj.name = "CrabSquidPet";
                     obj.SetActive(false);
                     LogUtils.LogDebug(LogArea.Prefabs, $"Done modifying {Info.TechType}");
@@ -262,14 +266,14 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
                 if (SubnauticaPetsPlugin.ModConfig.ModMode == ModMode.Adventure)
                 {
                     recipe = new RecipeData(
-                    new CraftData.Ingredient(TechType.Gold, 1),
-                    new CraftData.Ingredient(TechType.JellyPlant, 1),
-                    new CraftData.Ingredient(TechType.Salt, 1),
-                    new CraftData.Ingredient(PetDnaPrefabs.CrabSquidDnaPrefab.Info.TechType, 3));
+                    new Ingredient(TechType.Gold, 1),
+                    new Ingredient(TechType.JellyPlant, 1),
+                    new Ingredient(TechType.Salt, 1),
+                    new Ingredient(PetDnaPrefabs.CrabSquidDnaPrefab.Info.TechType, 3));
                 }
                 else
                 {
-                    recipe = new RecipeData(new CraftData.Ingredient(TechType.Titanium, 1));
+                    recipe = new RecipeData(new Ingredient(TechType.Titanium, 1));
                 }
                 CraftingGadget crafting = prefab.SetRecipe(recipe);
                 prefab.Register();

@@ -39,6 +39,10 @@ namespace DaftAppleGames.SubnauticaPets
             Log.LogDebug("Setting up FMOD Emitter");
             FMOD_CustomEmitter customEmitter = targetGameObject.EnsureComponent<FMOD_CustomEmitter>();
             CustomAudioUtils.ConfigureEmitter(customEmitter, audioClipName, busPath, audioVolume);
+            
+            // Configure the CharacterController collider to interact with the MoonPool blocker
+            CharacterController characterController = targetGameObject.GetComponent<CharacterController>();
+
         }
 
         /// <summary>

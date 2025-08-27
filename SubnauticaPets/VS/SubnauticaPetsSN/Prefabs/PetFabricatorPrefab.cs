@@ -67,18 +67,18 @@ namespace DaftAppleGames.SubnauticaPets.Prefabs
             if (SubnauticaPetsPlugin.ModConfig.ModMode == ModMode.Adventure)
             {
                 recipe = new RecipeData(
-                    new CraftData.Ingredient(TechType.Titanium, 5),
-                    new CraftData.Ingredient(TechType.ComputerChip, 1),
-                    new CraftData.Ingredient(TechType.CopperWire, 2),
-                    new CraftData.Ingredient(PetDnaPrefabs.CrabSquidDnaPrefab.Info.TechType, 1),
-                    new CraftData.Ingredient(PetDnaPrefabs.AlienRobotDnaPrefab.Info.TechType, 1),
-                    new CraftData.Ingredient(PetDnaPrefabs.BloodCrawlerDnaPrefab.Info.TechType, 1),
-                    new CraftData.Ingredient(PetDnaPrefabs.CaveCrawlerDnaPrefab.Info.TechType, 1));
+                    new Ingredient(TechType.Titanium, 5),
+                    new Ingredient(TechType.ComputerChip, 1),
+                    new Ingredient(TechType.CopperWire, 2),
+                    new Ingredient(PetDnaPrefabs.CrabSquidDnaPrefab.Info.TechType, 1),
+                    new Ingredient(PetDnaPrefabs.AlienRobotDnaPrefab.Info.TechType, 1),
+                    new Ingredient(PetDnaPrefabs.BloodCrawlerDnaPrefab.Info.TechType, 1),
+                    new Ingredient(PetDnaPrefabs.CaveCrawlerDnaPrefab.Info.TechType, 1));
             }
             else
             {
                 // Only costs 1 titanium in "Easy" mode
-                recipe = new RecipeData(new CraftData.Ingredient(TechType.Titanium, 1));
+                recipe = new RecipeData(new Ingredient(TechType.Titanium, 1));
             }
 
             // Set the recipe

@@ -10,7 +10,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
     internal class PetStateController : MonoBehaviour
     {
 
-        private PetState _currState;
+        [SerializeField] private PetState currState;
         private PetAction _currentAction;
         
         private WanderAction _wanderAction;
@@ -43,12 +43,13 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
         internal void SetNewState(PetState newState)
         {
-            if (_currState == PetState.Dead)
+            if (currState == PetState.Dead)
             {
                 return;
             }
             
-            LogUtils.LogDebug(LogArea.MonoPets, $"{gameObject.name}: Changing state from: {_currState} to {newState}");
+            LogUtils.LogDebug(LogArea.MonoPets, $"{gameObject.name}: Changing state from: {currState} to {newState}");
+            currState = newState;
             
             switch (newState)
             {
@@ -83,7 +84,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         
         private void WanderActionComplete()
         {
-            Debug.Log("Wander Action Complete!");
             SetNewState(PetState.Idle);
         }
 

@@ -83,7 +83,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         
         private void WanderActionComplete()
         {
-            Debug.Log("Wander Action Complete!");
             SetNewState(PetState.Idle);
         }
 

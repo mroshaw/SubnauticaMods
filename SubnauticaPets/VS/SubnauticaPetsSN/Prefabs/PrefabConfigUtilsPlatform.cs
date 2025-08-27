@@ -1,5 +1,6 @@
 ﻿using DaftAppleGames.SubnauticaPets.Extensions;
 using DaftAppleGames.SubnauticaPets.Pets;
+using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
@@ -9,7 +10,7 @@ using static CraftData;
 namespace DaftAppleGames.SubnauticaPets
 {
     /// <summary>
-    /// Static utilities class for common functions and properties to be used within your mod code
+    /// Static utilities class for prefab configuration tasks specifically for the Subnautica game
     /// </summary>
     internal static class PrefabConfigUtilsPlatform
     {
@@ -36,6 +37,11 @@ namespace DaftAppleGames.SubnauticaPets
             PrefabConfigUtils.AddPetComponent(prefabGameObject);
             PrefabConfigUtils.AddCustomPetComponents(prefabGameObject, audioClipName, AudioUtils.BusPaths.SurfaceCreatures, 10.0f);
             PrefabConfigUtils.AddPetHandTarget(prefabGameObject);
+            AddSubnauticaPetComponents(prefabGameObject);
+            
+            // ONLY required for Subnautica, to prevent Pets from falling into MoonPools
+            prefabGameObject.SetLayer("Vehicle", true);
+            
             prefab.SetGameObject(prefabGameObject);
 
             // Set the recipe, depends on whether in "Adventure" or "Creative" mode.
@@ -86,5 +92,20 @@ namespace DaftAppleGames.SubnauticaPets
             LogUtils.LogDebug(LogArea.PetConfigUtils, "DestroyAttackLastTarget done.");
         }
 
+        /// <summary>
+        /// Custom components for all Subnautica game pets
+        /// </summary>
+        public static void AddSubnauticaPetComponents(GameObject targetGameObject)
+        {
+            AddCleanUpSerializer(targetGameObject);
+        }
+        
+        /// <summary>
+        /// Ensures the Pet is on the correct Layer for MoonPool collision detection
+        /// </summary>
+        public static void AddCleanUpSerializer(GameObject targetGameObject)
+        {
+            targetGameObject.EnsureComponent<CleanUpSerializer>();
+        }
     }
 }
