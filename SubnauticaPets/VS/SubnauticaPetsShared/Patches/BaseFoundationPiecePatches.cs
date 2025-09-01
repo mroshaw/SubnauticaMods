@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿/*
+using HarmonyLib;
 using UnityEngine;
 
 namespace DaftAppleGames.SubnauticaPets.Patches
@@ -55,3 +56,4 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         }
     }
 }
+*/
